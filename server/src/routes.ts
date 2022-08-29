@@ -1,6 +1,8 @@
 module.exports = () => {
   const express = require("express");
   const router = express.Router();
+  const dbo = require("./db/conn")
+  const db = dbo.getDb()
 
   /**** Routes ****/
   router.get('/hello', async (req, res) => {
