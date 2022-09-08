@@ -1,5 +1,5 @@
 ## Summary
-<!-- Summarize the new features you implemented. If you wrote frontend code, you should include screenshots of the UI to help explain your features. -->
+<!-- Start this section with a message that says what issue this PR is associated with (e.g. Closes #44). Summarize the new features you implemented. If you wrote frontend code, you should include screenshots of the UI to help explain your features. -->
 
 
 
