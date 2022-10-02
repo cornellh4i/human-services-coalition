@@ -16,16 +16,41 @@ enum Gender {
 }
 
 const userSchema = new Schema({
+  username: {
+    type: String,
+    required: true
+  },
+  password: {
+    type: String,
+    required: true
+  },
   fName: {
+    type: String,
+    required: true
+  },
+  lName: {
+    type: String,
+    required: true
+  },
+  dateCreated: {
+    type: Date,
+    required: true
+  },
+  supervisor: {
     type: String,
     required: true
   },
   mInitial: {
     type: String,
   },
-  lName: {
-    type: String,
-    required: true
+  birthDate: {
+    type: Date
+  },
+  email: {
+    type: String
+  },
+  phone: {
+    type: Number
   },
   prefName: {
     type: String
@@ -33,28 +58,14 @@ const userSchema = new Schema({
   gender: {
     type: Gender
   },
-  birthDate: {
-    type: Date,
-    required: true
+  race: {
+    type: String
   },
-  email: {
-    type: String,
-    required: true
-  },
-  phone: {
-    type: Number,
-    required: true
+  ethnicity: {
+    type: String
   },
   contactPref: {
     type: ContactPref,
-  },
-  dateCreated: {
-    type: Date,
-    required: true
-  },
-  password: {
-    type: String,
-    required: true
   },
   recentlyViewed: {
     type: Array

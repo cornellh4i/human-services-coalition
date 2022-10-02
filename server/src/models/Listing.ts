@@ -9,13 +9,19 @@ enum Size {
   FiveBed = "Five Bed",
 }
 
+enum Distance {
+  Close = "Near",
+  Medium = "Medium",
+  Far = "Far"
+}
+
 const listingSchema = new Schema({
   webScraped: {
     type: Boolean,
     required: true
   },
-  picture: {
-    type: String,
+  pictures: {
+    type: Array,
     required: true
   },
   price: {
@@ -24,6 +30,10 @@ const listingSchema = new Schema({
   },
   size: {
     type: Size,
+    required: true
+  },
+  numBath: {
+    type: Number,
     required: true
   },
   schoolDistrict: {
@@ -39,26 +49,23 @@ const listingSchema = new Schema({
     type: Boolean
   },
   distTransportation: {
-    type: Boolean
+    type: Distance
   },
   landlord: {
     type: String,
     required: true
   },
-  email: {
+  landlordEmail: {
     type: String,
-    required: true
   },
-  phone: {
+  landlordPhone: {
     type: Number
   },
   linkOrig: {
-    type: String,
-    required: true
+    type: String
   },
   linkApp: {
-    type: String,
-    required: true
+    type: String
   }
 }, { timestamps: true })
 
