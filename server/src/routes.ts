@@ -5,13 +5,82 @@ module.exports = () => {
   const db = dbo.getDb()
 
   /**** Routes ****/
-  router.get('/hello', async (req, res) => {
-    res.json({msg: "Hello, world!"});
-  });
 
-  router.get('/hello/:name', async (req, res) => {
-    res.json({msg: `Hello, ${req.params.name}`});
-  });
+  // GET all housing listings
+  router.get('/housing', async (req, res) => {
+    res.json({ msg: "GET all housing listings" })
+  })
+
+  // GET a specific housing listing (by id)
+  router.get('/housing/:id', async (req, res) => {
+    res.json({ msg: "GET a specific housing listing (by ID)" })
+  })
+
+  // POST (add) a new housing listing
+  router.post('/housing', async (req, res) => {
+    res.json({ msg: "POST (add) a new housing listing" })
+  })
+
+  // PATCH (edit) a specific housing listing
+  router.patch('/housing/:id', async (req, res) => {
+    res.json({ msg: "PATCH (edit) a specific housing listing" })
+  })
+
+  // DELETE a specific housing listing
+  router.delete('/housing/:id', async (req, res) => {
+    res.json({ msg: "DELETE a specific housing listing" })
+  })
+
+  // GET all users
+  router.get('/users', async (req, res) => {
+    res.json({ msg: "GET all users" })
+  })
+
+  // GET a specific user
+  router.get('/users/:id', async (req, res) => {
+    res.json({ msg: "GET a specific user (by ID)" })
+  })
+
+  // POST (add) a new user
+  router.post('/users', async (req, res) => {
+    res.json({ msg: "POST (add) a new user" })
+  })
+
+  // PATCH (edit) a specific user
+  router.patch('/users/:id', async (req, res) => {
+    res.json({ msg: "PATCH (edit) a specific user" })
+  })
+
+  // DELETE a specific user
+  router.delete('/users/:id', async (req, res) => {
+    res.json({ msg: "DELETE a specific user" })
+  })
+
+  // GET all admins
+  router.get('/admins', async (req, res) => {
+    res.json({ msg: "GET all admins" })
+  })
+
+  // GET a specific admin
+  router.get('/admins/:id', async (req, res) => {
+    res.json({ msg: "GET a specific admin" })
+  })
+
+  // POST (add) a new admin
+  router.post('/admins', async (req, res) => {
+    res.json({ msg: "POST (add) a new admin" })
+  })
+
+  // PATCH (edit) a specific admin
+  router.patch('/admins/:id', async (req, res) => {
+    res.json({ msg: "PATCH (edit) a specific admin" })
+  })
+
+  // DELETE a specific admin
+  router.delete('/admins/:id', async (req, res) => {
+    res.json({ msg: "DELETE a specific admin" })
+  })
 
   return router;
 }
+
