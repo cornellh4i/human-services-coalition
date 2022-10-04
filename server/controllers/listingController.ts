@@ -1,5 +1,5 @@
 const Listing = require("../src/models/Listing");
-const mongoose = require('mongoose')
+import mongoose from 'mongoose';
 
 // GET all housing listings
 const getListings = async (req, res) => {

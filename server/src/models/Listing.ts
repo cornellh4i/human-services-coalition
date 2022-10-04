@@ -1,6 +1,6 @@
-import { Schema } from 'mongoose';
 const mongoose = require('mongoose')
 
+import { Schema } from 'mongoose';
 
 enum Size {
   Studio = "Studio",
@@ -8,7 +8,7 @@ enum Size {
   TwoBed = "Two Bed",
   ThreeBed = "Three Bed",
   FourBed = "Four Bed",
-  FiveBed = "Five Bed",
+  FiveBed = "Five Bed"
 }
 
 enum Distance {
@@ -31,7 +31,8 @@ const listingSchema = new Schema({
     required: true
   },
   size: {
-    type: Size,
+    type: String,
+    enum: Size,
     required: true
   },
   numBath: {
@@ -51,7 +52,8 @@ const listingSchema = new Schema({
     type: Boolean
   },
   distTransportation: {
-    type: Distance
+    type: String,
+    enum: Distance
   },
   landlord: {
     type: String,
@@ -72,4 +74,3 @@ const listingSchema = new Schema({
 }, { timestamps: true })
 
 module.exports = mongoose.model('Listing', listingSchema)
-

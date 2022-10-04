@@ -1,3 +1,5 @@
+const mongoose = require('mongoose')
+
 import { Schema } from 'mongoose';
 
 enum ContactPref {
@@ -37,7 +39,8 @@ const adminSchema = new Schema({
     type: String,
   },
   gender: {
-    type: Gender,
+    type: String,
+    enum: Gender
   },
   race: {
     type: String
@@ -52,11 +55,12 @@ const adminSchema = new Schema({
     type: String
   },
   contactPref: {
-    type: ContactPref,
+    type: String,
+    enum: ContactPref
   },
   company: {
     type: String,
   },
 }, { timestamps: true })
 
-
+module.exports = mongoose.model('Admin', adminSchema)
