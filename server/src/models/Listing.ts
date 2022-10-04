@@ -1,4 +1,6 @@
 import { Schema } from 'mongoose';
+const mongoose = require('mongoose')
+
 
 enum Size {
   Studio = "Studio",
@@ -69,4 +71,5 @@ const listingSchema = new Schema({
   }
 }, { timestamps: true })
 
+module.exports = mongoose.model('Listing', listingSchema)
 

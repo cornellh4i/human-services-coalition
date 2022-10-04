@@ -3,33 +3,30 @@ module.exports = () => {
   const router = express.Router();
   const dbo = require("./db/conn")
   const db = dbo.getDb()
+  const {
+    getListings,
+    getListing,
+    createListing,
+    updateListing,
+    deleteListing
+  } = require("../controllers/listingController")
 
   /**** Routes ****/
 
   // GET all housing listings
-  router.get('/housing', async (req, res) => {
-    res.json({ msg: "GET all housing listings" })
-  })
+  router.get('/housing', getListings)
 
   // GET a specific housing listing (by id)
-  router.get('/housing/:id', async (req, res) => {
-    res.json({ msg: "GET a specific housing listing (by ID)" })
-  })
+  router.get('/housing/:id', getListing)
 
   // POST (add) a new housing listing
-  router.post('/housing', async (req, res) => {
-    res.json({ msg: "POST (add) a new housing listing" })
-  })
+  router.post('/housing', createListing)
 
   // PATCH (edit) a specific housing listing
-  router.patch('/housing/:id', async (req, res) => {
-    res.json({ msg: "PATCH (edit) a specific housing listing" })
-  })
+  router.patch('/housing/:id', updateListing)
 
   // DELETE a specific housing listing
-  router.delete('/housing/:id', async (req, res) => {
-    res.json({ msg: "DELETE a specific housing listing" })
-  })
+  router.delete('/housing/:id', deleteListing)
 
   // GET all users
   router.get('/users', async (req, res) => {
