@@ -1,8 +1,7 @@
 module.exports = () => {
   const express = require("express");
   const router = express.Router();
-  const dbo = require("./db/conn")
-  const db = dbo.getDb()
+
   const {
     getListings,
     getListing,

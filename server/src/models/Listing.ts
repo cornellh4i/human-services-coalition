@@ -12,7 +12,7 @@ enum Size {
 }
 
 enum Distance {
-  Close = "Near",
+  Close = "Close",
   Medium = "Medium",
   Far = "Far"
 }
