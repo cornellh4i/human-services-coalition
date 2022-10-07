@@ -7,8 +7,18 @@ module.exports = () => {
     getListing,
     createListing,
     updateListing,
-    deleteListing
+    deleteListing,
   } = require("../controllers/listingController")
+
+  const {
+    getUsers,
+    getUser,
+    createUser,
+    updateUser,
+    deleteUser,
+  } = require("../controllers/userController")
+
+
 
   /**** Routes ****/
 
@@ -28,29 +38,20 @@ module.exports = () => {
   router.delete('/housing/:id', deleteListing)
 
   // GET all users
-  router.get('/users', async (req, res) => {
-    res.json({ msg: "GET all users" })
-  })
+  router.get('/users', getUsers)
 
   // GET a specific user
-  router.get('/users/:id', async (req, res) => {
-    res.json({ msg: "GET a specific user (by ID)" })
-  })
+  router.get('/users/:id', getUser)
 
   // POST (add) a new user
-  router.post('/users', async (req, res) => {
-    res.json({ msg: "POST (add) a new user" })
-  })
+  router.post('/users', createUser)
 
   // PATCH (edit) a specific user
-  router.patch('/users/:id', async (req, res) => {
-    res.json({ msg: "PATCH (edit) a specific user" })
-  })
+  router.patch('/users/:id', updateUser)
 
   // DELETE a specific user
-  router.delete('/users/:id', async (req, res) => {
-    res.json({ msg: "DELETE a specific user" })
-  })
+  router.delete('/users/:id', deleteUser)
+
 
   // GET all admins
   router.get('/admins', async (req, res) => {
