@@ -71,7 +71,7 @@ const createUser = async (req, res) => {
 }
 
 // DELETE a specific user
-const deleteWorkout = async (req, res) => {
+const deleteUser = async (req, res) => {
   const { id } = req.params
 
   if (!mongoose.Types.ObjectId.isValid(id)) {
@@ -111,6 +111,6 @@ module.exports = {
   getUser,
   getUsers,
   createUser,
-  deleteWorkout,
+  deleteUser,
   updateUser
 }

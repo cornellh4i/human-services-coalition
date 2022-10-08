@@ -102,6 +102,8 @@ const deleteListing = async (req, res) => {
   res.status(200).json(listing)
 }
 
+
+// Exports
 module.exports = {
   getListings,
   getListing,

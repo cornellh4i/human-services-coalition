@@ -23,19 +23,19 @@ module.exports = () => {
   /**** Routes ****/
 
   // GET all housing listings
-  router.get('/housing', getListings)
+  router.get('/listing', getListings)
 
   // GET a specific housing listing (by id)
-  router.get('/housing/:id', getListing)
+  router.get('/listing/:id', getListing)
 
   // POST (add) a new housing listing
-  router.post('/housing', createListing)
+  router.post('/listing', createListing)
 
   // PATCH (edit) a specific housing listing
-  router.patch('/housing/:id', updateListing)
+  router.patch('/listing/:id', updateListing)
 
   // DELETE a specific housing listing
-  router.delete('/housing/:id', deleteListing)
+  router.delete('/listing/:id', deleteListing)
 
   // GET all users
   router.get('/users', getUsers)
