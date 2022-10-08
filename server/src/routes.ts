@@ -18,6 +18,15 @@ module.exports = () => {
     deleteUser,
   } = require("../controllers/userController")
 
+  const {
+    getAdmin,
+    getAdmins,
+    createAdmin,
+    deleteAdmin,
+    updateAdmin
+  } = require("../controllers/adminController")
+
+
 
 
   /**** Routes ****/
@@ -37,6 +46,7 @@ module.exports = () => {
   // DELETE a specific housing listing
   router.delete('/listing/:id', deleteListing)
 
+
   // GET all users
   router.get('/users', getUsers)
 
@@ -54,29 +64,19 @@ module.exports = () => {
 
 
   // GET all admins
-  router.get('/admins', async (req, res) => {
-    res.json({ msg: "GET all admins" })
-  })
+  router.get('/admins', getAdmins)
 
   // GET a specific admin
-  router.get('/admins/:id', async (req, res) => {
-    res.json({ msg: "GET a specific admin" })
-  })
+  router.get('/admins/:id', getAdmin)
 
   // POST (add) a new admin
-  router.post('/admins', async (req, res) => {
-    res.json({ msg: "POST (add) a new admin" })
-  })
+  router.post('/admins', createAdmin)
 
   // PATCH (edit) a specific admin
-  router.patch('/admins/:id', async (req, res) => {
-    res.json({ msg: "PATCH (edit) a specific admin" })
-  })
+  router.patch('/admins/:id', updateAdmin)
 
   // DELETE a specific admin
-  router.delete('/admins/:id', async (req, res) => {
-    res.json({ msg: "DELETE a specific admin" })
-  })
+  router.delete('/admins/:id', deleteAdmin)
 
   return router;
 }
