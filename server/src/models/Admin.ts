@@ -1,3 +1,5 @@
+const mongoose = require('mongoose')
+
 import { Schema } from 'mongoose';
 
 enum ContactPref {
@@ -16,11 +18,13 @@ enum Gender {
 const adminSchema = new Schema({
   username: {
     type: String,
-    required: true
+    required: true,
+    unique: true
   },
   password: {
     type: String,
-    required: true
+    required: true,
+    unique: true
   },
   fName: {
     type: String,
@@ -37,7 +41,8 @@ const adminSchema = new Schema({
     type: String,
   },
   gender: {
-    type: Gender,
+    type: String,
+    enum: Gender
   },
   race: {
     type: String
@@ -52,11 +57,12 @@ const adminSchema = new Schema({
     type: String
   },
   contactPref: {
-    type: ContactPref,
+    type: String,
+    enum: ContactPref
   },
   company: {
     type: String,
   },
 }, { timestamps: true })
 
-
+module.exports = mongoose.model('Admin', adminSchema)
