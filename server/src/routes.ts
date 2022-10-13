@@ -27,8 +27,6 @@ module.exports = () => {
   } = require("../controllers/adminController")
 
 
-
-
   /**** Routes ****/
 
   // GET all housing listings
