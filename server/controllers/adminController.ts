@@ -30,8 +30,8 @@ const createAdmin = async (req, res) => {
   const {
     username,
     password,
-    fname,
-    lname,
+    fName,
+    lName,
     mInitial,
     prefName,
     gender,
@@ -47,8 +47,8 @@ const createAdmin = async (req, res) => {
     const admin = await Admin.create({
       username,
       password,
-      fname,
-      lname,
+      fName,
+      lName,
       mInitial,
       prefName,
       gender,
