@@ -6,7 +6,6 @@ const UserForm = () => {
   const [password, setPassword] = useState('')
   const [fname, setFname] = useState('')
   const [lname, setLname] = useState('')
-  const [dateCreated, setDateCreated] = useState('')
   const [supervisor, setSupervisor] = useState('')
   const [mInitial, setMInitial] = useState('')
   const [birthDate, setBirthDate] = useState('')
@@ -17,7 +16,6 @@ const UserForm = () => {
   const [race, setRace] = useState('')
   const [ethnicity, setEthnicity] = useState('')
   const [contactPref, setContactPref] = useState('')
-  const [recentlyViewed, setRecentlyViewed] = useState('')
   const [error, setError] = useState(null)
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -28,7 +26,6 @@ const UserForm = () => {
       password,
       fname,
       lname,
-      dateCreated,
       supervisor,
       mInitial,
       birthDate,
@@ -38,8 +35,7 @@ const UserForm = () => {
       gender,
       race,
       ethnicity,
-      contactPref,
-      recentlyViewed,
+      contactPref
     }
 
     const response = await fetch('/api/user', {
@@ -55,12 +51,12 @@ const UserForm = () => {
     if (!response.ok) {
       setError(json.error)
     }
+
     if (response.ok) {
       setUsername('')
       setPassword('')
       setFname('')
       setLname('')
-      setDateCreated('')
       setSupervisor('')
       setMInitial('')
       setBirthDate('')
@@ -71,9 +67,7 @@ const UserForm = () => {
       setRace('')
       setEthnicity('')
       setContactPref('')
-      setRecentlyViewed('')
       setError(null)
-      console.log('New user added', json)
     }
   }
 
@@ -83,107 +77,148 @@ const UserForm = () => {
 
       <label>Username:</label>
       <input type="text"
+        id="username"
+        name="username"
+        className="form-field"
         onChange={(e) => setUsername(e.target.value)}
         value={username}
+        required
       />
 
       <label>Password:</label>
       <input type="text"
+        id="password"
+        name="password"
+        className="form-field"
         onChange={(e) => setPassword(e.target.value)}
         value={password}
+        required
       />
 
       <label>First Name:</label>
       <input type="text"
+        id="fname"
+        name="fname"
+        className="form-field"
         onChange={(e) => setFname(e.target.value)}
         value={fname}
+        required
       />
 
       <label>Last Name:</label>
       <input type="text"
+        id="lname"
+        name="lname"
+        className="form-field"
         onChange={(e) => setLname(e.target.value)}
         value={lname}
-      />
-
-      <label>Date Created:</label>
-      <input type="text"
-        onChange={(e) => setDateCreated(e.target.value)}
-        value={dateCreated}
+        required
       />
 
       <label>Supervisor:</label>
       <input type="text"
+        id="supervisor"
+        name="supervisor"
+        className="form-field"
         onChange={(e) => setSupervisor(e.target.value)}
         value={supervisor}
+        required
       />
 
       <label>Middle Initial:</label>
       <input type="text"
+        id="minitial"
+        name="minitial"
+        className="form-field"
         onChange={(e) => setMInitial(e.target.value)}
         value={mInitial}
       />
 
       <label>Birthdate:</label>
-      <input type="text"
+      <input type="date"
+        id="birthdate"
+        name="birthdate"
+        className="date-field"
         onChange={(e) => setBirthDate(e.target.value)}
         value={birthDate}
       />
 
       <label>Email:</label>
-      <input type="text"
+      <input type="email"
+        id="email"
+        name="email"
+        className="form-field"
         onChange={(e) => setEmail(e.target.value)}
         value={email}
       />
 
       <label>Phone:</label>
-      <input type="number"
+      <input type="tel"
+        id="phone"
+        name="phone"
+        className="phone-field"
+        placeholder="123-45-678"
+        pattern="[0-9]{3}-[0-9]{2}-[0-9]{3}"
         onChange={(e) => setPhone(e.target.value)}
         value={phone}
       />
 
       <label>Preferred Name:</label>
       <input type="text"
+        id="prefname"
+        name="prefname"
+        className="form-field"
         onChange={(e) => setPrefName(e.target.value)}
         value={prefName}
       />
 
       <label>Gender:</label>
-      <input type="text"
+      <select
+        id="gender"
+        name="gender"
+        className="select-field"
         onChange={(e) => setGender(e.target.value)}
-        value={gender}
-      />
+        value={gender}>
+        <option value="Male">Male</option>
+        <option value="Female">Female</option>
+        <option value="Non-Binary">Non-Binary</option>
+        <option value="Other">Other</option>
+        <option value="Prefer Not To Respond">Prefer Not To Respond</option>
+      </select>
 
       <label>Race:</label>
       <input type="text"
+        id="race"
+        name="race"
+        className="form-field"
         onChange={(e) => setRace(e.target.value)}
         value={race}
       />
 
       <label>Ethnicity:</label>
       <input type="text"
+        id="ethnicity"
+        name="ethnicity"
+        className="form-field"
         onChange={(e) => setEthnicity(e.target.value)}
         value={ethnicity}
       />
 
       <label>Contact Preference:</label>
-      <input type="text"
+      <select
+        id="contactpref"
+        name="contactpref"
+        className="select-field"
         onChange={(e) => setContactPref(e.target.value)}
-        value={contactPref}
-      />
+        value={contactPref}>
+        <option value="email">Email</option>
+        <option value="phone number">Phone Number</option>
+      </select>
 
-      <label>Recently Viewed:</label>
-      <input type="text"
-        onChange={(e) => setRecentlyViewed(e.target.value)}
-        value={recentlyViewed}
-      />
-
-      <button>Add Workout</button>
-      {error && <div className="error">{error}</div>}
-
+      <button type="submit">Add User</button>
+      {error && <div className="user-error">{error}</div>}
     </form>
   )
-
-
 }
 
 export default UserForm
