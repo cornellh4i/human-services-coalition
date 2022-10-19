@@ -1,4 +1,4 @@
-import { SyntheticEvent, useState } from "react"
+import React, { SyntheticEvent, useState } from "react"
 
 const ListingForm = () => {
   const [webScraped, setWebScraped] = useState(false)
@@ -18,7 +18,7 @@ const ListingForm = () => {
   const [linkApp, setLinkApp] = useState('')
   const [error, setError] = useState(null)
 
-  const handleSubmit = async (e: SyntheticEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
     const listing = {
@@ -212,7 +212,7 @@ const ListingForm = () => {
       <input
         id="listing-landlordEmail"
         className="form-field"
-        type="text"
+        type="email"
         placeholder="Landlord Email"
         name="landlordEmail"
         onChange={(e) => setLandlordEmail(e.target.value)}
@@ -223,8 +223,9 @@ const ListingForm = () => {
       <input
         id="listing-landlordPhone"
         className="form-field"
-        type="number"
-        placeholder="Landlord Phone"
+        type="tel"
+        pattern="[0-9]{3}[0-9]{3}[0-9]{4}"
+        placeholder="1234567890"
         name="landlordPhone"
         onChange={(e) => setLandlordPhone(e.target.value)}
         value={landlordPhone}
@@ -234,7 +235,7 @@ const ListingForm = () => {
       <input
         id="listing-linkOrig"
         className="form-field"
-        type="text"
+        type="url"
         placeholder="Original Listing"
         name="linkOrig"
         onChange={(e) => setLinkOrig(e.target.value)}
@@ -245,7 +246,7 @@ const ListingForm = () => {
       <input
         id="listing-linkApp"
         className="form-field"
-        type="text"
+        type="url"
         placeholder="Housing Application"
         name="linkApp"
         onChange={(e) => setLinkApp(e.target.value)}
