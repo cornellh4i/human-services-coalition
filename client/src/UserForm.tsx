@@ -38,7 +38,7 @@ const UserForm = () => {
       contactPref
     }
 
-    const response = await fetch('/api/user', {
+    const response = await fetch('/api/users/', {
       method: 'POST',
       body: JSON.stringify(user),
       headers: {

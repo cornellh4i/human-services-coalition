@@ -36,7 +36,7 @@ const AdminForm = () => {
       company
     }
 
-    const response = await fetch('/api/admin', {
+    const response = await fetch('/api/admins/', {
       method: 'POST',
       body: JSON.stringify(admin),
       headers: {
