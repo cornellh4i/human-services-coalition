@@ -63,7 +63,7 @@ const listingSchema = new Schema({
     type: String,
   },
   landlordPhone: {
-    type: Number
+    type: String
   },
   linkOrig: {
     type: String

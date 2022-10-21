@@ -224,7 +224,6 @@ const ListingForm = () => {
         id="listing-landlordPhone"
         className="form-field"
         type="tel"
-        pattern="[0-9]{3}[0-9]{3}[0-9]{4}"
         placeholder="1234567890"
         name="landlordPhone"
         onChange={(e) => setLandlordPhone(e.target.value)}
