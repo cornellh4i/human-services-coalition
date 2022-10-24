@@ -80,6 +80,7 @@ const UserForm = () => {
         id="username"
         name="username"
         className="form-field"
+        placeholder="Username"
         onChange={(e) => setUsername(e.target.value)}
         value={username}
         required
@@ -90,6 +91,7 @@ const UserForm = () => {
         id="password"
         name="password"
         className="form-field"
+        placeholder="Password"
         onChange={(e) => setPassword(e.target.value)}
         value={password}
         required
@@ -100,6 +102,7 @@ const UserForm = () => {
         id="fname"
         name="fname"
         className="form-field"
+        placeholder="First Name"
         onChange={(e) => setFname(e.target.value)}
         value={fname}
         required
@@ -110,6 +113,7 @@ const UserForm = () => {
         id="lname"
         name="lname"
         className="form-field"
+        placeholder="Last Name"
         onChange={(e) => setLname(e.target.value)}
         value={lname}
         required
@@ -120,6 +124,7 @@ const UserForm = () => {
         id="supervisor"
         name="supervisor"
         className="form-field"
+        placeholder="Supervisor"
         onChange={(e) => setSupervisor(e.target.value)}
         value={supervisor}
         required
@@ -130,6 +135,7 @@ const UserForm = () => {
         id="minitial"
         name="minitial"
         className="form-field"
+        placeholder="Middle Initial"
         onChange={(e) => setMInitial(e.target.value)}
         value={mInitial}
       />
@@ -139,6 +145,7 @@ const UserForm = () => {
         id="birthdate"
         name="birthdate"
         className="date-field"
+        placeholder="Birthdate"
         onChange={(e) => setBirthDate(e.target.value)}
         value={birthDate}
       />
@@ -148,6 +155,7 @@ const UserForm = () => {
         id="email"
         name="email"
         className="form-field"
+        placeholder="Email"
         onChange={(e) => setEmail(e.target.value)}
         value={email}
       />
@@ -157,8 +165,7 @@ const UserForm = () => {
         id="phone"
         name="phone"
         className="phone-field"
-        placeholder="123-45-678"
-        pattern="[0-9]{3}-[0-9]{2}-[0-9]{3}"
+        placeholder="123-456-789"
         onChange={(e) => setPhone(e.target.value)}
         value={phone}
       />
@@ -168,6 +175,7 @@ const UserForm = () => {
         id="prefname"
         name="prefname"
         className="form-field"
+        placeholder="Preferred Name"
         onChange={(e) => setPrefName(e.target.value)}
         value={prefName}
       />
@@ -177,8 +185,10 @@ const UserForm = () => {
         id="gender"
         name="gender"
         className="select-field"
+        placeholder="Gender"
         onChange={(e) => setGender(e.target.value)}
         value={gender}>
+        <option value="" selected disabled hidden>Gender</option>
         <option value="Male">Male</option>
         <option value="Female">Female</option>
         <option value="Non-Binary">Non-Binary</option>
@@ -191,6 +201,7 @@ const UserForm = () => {
         id="race"
         name="race"
         className="form-field"
+        placeholder="Race"
         onChange={(e) => setRace(e.target.value)}
         value={race}
       />
@@ -200,6 +211,7 @@ const UserForm = () => {
         id="ethnicity"
         name="ethnicity"
         className="form-field"
+        placeholder="Ethnicity"
         onChange={(e) => setEthnicity(e.target.value)}
         value={ethnicity}
       />
@@ -209,8 +221,11 @@ const UserForm = () => {
         id="contactpref"
         name="contactpref"
         className="select-field"
+        placeholder="Preferred Contact Method"
         onChange={(e) => setContactPref(e.target.value)}
         value={contactPref}>
+        <option value="" selected disabled hidden>Preferred Contact Method
+        </option>
         <option value="email">Email</option>
         <option value="phone number">Phone Number</option>
       </select>
