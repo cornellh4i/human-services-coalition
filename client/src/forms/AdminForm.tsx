@@ -196,7 +196,8 @@ const AdminForm = () => {
         id="phone"
         name="phone"
         className="phone-field"
-        placeholder="123-456-789"
+        placeholder="123-456-7890"
+        pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
         onChange={(e) => setPhone(e.target.value)}
         value={phone}
       />
