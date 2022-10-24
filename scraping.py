@@ -1,17 +1,19 @@
+from audioop import add
 from cgi import print_exception
 import requests
 from bs4 import BeautifulSoup
 
-# Fair market rates
+#  Fair market rates
 fmrStudio = 980
-fmrOne = 1000
-fmrTwo = 1270
-fmrThree = 1600
-fmrFourPlus = 1800
+fmrOne = 1048
+fmrTwo = 1269
+fmrThree = 1619
+fmrFour = 1812
+fmrFive = 2083.8
+fmrSix = 2396.37
+
 
 # Returns an array of listings from CSP Management under fair market prices
-
-
 def processCSP():
     URL = "https://cspmgmt.managebuilding.com/Resident/public/rentals"
 
@@ -40,7 +42,7 @@ def processCSP():
             image = row.find(
                 'div', attrs={'class': 'featured-listing__image-container'})
 
-            price = (priceContainer.text[1:]).replace(',', '')
+            price = (priceContainer.text[1:]).replace(',',  '')
             beds = getBed(bedbath.text)
 
             # Check if listing falls under fair market price
@@ -63,13 +65,12 @@ def processCSP():
 
                 listings.append(listing)
         except:
-            continue
+              continue
 
     return listings
 
-# Returns an array of listings from CSP Management under fair market prices
 
-
+# Returns an array of listings from certified properties under fair market prices
 def processCertified():
     URL = "https://www.certifiedpropertiesinc.com/property-listings/"
 
@@ -108,7 +109,7 @@ def processCertified():
                 except:
                     continue
 
-            price = (priceText[2:-3]).replace(',', '')
+            price = (priceText[2:-3]).replace(',',  '')
             beds = getBed(listing['bed'])
 
             # Check if listing falls under fair market price
@@ -132,8 +133,6 @@ def processCertified():
     return listings
 
 # Returns an array of listings from Craigslist under fair market prices (only 1st page)
-
-
 def processCraigslist():
     URL = "https://ithaca.craigslist.org/search/apa"
 
@@ -226,13 +225,40 @@ def getCraigslistAdditional(url):
 
 # Returns an array of listings from apartments.com under fair market prices
 def processApartments():
-    URL = "https://www.apartments.com/ithaca-ny/"
+    # These are the urls of each bed size
+    URL1 = "https://www.apartments.com/ithaca-ny/1-bedrooms/"
+    URL2 = "https://www.apartments.com/ithaca-ny/2-bedrooms/"
+    URL3 = "https://www.apartments.com/ithaca-ny/3-bedrooms/"
+    URL4 = "https://www.apartments.com/ithaca-ny/4-bedrooms/"
 
-    # Goes to each page of apartments.com and processes its lisitngs
-    for page in range(1, 9):
-        url = URL + str(page) + '/'
-        processApartmentsHelper(url)
+    URLS = [URL1, URL2, URL3, URL4]
 
+    # For each bed size in apartments.com, go to each of its pages and process its listings
+    for URL in URLS:
+        for page in range(1, getNumPages(URL) + 1):
+            url = URL + str(page) + '/'
+            processApartmentsHelper(url)
+
+# Get the total number of pages of listings for each bed size
+def getNumPages(url):
+    URL = url
+
+    # Use a header to allow the client to pass in additional information while trying to get HTML content from specified URL (avoiding a timeout error)
+    headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.76 Safari/537.36', "Upgrade-Insecure-Requests": "1",
+               "DNT": "1", "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8", "Accept-Language": "en-US,en;q=0.5", "Accept-Encoding": "gzip, deflate"}
+
+    # Get HTML content from specified URL
+    r = requests.get(URL, headers=headers)
+
+    # Create Beautiful Soup object with HTML content
+    soup = BeautifulSoup(r.content, 'html5lib')
+
+    # Get the total number of pages
+    pageRange = soup.find('div', attrs={'id': 'placardContainer'}).find('span', attrs={'class': 'pageRange'}).text
+    index = pageRange.find('of')
+    totalNumPages = pageRange[index+2:].strip()
+
+    return int(totalNumPages)
 
 # Processes a single page of apartments.com and returns an array of listings from that page under fair market prices
 def processApartmentsHelper(url):
@@ -257,13 +283,19 @@ def processApartmentsHelper(url):
     # Get each listing and add to array of listings
     for row in table.findAll('li', attrs={'mortar-wrapper'}):
         try:
+            # Get the address
             try:
                 address = row.find(
                     'div', attrs={'class': 'property-address js-url'}).text
+                if (address.find('Ithaca') == 0):
+                    address = row.find('span', attrs = {'class': 'js-placardTitle title'}).text + " " + address
             except:
                 address = row.find(
                     'p', attrs={'class': 'property-address js-url'}).text
+                if (address.find('NY') < 0):
+                    address = address + " " + row.find('p', attrs={'class': 'property-address js-url'}).find_next_sibling().text
 
+            # Get the price
             try:
                 priceText = row.find('section', attrs={
                                      'class': 'placard-content'}).find('p', attrs={'class': 'property-pricing'}).text
@@ -283,6 +315,7 @@ def processApartmentsHelper(url):
                             priceText = row.find('section', attrs={
                                                  'class': 'placard-content'}).find('div', attrs={'class': 'price-range'}).text
 
+            # Get the number of beds and baths
             try:
                 bedbathText = row.find('section', attrs={
                                        'class': 'placard-content'}).find('p', attrs={'class': 'property-beds'}).text
@@ -294,79 +327,168 @@ def processApartmentsHelper(url):
                     bedbathText = row.find('section', attrs={
                                            'class': 'placard-content'}).find('span', attrs={'class': 'property-beds'}).text
 
+            # Get the URL of listing
+            linkContainer = row.find('section', attrs={
+                                           'class': 'placard-content'}).find('a', attrs = {'class': 'property-link'})
+            link = linkContainer['href']
+
+            # Get pictures of listing
+            pictures = []
+            pictureContainer = row.find('div', attrs = {'class': 'carouselInner'}).findChild()
+            try:
+                pic = pictureContainer['style']
+                indexQuotes1 = pic.find('\"')
+                pic = pic[indexQuotes1+1:]
+                indexQuotes2 = pic.find('\"')
+                pic = pic[:indexQuotes2]
+            except:
+                pic = pictureContainer['data-image']
+            pictures.append(pic)
+
             # Create empty listing
             listing = {}
 
-            # Handles the case that the listing is a range of beds and prices
-            if "-" in priceText:
-                indexPriceDash = priceText.find("-")
-                price1 = priceText[:indexPriceDash].replace(
-                    '$', '').replace(',', '').strip()
-                price2 = priceText[indexPriceDash+2:].replace(',', '').strip()
-                indexBedDash = bedbathText.find("-")
-                bed1Text = bedbathText[:indexBedDash].strip() + " Beds"
-                bed2Text = bedbathText[indexBedDash+1:].strip()
-                bed1 = getBed(bed1Text)
-                bed2 = getBed(bed2Text)
+            # Get the price in integer form
+            price = getPriceApartmentsHelper(priceText)
 
-                # Check if listing falls under fair market price
-                if filterListing(int(price1), bed1) or filterListing(int(price2), bed2):
-                    # Add listing information
-                    listing['address'] = address
-                    listing['price'] = priceText
-                    listing['bedbath'] = bedbathText
+            # Get the number of beds in the form '# Bed(s)'
+            if (bedbathText.find(',') >= 0):
+                index = bedbathText.find(',')
+                bed = bedbathText[:index]
+            else:
+                bed = bedbathText
 
-                    # Print statements for debugging
-                    print(listing['address'])
-                    print(listing['price'])
-                    print(listing['bedbath'])
-                    print()
+            # Get additional info: the number of bathrooms, if utilities are included, if the listing is furnished, etc.
+            additionalInfo = getApartmentsAdditional(link, price)
 
-                    listings.append(listing)
+            # Check if listing falls under fair market price
+            if filterListing(price, getBed(bed)):
+                # Add listing information
+                listing['webScraped'] = True
+                listing['pictures'] = pictures
+                listing['address'] = address
+                listing['price'] = price
+                listing['size'] = bed
+                listing.update(additionalInfo)
 
-            # Handles case that the listing is not a range of beds and prices
-            elif '$' in priceText:
-                if '/' in priceText:
-                    price = (priceText[:priceText.find('/')]
-                             ).replace('$', '').strip()
-                else:
-                    price = priceText.replace('$', '').replace(',', '').strip()
+                # Print statements for debugging
+                print(listing['webScraped'])
+                print(listing['pictures'])
+                print(listing['address'])
+                print(listing['price'])
+                print(listing['size'])
+                print(listing['numBath'])
+                print(listing['utilities'])
+                print(listing['furnished'])
+                print(listing['distTransportation'])
+                print(listing['landlordPhone'])
+                print()
 
-                if ' ' in bedbathText:
-                    bed = getBed(bedbathText)
-                else:
-                    bed = bedbathText
-
-                # Check if listing falls under fair market price
-                if filterListing(int(price), bed):
-                    # Add listing information
-                    listing['address'] = address
-                    listing['price'] = priceText
-                    listing['bedbath'] = bedbathText
-
-                    # Print statements for debugging
-                    print(listing['address'])
-                    print(listing['price'])
-                    print(listing['bedbath'])
-                    print()
-
-                    listings.append(listing)
-
+                listings.append(listing)
         except:
             continue
 
     return listings
 
+# Get the price in integer form
+def getPriceApartmentsHelper(priceText):
+    priceText = priceText.strip()
+    if (priceText.find(" ") >= 0):
+        index = priceText.find(' ')
+        price = priceText[:index].replace('$', '').replace(',', '').strip()
+    else:
+        price = priceText.replace('$', '').replace(',', '').strip()
+    return int(price)
+
+# Get additional information from apartments.com such as number of bathrooms, whether the listing includes utilities, etc.
+def getApartmentsAdditional(link, price):
+    URL = link
+
+    # Use a header to allow the client to pass in additional information while trying to get HTML content from specified URL (avoiding a timeout error)
+    headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.76 Safari/537.36', "Upgrade-Insecure-Requests": "1",
+               "DNT": "1", "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8", "Accept-Language": "en-US,en;q=0.5", "Accept-Encoding": "gzip, deflate"}
+
+    # Get HTML content from specified URL
+    r = requests.get(URL, headers=headers)
+
+    # Create Beautiful Soup object with HTML content
+    soup = BeautifulSoup(r.content, 'html5lib')
+
+    # Create a new listing
+    listing = {}
+
+    # Get the number of bathrooms in the listing
+    try:
+        table = soup.find('div', attrs = {'class': 'sectionContainer'})
+        pricingGridItemExists = table.find('div', attrs = {'class': 'pricingGridItem'})
+        if pricingGridItemExists == None: raise Exception
+        for row in table.findAll('div', attrs = {'class': 'pricingGridItem'}):
+            rowPriceText = row.find('span', attrs = {'class': 'rentLabel'}).text.strip()
+            rowPrice = getPriceApartmentsHelper(rowPriceText)
+
+            if (rowPrice == price):
+                container = row.find('span', attrs = {'class': 'detailsTextWrapper'})
+                firstChild = container.findChild()
+                bath = firstChild.find_next_sibling().text.strip()
+                bath = bath[:bath.find(" ")]
+    except:
+        info = soup.find('ul', attrs = {'class': 'priceBedRangeInfo'}).findChild().find_next_sibling().find_next_sibling()
+        bath = info.find('p', attrs = {'class': 'rentInfoDetail'}).text.strip()
+        bath = bath[:bath.find(" ")]
+
+    try:
+        bath = int(bath)
+    except:
+        bath = float(bath)
+
+    # Get whether or not the listing includes utilities
+    utilities = False
+    for column in soup.findAll('h4', attrs = {'class': 'header-column'}):
+        if column.text.find("Utilities Included") >= 0:
+            utilities = True
+
+    # Get whether or not the listing is furnished
+    furnished = False
+    for list in soup.findAll('ul', attrs = {'class': 'combinedAmenitiesList'}):
+        for amenities in list.findAll('li', attrs = {'class': 'specInfo'}):
+            if amenities.span.text == 'Furnished':
+                furnished = True
+
+    # Get distance to transportation (airports), no info about distance to buses on apartments.com
+    distTransportation = ""
+    for info in soup.findAll('h2', attrs = {'class': 'sectionTitle'}):
+        try:
+            if info.text == "Transportation":
+                for list in info.find_parent('section').findAll('div', attrs = {'class': 'transportationName airport'}):
+                    airport = list.text
+                    dist = list.find_parent('tr').find('td', attrs = {'class': 'right-align-data'}).text
+                    distAirport = airport + " Airport: " + dist + ", "
+                    distTransportation += distAirport
+        except:
+            continue
+    distTransportation = distTransportation[:len(distTransportation)-2]
+
+    # Get the landlord's number
+    phoneContainer = soup.find('p', attrs = {'class': 'phoneLabel'}).a
+    landlordPhone = phoneContainer['href']
+    landlordPhone = landlordPhone[landlordPhone.find(':')+1:]
+
+    # Add listing information
+    listing['numBath'] = bath
+    listing['utilities'] = utilities
+    listing['furnished'] = furnished
+    listing['distTransportation'] = distTransportation
+    listing['landlordPhone'] = landlordPhone
+
+    return listing
+
+
 # Returns number of beds in listing
-
-
 def getBed(bedbath):
     bed = bedbath[0: bedbath.find(' ')]
     return bed
 
 # Returns fair market price for listing type
-
-
 def getFMR(bed):
     if bed == "Studio":
         return fmrStudio
@@ -376,17 +498,20 @@ def getFMR(bed):
         return fmrTwo
     elif bed == "3":
         return fmrThree
-    else:
-        return fmrFourPlus
+    elif bed == "4":
+        return fmrFour
+    elif bed == "5":
+        return fmrFive
+    elif bed == "6":
+        return fmrSix
 
 # Returns true if price of listing is under fair market price for listing type
-
-
 def filterListing(price, beds):
-    return price <= getFMR(beds)
+      return price <= getFMR(beds)
 
 
 processCSP()
 processCertified()
 processCraigslist()
 processApartments()
+
