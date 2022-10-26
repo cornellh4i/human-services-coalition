@@ -29,6 +29,7 @@ const createUser = async (req, res) => {
   const {
     username,
     password,
+    voucherType,
     fName,
     lName,
     dateCreated,
@@ -49,6 +50,7 @@ const createUser = async (req, res) => {
     const user = await User.create({
       username,
       password,
+      voucherType,
       fName,
       lName,
       dateCreated,

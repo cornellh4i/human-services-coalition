@@ -26,6 +26,10 @@ const userSchema = new Schema({
     required: true,
     unique: true
   },
+  voucherType: {
+    type: String,
+    required: true,
+  },
   fName: {
     type: String,
     required: true
@@ -36,7 +40,6 @@ const userSchema = new Schema({
   },
   dateCreated: {
     type: Date,
-    required: true
   },
   supervisor: {
     type: String,

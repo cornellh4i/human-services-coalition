@@ -2,9 +2,15 @@ import React, { SyntheticEvent, useState } from "react"
 
 const ListingForm = () => {
   const [webScraped, setWebScraped] = useState(false)
+  const [streetAddress, setStreetAddress] = useState('')
+  const [city, setCity] = useState('')
+  const [state, setState] = useState('')
+  const [country, setCountry] = useState('')
+  const [zipCode, setZipCode] = useState('')
   const [pictures, setPictures] = useState('')
   const [price, setPrice] = useState('')
   const [size, setSize] = useState('')
+  const [unitType, setUnitType] = useState('')
   const [numBath, setNumBath] = useState('')
   const [schoolDistrict, setSchoolDistrict] = useState('')
   const [pets, setPets] = useState('')
@@ -16,16 +22,24 @@ const ListingForm = () => {
   const [landlordPhone, setLandlordPhone] = useState('')
   const [linkOrig, setLinkOrig] = useState('')
   const [linkApp, setLinkApp] = useState('')
+  const [dateAvailable, setDateAvailable] = useState('')
   const [error, setError] = useState(null)
+
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
     const listing = {
       webScraped,
+      streetAddress,
+      city,
+      state,
+      country,
+      zipCode,
       pictures,
       price,
       size,
+      unitType,
       numBath,
       schoolDistrict,
       pets,
@@ -36,7 +50,8 @@ const ListingForm = () => {
       landlordEmail,
       landlordPhone,
       linkOrig,
-      linkApp
+      linkApp,
+      dateAvailable
     }
 
     const response = await fetch('/api/listing/', {
@@ -53,9 +68,15 @@ const ListingForm = () => {
     }
     if (response.ok) {
       setWebScraped(false)
+      setStreetAddress('')
+      setCity('')
+      setState('')
+      setCountry('')
+      setZipCode('')
       setPictures('')
       setPrice('')
       setSize('')
+      setUnitType('')
       setNumBath('')
       setSchoolDistrict('')
       setPets('')
@@ -67,7 +88,8 @@ const ListingForm = () => {
       setLandlordPhone('')
       setLinkOrig('')
       setLinkApp('')
-
+      setDateAvailable('')
+    
       setError(null)
       console.log('New Listing Added', json)
     }
@@ -76,6 +98,61 @@ const ListingForm = () => {
   return (
     <form className="listing-form" onSubmit={handleSubmit}>
       <h3>Add a New Listing</h3>
+
+      <label>Street Address:</label>
+      <input
+        id="listing-streetAddress"
+        className="form-field"
+        type="text"
+        placeholder="Street Address"
+        name="streetAddress"
+        onChange={(e) => setStreetAddress(e.target.value)}
+        value={streetAddress}
+      />
+
+      <label>City:</label>
+      <input
+        id="listing-city"
+        className="form-field"
+        type="text"
+        placeholder="City"
+        name="city"
+        onChange={(e) => setCity(e.target.value)}
+        value={city}
+      />
+
+      <label>State:</label>
+      <input
+        id="listing-state"
+        className="form-field"
+        type="text"
+        placeholder="State"
+        name="state"
+        onChange={(e) => setState(e.target.value)}
+        value={state}
+      />
+
+      <label>Country:</label>
+      <input
+        id="listing-country"
+        className="form-field"
+        type="text"
+        placeholder="Country"
+        name="country"
+        onChange={(e) => setCountry(e.target.value)}
+        value={country}
+      />
+
+      <label>Zip:</label>
+      <input
+        id="listing-zipCode"
+        className="form-field"
+        type="text"
+        placeholder="Zip Code"
+        name="zipCode"
+        onChange={(e) => setZipCode(e.target.value)}
+        value={zipCode}
+      />
 
       <label>Pictures:</label>
       <input
@@ -118,6 +195,20 @@ const ListingForm = () => {
         <option value="Three Bed">Three Bed</option>
         <option value="Four Bed">Four Bed</option>
         <option value="Five Bed">Five Bed</option>
+      </select>
+
+      <label>Unit Type:</label>
+      <select
+        name="unitType"
+        id="listing-unitType"
+        required={true}
+        onChange={(e) => setUnitType(e.target.value)}
+        value={unitType}
+      >
+        <option value="" selected disabled hidden >Select a type</option>
+        <option value="House">House</option>
+        <option value="Apartment">Apartment</option>
+        <option value="Condo">Condo</option>
       </select>
 
       <label>Number of Bathrooms:</label>
@@ -253,8 +344,21 @@ const ListingForm = () => {
         value={linkApp}
       />
 
+      <label>Date this listing is available</label>
+      <input
+        id="listing-dateAvailable"
+        className="form-field"
+        type="date"
+        placeholder="01/01/2000"
+        pattern = "[0-9]{2}/[0-9]{2}/[0-9]{4}"
+        name="dateAvailable"
+        onChange={(e) => setDateAvailable(e.target.value)}
+        value={dateAvailable}
+      />
+
       <button type="submit">Add Listing</button>
-      {error && <div className="listing-error">{error}</div>}
+
+    {error && <div className="listing-error">{error}</div>}
     </form>
   )
 }
