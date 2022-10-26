@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { useEffect, useState } from "react";
 import Home from "./pages/Home"
+import Users from "./pages/Users"
 const API_URL = process.env.REACT_APP_API;
 
 
@@ -24,7 +25,7 @@ function App() {
           <Routes>
             <Route
               path="/"
-              element={<Home />}
+              element={<Users />}
             />
           </Routes>
         </div>
