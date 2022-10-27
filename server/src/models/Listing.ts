@@ -12,7 +12,7 @@ enum Size {
 }
 
 enum Distance {
-  Close = "Near",
+  Close = "Close",
   Medium = "Medium",
   Far = "Far"
 }
@@ -63,7 +63,7 @@ const listingSchema = new Schema({
     type: String,
   },
   landlordPhone: {
-    type: Number
+    type: String
   },
   linkOrig: {
     type: String

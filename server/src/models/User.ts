@@ -12,17 +12,19 @@ enum Gender {
   Male = "Male",
   NonBinary = "Non-Binary",
   Other = "Other",
-  NoResponse = "Prefer Not to Respond"
+  NoResponse = "Prefer Not To Respond"
 }
 
 const userSchema = new Schema({
   username: {
     type: String,
-    required: true
+    required: true,
+    unique: true
   },
   password: {
     type: String,
-    required: true
+    required: true,
+    unique: true
   },
   fName: {
     type: String,
@@ -50,7 +52,7 @@ const userSchema = new Schema({
     type: String
   },
   phone: {
-    type: Number
+    type: String
   },
   prefName: {
     type: String
