@@ -6,7 +6,7 @@ const Home = () => {
 
   useEffect(() => {
     const fetchListings = async () => {
-      const response = await fetch('/listing')
+      const response = await fetch('/api/listing')
       const json = await response.json()
 
       if (response.ok) {
