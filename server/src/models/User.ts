@@ -38,9 +38,6 @@ const userSchema = new Schema({
     type: String,
     required: true
   },
-  dateCreated: {
-    type: Date,
-  },
   supervisor: {
     type: String,
     required: true
