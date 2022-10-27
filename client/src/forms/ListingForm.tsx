@@ -200,7 +200,7 @@ const ListingForm = () => {
         <option value="Three Bed">Three Bed</option>
         <option value="Four Bed">Four Bed</option>
         <option value="Five Bed">Five Bed</option>
-        <option value="Five Bed">Six Bed</option>
+        <option value="Six Bed">Six Bed</option>
       </select>
 
       <label>Unit Type:</label>
