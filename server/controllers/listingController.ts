@@ -1,5 +1,6 @@
 const Listing = require("../src/models/Listing");
 import mongoose from 'mongoose';
+import { json } from 'stream/consumers';
 
 // GET all housing listings
 const getListings = async (req, res) => {
@@ -69,6 +70,54 @@ const createListing = async (req, res) => {
   }
 }
 
+const createScrapedListing = async (req, res) => {
+  // dummy data to test post
+  // const listing = {};
+  // listing['webScraped'] = true;
+  // listing['pictures'] = "link";
+  // listing['price'] = 2;
+  // listing['size'] = "One Bed";
+  // listing['numBath'] = 3;
+  // listing['schoolDistrict'] = null;
+  // listing['pets'] = null;
+  // listing['utilities'] = null;
+  // listing['furnished'] = null;
+  // listing['distTransportation'] = null;
+  // listing['landlord'] = "Certified Properties"
+  // listing['landlordEmail'] = null;
+  // listing['landlordPhone'] = null;
+  // listing['linkOrig'] = "sample link";
+
+  // collect data from script
+  const spawn = require('child_process').spawn;
+  const scraping = spawn('python', ['./scraping.py']);
+
+  //const listings = [];
+
+  var listing = "s";
+
+  scraping.stdout.on('data', function(data) {
+    //res.status(200).json("collecting");
+    console.log(data.toString());
+    listing = data.toString();
+
+    // res.send(data.toString());
+    // listings.push(data.toString());
+  });
+
+  res.status(200).json(listing);
+
+  //console.log(listing);
+
+  // const { id } = req.params
+  // if (!mongoose.Types.ObjectId.isValid(id)) {
+  //   // error returned here
+  //   return res.status(404).json({ error: 'No such listing 2' })
+  // }
+
+  //createListing(listing, 201);
+}
+
 // PATCH (edit) a specific housing listing
 const updateListing = async (req, res) => {
   const { id } = req.params
@@ -112,5 +161,6 @@ module.exports = {
   getListing,
   createListing,
   updateListing,
-  deleteListing
+  deleteListing,
+  createScrapedListing
 }

@@ -8,6 +8,7 @@ module.exports = () => {
     createListing,
     updateListing,
     deleteListing,
+    createScrapedListing
   } = require("../controllers/listingController")
 
   const {
@@ -44,6 +45,8 @@ module.exports = () => {
   // DELETE a specific housing listing
   router.delete('/listing/:id', deleteListing)
 
+  // POST (add) a webscraped listing
+  router.post('/scraped', createScrapedListing)
 
   // GET all users
   router.get('/users', getUsers)
@@ -59,7 +62,6 @@ module.exports = () => {
 
   // DELETE a specific user
   router.delete('/users/:id', deleteUser)
-
 
   // GET all admins
   router.get('/admins', getAdmins)
