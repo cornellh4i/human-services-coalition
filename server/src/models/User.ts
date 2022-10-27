@@ -12,7 +12,7 @@ enum Gender {
   Male = "Male",
   NonBinary = "Non-Binary",
   Other = "Other",
-  NoResponse = "Prefer Not to Respond"
+  NoResponse = "Prefer Not To Respond"
 }
 
 const userSchema = new Schema({
@@ -26,16 +26,16 @@ const userSchema = new Schema({
     required: true,
     unique: true
   },
+  voucherType: {
+    type: String,
+    required: true,
+  },
   fName: {
     type: String,
     required: true
   },
   lName: {
     type: String,
-    required: true
-  },
-  dateCreated: {
-    type: Date,
     required: true
   },
   supervisor: {
@@ -52,7 +52,7 @@ const userSchema = new Schema({
     type: String
   },
   phone: {
-    type: Number
+    type: String
   },
   prefName: {
     type: String

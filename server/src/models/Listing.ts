@@ -8,7 +8,15 @@ enum Size {
   TwoBed = "Two Bed",
   ThreeBed = "Three Bed",
   FourBed = "Four Bed",
-  FiveBed = "Five Bed"
+  FiveBed = "Five Bed",
+  SixBed = "Six Bed"
+}
+
+enum UnitType {
+  House = "House",
+  Apartment = "Apartment",
+  Condo = "Condo",
+  SingleRoom = "Single Room"
 }
 
 enum Distance {
@@ -17,9 +25,30 @@ enum Distance {
   Far = "Far"
 }
 
+
 const listingSchema = new Schema({
   webScraped: {
     type: Boolean,
+    required: true
+  },
+  streetAddress: {
+    type: String,
+    required: true
+  },
+  city: {
+    type: String,
+    required: true
+  },
+  state: {
+    type: String,
+    required: true
+  },
+  country: {
+    type: String,
+    required: true
+  },
+  zipCode: {
+    type: String,
     required: true
   },
   pictures: {
@@ -33,6 +62,11 @@ const listingSchema = new Schema({
   size: {
     type: String,
     enum: Size,
+    required: true
+  },
+  unitType: {
+    type: String,
+    enum: UnitType,
     required: true
   },
   numBath: {
@@ -63,14 +97,18 @@ const listingSchema = new Schema({
     type: String,
   },
   landlordPhone: {
-    type: Number
+    type: String
   },
   linkOrig: {
     type: String
   },
   linkApp: {
     type: String
+  },
+  dateAvailable: { 
+    type: Date
   }
+  
 }, { timestamps: true })
 
 module.exports = mongoose.model('Listing', listingSchema)
