@@ -1,9 +1,6 @@
 import { useEffect, useState } from 'react'
 import ListingDetails from '../components/ListingDetails'
 
-//componennts
-//import ListingDetails from '../components/ListingDetails'
-
 const Home = () => {
   const [Listings, setListings] = useState<any[]>([])
 
