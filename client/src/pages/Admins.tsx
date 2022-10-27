@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react"
+import AdminForm from "../forms/AdminForm"
 
 //components
 import AdminDetails from '../components/AdminDetails'
@@ -25,7 +26,7 @@ const Admins = () => {
         {Admins && Admins.map((Admin) => (
           <AdminDetails key={Admin._id} Admin={Admin} />
         ))}
-
+        <AdminForm />
       </div>
     </div>
 

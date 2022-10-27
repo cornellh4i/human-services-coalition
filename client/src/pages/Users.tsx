@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react"
+import UserForm from "../forms/UserForm"
 
 //components
 import UserDetails from '../components/UserDetails'
@@ -25,7 +26,7 @@ const Users = () => {
         {Users && Users.map((User) => (
           <UserDetails key={User._id} User={User} />
         ))}
-
+        <UserForm />
       </div>
     </div>
 
