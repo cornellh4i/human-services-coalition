@@ -90,22 +90,33 @@ const createScrapedListing = async (req, res) => {
 
   // collect data from script
   const spawn = require('child_process').spawn;
-  const scraping = spawn('python', ['./scraping.py']);
+  const scraping = spawn(process.env.HOMEBREW_PREFIX + '/bin/python', ['scraping.py']);
 
   //const listings = [];
 
   var listing = "s";
+  console.log(process.env.HOMEBREW_PREFIX + '/bin/python', ['scraping.py']);
 
-  scraping.stdout.on('data', function(data) {
-    //res.status(200).json("collecting");
-    console.log(data.toString());
-    listing = data.toString();
+  scraping.stdout.on('data', function() {
+    console.log("calling python script");
+    // res.status(200).json("collecting");
+    // console.log(data.toString());
+    // listing = data.toString();
 
     // res.send(data.toString());
     // listings.push(data.toString());
   });
 
-  res.status(200).json(listing);
+  scraping.stderr.on('data', (data) => {
+    console.error(`stderr: ${data}`);
+  });
+
+  scraping.on('close', async (code: any) => {
+    console.log(`childt process close all stdio with code ${code}`);
+    res.status(200).json(listing);
+  })
+}
+  //res.status(200).json(listing);
 
   //console.log(listing);
 
@@ -116,7 +127,6 @@ const createScrapedListing = async (req, res) => {
   // }
 
   //createListing(listing, 201);
-}
 
 // PATCH (edit) a specific housing listing
 const updateListing = async (req, res) => {

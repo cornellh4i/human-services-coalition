@@ -51,23 +51,41 @@ def processCSP():
                 # Create empty listing
                 listing = {}
 
+                listing['webScraped'] = True
+                listing['pictures'] = image.img['src']
+                listing['price'] = priceContainer.text[1:].replace(",","")
+                listing['size'] = "One Bed"
+                listing['numBath'] = 3
+                listing['schoolDistrict'] = None
+                listing['pets'] = None
+                listing['utilities'] = None
+                listing['furnished'] = None
+                listing['distTransportation'] = None
+                listing['landlord'] = "CSP Management"
+                listing['landlordEmail'] = None
+                listing['landlordPhone'] = None
+                listing['linkOrig'] = row['href']
+
                 # Add listing information
-                listing['title'] = info.h3.text
-                listing['price'] = priceContainer.text
-                listing['bed bath'] = bedbath.text
+                
+                # listing['title'] = info.h3.text
+                # listing['price'] = priceContainer.text
+                # listing['bed bath'] = bedbath.text
                 #listing['address'] = address.text
-                listing['img'] = image.img['src']
-                listing['url'] = row['href']
+                # listing['img'] = image.img['src']
+                # listing['url'] = row['href']
 
                 # Print statements for debugging
                 # print(listing['title'])
                 # print(listing['price'])
                 # print(listing['bed bath'])
+                # print(listing)
 
                 listings.append(listing)
         except:
               continue
 
+    print(listings)
     return listings
 
 
@@ -116,16 +134,33 @@ def processCertified():
             # Check if listing falls under fair market price
             if filterListing(int(price), beds):
                 # Add listing information
-                listing['title'] = titleText
-                listing['price'] = "$" + priceText[2:]
-                listing['img'] = imageLinkContainer.img['src']
-                listing['url'] = imageLinkContainer['href']
+                
+                # listing['title'] = titleText
+                # listing['price'] = "$" + priceText[2:]
+                # listing['img'] = imageLinkContainer.img['src']
+                # listing['url'] = imageLinkContainer['href']
+
+                listing['webScraped'] = True
+                listing['pictures'] = imageLinkContainer.img['src']
+                listing['price'] = int(price)
+                listing['size'] = "One Bed"
+                listing['numBath'] = 3
+                listing['schoolDistrict'] = None
+                listing['pets'] = None
+                listing['utilities'] = None
+                listing['furnished'] = None
+                listing['distTransportation'] = None
+                listing['landlord'] = "Certified Properties"
+                listing['landlordEmail'] = None
+                listing['landlordPhone'] = None
+                listing['linkOrig'] = imageLinkContainer['href']
 
                 # Print statements for debugging
-                print(listing['title'])
-                print(listing['price'])
-                print(listing['bed'])
-                print(listing['bath'])
+                # print(listing['title'])
+                # print(listing['price'])
+                # print(listing['bed'])
+                # print(listing['bath'])
+                print(listing)
 
                 listings.append(listing)
         except:
@@ -133,12 +168,35 @@ def processCertified():
 
     return listings
 
-# Returns an array of listings from Craigslist under fair market prices (only 1st page)
+# Returns an array of listings from Craigslist under fair market prices (all pages)
 def processCraigslist():
-    URL = "https://ithaca.craigslist.org/search/apa"
+  first_url = "https://ithaca.craigslist.org/search/apa"
+  urls = "https://ithaca.craigslist.org/search/apa?s="
 
+  #Get HTML content from first page of Craigslist
+  r = requests.get(first_url)
+
+  #Create Beautiful Soup object with HTML content
+  soup = BeautifulSoup(r.content, 'html5lib')
+
+  #Get number of total listings
+  totalListings = int((soup.find('span', attrs={'class': 'totalcount'}).text))
+
+  #Update listings to hold listings from first page
+  listings = processCraigslistHelper(first_url)
+
+  #Iterate through all the pages and get all listings under FMR
+  start = 120
+  while start < totalListings:
+    listings + processCraigslistHelper(urls+str(start))
+    start += 120
+
+  return listings
+
+# Returns an array of listings from Craigslist under fair market prices (only 1 page)
+def processCraigslistHelper(url):
     # Get HTML content from specified URL
-    r = requests.get(URL)
+    r = requests.get(url)
 
     # Create Beautiful Soup object with HTML content
     soup = BeautifulSoup(r.content, 'html5lib')
@@ -172,7 +230,6 @@ def processCraigslist():
                 beds = "Studio"
             url = info.h3.a['href']
 
-            # Check if listing falls under fair market price
             # Create empty listing
             listing = {}
 
@@ -510,10 +567,15 @@ def getFMR(bed):
 def filterListing(price, beds):
       return price <= getFMR(beds)
 
+# def main():
 
-print(processCSP())
+processCSP()
 sys.stdout.flush()
+
 # processCertified()
 # processCraigslist()
 # processApartments()
+
+# if __name__ == '__main__':
+#     main()
 
