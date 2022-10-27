@@ -29,9 +29,9 @@ const createUser = async (req, res) => {
   const {
     username,
     password,
+    voucherType,
     fName,
     lName,
-    dateCreated,
     supervisor,
     mInitial,
     birthDate,
@@ -49,9 +49,9 @@ const createUser = async (req, res) => {
     const user = await User.create({
       username,
       password,
+      voucherType,
       fName,
       lName,
-      dateCreated,
       supervisor,
       mInitial,
       birthDate,

@@ -4,8 +4,9 @@ const UserForm = () => {
 
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
-  const [fname, setFname] = useState('')
-  const [lname, setLname] = useState('')
+  const [voucherType, setVoucherType] = useState('')
+  const [fName, setFName] = useState('')
+  const [lName, setLName] = useState('')
   const [supervisor, setSupervisor] = useState('')
   const [mInitial, setMInitial] = useState('')
   const [birthDate, setBirthDate] = useState('')
@@ -24,8 +25,9 @@ const UserForm = () => {
     const user = {
       username,
       password,
-      fname,
-      lname,
+      voucherType,
+      fName,
+      lName,
       supervisor,
       mInitial,
       birthDate,
@@ -55,8 +57,9 @@ const UserForm = () => {
     if (response.ok) {
       setUsername('')
       setPassword('')
-      setFname('')
-      setLname('')
+      setVoucherType('')
+      setFName('')
+      setLName('')
       setSupervisor('')
       setMInitial('')
       setBirthDate('')
@@ -97,14 +100,26 @@ const UserForm = () => {
         required
       />
 
+      <label>Voucher Type:</label>
+      <input 
+        type="text"
+        id="voucherType"
+        name="voucherType"
+        className="form-field"
+        placeholder="Voucher Type"
+        onChange={(e) => setVoucherType(e.target.value)}
+        value={voucherType}
+        required
+      />
+
       <label>First Name:</label>
       <input type="text"
         id="fname"
         name="fname"
         className="form-field"
         placeholder="First Name"
-        onChange={(e) => setFname(e.target.value)}
-        value={fname}
+        onChange={(e) => setFName(e.target.value)}
+        value={fName}
         required
       />
 
@@ -114,8 +129,8 @@ const UserForm = () => {
         name="lname"
         className="form-field"
         placeholder="Last Name"
-        onChange={(e) => setLname(e.target.value)}
-        value={lname}
+        onChange={(e) => setLName(e.target.value)}
+        value={lName}
         required
       />
 
@@ -227,8 +242,8 @@ const UserForm = () => {
         value={contactPref}>
         <option value="" selected disabled hidden>Preferred Contact Method
         </option>
-        <option value="email">Email</option>
-        <option value="phone number">Phone Number</option>
+        <option value="Email">Email</option>
+        <option value="Phone Number">Phone Number</option>
       </select>
 
       <button type="submit">Add User</button>

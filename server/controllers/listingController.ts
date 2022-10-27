@@ -29,9 +29,15 @@ const getListing = async (req, res) => {
 const createListing = async (req, res) => {
   const {
     webScraped,
+    streetAddress,
+    city,
+    state,
+    country,
+    zipCode,
     pictures,
     price,
     size,
+    unitType,
     numBath,
     schoolDistrict,
     pets,
@@ -42,15 +48,22 @@ const createListing = async (req, res) => {
     landlordEmail,
     landlordPhone,
     linkOrig,
-    linkApp
+    linkApp,
+    dateAvailable
   } = req.body
 
   try {
     const listing = await Listing.create({
       webScraped,
+      streetAddress,
+      city,
+      state,
+      country,
+      zipCode,
       pictures,
       price,
       size,
+      unitType,
       numBath,
       schoolDistrict,
       pets,
@@ -61,7 +74,8 @@ const createListing = async (req, res) => {
       landlordEmail,
       landlordPhone,
       linkOrig,
-      linkApp
+      linkApp,
+      dateAvailable
     })
     res.status(200).json(listing)
   } catch (error) {
