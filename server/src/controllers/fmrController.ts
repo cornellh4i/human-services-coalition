@@ -1,4 +1,4 @@
-const FMRprices = require("../src/models/Fmr");
+const FMRprices = require("../models/Fmr");
 import mongoose from 'mongoose';
 
 //GET all FMR prices
@@ -57,7 +57,7 @@ const updateFMRprices = async (req, res) => {
   }
 }
 
-// DELETE FMR prices
+// DELETE FMR prices --> USED FOR TESTING
 const deleteFMRprices = async(req, res) => {
     const { id } = req.params
     if (!mongoose.Types.ObjectId.isValid(id)) {

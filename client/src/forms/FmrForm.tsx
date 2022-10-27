@@ -1,5 +1,5 @@
 import React, { useState } from "react"
-const FMR = require("../src/models/FMR");
+const FMR = require("../../../server/src/models/FMR");
 
 const FmrForm = () => {
   const [studio, setStudio] = useState('')
