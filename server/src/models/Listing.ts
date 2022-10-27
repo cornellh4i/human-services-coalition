@@ -12,10 +12,11 @@ enum Size {
   SixBed = "Six Bed"
 }
 
-enum Unit{
+enum UnitType {
   House = "House",
   Apartment = "Apartment",
-  Condo = "Condo"
+  Condo = "Condo",
+  SingleRoom = "Single Room"
 }
 
 enum Distance {
@@ -65,7 +66,7 @@ const listingSchema = new Schema({
   },
   unitType: {
     type: String,
-    enum: Unit,
+    enum: UnitType,
     required: true
   },
   numBath: {
@@ -105,7 +106,7 @@ const listingSchema = new Schema({
     type: String
   },
   dateAvailable: { 
-    type: String
+    type: Date
   }
   
 }, { timestamps: true })
