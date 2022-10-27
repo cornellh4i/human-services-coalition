@@ -105,6 +105,7 @@ const ListingForm = () => {
         className="form-field"
         type="text"
         placeholder="Street Address"
+        required={true}
         name="streetAddress"
         onChange={(e) => setStreetAddress(e.target.value)}
         value={streetAddress}
@@ -116,6 +117,7 @@ const ListingForm = () => {
         className="form-field"
         type="text"
         placeholder="City"
+        required={true}
         name="city"
         onChange={(e) => setCity(e.target.value)}
         value={city}
@@ -127,6 +129,7 @@ const ListingForm = () => {
         className="form-field"
         type="text"
         placeholder="State"
+        required={true}
         name="state"
         onChange={(e) => setState(e.target.value)}
         value={state}
@@ -138,6 +141,7 @@ const ListingForm = () => {
         className="form-field"
         type="text"
         placeholder="Country"
+        required={true}
         name="country"
         onChange={(e) => setCountry(e.target.value)}
         value={country}
@@ -149,6 +153,7 @@ const ListingForm = () => {
         className="form-field"
         type="text"
         placeholder="Zip Code"
+        required={true}
         name="zipCode"
         onChange={(e) => setZipCode(e.target.value)}
         value={zipCode}
@@ -195,6 +200,7 @@ const ListingForm = () => {
         <option value="Three Bed">Three Bed</option>
         <option value="Four Bed">Four Bed</option>
         <option value="Five Bed">Five Bed</option>
+        <option value="Five Bed">Six Bed</option>
       </select>
 
       <label>Unit Type:</label>
@@ -209,6 +215,7 @@ const ListingForm = () => {
         <option value="House">House</option>
         <option value="Apartment">Apartment</option>
         <option value="Condo">Condo</option>
+        <option value="Single Room">Single Room</option>
       </select>
 
       <label>Number of Bathrooms:</label>
