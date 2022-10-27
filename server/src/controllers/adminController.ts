@@ -1,4 +1,4 @@
-const Admin = require("../src/models/Admin");
+const Admin = require("../models/Admin");
 import mongoose from 'mongoose';
 
 // GET all admin

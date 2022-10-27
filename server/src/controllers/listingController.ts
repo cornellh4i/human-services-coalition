@@ -1,4 +1,4 @@
-const Listing = require("../src/models/Listing");
+const Listing = require("../models/Listing");
 import mongoose from 'mongoose';
 
 // GET all housing listings
