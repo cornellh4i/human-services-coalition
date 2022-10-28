@@ -1,5 +1,3 @@
-import { ReactElement, JSXElementConstructor, ReactFragment, ReactPortal } from "react"
-
 const ListingDetails = ({ Listing }: { Listing: any }) => {
   return (
     <div className="Listing-Details">

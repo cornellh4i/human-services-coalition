@@ -1,6 +1,3 @@
-import { ReactElement, JSXElementConstructor, ReactFragment, ReactPortal } from "react"
-
-
 const AdminDetails = ({ Admin }: { Admin: any }) => {
   return (
     <div className="User-Details">
