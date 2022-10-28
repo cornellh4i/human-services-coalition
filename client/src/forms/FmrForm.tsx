@@ -90,6 +90,7 @@ const FmrForm = () => {
           className="form-field"
           type="number"
           placeholder="Studio FMR price"
+          required={true}
           name="studioFMR"
           onChange={(e) => setStudio(e.target.value)}
           value={studio}
@@ -101,6 +102,7 @@ const FmrForm = () => {
           className="form-field"
           type="number"
           placeholder="One Bed FMR price"
+          required={true}
           name="oneBedFMR"
           onChange={(e) => setOneBed(e.target.value)}
           value={oneBed}
@@ -112,6 +114,7 @@ const FmrForm = () => {
           className="form-field"
           type="number"
           placeholder="Two Bed FMR price"
+          required={true}
           name="twoBedFMR"
           onChange={(e) => setTwoBed(e.target.value)}
           value={twoBed}
@@ -123,6 +126,7 @@ const FmrForm = () => {
           className="form-field"
           type="number"
           placeholder="Three Bed FMR price"
+          required={true}
           name="threeBedFMR"
           onChange={(e) => setThreeBed(e.target.value)}
           value={threeBed}
@@ -134,6 +138,7 @@ const FmrForm = () => {
           className="form-field"
           type="number"
           placeholder="Four Bed FMR price"
+          required={true}
           name="fourBedFMR"
           onChange={(e) => setFourBed(e.target.value)}
           value={fourBed}
@@ -145,6 +150,7 @@ const FmrForm = () => {
           className="form-field"
           type="number"
           placeholder="Five Bed FMR price"
+          required={true}
           name="fiveBedFMR"
           onChange={(e) => setFiveBed(e.target.value)}
           value={fiveBed}
@@ -156,6 +162,7 @@ const FmrForm = () => {
           className="form-field"
           type="number"
           placeholder="Six Bed FMR price"
+          required={true}
           name="sixBedFMR"
           onChange={(e) => setSixBed(e.target.value)}
           value={sixBed}
@@ -167,5 +174,5 @@ const FmrForm = () => {
       </form>
     )
   }
-
+}
   export default FmrForm
