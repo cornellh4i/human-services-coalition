@@ -3,9 +3,9 @@ const UserDetails = ({ User }: { User: any }) => {
     <div className="User-Details">
       <p><strong>Username:</strong>{User.username}</p>
       <p><strong>Password:</strong>{User.password}</p>
+      <p><strong>Voucher Type:</strong>{User.voucherType}</p>
       <p><strong>First Name:</strong>{User.fName}</p>
       <p><strong>Last Name:</strong>{User.lName}</p>
-      <p><strong>Date Created:</strong>{User.dateCreated}</p>
       <p><strong>Supervisor:</strong>{User.supervisor}</p>
       <p><strong>Middle Initial:</strong>{User.mInitial}</p>
       <p><strong>Birthdate:</strong>{User.birthDate}</p>
