@@ -1,4 +1,4 @@
-import React, { SyntheticEvent, useState } from "react"
+import React, { useState } from "react"
 
 const ListingForm = () => {
   const [webScraped, setWebScraped] = useState(false)

@@ -1,4 +1,4 @@
-const User = require("../src/models/User");
+const User = require("../models/User");
 import mongoose from 'mongoose';
 
 // GET all users

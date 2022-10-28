@@ -8,7 +8,7 @@ module.exports = () => {
     createListing,
     updateListing,
     deleteListing,
-  } = require("../controllers/listingController")
+  } = require("./controllers/listingController")
 
   const {
     getUsers,
@@ -16,7 +16,7 @@ module.exports = () => {
     createUser,
     updateUser,
     deleteUser,
-  } = require("../controllers/userController")
+  } = require("./controllers/userController")
 
   const {
     getAdmin,
@@ -24,8 +24,14 @@ module.exports = () => {
     createAdmin,
     deleteAdmin,
     updateAdmin
-  } = require("../controllers/adminController")
+  } = require("./controllers/adminController")
 
+  const {
+    getFMRprices,
+    createFMRprices,
+    updateFMRprices,
+    deleteFMRprices
+  } = require("./controllers/fmrController")
 
   /**** Routes ****/
 
@@ -75,6 +81,19 @@ module.exports = () => {
 
   // DELETE a specific admin
   router.delete('/admins/:id', deleteAdmin)
+
+
+  //GET all FMR prices
+  router.get('/fmr', getFMRprices)
+  
+  // POST (add) FMR prices
+  router.post('/fmr', createFMRprices)
+  
+  // PATCH (edit) FMR prices  
+  router.patch('/fmr/:id', updateFMRprices)
+
+  // DELETE FMR prices
+  router.delete('/fmr/:id', deleteFMRprices)
 
   return router;
 }
