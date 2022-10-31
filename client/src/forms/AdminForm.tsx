@@ -212,8 +212,8 @@ const AdminForm = () => {
         value={contactPref}>
         <option value="" selected disabled hidden>Preferred Contact Method
         </option>
-        <option value="email">Email</option>
-        <option value="phone number">Phone Number</option>
+        <option value="Email">Email</option>
+        <option value="Phone Number">Phone Number</option>
       </select>
 
       <label>Company</label>

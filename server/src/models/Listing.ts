@@ -20,9 +20,16 @@ enum UnitType {
 }
 
 enum Distance {
+  NoInput = "",
   Close = "Close",
   Medium = "Medium",
   Far = "Far"
+}
+
+enum BooleanType {
+  NoInput = "",
+  Close = "true",
+  Medium = "false"
 }
 
 
@@ -77,13 +84,16 @@ const listingSchema = new Schema({
     type: String
   },
   pets: {
-    type: Boolean
+    type: String,
+    enum: BooleanType
   },
   utilities: {
-    type: Boolean
+    type: String,
+    enum: BooleanType
   },
   furnished: {
-    type: Boolean
+    type: String,
+    enum: BooleanType
   },
   distTransportation: {
     type: String,
