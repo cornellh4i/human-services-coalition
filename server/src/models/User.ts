@@ -3,11 +3,13 @@ const mongoose = require('mongoose')
 import { Schema } from 'mongoose';
 
 enum ContactPref {
+  NoInput = "",
   Email = "Email",
   Phone = "Phone Number"
 }
 
 enum Gender {
+  NoInput = "",
   Female = "Female",
   Male = "Male",
   NonBinary = "Non-Binary",

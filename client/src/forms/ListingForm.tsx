@@ -89,7 +89,7 @@ const ListingForm = () => {
       setLinkOrig('')
       setLinkApp('')
       setDateAvailable('')
-    
+
       setError(null)
       console.log('New Listing Added', json)
     }
@@ -241,11 +241,10 @@ const ListingForm = () => {
         value={schoolDistrict}
       />
 
-      <label>Pets:</label>
+      <label>Pets Allowed:</label>
       <select
         name="pets"
         id="listing-pets"
-        required={true}
         onChange={(e) => setPets(e.target.value)}
         value={pets}
       >
@@ -254,11 +253,10 @@ const ListingForm = () => {
         <option value="false">No</option>
       </select>
 
-      <label>Utilities:</label>
+      <label>Utilities Provided:</label>
       <select
         name="utilities"
         id="listing-utilities"
-        required={true}
         onChange={(e) => setUtilities(e.target.value)}
         value={utilities}
       >
@@ -271,7 +269,6 @@ const ListingForm = () => {
       <select
         name="furnished"
         id="listing-furnished"
-        required={true}
         onChange={(e) => setFurnished(e.target.value)}
         value={furnished}
       >
@@ -284,7 +281,6 @@ const ListingForm = () => {
       <select
         name="distTransportation"
         id="listing-distTransportation"
-        required={true}
         onChange={(e) => setDistTransportation(e.target.value)}
         value={distTransportation}
       >
@@ -357,7 +353,7 @@ const ListingForm = () => {
         className="form-field"
         type="date"
         placeholder="01/01/2000"
-        pattern = "[0-9]{2}/[0-9]{2}/[0-9]{4}"
+        pattern="[0-9]{2}/[0-9]{2}/[0-9]{4}"
         name="dateAvailable"
         onChange={(e) => setDateAvailable(e.target.value)}
         value={dateAvailable}
@@ -365,7 +361,7 @@ const ListingForm = () => {
 
       <button type="submit">Add Listing</button>
 
-    {error && <div className="listing-error">{error}</div>}
+      {error && <div className="listing-error">{error}</div>}
     </form>
   )
 }
