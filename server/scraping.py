@@ -53,7 +53,7 @@ def processCSP():
 
                 listing['webScraped'] = True
                 listing['pictures'] = image.img['src']
-                listing['price'] = priceContainer.text[1:].replace(",","")
+                listing['price'] = priceContainer.text[1:].replace(",", "")
                 listing['size'] = "One Bed"
                 listing['numBath'] = 3
                 listing['schoolDistrict'] = None
@@ -67,7 +67,7 @@ def processCSP():
                 listing['linkOrig'] = row['href']
 
                 # Add listing information
-                
+
                 # listing['title'] = info.h3.text
                 # listing['price'] = priceContainer.text
                 # listing['bed bath'] = bedbath.text
@@ -83,7 +83,7 @@ def processCSP():
 
                 listings.append(listing)
         except:
-              continue
+            continue
 
     print(listings)
     return listings
@@ -134,7 +134,7 @@ def processCertified():
             # Check if listing falls under fair market price
             if filterListing(int(price), beds):
                 # Add listing information
-                
+
                 # listing['title'] = titleText
                 # listing['price'] = "$" + priceText[2:]
                 # listing['img'] = imageLinkContainer.img['src']
@@ -169,31 +169,36 @@ def processCertified():
     return listings
 
 # Returns an array of listings from Craigslist under fair market prices (all pages)
+
+
 def processCraigslist():
-  first_url = "https://ithaca.craigslist.org/search/apa"
-  urls = "https://ithaca.craigslist.org/search/apa?s="
+    first_url = "https://ithaca.craigslist.org/search/apa"
+    urls = "https://ithaca.craigslist.org/search/apa?s="
 
-  #Get HTML content from first page of Craigslist
-  r = requests.get(first_url)
+    # Get HTML content from first page of Craigslist
+    r = requests.get(first_url)
 
-  #Create Beautiful Soup object with HTML content
-  soup = BeautifulSoup(r.content, 'html5lib')
+    # Create Beautiful Soup object with HTML content
+    soup = BeautifulSoup(r.content, 'html5lib')
 
-  #Get number of total listings
-  totalListings = int((soup.find('span', attrs={'class': 'totalcount'}).text))
+    # Get number of total listings
+    totalListings = int(
+        (soup.find('span', attrs={'class': 'totalcount'}).text))
 
-  #Update listings to hold listings from first page
-  listings = processCraigslistHelper(first_url)
+    # Update listings to hold listings from first page
+    listings = processCraigslistHelper(first_url)
 
-  #Iterate through all the pages and get all listings under FMR
-  start = 120
-  while start < totalListings:
-    listings + processCraigslistHelper(urls+str(start))
-    start += 120
+    # Iterate through all the pages and get all listings under FMR
+    start = 120
+    while start < totalListings:
+        listings + processCraigslistHelper(urls+str(start))
+        start += 120
 
-  return listings
+    return listings
 
 # Returns an array of listings from Craigslist under fair market prices (only 1 page)
+
+
 def processCraigslistHelper(url):
     # Get HTML content from specified URL
     r = requests.get(url)
@@ -214,9 +219,6 @@ def processCraigslistHelper(url):
             priceText = info.find('span', attrs={
                 'class': 'result-meta'}).find('span', attrs={'class': 'result-price'}).text
             price = (priceText[1:]).replace(',', '')
-            address = info.find('span', attrs={
-                'class': 'result-meta'}).find('span', attrs={'class': 'result-hood'}).text
-            address = address.strip()
             try:
                 beds = info.find('span', attrs={
                     'class': 'result-meta'}).find('span', attrs={'class': 'housing'}).text
@@ -238,7 +240,6 @@ def processCraigslistHelper(url):
                 # Add listing information
                 listing['title'] = title.strip()
                 listing['price'] = priceText
-                listing['address'] = address[1:len(address)-1]
                 listing['beds'] = beds
                 listing['url'] = url
                 # Get bathrooms and pictures
@@ -259,7 +260,7 @@ def processCraigslistHelper(url):
     return listings
 
 
-# Get additonal info from Craigslist such as bathrooms and pictures
+# Get additonal info from Craigslist such as bathrooms, pictures, and address
 def getCraigslistAdditional(url):
     r = requests.get(url)
     soup = BeautifulSoup(r.content, 'html5lib')
@@ -277,6 +278,10 @@ def getCraigslistAdditional(url):
     for pic in imageHead.findAll('a'):
         pics.append(pic['href'])
     info['pics'] = pics
+
+    # Get address
+    address = soup.find('div', attrs={'class': 'mapaddress'}).text.strip()
+    info['address'] = address
 
     return info
 
@@ -298,6 +303,8 @@ def processApartments():
             processApartmentsHelper(url)
 
 # Get the total number of pages of listings for each bed size
+
+
 def getNumPages(url):
     URL = url
 
@@ -312,13 +319,16 @@ def getNumPages(url):
     soup = BeautifulSoup(r.content, 'html5lib')
 
     # Get the total number of pages
-    pageRange = soup.find('div', attrs={'id': 'placardContainer'}).find('span', attrs={'class': 'pageRange'}).text
+    pageRange = soup.find('div', attrs={'id': 'placardContainer'}).find(
+        'span', attrs={'class': 'pageRange'}).text
     index = pageRange.find('of')
     totalNumPages = pageRange[index+2:].strip()
 
     return int(totalNumPages)
 
 # Processes a single page of apartments.com and returns an array of listings from that page under fair market prices
+
+
 def processApartmentsHelper(url):
     URL = url
 
@@ -346,12 +356,15 @@ def processApartmentsHelper(url):
                 address = row.find(
                     'div', attrs={'class': 'property-address js-url'}).text
                 if (address.find('Ithaca') == 0):
-                    address = row.find('span', attrs = {'class': 'js-placardTitle title'}).text + " " + address
+                    address = row.find(
+                        'span', attrs={'class': 'js-placardTitle title'}).text + " " + address
             except:
                 address = row.find(
                     'p', attrs={'class': 'property-address js-url'}).text
                 if (address.find('NY') < 0):
-                    address = address + " " + row.find('p', attrs={'class': 'property-address js-url'}).find_next_sibling().text
+                    address = address + " " + \
+                        row.find(
+                            'p', attrs={'class': 'property-address js-url'}).find_next_sibling().text
 
             # Get the price
             try:
@@ -387,12 +400,13 @@ def processApartmentsHelper(url):
 
             # Get the URL of listing
             linkContainer = row.find('section', attrs={
-                                           'class': 'placard-content'}).find('a', attrs = {'class': 'property-link'})
+                'class': 'placard-content'}).find('a', attrs={'class': 'property-link'})
             link = linkContainer['href']
 
             # Get pictures of listing
             pictures = []
-            pictureContainer = row.find('div', attrs = {'class': 'carouselInner'}).findChild()
+            pictureContainer = row.find(
+                'div', attrs={'class': 'carouselInner'}).findChild()
             try:
                 pic = pictureContainer['style']
                 indexQuotes1 = pic.find('\"')
@@ -449,6 +463,8 @@ def processApartmentsHelper(url):
     return listings
 
 # Get the price in integer form
+
+
 def getPriceApartmentsHelper(priceText):
     priceText = priceText.strip()
     if (priceText.find(" ") >= 0):
@@ -459,6 +475,8 @@ def getPriceApartmentsHelper(priceText):
     return int(price)
 
 # Get additional information from apartments.com such as number of bathrooms, whether the listing includes utilities, etc.
+
+
 def getApartmentsAdditional(link, price):
     URL = link
 
@@ -477,21 +495,26 @@ def getApartmentsAdditional(link, price):
 
     # Get the number of bathrooms in the listing
     try:
-        table = soup.find('div', attrs = {'class': 'sectionContainer'})
-        pricingGridItemExists = table.find('div', attrs = {'class': 'pricingGridItem'})
-        if pricingGridItemExists == None: raise Exception
-        for row in table.findAll('div', attrs = {'class': 'pricingGridItem'}):
-            rowPriceText = row.find('span', attrs = {'class': 'rentLabel'}).text.strip()
+        table = soup.find('div', attrs={'class': 'sectionContainer'})
+        pricingGridItemExists = table.find(
+            'div', attrs={'class': 'pricingGridItem'})
+        if pricingGridItemExists == None:
+            raise Exception
+        for row in table.findAll('div', attrs={'class': 'pricingGridItem'}):
+            rowPriceText = row.find(
+                'span', attrs={'class': 'rentLabel'}).text.strip()
             rowPrice = getPriceApartmentsHelper(rowPriceText)
 
             if (rowPrice == price):
-                container = row.find('span', attrs = {'class': 'detailsTextWrapper'})
+                container = row.find(
+                    'span', attrs={'class': 'detailsTextWrapper'})
                 firstChild = container.findChild()
                 bath = firstChild.find_next_sibling().text.strip()
                 bath = bath[:bath.find(" ")]
     except:
-        info = soup.find('ul', attrs = {'class': 'priceBedRangeInfo'}).findChild().find_next_sibling().find_next_sibling()
-        bath = info.find('p', attrs = {'class': 'rentInfoDetail'}).text.strip()
+        info = soup.find('ul', attrs={'class': 'priceBedRangeInfo'}).findChild(
+        ).find_next_sibling().find_next_sibling()
+        bath = info.find('p', attrs={'class': 'rentInfoDetail'}).text.strip()
         bath = bath[:bath.find(" ")]
 
     try:
@@ -501,25 +524,26 @@ def getApartmentsAdditional(link, price):
 
     # Get whether or not the listing includes utilities
     utilities = False
-    for column in soup.findAll('h4', attrs = {'class': 'header-column'}):
+    for column in soup.findAll('h4', attrs={'class': 'header-column'}):
         if column.text.find("Utilities Included") >= 0:
             utilities = True
 
     # Get whether or not the listing is furnished
     furnished = False
-    for list in soup.findAll('ul', attrs = {'class': 'combinedAmenitiesList'}):
-        for amenities in list.findAll('li', attrs = {'class': 'specInfo'}):
+    for list in soup.findAll('ul', attrs={'class': 'combinedAmenitiesList'}):
+        for amenities in list.findAll('li', attrs={'class': 'specInfo'}):
             if amenities.span.text == 'Furnished':
                 furnished = True
 
     # Get distance to transportation (airports), no info about distance to buses on apartments.com
     distTransportation = ""
-    for info in soup.findAll('h2', attrs = {'class': 'sectionTitle'}):
+    for info in soup.findAll('h2', attrs={'class': 'sectionTitle'}):
         try:
             if info.text == "Transportation":
-                for list in info.find_parent('section').findAll('div', attrs = {'class': 'transportationName airport'}):
+                for list in info.find_parent('section').findAll('div', attrs={'class': 'transportationName airport'}):
                     airport = list.text
-                    dist = list.find_parent('tr').find('td', attrs = {'class': 'right-align-data'}).text
+                    dist = list.find_parent('tr').find(
+                        'td', attrs={'class': 'right-align-data'}).text
                     distAirport = airport + " Airport: " + dist + ", "
                     distTransportation += distAirport
         except:
@@ -527,7 +551,7 @@ def getApartmentsAdditional(link, price):
     distTransportation = distTransportation[:len(distTransportation)-2]
 
     # Get the landlord's number
-    phoneContainer = soup.find('p', attrs = {'class': 'phoneLabel'}).a
+    phoneContainer = soup.find('p', attrs={'class': 'phoneLabel'}).a
     landlordPhone = phoneContainer['href']
     landlordPhone = landlordPhone[landlordPhone.find(':')+1:]
 
@@ -547,6 +571,8 @@ def getBed(bedbath):
     return bed
 
 # Returns fair market price for listing type
+
+
 def getFMR(bed):
     if bed == "Studio":
         return fmrStudio
@@ -564,18 +590,20 @@ def getFMR(bed):
         return fmrSix
 
 # Returns true if price of listing is under fair market price for listing type
+
+
 def filterListing(price, beds):
-      return price <= getFMR(beds)
+    return price <= getFMR(beds)
 
 # def main():
 
-processCSP()
-sys.stdout.flush()
+# processCSP()
+# sys.stdout.flush()
+
 
 # processCertified()
-# processCraigslist()
+processCraigslist()
 # processApartments()
 
 # if __name__ == '__main__':
 #     main()
-
