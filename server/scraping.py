@@ -1,5 +1,6 @@
 from audioop import add
 from cgi import print_exception
+from re import S
 import requests
 from bs4 import BeautifulSoup
 import sys
@@ -409,6 +410,9 @@ def processApartmentsHelper(url):
                     address = address + " " + \
                         row.find(
                             'p', attrs={'class': 'property-address js-url'}).find_next_sibling().text
+            streetAddress = address[:address.find('Ithaca')-1]
+            if streetAddress.find(',') >= 0:
+                streetAddress = streetAddress[:streetAddress.find(',')].strip()
 
             # Get the price
             try:
@@ -481,23 +485,36 @@ def processApartmentsHelper(url):
             if filterListing(price, getBed(bed)):
                 # Add listing information
                 listing['webScraped'] = True
+                listing['streetAddress'] = streetAddress
+                listing['city'] = "Ithaca"
+                listing['state'] = "NY"
+                listing['country'] = "U.S."
+                listing['zipCode'] = 14850
                 listing['pictures'] = pictures
-                listing['address'] = address
                 listing['price'] = price
                 listing['size'] = bed
                 listing.update(additionalInfo)
 
                 # Print statements for debugging
                 print(listing['webScraped'])
+                print(listing['streetAddress'])
+                print(listing['city'])
+                print(listing['state'])
+                print(listing['country'])
+                print(listing['zipCode'])
                 print(listing['pictures'])
-                print(listing['address'])
                 print(listing['price'])
                 print(listing['size'])
                 print(listing['numBath'])
+                print(listing['schoolDistrict'])
+                print(listing['pets'])
                 print(listing['utilities'])
                 print(listing['furnished'])
                 print(listing['distTransportation'])
+                print(listing['landlord'])
+                print(listing['landlordEmail'])
                 print(listing['landlordPhone'])
+                print(listing['linkApp'])
                 print()
 
                 listings.append(listing)
@@ -601,10 +618,15 @@ def getApartmentsAdditional(link, price):
 
     # Add listing information
     listing['numBath'] = bath
+    listing['schoolDistrict'] = None
+    listing['pets'] = None
     listing['utilities'] = utilities
     listing['furnished'] = furnished
     listing['distTransportation'] = distTransportation
+    listing['landlord'] = "Apartments.com"
+    listing['landlordEmail'] = None
     listing['landlordPhone'] = landlordPhone
+    listing['linkApp'] = None
 
     return listing
 
@@ -645,8 +667,8 @@ def filterListing(price, beds):
 
 # processCertified()
 # processCraigslist()
-# processApartments()
-getIthacaRentingHelper('http://ithacarenting.com/downtown-rentals/')
+processApartments()
+# getIthacaRentingHelper('http://ithacarenting.com/downtown-rentals/')
 
 # if __name__ == '__main__':
 #     main()
