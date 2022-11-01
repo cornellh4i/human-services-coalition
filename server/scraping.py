@@ -196,9 +196,8 @@ def processCraigslist():
 
     return listings
 
+
 # Returns an array of listings from Craigslist under fair market prices (only 1 page)
-
-
 def processCraigslistHelper(url):
     # Get HTML content from specified URL
     r = requests.get(url)
@@ -286,6 +285,52 @@ def getCraigslistAdditional(url):
     return info
 
 
+def getIthacaRentingHelper(url):
+    r = requests.get(url)
+    soup = BeautifulSoup(r.content, 'html5lib')
+
+    listings = []
+
+    units = soup.find('div', attrs={'class': 'units'})
+    print(soup)
+    for unit in soup.findAll('div', attrs={'class': 'unit-list'}):
+        print("hi")
+        # Get beds
+        bedbath = unit.find('div', attrs={'class': 'unit-type'}).text.strip()
+        if 'BR' not in bedbath:
+            beds = "Studio"
+            baths = 0
+        else:
+            beds = (int)(bedbath[0:1])
+            baths = (int)(bedbath[4:5])
+        # Get price, if no price listed, set to large number
+        try:
+            price = (int)(unit.find('div', attrs={'id': 'unitPrice'}))
+        except:
+            price = 100000
+        # Get url
+        url = unit.a['href']
+
+        listing = {}
+
+        if filterListing(price, beds):
+            listing['price'] = price
+            listing['size'] = beds
+            listing['numBaths'] = baths
+            listing['linkOrig'] = url
+
+        print(listing['price'])
+        print(listing['size'])
+        print(listing['numBaths'])
+        print(listing['linkOrig'])
+
+
+def getIthacaRentingInfo(url):
+    r = requests.get(url)
+    soup = BeautifulSoup(r.content, 'html5lib')
+    info = {}
+
+
 # Returns an array of listings from apartments.com under fair market prices
 def processApartments():
     # These are the urls of each bed size
@@ -326,9 +371,8 @@ def getNumPages(url):
 
     return int(totalNumPages)
 
+
 # Processes a single page of apartments.com and returns an array of listings from that page under fair market prices
-
-
 def processApartmentsHelper(url):
     URL = url
 
@@ -570,9 +614,8 @@ def getBed(bedbath):
     bed = bedbath[0: bedbath.find(' ')]
     return bed
 
+
 # Returns fair market price for listing type
-
-
 def getFMR(bed):
     if bed == "Studio":
         return fmrStudio
@@ -589,9 +632,8 @@ def getFMR(bed):
     elif bed == "6":
         return fmrSix
 
+
 # Returns true if price of listing is under fair market price for listing type
-
-
 def filterListing(price, beds):
     return price <= getFMR(beds)
 
@@ -602,8 +644,9 @@ def filterListing(price, beds):
 
 
 # processCertified()
-processCraigslist()
+# processCraigslist()
 # processApartments()
+getIthacaRentingHelper('http://ithacarenting.com/downtown-rentals/')
 
 # if __name__ == '__main__':
 #     main()
