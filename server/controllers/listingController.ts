@@ -90,12 +90,13 @@ const createScrapedListing = async (req, res) => {
 
   // collect data from script
   const spawn = require('child_process').spawn;
-  const scraping = spawn(process.env.HOMEBREW_PREFIX + '/bin/python', ['scraping.py']);
+  //const scraping = spawn(process.env.HOMEBREW_PREFIX + '/bin/python', ['scraping.py']);
+  const scraping = spawn('python', ['scraping.py']);
 
   //const listings = [];
 
   var listing = "s";
-  console.log(process.env.HOMEBREW_PREFIX + '/bin/python', ['scraping.py']);
+  //console.log(process.env.HOMEBREW_PREFIX + '/bin/python', ['scraping.py']);
 
   scraping.stdout.on('data', function() {
     console.log("calling python script");
