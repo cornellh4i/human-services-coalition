@@ -4,6 +4,9 @@ import Home from "./pages/Home"
 import Users from "./pages/Users"
 import Admins from "./pages/Admins"
 import NavBar from "./components/NavBar"
+import LoginForm from './forms/LoginForm'
+import ListingDetails from './components/ListingDetails'
+
 
 function App() {
   return (
@@ -26,6 +29,7 @@ function App() {
             />
           </Routes>
         </div>
+       <Home></Home>
       </BrowserRouter>
     </div>
   );
