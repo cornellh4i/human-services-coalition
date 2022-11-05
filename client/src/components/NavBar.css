@@ -1,0 +1,8 @@
+.log-out-button {
+  width: 118px;
+  height: 38px;
+  filter: drop-shadow(0px 4px 4px rgba(93, 115, 126, 0.5));
+  flex: none;
+  order: 3;
+  flex-grow: 0;
+}
