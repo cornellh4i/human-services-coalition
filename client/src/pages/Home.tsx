@@ -1,3 +1,5 @@
+import Container from '@mui/material/Container'
+import Grid from '@mui/material/Grid'
 import { useEffect, useState } from 'react'
 import ListingDetails from '../components/ListingDetails'
 import ListingForm from "../forms/ListingForm"
@@ -8,9 +10,10 @@ const Home = () => {
   useEffect(() => {
     const fetchListings = async () => {
       const response = await fetch('/api/listing')
+      console.log(response)
       const json = await response.json()
 
-      if (response.ok) {
+      if (response.ok){
         setListings(json)
       }
     }
@@ -20,20 +23,27 @@ const Home = () => {
 
   //the function that calls the delete routing function
   const handleDelete = async (id: any) => {
+    console.log(id)
     await fetch('/api/listing/' + id, {
       method: 'DELETE' 
     })
-    //after we delete we must update the local state
-    const newListings = Listings.filter(Listing => Listing.id != id)
+    // after we delete we must update the local state
+    const newListings = Listings.filter(Listing => Listing._id != id)
     setListings(newListings)
   }
    
   return (
     <div className="home">
       <div className="listings">
-        {Listings && Listings.map((Listing) => (
-          <ListingDetails key={Listing._id} Listing={Listing} handleDelete = {handleDelete}/>
-        ))}
+        <Container>
+          <Grid container spacing = {3}>
+            {Listings.map((Listing) => (             
+                <Grid item key={Listing._id}>
+                  <ListingDetails Listing={Listing} handleDelete = {handleDelete}/>
+                </Grid>
+            ))}
+          </Grid>
+        </Container>
         {/* <ListingForm /> */}
       </div>
     </div>
