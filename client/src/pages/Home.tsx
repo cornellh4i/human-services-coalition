@@ -36,7 +36,7 @@ const Home = () => {
     <div className="home">
       <div className="listings">
         <Container>
-          <Grid container spacing = {3}>
+          <Grid container spacing = {2}>
             {Listings.map((Listing) => (             
                 <Grid item key={Listing._id}>
                   <ListingDetails Listing={Listing} handleDelete = {handleDelete}/>

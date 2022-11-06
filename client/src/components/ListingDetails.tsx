@@ -10,7 +10,7 @@ import { EditOutlined } from '@mui/icons-material';
 import IconButton from '@mui/material/IconButton/IconButton';
 import { color, fontFamily, fontSize, fontStyle, fontWeight, height, width } from '@mui/system';
 import { ThemeProvider } from '@emotion/react';
-import { createTheme } from '@mui/material';
+import { createTheme, Grid } from '@mui/material';
 
 const listingTheme = createTheme({
   typography: {
@@ -38,74 +38,111 @@ const sizeTheme = createTheme({
 
 export default function ListingDetails({ Listing, handleDelete}: { Listing: any , handleDelete: any}){
   return(
-    <Card sx={{ 
-      maxWidth: 350,
-      maxHeight: 340,
-      borderRadius: 2
-      }} elevation = {3}>
+    <Card style={{backgroundColor: "#F5F5F5"}} sx={{ 
+      width: "350px",
+      height: "340px",
+      borderRadius: "10px",
+      boxShadow: "0px 2px 4px rgba(0,0,0,0.25)",
+      flex: "none",
+      order: 1,
+      flexGrow: 0
+      }} elevation = {5}>
       
-      <CardMedia sx={{
-        width: 300,
-        height: 200
+      {/* <CardMedia sx={{
+        width: 350,
+        height: 242
       }}
         component = "img"
         alt = "listing picture"
-        image = "https://media.istockphoto.com/vectors/home-flat-icon-pixel-perfect-for-mobile-and-web-vector-id1145840259?k=20&m=1145840259&s=612x612&w=0&h=4ejY4fSiFcyk3MsQx8bOpeJ_rf5_yeDGuIoH5rpPAbY="
-      />
+        image = "https://cdn.pixabay.com/photo/2020/03/14/13/25/house-4930614_1280.jpg"
+      /> */}
 
-      <CardContent>
-        
-        <IconButton onClick={() => handleDelete(Listing._id)}>
-          <DeleteOutlined />
-        </IconButton>
+      <CardContent style={{backgroundColor: "#D9D9D9"}}> 
+        <Grid sx={{width: "350px", height: "210px", left: "0px", top: "0px"}}>
+          <IconButton onClick={() => handleDelete(Listing._id)}>
+            <DeleteOutlined />
+          </IconButton>
 
-        <IconButton>
-          <EditOutlined />
-        </IconButton>
-          
-        <ThemeProvider theme = {listingTheme}>
-          <Typography gutterBottom variant ="h6" 
-          style={{color:"#00adb5", fontFamily:"Open Sans"}}
-          fontStyle = {"normal"}
-          fontWeight = {700}
-          fontSize = {18}
-          //lineHeight= {25}
-          color = {"#343434"}
-          >
-            Name of Listing
-          </Typography>
-        </ThemeProvider>
-
-        <ThemeProvider theme = {addressTheme}>
-          <Typography variant ="body2" 
-                      width = {338} 
-                      height = {18}
-                      fontFamily = {"Open Sans"} 
-                      fontStyle = {"bold"} 
-                      fontWeight = {400} 
-                      fontSize = {18}  
-                      color = {"#343434"}>
-            {Listing.streetAddress}
-          </Typography>
-        </ThemeProvider>
-  
-
-        <ThemeProvider theme={sizeTheme}>
-          <Typography variant ="body2" sx = {{
-                      width: 338,
-                      height: 18,
-                      fontFamily: "Open Sans",
-                      fontStyle : "normal",
-                      fontWeight :400,
-                      fontSize :18, 
-                      color : "#343434"}}>
-            {Listing.size} / {Listing.numBath}  {Listing.price}
-          </Typography>
-        </ThemeProvider>
-
-      
-
+          <IconButton>
+            <EditOutlined />
+          </IconButton>
+        </Grid>
       </CardContent>
+
+      <Grid width="250px" height="72px" top="251px" left="18px" padding="7px 34px 0px 13px"
+      gap="9px" display="flex" flexDirection="column" alignItems="flex-start">
+        <Grid item>
+          <ThemeProvider theme = {listingTheme}>
+            <Typography variant ="body2" sx = {{
+                        width: "278px",
+                        height: "18px", 
+                        fontFamily:"Open Sans",
+                        fontStyle: "normal",
+                        fontWeight: 700,
+                        fontSize: "18px",
+                        color: "#343434",
+                        flex: "none",
+                        order: 0,
+                        flexGrow: 0}}>
+                          Woodland Acres Townhomes
+            </Typography>
+          </ThemeProvider>
+        </Grid>
+          {/* <Grid item>
+            <IconButton onClick={() => handleDelete(Listing._id)}>
+              <DeleteOutlined />
+            </IconButton>
+
+            <IconButton>
+              <EditOutlined />
+            </IconButton>
+          </Grid> */}
+        {/* </Grid> */}
+        <Grid item>
+          <ThemeProvider theme = {addressTheme}>
+            <Typography variant ="body2" sx = {{
+                        width: "278px",
+                        height: "18px",
+                        fontFamily: "'Open Sans'",
+                        fontStyle: "normal",
+                        fontWeight: 400, 
+                        fontSize: "18px", 
+                        color: "#343434",
+                        flex: "none",
+                        order: 1,
+                        flexGrow: 0}}>
+              {Listing.streetAddress}
+            </Typography>
+          </ThemeProvider>
+        </Grid>
+        <Grid item>
+          <ThemeProvider theme={sizeTheme}>
+                <Typography variant ="body2" sx = {{
+                            width: "278px",
+                            height: "18px",
+                            fontFamily: "Open Sans",
+                            fontStyle: "normal",
+                            fontWeight: 400,
+                            fontSize: 18, 
+                            color: "#343434",
+                            flex: "none",
+                            order: 2,
+                            flexGrow: 0}}>
+                  {Listing.size} / {Listing.numBath}
+                </Typography>
+          </ThemeProvider>
+        </Grid>
+      </Grid>
+      <Grid width={40} height={18} top={305} left={325}>
+        <Typography variant = "body2" sx = {{
+                    fontFamily: "Open Sans",
+                    fontStyle: "normal",
+                    fontWeight: 700,
+                    fontSize: 18, 
+                    color: "#000000"}}>
+          {Listing.price}
+        </Typography>
+      </Grid>
     </Card>
 
   )
