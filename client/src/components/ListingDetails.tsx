@@ -10,31 +10,57 @@ import { EditOutlined } from '@mui/icons-material';
 import IconButton from '@mui/material/IconButton/IconButton';
 import { color, fontFamily, fontSize, fontStyle, fontWeight, height, width } from '@mui/system';
 import { ThemeProvider } from '@emotion/react';
-import { createTheme, Grid } from '@mui/material';
+import { createMuiTheme, createTheme, Grid, makeStyles, styled } from '@mui/material';
+import { green, purple } from '@mui/material/colors';
+
 
 const listingTheme = createTheme({
+  palette: {
+    primary: purple,
+    secondary: green
+  },
   typography: {
-    fontFamily: 'Quicksand',
-    fontSize: 18,
-  }
+    fontFamily: "Arial",
+    fontSize: 13, 
+    fontWeightRegular: 400,
+  } 
 });
 
-const addressTheme = createTheme({
+const addressTheme = createMuiTheme({
+  palette: {
+    primary: purple,
+    secondary: green
+  },
   typography: {
-    fontFamily: "Open Sans"
-  }
+    fontFamily: "Arial",
+    fontSize: 13, 
+    fontWeightRegular: 400,
+  } 
 });
 
 const priceTheme = createTheme({
+  palette: {
+    primary: purple,
+    secondary: green
+  },
   typography: {
-    fontFamily: "Open Sans"
-  }
+    fontFamily: "Arial",
+    fontSize: 13, 
+    fontWeightRegular: 400,
+  } 
 });
 const sizeTheme = createTheme({
+  palette: {
+    primary: purple,
+    secondary: green
+  },
   typography: {
-    fontFamily: "Open Sans"
-  }
+    fontFamily: "Arial",
+    fontSize: 13, 
+    fontWeightRegular: 400,
+  } 
 });
+
 
 export default function ListingDetails({ Listing, handleDelete}: { Listing: any , handleDelete: any}){
   return(
@@ -43,105 +69,66 @@ export default function ListingDetails({ Listing, handleDelete}: { Listing: any 
       height: "340px",
       borderRadius: "10px",
       boxShadow: "0px 2px 4px rgba(0,0,0,0.25)",
+      // padding: "5px 0px 0px 5px",
       flex: "none",
       order: 1,
       flexGrow: 0
       }} elevation = {5}>
-      
-      {/* <CardMedia sx={{
-        width: 350,
-        height: 242
-      }}
-        component = "img"
-        alt = "listing picture"
-        image = "https://cdn.pixabay.com/photo/2020/03/14/13/25/house-4930614_1280.jpg"
-      /> */}
 
       <CardContent style={{backgroundColor: "#D9D9D9"}}> 
         <Grid sx={{width: "350px", height: "210px", left: "0px", top: "0px"}}>
-          <IconButton onClick={() => handleDelete(Listing._id)}>
-            <DeleteOutlined />
-          </IconButton>
-
-          <IconButton>
-            <EditOutlined />
-          </IconButton>
         </Grid>
       </CardContent>
 
-      <Grid width="250px" height="72px" top="251px" left="18px" padding="7px 34px 0px 13px"
+      <Grid width="350px" height="72px" top="210px" left="0px" padding="7px 34px 0px 13px"
       gap="9px" display="flex" flexDirection="column" alignItems="flex-start">
-        <Grid item>
-          <ThemeProvider theme = {listingTheme}>
-            <Typography variant ="body2" sx = {{
-                        width: "278px",
-                        height: "18px", 
-                        fontFamily:"Open Sans",
-                        fontStyle: "normal",
-                        fontWeight: 700,
-                        fontSize: "18px",
-                        color: "#343434",
-                        flex: "none",
-                        order: 0,
-                        flexGrow: 0}}>
-                          Woodland Acres Townhomes
-            </Typography>
-          </ThemeProvider>
-        </Grid>
-          {/* <Grid item>
-            <IconButton onClick={() => handleDelete(Listing._id)}>
-              <DeleteOutlined />
-            </IconButton>
+         
+          <Grid container alignItems="center" spacing= {1} >
+            
+            <ThemeProvider theme={listingTheme}>
+              <Typography sx = {{fontSize: "17px"}}>
+                Woodland Acres Townhomes
+              </Typography>
+            </ThemeProvider>
+           
 
-            <IconButton>
-              <EditOutlined />
-            </IconButton>
-          </Grid> */}
-        {/* </Grid> */}
-        <Grid item>
-          <ThemeProvider theme = {addressTheme}>
-            <Typography variant ="body2" sx = {{
-                        width: "278px",
-                        height: "18px",
-                        fontFamily: "'Open Sans'",
-                        fontStyle: "normal",
-                        fontWeight: 400, 
-                        fontSize: "18px", 
-                        color: "#343434",
-                        flex: "none",
-                        order: 1,
-                        flexGrow: 0}}>
-              {Listing.streetAddress}
-            </Typography>
-          </ThemeProvider>
-        </Grid>
-        <Grid item>
-          <ThemeProvider theme={sizeTheme}>
-                <Typography variant ="body2" sx = {{
-                            width: "278px",
-                            height: "18px",
-                            fontFamily: "Open Sans",
-                            fontStyle: "normal",
-                            fontWeight: 400,
-                            fontSize: 18, 
-                            color: "#343434",
-                            flex: "none",
-                            order: 2,
-                            flexGrow: 0}}>
-                  {Listing.size} / {Listing.numBath}
-                </Typography>
-          </ThemeProvider>
-        </Grid>
-      </Grid>
-      <Grid width={40} height={18} top={305} left={325}>
-        <Typography variant = "body2" sx = {{
-                    fontFamily: "Open Sans",
-                    fontStyle: "normal",
-                    fontWeight: 700,
-                    fontSize: 18, 
-                    color: "#000000"}}>
-          {Listing.price}
-        </Typography>
+            <Grid item>
+                <IconButton onClick={() => handleDelete(Listing._id)}>
+                  <DeleteOutlined fontSize = "small"/>
+                </IconButton>
+                <IconButton>
+                  <EditOutlined fontSize = "small"/>
+                </IconButton>
+            </Grid>
+
+          </Grid>
+    
+          <Grid container alignItems="center" spacing= {1}>
+            <ThemeProvider theme = {addressTheme}>
+              <Typography>
+                {Listing.streetAddress}, Ithaca
+              </Typography>
+            </ThemeProvider>
+          </Grid>
+
+          <Grid container alignItems="center" spacing= {0}>
+
+            <Grid item xs spacing= {1}>
+              <ThemeProvider theme={sizeTheme}>
+                  <Typography >
+                    {Listing.size} / {Listing.numBath} bath
+                  </Typography>
+              </ThemeProvider>
+            </Grid>
+      
+            <Grid item>
+              <Typography >
+                ${Listing.price}/mo
+              </Typography>
+            </Grid>
+  
+          </Grid>
+
       </Grid>
     </Card>
 
