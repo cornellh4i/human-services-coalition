@@ -35,7 +35,7 @@ const addressTheme = createMuiTheme({
     fontFamily: "Arial",
     fontSize: 13, 
     fontWeightRegular: 400,
-  } 
+  } ,
 });
 
 const priceTheme = createTheme({
@@ -80,30 +80,29 @@ export default function ListingDetails({ Listing, handleDelete}: { Listing: any 
         </Grid>
       </CardContent>
 
-      <Grid width="350px" height="72px" top="210px" left="0px" padding="7px 34px 0px 13px"
+      <Grid padding="0px 10px"
       gap="9px" display="flex" flexDirection="column" alignItems="flex-start">
          
-          <Grid container alignItems="center" spacing= {1} >
-            
+        <Grid container alignItems="center" spacing= {1} >
+
+          <Grid item xs={9}>
             <ThemeProvider theme={listingTheme}>
               <Typography sx = {{fontSize: "17px"}}>
                 Woodland Acres Townhomes
               </Typography>
             </ThemeProvider>
-           
-
-            <Grid item>
-                <IconButton onClick={() => handleDelete(Listing._id)}>
-                  <DeleteOutlined fontSize = "small"/>
-                </IconButton>
-                <IconButton>
-                  <EditOutlined fontSize = "small"/>
-                </IconButton>
-            </Grid>
-
           </Grid>
-    
-          <Grid container alignItems="center" spacing= {1}>
+
+          <Grid item xs={3}>
+              <IconButton onClick={() => handleDelete(Listing._id)}>
+                <DeleteOutlined fontSize = "small"/>
+              </IconButton>
+              <IconButton>
+                <EditOutlined fontSize = "small"/>
+              </IconButton>
+          </Grid>
+
+          <Grid item xs={12}>
             <ThemeProvider theme = {addressTheme}>
               <Typography>
                 {Listing.streetAddress}, Ithaca
@@ -111,24 +110,21 @@ export default function ListingDetails({ Listing, handleDelete}: { Listing: any 
             </ThemeProvider>
           </Grid>
 
-          <Grid container alignItems="center" spacing= {0}>
+          <Grid item xs={9} spacing= {1}>
+            <ThemeProvider theme={sizeTheme}>
+                <Typography >
+                  {Listing.size} / {Listing.numBath} bath
+                </Typography>
+            </ThemeProvider>
+          </Grid>   
 
-            <Grid item xs spacing= {1}>
-              <ThemeProvider theme={sizeTheme}>
-                  <Typography >
-                    {Listing.size} / {Listing.numBath} bath
-                  </Typography>
-              </ThemeProvider>
-            </Grid>
-      
-            <Grid item>
-              <Typography >
-                ${Listing.price}/mo
-              </Typography>
-            </Grid>
-  
+          <Grid item xs={3}>
+            <Typography >
+              ${Listing.price}/mo
+            </Typography>
           </Grid>
-
+          
+        </Grid>
       </Grid>
     </Card>
 
