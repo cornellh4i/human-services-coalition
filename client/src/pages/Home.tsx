@@ -10,6 +10,8 @@ import {
   ThemeProvider,
 } from '@mui/material/styles'
 import { Typography } from '@mui/material'
+import FilterSideBar from '../components/FilterSideBar'
+// import AdminDetals from '../components/AdminDetails/AdminDetails'
 
 let theme = createTheme();
 theme = responsiveFontSizes(theme);
@@ -34,7 +36,9 @@ const Home = () => {
   return (
     <div className="home">
       <div className="listings">
-        <Box sx={{
+        <FilterSideBar />
+        {/* </FilterSideBar> */}
+        {/* <Box sx={{
           flexGrow: 1,
           position: "absolute",
           width: '23%',
@@ -63,7 +67,7 @@ const Home = () => {
               </ThemeProvider>
             </Grid>
           </Grid>
-        </Box>
+        </Box> */}
         {Listings && Listings.map((Listing) => (
           <ListingDetails key={Listing._id} Listing={Listing} />
         ))}

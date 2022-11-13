@@ -14,9 +14,10 @@ import MenuItem from '@mui/material/MenuItem';
 //import AdbIcon from '@mui/icons-material/Adb';
 import { createTheme } from '@mui/material/styles';
 import { ReactComponent as Logo } from './coclogo.svg';
+import { Link } from 'react-router-dom';
 import './NavBar.css';
 
-const pages = ['Manage Listings', 'Create New', 'Update FMR'];
+const pages = ['Create New', 'Manage Profiles', 'Update FMR'];
 const settings = ['Listing', 'User', 'Admin'];
 
 // const theme = createTheme({
@@ -55,111 +56,31 @@ function ResponsiveAppBar() {
   };
 
   return (
-    <AppBar position="static" style={{ background: "white" }}>
+    <AppBar position="static" elevation={0} style={{ background: "white", borderBottom: '1px solid #D9D9D9' }}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          {/* <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
-          <Typography
-            variant="h6"
-            noWrap
-            component="a"
-            href="/"
-            sx={{
-              mr: 2,
-              display: { xs: 'none', md: 'flex' },
-              fontFamily: 'avenir',
-              fontWeight: 700,
-              letterSpacing: '.3rem',
-              color: 'black',
-              textDecoration: 'none',
-            }}
-          >
-            LOGO
-          </Typography> */}
-          <Box textAlign={'left'}>
-            <Button sx={{
-              padding: 0
-            }}
-              style={{ justifyContent: "flex-start" }}>
+          <Box textAlign={'left'}
+            sx={{ p: 0 }}>
+            <Button
+              component={Link} to="/"
+              sx={{ width: 300, p: 0, border: 0, justifyContent: "flex-start" }}>
               <Logo height={75} href="" />
             </Button>
           </Box>
 
-          <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
-            <IconButton
-              size="large"
-              aria-label="account of current user"
-              aria-controls="menu-appbar"
-              aria-haspopup="true"
-              onClick={handleOpenNavMenu}
-              color="inherit"
-            >
-              <MenuIcon />
-            </IconButton>
-            <Menu
-              id="menu-appbar"
-              anchorEl={anchorElNav}
-              anchorOrigin={{
-                vertical: 'bottom',
-                horizontal: 'left',
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: 'top',
-                horizontal: 'left',
-              }}
-              open={Boolean(anchorElNav)}
-              onClose={handleCloseNavMenu}
-              sx={{
-                display: { xs: 'block', md: 'none' },
-              }}
-            >
-              {pages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
-                  <Typography
-                    sx={{
-                      mr: 2,
-                      display: { xs: 'flex', md: 'none' },
-                      flexGrow: 1,
-                      fontFamily: 'avenir',
-                      fontWeight: 700,
-                      letterSpacing: '.3rem',
-                      color: 'black',
-                      textDecoration: 'none',
-                    }} textAlign="center">{page}</Typography>
-                </MenuItem>
-              ))}
-            </Menu>
-          </Box>
-          {/* <Button>
-            <Logo height={75} href="" />
-          </Button> */}
-          {/* <Typography
-            variant="h5"
-            noWrap
-            component="a"
-            href=""
-            sx={{
-              mr: 2,
-              display: { xs: 'flex', md: 'none' },
-              flexGrow: 1,
-              fontFamily: 'avenir',
-              fontWeight: 700,
-              letterSpacing: '.3rem',
-              color: 'black',
-              textDecoration: 'none',
-            }}
-          >
-            LOGO
-          </Typography> */}
-          <Box sx={{ flexGrow: 1, justifyContent: 'right', display: { xs: 'none', md: 'flex' } }}>
+          <Box sx={{
+            flexGrow: 1, justifyContent: 'right', display: { xs: 'none', md: 'flex' },
+            padding: 0
+          }}>
             {pages.map((page) => (
               <Button
+                component={Link} to=""
                 key={page}
                 onClick={page === "Create New" ? handleOpenUserMenu : handleOpenNavMenu}
-                sx={{ my: 2, color: 'black', display: 'block' }}
-                style={{
-                  fontFamily: 'avenir'
+                sx={{
+                  textTransform: 'none',
+                  '&:hover': { fontWeight: 'bold' }, fontSize: 16, my: 2, color: '#737171',
+                  display: 'block', fontFamily: "'Poppins', sans-serif"
                 }}
               >
                 {page}
@@ -169,13 +90,15 @@ function ResponsiveAppBar() {
 
           <Box sx={{ flexGrow: 0 }}>
             <div className="log-out-button">
-              <Button
+              <Button className='log-out-text'
                 style={{
-                  backgroundColor: "#5D737E",
-                  fontFamily: 'avenir',
-                  borderRadius: 15
+                  textTransform: 'none',
+                  backgroundColor: "#E8E8E8",
+                  color: "#737171",
+                  fontSize: 16
                 }}
-                variant="contained">Log Out</Button>
+                variant="contained"
+              >Log Out</Button>
             </div>
             <Menu
               sx={{ mt: "45px" }}
@@ -195,7 +118,7 @@ function ResponsiveAppBar() {
             >
               {settings.map((setting) => (
                 <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                  <Typography textAlign="center">{setting}</Typography>
+                  <Typography className='text' textAlign="center">{setting}</Typography>
                 </MenuItem>
               ))}
             </Menu>
