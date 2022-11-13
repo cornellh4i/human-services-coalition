@@ -4,11 +4,12 @@ import Home from "./pages/Home"
 import Users from "./pages/Users"
 import Admins from "./pages/Admins"
 import NavBar from "./components/NavBar"
+import ListingInformation from './pages/ListingInformation'
 
 function App() {
   return (
     <div className="App">
-      <BrowserRouter>
+      {/* <BrowserRouter>
         <NavBar />
         <div className="pages">
           <Routes>
@@ -26,7 +27,8 @@ function App() {
             />
           </Routes>
         </div>
-      </BrowserRouter>
+      </BrowserRouter> */}
+      <ListingInformation></ListingInformation>
     </div>
   );
 }
