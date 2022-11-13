@@ -83,7 +83,7 @@ export default function ListingDetails({ Listing, handleDelete}: { Listing: any 
       <Grid padding="0px 10px"
       gap="9px" display="flex" flexDirection="column" alignItems="flex-start">
          
-        <Grid container alignItems="center" spacing= {1} >
+        <Grid container xs = {12} alignItems="center" columnSpacing= {{xs:1}} >
 
           <Grid item xs={9}>
             <ThemeProvider theme={listingTheme}>
@@ -110,7 +110,7 @@ export default function ListingDetails({ Listing, handleDelete}: { Listing: any 
             </ThemeProvider>
           </Grid>
 
-          <Grid item xs={9} spacing= {1}>
+          <Grid item xs={9} >
             <ThemeProvider theme={sizeTheme}>
                 <Typography >
                   {Listing.size} / {Listing.numBath} bath
