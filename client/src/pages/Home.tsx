@@ -11,7 +11,8 @@ import {
 } from '@mui/material/styles'
 import { Typography } from '@mui/material'
 import FilterSideBar from '../components/FilterSideBar'
-// import AdminDetals from '../components/AdminDetails/AdminDetails'
+import './Home.css'
+import Card from '@mui/material/Card';
 
 let theme = createTheme();
 theme = responsiveFontSizes(theme);
@@ -34,46 +35,27 @@ const Home = () => {
   }, [])
 
   return (
-    <div className="home">
-      <div className="listings">
-        <FilterSideBar />
-        {/* </FilterSideBar> */}
-        {/* <Box sx={{
-          flexGrow: 1,
-          position: "absolute",
-          width: '23%',
-          height: 869,
-          left: 16,
-          top: 103,
-          background: "#FFFFFF",
-          boxShadow: "0px 4px 4px rgba(93, 115, 126, 0.5)",
-          borderRadius: 10,
-          p: 2,
-          pl: 3,
-          pt: 1
-        }}>
-          <Grid container spacing={2} columns={12}>
-            <Grid item xs={12}>
-            </Grid>
-            <Grid item xs={12}>
-              <ThemeProvider theme={theme}>
-                <Typography variant="h4" sx={{
-                  fontFamily: 'Poppins',
-                  fontStyle: "normal",
-                  fontWeight: 700,
-                  fontSize: 24,
-                  textAlign: "left",
-                }}>Filters</Typography>
-              </ThemeProvider>
-            </Grid>
-          </Grid>
-        </Box> */}
-        {Listings && Listings.map((Listing) => (
-          <ListingDetails key={Listing._id} Listing={Listing} />
-        ))}
-        <ListingForm />
+    <div>
+      <div className='body-box'>
+        <div className='side-box'>
+          <FilterSideBar />
+        </div>
+        <div className='content-box'>
+          <div className='listing-cards'>
+            <Card style={{backgroundColor: "lightgrey"}}className='card'></Card>
+            <Card style={{backgroundColor: "lightgrey"}} className='card'></Card>
+            <Card style={{backgroundColor: "lightgrey"}} className='card'></Card>
+            <Card style={{backgroundColor: "lightgrey"}} className='card'></Card>
+            <Card style={{backgroundColor: "lightgrey"}} className='card'></Card>
+            <Card style={{backgroundColor: "lightgrey"}} className='card'></Card>
+            {Listings && Listings.map((Listing) => (
+            <ListingDetails key={Listing._id} Listing={Listing} />
+            ))}
+            <ListingForm />
+          </div>
+        </div>
       </div>
-    </div >
+    </div>
   )
 }
 

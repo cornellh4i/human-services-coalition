@@ -20,22 +20,6 @@ import './NavBar.css';
 const pages = ['Create New', 'Manage Profiles', 'Update FMR'];
 const settings = ['Listing', 'User', 'Admin'];
 
-// const theme = createTheme({
-//   status: {
-//     danger: '#e53e3e',
-//   },
-//   palette: {
-//     primary: {
-//       main: '#0971f1',
-//       darker: '#053e85',
-//     },
-//     neutral: {
-//       main: '#64748B',
-//       contrastText: '#fff',
-//     },
-//   },
-// });
-
 function ResponsiveAppBar() {
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
@@ -56,7 +40,7 @@ function ResponsiveAppBar() {
   };
 
   return (
-    <AppBar position="static" elevation={0} style={{ background: "white", borderBottom: '1px solid #D9D9D9' }}>
+    <AppBar position="sticky" elevation={0} style={{ background: "white", borderBottom: '1px solid #D9D9D9' }}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <Box textAlign={'left'}

@@ -32,7 +32,7 @@ export default function FilterSideBar() {
       background: "#FFFFFF",
       boxShadow: "0px 4px 4px rgba(93, 115, 126, 0.5)",
       borderRadius: 10,
-      p: 2,
+      // p: 2,
       pl: 3,
       pt: 1
     }}>
@@ -63,14 +63,14 @@ export default function FilterSideBar() {
           <FormGroup>
             <Grid container spacing={1} columns={16}>
               <Grid item xs={8}>
-                <FormControlLabel control={<Checkbox checked={false} />} label={<h4 className='prop-text'>Apartment</h4>} />
+                <FormControlLabel control={<Checkbox />} label={<h4 className='prop-text'>Apartment</h4>} />
               </Grid>
               <Grid item xs={8}>
-                <FormControlLabel control={<Checkbox checked={false} />} label={<h4 className='prop-text'>House</h4>} />
+                <FormControlLabel control={<Checkbox />} label={<h4 className='prop-text'>House</h4>} />
               </Grid>
             </Grid>
           </FormGroup>
-          <FormControl className='dropdown'>
+          <FormControl style={{paddingRight: 10}} className='dropdown' size="small">
             <InputLabel id="num-beds-label"># beds</InputLabel>
             <Select
               labelId="num-beds-label"
@@ -83,7 +83,7 @@ export default function FilterSideBar() {
               <MenuItem value={6}>6+</MenuItem>
             </Select>
           </FormControl>
-          <FormControl className='dropdown'>
+          <FormControl className='dropdown' size="small">
             <InputLabel id="num-baths-label"># baths</InputLabel>
             <Select
               labelId="num-baths-label"
@@ -102,35 +102,35 @@ export default function FilterSideBar() {
         <Box className='box' component="span">
           <h3 className='text'>Amenities</h3>
           <FormGroup>
-            <FormControlLabel control={<Checkbox checked={false} />} label={<h4 className='prop-text'>Utilities included</h4>} />
+            <FormControlLabel control={<Checkbox />} label={<h4 className='prop-text'>Utilities included</h4>} />
           </FormGroup>
           <FormGroup>
-            <FormControlLabel control={<Checkbox checked={false} />} label={<h4 className='prop-text'>Fully furnished</h4>} />
+            <FormControlLabel control={<Checkbox />} label={<h4 className='prop-text'>Fully furnished</h4>} />
           </FormGroup>
           <FormGroup>
-            <FormControlLabel control={<Checkbox checked={false} />} label={<h4 className='prop-text'>Pet-friendly</h4>} />
+            <FormControlLabel control={<Checkbox />} label={<h4 className='prop-text'>Pet-friendly</h4>} />
           </FormGroup>
           <FormGroup>
-            <FormControlLabel control={<Checkbox checked={false} />} label={<h4 className='prop-text'>In-unit laundry</h4>} />
+            <FormControlLabel control={<Checkbox />} label={<h4 className='prop-text'>In-unit laundry</h4>} />
           </FormGroup>
           <FormGroup>
-            <FormControlLabel control={<Checkbox checked={false} />} label={<h4 className='prop-text'>Wifi</h4>} />
+            <FormControlLabel control={<Checkbox />} label={<h4 className='prop-text'>Wifi</h4>} />
           </FormGroup>
           <FormGroup>
-            <FormControlLabel control={<Checkbox checked={false} />} label={<h4 className='prop-text'>Carpet</h4>} />
+            <FormControlLabel control={<Checkbox />} label={<h4 className='prop-text'>Carpet</h4>} />
           </FormGroup>
           <FormGroup>
-            <FormControlLabel control={<Checkbox checked={false} />} label={<h4 className='prop-text'>Wood flooring</h4>} />
+            <FormControlLabel control={<Checkbox />} label={<h4 className='prop-text'>Wood flooring</h4>} />
           </FormGroup>
           <FormGroup>
-            <FormControlLabel control={<Checkbox checked={false} />} label={<h4 className='prop-text'>Full-kitchen</h4>} />
+            <FormControlLabel control={<Checkbox />} label={<h4 className='prop-text'>Full-kitchen</h4>} />
           </FormGroup>
         </Box>
       </Grid>
       <Grid>
         <Box className='box' component="span">
           <h3 className='text'>Proximity to Public Transit</h3>
-          <FormControl sx={{ m: 1, minWidth: 200 }} size="small">
+          <FormControl sx={{ width: 200 }} size="small">
             <InputLabel id="demo-select-small">Select Proximity</InputLabel>
             <Select
               autoWidth
@@ -138,12 +138,9 @@ export default function FilterSideBar() {
               id="demo-select-small"
               label="Select Proximity"
             >
-              <MenuItem value="">
-                <em>None</em>
-              </MenuItem>
-              <MenuItem value={10}>Ten</MenuItem>
-              <MenuItem value={20}>Twenty</MenuItem>
-              <MenuItem value={30}>Thirty</MenuItem>
+              <MenuItem value={"Close"}>Close</MenuItem>
+              <MenuItem value={"Medium"}>Medium</MenuItem>
+              <MenuItem value={"Far"}>Far</MenuItem>
             </Select>
           </FormControl>
         </Box>

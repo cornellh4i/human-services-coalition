@@ -1,8 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
 
 .log-out-button {
-  /* width: 118px; */
-  /* height: 40px; */
   flex: none;
   order: 3;
   flex-grow: 0;
