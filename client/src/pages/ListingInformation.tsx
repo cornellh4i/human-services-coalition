@@ -49,10 +49,10 @@ const ListingInformation = () => {
                       <Typography variant="h6" display="flex" sx = {{fontSize: "40px", fontWeight: 700, color: "#000000"}}>
                           Listing Address
                           <IconButton>
-                            <DeleteOutlined fontSize = "large"/>
+                            <EditOutlined fontSize = "large"/>
                           </IconButton>
                           <IconButton>
-                            <EditOutlined fontSize = "large"/>
+                            <DeleteOutlined fontSize = "large"/>
                           </IconButton>
                       </Typography>
                     </Grid>
