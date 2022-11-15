@@ -84,11 +84,11 @@ export default function ListingDetails({ Listing, handleDelete}: { Listing: any 
 
         {/* Creates the delete and edit buttons and displays it next to the listing name */}
          <Grid item xs={3} >
-             <IconButton onClick={() => handleDelete(Listing._id)}>
-               <DeleteOutlined fontSize = "small"/>
-             </IconButton>
              <IconButton>
                <EditOutlined fontSize = "small"/>
+             </IconButton>
+             <IconButton onClick={() => handleDelete(Listing._id)}>
+               <DeleteOutlined fontSize = "small"/>
              </IconButton>
          </Grid>
  
