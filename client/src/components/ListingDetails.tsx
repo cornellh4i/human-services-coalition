@@ -21,8 +21,8 @@ const listingTheme = createTheme({
   },
   typography: {
     fontFamily: "Arial",
-    fontSize: 13, 
-    fontWeightRegular: 400,
+    fontSize: 14, 
+    fontWeightRegular: 700,
   } 
 });
 
@@ -33,7 +33,7 @@ const addressTheme = createMuiTheme({
   },
   typography: {
     fontFamily: "Arial",
-    fontSize: 13, 
+    fontSize: 14, 
     fontWeightRegular: 400,
   } ,
 });
@@ -45,7 +45,7 @@ const priceTheme = createTheme({
   },
   typography: {
     fontFamily: "Arial",
-    fontSize: 13, 
+    fontSize: 14, 
     fontWeightRegular: 400,
   } 
 });
@@ -56,7 +56,7 @@ const sizeTheme = createTheme({
   },
   typography: {
     fontFamily: "Arial",
-    fontSize: 13, 
+    fontSize: 14, 
     fontWeightRegular: 400,
   } 
 });
@@ -119,7 +119,7 @@ export default function ListingDetails({ Listing, handleDelete}: { Listing: any 
           </Grid>   
 
           <Grid item xs={3}>
-            <Typography >
+            <Typography sx = {{fontWeight: 700}}>
               ${Listing.price}/mo
             </Typography>
           </Grid>
