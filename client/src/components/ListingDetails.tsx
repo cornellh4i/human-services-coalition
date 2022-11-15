@@ -10,7 +10,7 @@ import { EditOutlined } from '@mui/icons-material';
 import IconButton from '@mui/material/IconButton/IconButton';
 import { color, fontFamily, fontSize, fontStyle, fontWeight, height, width } from '@mui/system';
 import { ThemeProvider } from '@emotion/react';
-import { createMuiTheme, createTheme, Grid, makeStyles, styled } from '@mui/material';
+import { createTheme, Grid, makeStyles, styled } from '@mui/material';
 import { green, purple } from '@mui/material/colors';
 
 
@@ -26,7 +26,7 @@ const listingTheme = createTheme({
   } 
 });
 
-const addressTheme = createMuiTheme({
+const addressTheme = createTheme({
   palette: {
     primary: purple,
     secondary: green
@@ -38,17 +38,6 @@ const addressTheme = createMuiTheme({
   } ,
 });
 
-const priceTheme = createTheme({
-  palette: {
-    primary: purple,
-    secondary: green
-  },
-  typography: {
-    fontFamily: "Arial",
-    fontSize: 14, 
-    fontWeightRegular: 400,
-  } 
-});
 const sizeTheme = createTheme({
   palette: {
     primary: purple,
@@ -61,30 +50,46 @@ const sizeTheme = createTheme({
   } 
 });
 
+const priceTheme = createTheme({
+  palette: {
+    primary: purple,
+    secondary: green
+  },
+  typography: {
+    fontFamily: "Arial",
+    fontSize: 14, 
+    fontWeightRegular: 700,
+  } 
+});
 
 export default function ListingDetails({ Listing, handleDelete}: { Listing: any , handleDelete: any}){
   return(
+
+    // Creates a single listing card
     <Card style={{backgroundColor: "#F5F5F5"}} sx={{ 
       width: "350px",
       height: "340px",
       borderRadius: "10px",
       boxShadow: "0px 2px 4px rgba(0,0,0,0.25)",
-      // padding: "5px 0px 0px 5px",
       flex: "none",
       order: 1,
       flexGrow: 0
       }} elevation = {5}>
 
+      {/* Creates the gray area at the top of the card that should display a picture of the listing */}
       <CardContent style={{backgroundColor: "#D9D9D9"}}> 
         <Grid sx={{width: "350px", height: "210px", left: "0px", top: "0px"}}>
         </Grid>
       </CardContent>
 
+      {/* Displays the listing information in a grid at the bottom of the card */}
       <Grid padding="0px 10px"
       gap="9px" display="flex" flexDirection="column" alignItems="flex-start">
          
+        {/* Create a grid container to hold all the grid items of the grid */}
         <Grid container xs = {12} alignItems="center" columnSpacing= {{xs:1}} >
 
+          {/* Displays the listing name */}
           <Grid item xs={9}>
             <ThemeProvider theme={listingTheme}>
               <Typography sx = {{fontSize: "17px"}}>
@@ -93,15 +98,17 @@ export default function ListingDetails({ Listing, handleDelete}: { Listing: any 
             </ThemeProvider>
           </Grid>
 
+          {/* Creates the delete and edit buttons and displays it next to the listing name */}
           <Grid item xs={3}>
-              <IconButton onClick={() => handleDelete(Listing._id)}>
-                <DeleteOutlined fontSize = "small"/>
-              </IconButton>
-              <IconButton>
-                <EditOutlined fontSize = "small"/>
-              </IconButton>
+            <IconButton onClick={() => handleDelete(Listing._id)}>
+              <DeleteOutlined fontSize = "small"/>
+            </IconButton>
+            <IconButton>
+              <EditOutlined fontSize = "small"/>
+            </IconButton>
           </Grid>
 
+          {/* Displays the listing street address */}
           <Grid item xs={12}>
             <ThemeProvider theme = {addressTheme}>
               <Typography>
@@ -110,18 +117,22 @@ export default function ListingDetails({ Listing, handleDelete}: { Listing: any 
             </ThemeProvider>
           </Grid>
 
+          {/* Displays the size of the listing and the number of bathrooms */}
           <Grid item xs={9} >
             <ThemeProvider theme={sizeTheme}>
-                <Typography >
-                  {Listing.size} / {Listing.numBath} bath
-                </Typography>
+              <Typography >
+                {Listing.size} / {Listing.numBath} bath
+              </Typography>
             </ThemeProvider>
           </Grid>   
 
+          {/* Displays the rent per month of the listing */}
           <Grid item xs={3}>
-            <Typography sx = {{fontWeight: 700}}>
-              ${Listing.price}/mo
-            </Typography>
+            <ThemeProvider theme = {priceTheme}>
+              <Typography>
+                ${Listing.price}/mo
+              </Typography>
+            </ThemeProvider>
           </Grid>
           
         </Grid>
@@ -130,30 +141,3 @@ export default function ListingDetails({ Listing, handleDelete}: { Listing: any 
 
   )
 }
-
-
-{/* <div className="Listing-Details">
-<p><strong>Web Scraped:</strong>{Listing.webScraped}</p>
-<p><strong>Street Address:</strong>{Listing.streetAddress}</p>
-<p><strong>City:</strong>{Listing.city}</p>
-<p><strong>State:</strong>{Listing.state}</p>
-<p><strong>Country:</strong>{Listing.country}</p>
-<p><strong>Zip Code:</strong>{Listing.zipCode}</p>
-<p><strong>Pictures:</strong>{Listing.pictures}</p>
-<p><strong>Listing Price:</strong>{Listing.price}</p>
-<p><strong>Size:</strong>{Listing.size}</p>
-<p><strong>Unit Type:</strong>{Listing.unitType}</p>
-<p><strong>Bathrooms:</strong>{Listing.numBath}</p>
-<p><strong>School District:</strong>{Listing.schoolDistrict}</p>
-<p><strong>Pet Policy:</strong>{Listing.pets}</p>
-<p><strong>Utilities:</strong>{Listing.utilities}</p>
-<p><strong>Furnished:</strong>{Listing.furnished}</p>
-<p><strong>Distance from Transportation:</strong>{Listing.distTransportation}</p>
-<p><strong>Landlord:</strong>{Listing.landlord}</p>
-<p><strong>Landlord Email:</strong>{Listing.landlordEmail}</p>
-<p><strong>Landlord Phone:</strong>{Listing.landlordPhone}</p>
-<p><strong>Original Listing Link:</strong>{Listing.linkOrig}</p>
-<p><strong>Link to Listing Application:</strong>{Listing.linkApp}</p>
-<p><strong>Date Available:</strong>{Listing.dateAvailable}</p>
-<p>{Listing.createdAt}</p>
-</div> */}
