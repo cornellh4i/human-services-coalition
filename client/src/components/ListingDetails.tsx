@@ -1,6 +1,4 @@
 
-
-
 import * as React from 'react';
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
@@ -27,13 +25,13 @@ const listingTheme = createMuiTheme({
 const addressTheme = createMuiTheme({
  typography: {
    fontSize: 15,
-   fontWeightRegular: 500,
-   fontFamily: ['"Montserrat"', 'Open Sans'].join(','),
+   fontWeightRegular: 400,
+   //fontFamily: ['"Montserrat"', 'Open Sans'].join(','),
  } ,
 });
 const sizeTheme = createTheme({
  typography: {
-   fontFamily: ['"Montserrat"', 'Open Sans'].join(','),
+   //fontFamily: ['"Montserrat"', 'Open Sans'].join(','),
    fontSize: 15,
    fontWeightRegular: 400,
  }
@@ -44,12 +42,11 @@ const priceTheme = createTheme({
    fontWeightRegular: 700,
  }
 });
- 
- 
- 
+
 export default function ListingDetails({ Listing, handleDelete}: { Listing: any , handleDelete: any}){
  return(
  
+   // Creates a single listing card
    <Card style={{backgroundColor: "#F5F5F5"}} sx={{
      width: "350px",
      height: "340px",
@@ -61,20 +58,22 @@ export default function ListingDetails({ Listing, handleDelete}: { Listing: any 
      flexGrow: 0
      }} elevation = {10} >
  
+    {/* Creates the gray area at the top of the card that should display a picture of the listing */}
      <CardContent style={{backgroundColor: "#D9D9D9"}}>
        <Grid sx={{width: "350px", height: "210px", left: "0px", top: "0px"}}>
        </Grid>
      </CardContent>
  
+     {/* Displays the listing information in a grid at the bottom of the card */}
      <Grid
        padding="0px 0px 0px 10px"
        display="flex"
        flexDirection="column"
        alignItems="flex-start">
        
- 
+      {/* Create a grid container to hold all the grid items of the grid */}
        <Grid container xs = {18} alignItems="center" >
- 
+        {/* Displays the listing name */}
          <Grid item xs={9}>
            <ThemeProvider theme={listingTheme}>
              <Typography>
@@ -82,7 +81,8 @@ export default function ListingDetails({ Listing, handleDelete}: { Listing: any 
              </Typography>
            </ThemeProvider>
          </Grid>
- 
+
+        {/* Creates the delete and edit buttons and displays it next to the listing name */}
          <Grid item xs={3} >
              <IconButton onClick={() => handleDelete(Listing._id)}>
                <DeleteOutlined fontSize = "small"/>
@@ -92,6 +92,7 @@ export default function ListingDetails({ Listing, handleDelete}: { Listing: any 
              </IconButton>
          </Grid>
  
+        {/* Displays the listing street address */}
          <Grid item xs={12}>
            <ThemeProvider theme = {addressTheme}>
              <Typography>
@@ -100,6 +101,7 @@ export default function ListingDetails({ Listing, handleDelete}: { Listing: any 
            </ThemeProvider>
          </Grid>
  
+        {/* Displays the size of the listing and the number of bathrooms */}
          <Grid item xs={8.6} >
            <ThemeProvider theme={sizeTheme}>
                <Typography >
@@ -108,9 +110,10 @@ export default function ListingDetails({ Listing, handleDelete}: { Listing: any 
            </ThemeProvider>
          </Grid>  
  
+          {/* Displays the rent per month of the listing */}
          <Grid item xs={2}>
          <ThemeProvider theme={priceTheme}>
-           <Typography sx = {{color: 'grey'}}>
+           <Typography >
              ${Listing.price}/mo
            </Typography>
          </ThemeProvider>
