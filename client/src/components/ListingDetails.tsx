@@ -74,7 +74,7 @@ export default function ListingDetails({ Listing, handleDelete}: { Listing: any 
       flex: "none",
       order: 1,
       flexGrow: 0
-      }} elevation = {5}>
+      }} elevation = {10} >
 
       {/* Creates the gray area at the top of the card that should display a picture of the listing */}
       <CardContent style={{backgroundColor: "#D9D9D9"}}> 
@@ -92,7 +92,7 @@ export default function ListingDetails({ Listing, handleDelete}: { Listing: any 
           {/* Displays the listing name */}
           <Grid item xs={9}>
             <ThemeProvider theme={listingTheme}>
-              <Typography sx = {{fontSize: "17px"}}>
+              <Typography>
                 Woodland Acres Townhomes
               </Typography>
             </ThemeProvider>
