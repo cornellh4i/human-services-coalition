@@ -18,7 +18,7 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 const ListingInformation = () => {
     return (
         <>
-        <Grid padding="122px 142px">
+        <Grid padding="5% 5%">
 
           {/* Back button */}
           <Grid item xs = {1}>
@@ -56,10 +56,10 @@ const ListingInformation = () => {
                           </IconButton>
                       </Typography>
                     </Grid>
-                    <Typography paddingBottom = {"20px"} sx = {{color: "#343434", fontSize: "16px", fontStyle: "italic"}}>
-                      This listing has been webscraped from apartments.com
-                    </Typography>
                   </Grid>
+                  <Typography paddingBottom = {"20px"} sx = {{color: "#343434", fontSize: "16px", fontStyle: "italic"}}>
+                    This listing has been webscraped from apartments.com
+                  </Typography>
 
                   {/* Listing information */}
                   <Grid item padding = "10px 0px" xs = {12}>
