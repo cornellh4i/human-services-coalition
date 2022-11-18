@@ -13,16 +13,29 @@ import SmartphoneIcon from '@mui/icons-material/Smartphone';
 import LinkIcon from '@mui/icons-material/Link';
 import PlaceIcon from '@mui/icons-material/Place';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import { useLocation, useNavigate } from "react-router-dom";
 
-
+// {Listing, handleDelete}: {Listing: any, handleDelete: any}
 const ListingInformation = () => {
+  // {Listing, handleDelete}: {Listing: any, handleDelete: any}
+  
+  const location= useLocation();
+  const Listing = location.state? location.state.Listing : {streetAddress: null, unitType: null, price: null, numBath: null, size: null}
+  const handleDelete = location.state? location.state.handleDelete : null
+
+  
+  console.log(Listing)
+  console.log(handleDelete)
+  //navigation functionality
+  const navigate = useNavigate();
+
     return (
         <>
         <Grid padding="5% 5%">
 
           {/* Back button */}
           <Grid item xs = {1}>
-            <IconButton>
+            <IconButton onClick={() => navigate("/")}>
               <ArrowBackIcon fontSize='large'></ArrowBackIcon> Back
             </IconButton>
           </Grid>
@@ -47,7 +60,7 @@ const ListingInformation = () => {
                   <Grid container>
                     <Grid item>
                       <Typography variant="h6" display="flex" sx = {{fontSize: "40px", fontWeight: 700, color: "#000000"}}>
-                          Listing Address
+                          {Listing.streetAddress}
                           <IconButton>
                             <EditOutlined fontSize = "large"/>
                           </IconButton>
@@ -64,16 +77,16 @@ const ListingInformation = () => {
                   {/* Listing information */}
                   <Grid item padding = "10px 0px" xs = {12}>
                     <Typography sx = {{fontWeight: 700, color: "#000000"}}>
-                        $760/mo
+                      {Listing.price}
                     </Typography>
                     <Typography >
-                        1bed 1bath
+                        {Listing.size} {Listing.numBath}
                     </Typography>
                     <Typography >
                         Woodland Acres Town Homes
                     </Typography>
                     <Typography>
-                      Type of Listing
+                      {Listing.unitType}
                     </Typography>
                   </Grid>
 

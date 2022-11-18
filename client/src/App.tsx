@@ -9,7 +9,7 @@ import ListingInformation from './pages/ListingInformation'
 function App() {
   return (
     <div className="App">
-      {/* <BrowserRouter>
+      <BrowserRouter>
         <NavBar />
         <div className="pages">
           <Routes>
@@ -25,10 +25,14 @@ function App() {
               path="/admins"
               element={<Admins />}
             />
+            <Route
+              path="/listing_info"
+              element={<ListingInformation  />}
+            />
           </Routes>
         </div>
-      </BrowserRouter> */}
-      <ListingInformation></ListingInformation>
+      </BrowserRouter>
+  
     </div>
   );
 }
