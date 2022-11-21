@@ -1,10 +1,10 @@
 import { BackupOutlined, DeleteOutlined, EditOutlined } from '@mui/icons-material'
-import { Card, CardContent, IconButton, Paper } from '@mui/material'
+import { Button, Card, CardContent, CardMedia, Fab, IconButton, ImageList, ImageListItem, Paper } from '@mui/material'
 import Divider from '@mui/material/Divider'
 import Grid from '@mui/material/Grid'
 import Typography from '@mui/material/Typography'
 import { borderRadius, fontWeight, width } from '@mui/system'
-import { useEffect, useState } from 'react'
+import { Key, useEffect, useState } from 'react'
 import ListingDetails from '../components/ListingDetails'
 import ListingForm from "../forms/ListingForm"
 import CheckIcon from '@mui/icons-material/Check';
@@ -15,21 +15,19 @@ import PlaceIcon from '@mui/icons-material/Place';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { useLocation, useNavigate } from "react-router-dom";
 
-// {Listing, handleDelete}: {Listing: any, handleDelete: any}
-const ListingInformation = () => {
-  // {Listing, handleDelete}: {Listing: any, handleDelete: any}
-  
-  const location= useLocation();
-  const Listing = location.state? location.state.Listing : {streetAddress: null, unitType: null, price: null, numBath: null, size: null}
-  const handleDelete = location.state? location.state.handleDelete : null
 
+const ListingInformation = () => {
   
-  console.log(Listing)
-  console.log(handleDelete)
+  // Allows us to access the state of the listing details
+  const location= useLocation();
+  console.log(location);
+
   //navigation functionality
   const navigate = useNavigate();
 
-    return (
+  // const imageArray = location.state.pictures;
+
+  return (
         <>
         <Grid padding="5% 5%">
 
@@ -41,33 +39,115 @@ const ListingInformation = () => {
           </Grid>
 
           <Grid item xs = {12}>
-            <Card>
-                {/* displays the big grey box at the top */}
-                <CardContent style={{ backgroundColor: "#D9D9D9" }}>
+
+            {/* Displays the big grey box at the top */}
+            {/* <Card> */}
+                {/* <CardContent style={{ backgroundColor: "#D9D9D9" }}>
                     <Grid
                     sx={{ width: "100%", height: "450px", left: "0px", top: "0px" }}
                     ></Grid>
                 </CardContent>
-            </Card>
+            </Card> */}
 
+            {/* Displays a single picture */}
+            {/* if (location.state.pictures.length == 1){
+              <Card>
+                  <Grid sx = {{width: "100%", height: "450px", left: "0px", top: "0px" }}>
+                    <CardMedia
+                      component = "img"
+                      height = "450"
+                      width = "100%"
+                      image = "https://t3.ftcdn.net/jpg/03/27/47/64/360_F_327476437_wUTmsvTLezc2fNh3UmqrOYE7xyWp1fvo.jpg"
+                    />
+                  </Grid>
+              </Card>     
+            } */}
+
+            {/* Displays two pictures */}
+            {/* else if (location.state.pictures.length == 2){
+              <Grid container>
+                <Grid item xs = {6}>
+                  <Card>
+                    <CardMedia
+                      component = "img"
+                      height = "450"
+                      width = "100%"
+                      image = "https://t3.ftcdn.net/jpg/03/27/47/64/360_F_327476437_wUTmsvTLezc2fNh3UmqrOYE7xyWp1fvo.jpg"
+                    />
+                  </Card>
+                </Grid>
+                <Grid item xs = {6}>
+                  <Card>
+                    <CardMedia
+                      component = "img"
+                      height = "450"
+                      width = "100%"
+                      image = "https://t3.ftcdn.net/jpg/03/27/47/64/360_F_327476437_wUTmsvTLezc2fNh3UmqrOYE7xyWp1fvo.jpg"
+                    />
+                  </Card>
+                </Grid>
+              </Grid>
+            } */}
+
+            {/* Displays 3 pictures */}
+            <Grid container>
+              <Grid item xs = {8} padding = "5px">
+                <Card>
+                  <CardMedia
+                    component = "img"
+                    height = "100%"
+                    width = "100%"
+                    image = "https://t3.ftcdn.net/jpg/03/27/47/64/360_F_327476437_wUTmsvTLezc2fNh3UmqrOYE7xyWp1fvo.jpg"
+                  />
+                </Card>
+              </Grid>
+              <Grid item xs = {4}>
+                <Grid item xs = {12} padding = "5px">
+                  <Card>
+                    <CardMedia
+                      component = "img"
+                      height = "50%"
+                      width = "100%"
+                      image = "https://t3.ftcdn.net/jpg/03/27/47/64/360_F_327476437_wUTmsvTLezc2fNh3UmqrOYE7xyWp1fvo.jpg"
+                    />
+                  </Card>
+                </Grid>
+                <Grid item xs = {12} padding = "5px">
+                  <Card>
+                    <Grid item>
+                      <CardMedia
+                        component = "img"
+                        height = "50%"
+                        width = "100%"
+                        image = "https://t3.ftcdn.net/jpg/03/27/47/64/360_F_327476437_wUTmsvTLezc2fNh3UmqrOYE7xyWp1fvo.jpg"
+                      />
+                      <Button>Show All</Button>
+                    </Grid>
+                  </Card>
+                </Grid>
+              </Grid>
+            </Grid>
             
-            <Grid container padding = "10px 0px">
+            <Grid container padding = "22px 0px">
 
                 {/* Main content */}
                 <Grid item xs={12} md={8}>
 
                   {/* Listing address, edit, and delete buttons */}
                   <Grid container>
-                    <Grid item>
-                      <Typography variant="h6" display="flex" sx = {{fontSize: "40px", fontWeight: 700, color: "#000000"}}>
-                          {Listing.streetAddress}
-                          <IconButton>
-                            <EditOutlined fontSize = "large"/>
-                          </IconButton>
-                          <IconButton>
-                            <DeleteOutlined fontSize = "large"/>
-                          </IconButton>
+                    <Grid item xs = {9}>
+                      <Typography variant="h6" display="flex" sx = {{fontSize: "36px", fontWeight: 700, color: "#000000"}}>
+                          {location.state.streetAddress} {location.state.city}, {location.state.state} {location.state.zipCode}
                       </Typography>
+                    </Grid>
+                    <Grid item xs = {3}>
+                      <IconButton>
+                        <EditOutlined fontSize = "large"/>
+                      </IconButton>
+                      {/* <IconButton onClick={() => handleDelete(location.state.id)}></IconButton> */}
+                      <IconButton>
+                        <DeleteOutlined fontSize = "large"/>
+                      </IconButton>
                     </Grid>
                   </Grid>
                   <Typography paddingBottom = {"20px"} sx = {{color: "#343434", fontSize: "16px", fontStyle: "italic"}}>
@@ -77,16 +157,16 @@ const ListingInformation = () => {
                   {/* Listing information */}
                   <Grid item padding = "10px 0px" xs = {12}>
                     <Typography sx = {{fontWeight: 700, color: "#000000"}}>
-                      {Listing.price}
+                      ${location.state.price}/mo
                     </Typography>
                     <Typography >
-                        {Listing.size} {Listing.numBath}
+                      {location.state.size} {location.state.numBath} Bath
                     </Typography>
                     <Typography >
                         Woodland Acres Town Homes
                     </Typography>
                     <Typography>
-                      {Listing.unitType}
+                      {location.state.unitType}
                     </Typography>
                   </Grid>
 
@@ -132,7 +212,7 @@ const ListingInformation = () => {
                 {/* End main content */}
 
                 {/* Sidebar */}
-                <Grid item xs={12} md={4} spacing = {1}>
+                <Grid item xs={12} md={4}>
 
                   {/* Contact info card*/}
                   <Grid item padding = "10px 0px">
@@ -145,17 +225,20 @@ const ListingInformation = () => {
                         </Grid>
                         <Grid item padding = "5px 0px" xs = {12}>
                           <Typography display="flex" justifyContent = "center">
-                            <EmailIcon></EmailIcon> email@landlord.com
+                            {/* <EmailIcon></EmailIcon> email@landlord.com */}
+                            <EmailIcon></EmailIcon> {location.state.landlordEmail}
                           </Typography>
                         </Grid>
                         <Grid item padding = "5px 0px" xs = {12}>
                           <Typography display="flex" justifyContent = "center">
-                            <SmartphoneIcon></SmartphoneIcon> 123-456-7890
+                            {/* <SmartphoneIcon></SmartphoneIcon> 123-456-7890 */}
+                            <SmartphoneIcon></SmartphoneIcon> {location.state.landlordPhone}
                           </Typography>
                         </Grid>
                         <Grid item padding = "5px 0px" xs = {12}>
                           <Typography display="flex" justifyContent = "center">
                             <LinkIcon></LinkIcon> external-link.com
+                            {/* <LinkIcon></LinkIcon> {location.state.linkOrig} */}
                           </Typography>
                         </Grid>
                       </Grid>
@@ -165,7 +248,7 @@ const ListingInformation = () => {
                   {/* Location of listing on the map */}
                   <Grid item padding = "10px 0px">
                     <Card style = {{backgroundColor : "#EAEAEA", borderRadius: "10px", height: "340px"}} elevation={3}>
-                      <Grid container padding = "150px 160px" xs = {12}>
+                      <Grid container padding = "150px 160px">
                         <Typography justifyContent={"center"}>
                           <PlaceIcon fontSize='large'></PlaceIcon>
                         </Typography>
@@ -180,10 +263,7 @@ const ListingInformation = () => {
 
         </Grid>
         </>
-        
-
     )
-  
   }
   
   export default ListingInformation

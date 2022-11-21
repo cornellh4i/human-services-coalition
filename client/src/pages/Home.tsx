@@ -3,6 +3,7 @@ import Grid from '@mui/material/Grid'
 import { useEffect, useState } from 'react'
 import ListingDetails from '../components/ListingDetails'
 import ListingForm from "../forms/ListingForm"
+import ListingInformation from './ListingInformation'
 
 const Home = () => {
   const [Listings, setListings] = useState<any[]>([])

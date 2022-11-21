@@ -27,7 +27,7 @@ function App() {
             />
             <Route
               path="/listing_info"
-              element={<ListingInformation  />}
+              element={<ListingInformation />}
             />
           </Routes>
         </div>

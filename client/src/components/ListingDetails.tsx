@@ -10,19 +10,19 @@ import { EditOutlined } from '@mui/icons-material';
 import IconButton from '@mui/material/IconButton/IconButton';
 import { color, fontFamily, fontSize, fontStyle, fontWeight, height, width } from '@mui/system';
 import { ThemeProvider } from '@emotion/react';
-import { createMuiTheme, createTheme, Grid, makeStyles, styled } from '@mui/material';
+import { createTheme, Grid, makeStyles, styled } from '@mui/material';
 import { green, purple } from '@mui/material/colors';
 import { Route, Routes, Link, useNavigate } from "react-router-dom";
  
  
  
-const listingTheme = createMuiTheme({
+const listingTheme = createTheme({
  typography: {
    fontSize: 15,
    fontWeightRegular: 700,
   }
 });
-const addressTheme = createMuiTheme({
+const addressTheme = createTheme({
  typography: {
    fontSize: 15,
    fontWeightRegular: 400,
@@ -47,25 +47,42 @@ export default function ListingDetails({ Listing, handleDelete}: { Listing: any 
 
   //define handle click function
   const navigate = useNavigate();
- return(
+  return(
  
-   // Creates a single listing card
-  <Link to={'/listing_info'} state = {{Listing: Listing.id, handleDelete: handleDelete}}  >
+  // Creates a single listing card
   <Card style={{backgroundColor: "#F5F5F5"}} sx={{
      width: "350px",
      height: "340px",
      borderRadius: "10px",
      boxShadow: "0px 2px 4px rgba(0,0,0,0.25)",
-     // padding: "5px 0px 0px 5px",
      flex: "none",
      order: 1,
      flexGrow: 0
      }} elevation = {10}
-    //  onClick={() => navigate("/listing_info", {state: {Listing: Listing.id, handleDelete: handleDelete}})}
+     onClick={() => navigate("/listing_info", {state: {id: Listing._id,
+                                                      streetAddress: Listing.streetAddress, 
+                                                      city: Listing.city,
+                                                      state: Listing.state,
+                                                      country: Listing.country,
+                                                      zipCode: Listing.zipCode,
+                                                      pictures: Listing.pictures,
+                                                      price: Listing.price,
+                                                      size: Listing.size,
+                                                      unitType: Listing.unitType,
+                                                      numBath: Listing.numBath,
+                                                      schoolDistrict: Listing.schoolDistrict,
+                                                      pets: Listing.pets,
+                                                      utilities: Listing.utilities,
+                                                      furnished: Listing.furnished,
+                                                      distTransportation: Listing.distTransportation,
+                                                      landlord: Listing.landlord,
+                                                      landlordEmail: Listing.landlordEmail,
+                                                      landlordPhone: Listing.landlordPhone,
+                                                      linkOrig: Listing.linkOrig,
+                                                      linkApp: Listing.linkApp,
+                                                      dateAvailable: Listing.dateAvailable
+                                                      }})}
     >
-  
-    
-   
  
     {/* Creates the gray area at the top of the card that should display a picture of the listing */}
      <CardContent style={{backgroundColor: "#D9D9D9"}}>
@@ -131,6 +148,5 @@ export default function ListingDetails({ Listing, handleDelete}: { Listing: any 
        </Grid>
      </Grid>
    </Card>
- </Link>
  )
 }
