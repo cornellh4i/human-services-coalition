@@ -49,7 +49,7 @@ const ListingInformation = () => {
                 </CardContent>
             </Card> */}
 
-            {/* Displays a single picture */}
+            {/* Displays a single picture if pic array length is 1*/}
             {/* if (location.state.pictures.length == 1){
               <Card>
                   <Grid sx = {{width: "100%", height: "450px", left: "0px", top: "0px" }}>
@@ -63,7 +63,7 @@ const ListingInformation = () => {
               </Card>     
             } */}
 
-            {/* Displays two pictures */}
+            {/* Displays two pictures if pic array length is 2*/}
             {/* else if (location.state.pictures.length == 2){
               <Grid container>
                 <Grid item xs = {6}>
@@ -89,7 +89,7 @@ const ListingInformation = () => {
               </Grid>
             } */}
 
-            {/* Displays 3 pictures */}
+            {/* Displays 3 pictures if pic array length >= 3*/}
             <Grid container>
               <Grid item xs = {8} padding = "5px">
                 <Card>
