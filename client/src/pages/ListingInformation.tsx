@@ -14,6 +14,7 @@ import LinkIcon from '@mui/icons-material/Link';
 import PlaceIcon from '@mui/icons-material/Place';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { useLocation, useNavigate } from "react-router-dom";
+import ImageContainer from './ImageContainer'
 
 
 const ListingInformation = () => {
@@ -30,7 +31,7 @@ const ListingInformation = () => {
   return (
         <>
         <Grid padding="5% 5%">
-
+        <ImageContainer numImages={location.state.pictures.length} />
           {/* Back button */}
           <Grid item xs = {1}>
             <IconButton onClick={() => navigate("/")}>
@@ -88,7 +89,7 @@ const ListingInformation = () => {
                 </Grid>
               </Grid>
             } */}
-
+            {true ? <p>true </p> : <p>false</p>}
             {/* Displays 3 pictures if pic array length >= 3*/}
             <Grid container>
               <Grid item xs = {8} padding = "5px">
