@@ -6,11 +6,11 @@
 
 .side-box {
   display: flex;
-  padding-left:2%;
-  padding-top:2%;
-  /* padding-right: 16px; */
+  padding-left: 2%;
+  padding-top: 2%;
   flex-direction: column;
   width: 25%;
+  overflow: auto;
 }
 
 .content-box {
@@ -34,7 +34,3 @@
   align-items: stretch;
   padding-left: 12px;
 }
-
-
-
-

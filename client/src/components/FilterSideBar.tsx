@@ -1,5 +1,4 @@
-import * as React from 'react';
-import './FilterSideBar.css'
+import '../css/FilterSideBar.css'
 import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
@@ -7,13 +6,11 @@ import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import {
   createTheme,
-  responsiveFontSizes,
-  ThemeProvider,
+  responsiveFontSizes
 } from '@mui/material/styles'
-import { Typography } from '@mui/material';
 import TextField from '@mui/material/TextField';
 import FormControl from '@mui/material/FormControl';
-import Select, { SelectChangeEvent } from '@mui/material/Select';
+import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import InputLabel from '@mui/material/InputLabel';
 
@@ -24,15 +21,15 @@ export default function FilterSideBar() {
   return (
     <Box sx={{
       flexGrow: 1,
-      position: "absolute",
+      position: "fixed",
       width: '23%',
-      height: 869,
+      height: 600,
       left: 16,
       top: 103,
       background: "#FFFFFF",
       boxShadow: "0px 4px 4px rgba(93, 115, 126, 0.5)",
       borderRadius: 10,
-      // p: 2,
+      overflow: 'auto',
       pl: 3,
       pt: 1
     }}>
@@ -70,11 +67,13 @@ export default function FilterSideBar() {
               </Grid>
             </Grid>
           </FormGroup>
-          <FormControl style={{paddingRight: 10}} className='dropdown' size="small">
+          <FormControl style={{ paddingRight: 10 }} className='dropdown' size="small">
             <InputLabel id="num-beds-label"># beds</InputLabel>
             <Select
               labelId="num-beds-label"
-              id="num-beds" >
+              id="num-beds"
+              label="# beds"
+            >
               <MenuItem value={1}>1</MenuItem>
               <MenuItem value={2}>2</MenuItem>
               <MenuItem value={3}>3</MenuItem>
@@ -87,7 +86,9 @@ export default function FilterSideBar() {
             <InputLabel id="num-baths-label"># baths</InputLabel>
             <Select
               labelId="num-baths-label"
-              id="num-baths" >
+              id="num-baths"
+              label="# baths"
+            >
               <MenuItem value={1}>1</MenuItem>
               <MenuItem value={2}>2</MenuItem>
               <MenuItem value={3}>3</MenuItem>
@@ -145,6 +146,7 @@ export default function FilterSideBar() {
           </FormControl>
         </Box>
       </Grid>
+      <h2></h2>
     </Box >
   )
 }
