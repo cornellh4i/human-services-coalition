@@ -1,19 +1,12 @@
-import * as React from 'react';
 import Card from '@mui/material/Card';
-import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
-import CardMedia from '@mui/material/CardMedia';
-import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import { DeleteOutlined } from '@mui/icons-material';
 import { EditOutlined } from '@mui/icons-material';
 import IconButton from '@mui/material/IconButton/IconButton';
-import { color, fontFamily, fontSize, fontStyle, fontWeight, height, width } from '@mui/system';
 import { ThemeProvider } from '@emotion/react';
-import { createTheme, Grid, makeStyles, styled } from '@mui/material';
-import { green, purple } from '@mui/material/colors';
-import { Route, Routes, Link, useNavigate } from "react-router-dom";
- 
+import { createTheme, Grid } from '@mui/material';
+import { useNavigate } from "react-router-dom";
  
  
 const listingTheme = createTheme({
@@ -26,12 +19,10 @@ const addressTheme = createTheme({
  typography: {
    fontSize: 15,
    fontWeightRegular: 400,
-   //fontFamily: ['"Montserrat"', 'Open Sans'].join(','),
  } ,
 });
 const sizeTheme = createTheme({
  typography: {
-   //fontFamily: ['"Montserrat"', 'Open Sans'].join(','),
    fontSize: 15,
    fontWeightRegular: 400,
  }
@@ -99,11 +90,11 @@ export default function ListingDetails({ Listing, handleDelete}: { Listing: any 
        
       {/* Create a grid container to hold all the grid items of the grid */}
        <Grid container xs = {18} alignItems="center" >
-        {/* Displays the listing name */}
+        {/* Displays the listing address */}
          <Grid item xs={9}>
            <ThemeProvider theme={listingTheme}>
              <Typography>
-               Woodland Acres Townhomes
+               {Listing.streetAddress}
              </Typography>
            </ThemeProvider>
          </Grid>
@@ -118,11 +109,11 @@ export default function ListingDetails({ Listing, handleDelete}: { Listing: any 
              </IconButton>
          </Grid>
  
-        {/* Displays the listing street address */}
+        {/* Displays the listing landlord */}
          <Grid item xs={12}>
            <ThemeProvider theme = {addressTheme}>
              <Typography>
-               {Listing.streetAddress}, Ithaca
+               {Listing.landlord}
              </Typography>
            </ThemeProvider>
          </Grid>
@@ -130,9 +121,12 @@ export default function ListingDetails({ Listing, handleDelete}: { Listing: any 
         {/* Displays the size of the listing and the number of bathrooms */}
          <Grid item xs={8.6} >
            <ThemeProvider theme={sizeTheme}>
-               <Typography >
-                 {Listing.size} / {Listing.numBath}bath
-               </Typography>
+            <Typography >
+                {Listing.size === "One Bed" ? "1bed" : Listing.size === "Two Bed" ? "2bed" : 
+                Listing.size === "Three Bed" ? "3bed" : Listing.size === "Four Bed" ? "4bed" : 
+                Listing.size === "Five Bed" ? "5bed"  : Listing.size === "Six Bed" ? "6bed" : 
+                Listing.size === "Studio" ? "studio" : <p></p>} / {Listing.numBath}bath
+              </Typography>
            </ThemeProvider>
          </Grid>  
  
