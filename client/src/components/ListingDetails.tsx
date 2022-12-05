@@ -1,4 +1,4 @@
-import Card from '@mui/material/Card';
+import { Card, CardMedia } from '@mui/material';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
 import { DeleteOutlined } from '@mui/icons-material';
@@ -36,20 +36,23 @@ const priceTheme = createTheme({
 
 export default function ListingDetails({ Listing, handleDelete}: { Listing: any , handleDelete: any}){
 
-  //define handle click function
+  // define handle click function
   const navigate = useNavigate();
   return(
  
    // Creates a single listing card
-   <Card style={{backgroundColor: "#F5F5F5"}} sx={{
-     width: "300px",
-     height: "310px",
-     borderRadius: "10px",
-     boxShadow: "0px 2px 4px rgba(0,0,0,0.25)",
-     flex: "none",
-     order: 1,
-     flexGrow: 0
-     }} elevation = {10}
+   <Card style={{backgroundColor: "#F5F5F5"}} 
+     sx={{
+      ':hover': { boxShadow: 20 },
+      width: "300px",
+      height: "310px",
+      borderRadius: "10px",
+      boxShadow: "0px 2px 4px rgba(0,0,0,0.25)",
+      flex: "none",
+      order: 1,
+      flexGrow: 0
+     }} 
+     elevation = {10}
      onClick={() => navigate("/listing_info", {state: {id: Listing._id,
                                                       streetAddress: Listing.streetAddress, 
                                                       city: Listing.city,
@@ -75,11 +78,13 @@ export default function ListingDetails({ Listing, handleDelete}: { Listing: any 
                                                       }})}
     >
  
-    {/* Creates the gray area at the top of the card that should display a picture of the listing */}
-     <CardContent style={{backgroundColor: "#D9D9D9"}}>
-       <Grid sx={{width: "300px", height: "180px", left: "0px", top: "0px"}}>
-       </Grid>
-     </CardContent>
+    {/* Displays a picture of the listing at the top of the card */}
+    <CardMedia
+      component = "img"
+      height = "210px"
+      width = "300px"
+      image = {Listing.pictures[0]}
+    />
  
      {/* Displays the listing information in a grid at the bottom of the card */}
      <Grid

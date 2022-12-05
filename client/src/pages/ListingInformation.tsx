@@ -1,5 +1,5 @@
 import { DeleteOutlined, EditOutlined } from '@mui/icons-material'
-import { Card, CardMedia, IconButton } from '@mui/material'
+import { Card, IconButton } from '@mui/material'
 import Grid from '@mui/material/Grid'
 import Typography from '@mui/material/Typography'
 import CheckIcon from '@mui/icons-material/Check';
@@ -21,7 +21,7 @@ const ListingInformation = () => {
   const navigate = useNavigate();
 
   return (
-    <Grid padding="5% 5%">
+    <Grid padding="1% 5%">
 
       {/* Back button */}
       <Grid item xs = {1}>
