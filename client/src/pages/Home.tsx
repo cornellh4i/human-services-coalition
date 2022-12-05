@@ -3,6 +3,9 @@ import Grid from '@mui/material/Grid'
 import { useEffect, useState } from 'react'
 import ListingDetails from '../components/ListingDetails'
 import ListingForm from "../forms/ListingForm"
+import FilterSideBar from '../components/FilterSideBar'
+import '../css/Home.css'
+import Card from '@mui/material/Card';
 
 const Home = () => {
   const [Listings, setListings] = useState<any[]>([])
@@ -33,18 +36,24 @@ const Home = () => {
   }
    
   return (
-    <div className="home">
-      <div className="listings">
-        <Container>
-          <Grid container spacing = {2}>
-            {Listings.map((Listing) => (             
-                <Grid item key={Listing._id}>
-                  <ListingDetails Listing={Listing} handleDelete = {handleDelete}/>
-                </Grid>
-            ))}
-          </Grid>
-        </Container>
-        {/* <ListingForm /> */}
+    <div>
+      <div className='body-box'>
+        <div className='side-box'>
+          <FilterSideBar />
+        </div>
+        <div className='content-box'>
+          <div className='listing-cards'>
+            <Container>
+              <Grid container spacing = {2}>
+                {Listings.map((Listing) => (             
+                    <Grid item key={Listing._id}>
+                      <ListingDetails Listing={Listing} handleDelete = {handleDelete}/>
+                    </Grid>
+                ))}
+              </Grid>
+            </Container>
+          </div>
+        </div>
       </div>
     </div>
   )
