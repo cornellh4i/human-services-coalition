@@ -38,8 +38,8 @@ export default function ListingDetails({ Listing, handleDelete}: { Listing: any 
  
    // Creates a single listing card
    <Card style={{backgroundColor: "#F5F5F5"}} sx={{
-     width: "350px",
-     height: "340px",
+     width: "300px",
+     height: "310px",
      borderRadius: "10px",
      boxShadow: "0px 2px 4px rgba(0,0,0,0.25)",
      flex: "none",
@@ -49,7 +49,7 @@ export default function ListingDetails({ Listing, handleDelete}: { Listing: any 
  
     {/* Creates the gray area at the top of the card that should display a picture of the listing */}
      <CardContent style={{backgroundColor: "#D9D9D9"}}>
-       <Grid sx={{width: "350px", height: "210px", left: "0px", top: "0px"}}>
+       <Grid sx={{width: "300px", height: "180px", left: "0px", top: "0px"}}>
        </Grid>
      </CardContent>
  
