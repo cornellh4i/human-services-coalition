@@ -1,13 +1,9 @@
 import { Card, CardMedia, Grid } from "@mui/material"
 
-interface imageContainerProp {
-    numImages: number
-}
-
 export default function ImageContainer ({images, numImages}: {images: string[], numImages:number}) {
 
     if (numImages === 1){
-        {/* Displays a single picture if pic array length is 1*/}
+        /* Displays a single picture if pic array length is 1*/
         return (
             <Grid container>
                 <Grid item xs = {12}>
@@ -24,7 +20,7 @@ export default function ImageContainer ({images, numImages}: {images: string[], 
         )
     }
     else if (numImages === 2){
-        {/* Displays two pictures if pic array length is 2*/}
+        /* Displays two pictures if pic array length is 2*/
         return (
             <Grid container>
                 <Grid item xs = {6} padding = "5px">
@@ -51,7 +47,7 @@ export default function ImageContainer ({images, numImages}: {images: string[], 
         )
     }
     else{
-        {/* Displays 3 pictures if pic array length >= 3*/}
+        /* Displays 3 pictures if pic array length >= 3*/
         return (
             <Grid container>
               <Grid item xs = {8} padding = "5px">

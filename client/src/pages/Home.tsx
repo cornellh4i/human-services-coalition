@@ -2,7 +2,6 @@ import Container from '@mui/material/Container'
 import Grid from '@mui/material/Grid'
 import { useEffect, useState } from 'react'
 import ListingDetails from '../components/ListingDetails'
-import ListingInformation from './ListingInformation'
 import FilterSideBar from '../components/FilterSideBar'
 import '../css/Home.css'
 
