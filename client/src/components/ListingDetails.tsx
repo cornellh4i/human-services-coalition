@@ -1,5 +1,4 @@
 import { Card, CardMedia } from '@mui/material';
-import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
 import { DeleteOutlined } from '@mui/icons-material';
 import { EditOutlined } from '@mui/icons-material';

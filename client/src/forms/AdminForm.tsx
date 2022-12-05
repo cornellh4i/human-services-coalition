@@ -20,7 +20,6 @@ const AdminForm = () => {
   const [phone, setPhone] = useState('')
   const [birthdate, setBirthdate] = useState('')
   const [contactPref, setContactPref] = useState('')
-  const [company, setCompany] = useState('')
   const [error, setError] = useState(null)
 
   const [affiliationError, setAffiliationError] = useState(false)
@@ -91,8 +90,7 @@ const AdminForm = () => {
       email,
       phone,
       birthdate,
-      contactPref,
-      company
+      contactPref
     }
 
     const response = await fetch('/api/admins/', {
@@ -124,7 +122,6 @@ const AdminForm = () => {
       setPhone('')
       setBirthdate('')
       setContactPref('')
-      setCompany('')
       setError(null)
 
       setAffiliationError(false)

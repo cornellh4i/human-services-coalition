@@ -68,10 +68,7 @@ const adminSchema = new Schema({
   contactPref: {
     type: String,
     enum: ContactPref
-  },
-  company: {
-    type: String,
-  },
+  }
 }, { timestamps: true })
 
 module.exports = mongoose.model('Admin', adminSchema)

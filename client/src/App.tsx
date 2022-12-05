@@ -5,8 +5,9 @@ import Home from "./pages/Home"
 import NavBar from "./components/NavBar"
 import ListingInformation from './pages/ListingInformation'
 import ManageProfiles from './pages/ManageProfiles'
-import ListingForm from './forms/ListingForm';
-
+import ListingForm from './forms/ListingForm'
+import AdminForm from './forms/AdminForm'
+import UserForm from './forms/UserForm'
 
 function App() {
   
@@ -44,6 +45,14 @@ function App() {
               <Route
                 path='/listing-form'
                 element={<ListingForm />}
+              />
+              <Route
+                path='/admin-form'
+                element={<AdminForm />}
+              />
+              <Route
+                path='/user-form'
+                element={<UserForm />}
               />
             </Routes>
           </div>

@@ -52,7 +52,7 @@ function ResponsiveAppBar() {
           }}>
             {pages.map((page) => (
               <Button
-                component={Link} to=""
+                component={Link} to={page === "Manage Profiles" ? 'manage-profiles' : '' }
                 key={page}
                 onClick={page === "Create New" ? handleOpenUserMenu : handleOpenNavMenu}
                 sx={{
@@ -95,7 +95,12 @@ function ResponsiveAppBar() {
               onClose={handleCloseUserMenu}
             >
               {settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseUserMenu}>
+                <MenuItem 
+                  key={setting} 
+                  onClick={handleCloseUserMenu} 
+                  component={Link} 
+                  to={setting === "Listing" ? 'listing-form' : "User" ? 'user-form' : "Admin" ? 'admin-form' : ''}
+                >
                   <Typography className='text' textAlign="center">{setting}</Typography>
                 </MenuItem>
               ))}

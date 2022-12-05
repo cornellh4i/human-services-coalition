@@ -41,8 +41,7 @@ const createAdmin = async (req, res) => {
     email,
     phone,
     contactPref,
-    birthdate,
-    company
+    birthdate
   } = req.body
 
   try {
@@ -60,8 +59,7 @@ const createAdmin = async (req, res) => {
       email,
       phone,
       contactPref,
-      birthdate,
-      company
+      birthdate
     })
     res.status(200).json(admin)
   } catch (error) {

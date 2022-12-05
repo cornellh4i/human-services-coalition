@@ -2,8 +2,8 @@ import { useState, useEffect } from 'react'
 import { Box, Container, createTheme, Typography, Tab, Tabs } from '@mui/material'
 import { ThemeProvider } from '@emotion/react'
 import React from 'react'
-import ManageUsers from '../components/ManageUsers';
-import ManageAdmins from '../components/ManageAdmins';
+import ManageUsers from '../components/ManageUsers'
+import ManageAdmins from '../components/ManageAdmins'
 
 const ManageProfiles = () => {
   const theme = createTheme({
