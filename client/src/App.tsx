@@ -4,9 +4,7 @@ import Home from "./pages/Home"
 import Users from "./pages/Users"
 import Admins from "./pages/Admins"
 import NavBar from "./components/NavBar"
-import LoginForm from './forms/LoginForm'
-import ListingDetails from './components/ListingDetails'
-
+import ListingInformation from './pages/ListingInformation'
 
 function App() {
   return (
@@ -27,10 +25,14 @@ function App() {
               path="/admins"
               element={<Admins />}
             />
+            <Route
+              path="/listing_info"
+              element={<ListingInformation />}
+            />
           </Routes>
         </div>
-       <Home></Home>
       </BrowserRouter>
+  
     </div>
   );
 }
