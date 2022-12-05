@@ -4,7 +4,7 @@ import Home from "./pages/Home"
 import Users from "./pages/Users"
 import Admins from "./pages/Admins"
 import NavBar from "./components/NavBar"
-import FmrForm from './forms/FmrForm'
+import ListingInformation from './pages/ListingInformation'
 
 function App() {
   return (
@@ -25,9 +25,14 @@ function App() {
               path="/admins"
               element={<Admins />}
             />
+            <Route
+              path="/listing_info"
+              element={<ListingInformation />}
+            />
           </Routes>
         </div>
       </BrowserRouter>
+  
     </div>
   );
 }
