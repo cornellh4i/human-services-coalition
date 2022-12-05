@@ -1,6 +1,7 @@
 import { Box, Button, Container, FormControlLabel, FormGroup, FormLabel, Grid, MenuItem, Radio, RadioGroup, Select, SelectChangeEvent, TextField, Typography } from "@mui/material"
 import { useState } from "react"
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
+import { useNavigate } from "react-router-dom";
 import React from "react";
 
 
@@ -147,22 +148,26 @@ const AdminForm = () => {
     setRace(event.target.value as string);
   };
 
+  // Navigation functionality
+  const navigate = useNavigate();
+
   return (
     <Container maxWidth={false}>
       <form noValidate className="admin-form" onSubmit={handleSubmit}>
         <Grid container>
           <Grid item xs={2} alignSelf="flex-start">
             <Button disableElevation
-              startIcon={<ArrowBackIosNewIcon />}
+              startIcon={<ArrowBackIosNewIcon /> }
               variant="outlined"
               size="large"
+              onClick={() => navigate("/")}
               sx={{ marginTop: '2rem', padding: "0 1rem", fontSize: '1.2rem', fontWeight: 'bold', textTransform: "unset", borderRadius: '15px', color: '#5D737E', borderWidth: '0.14rem', borderColor: '#5D737E', bgcolor: 'white', ':hover': { bgcolor: "#5D737EB5" } }}
             >
               Back
             </Button>
           </Grid>
 
-          <Grid item xs={6}>
+          <Grid item xs={8}>
             <Grid item xs={12}>
               <Typography variant='h3' sx={{ fontSize: '1.3rem', fontWeight: 'bold', mt: '3%' }} >
                 Create a New Admin
@@ -501,24 +506,18 @@ const AdminForm = () => {
                 >
                   Cancel
                 </Button>
+                <Button disableElevation
+                  type="submit"
+                  variant="contained"
+                  size="large"
+                  sx={{ marginLeft: "10px", padding: "0 2rem", fontSize: '1.2rem', fontWeight: 'bold', textTransform: "unset", borderRadius: '12px', color: 'white', bgcolor: '#ED5F1E', ':hover': { bgcolor: "#ED5F1EB5" } }}
+                >
+                  Create Admin
+                </Button>
               </Box>
             </Grid>
           </Grid>
-
-          <Grid item xs={4} alignSelf="flex-end">
-            <Grid item xs={12}>
-              <Button disableElevation
-                type="submit"
-                variant="contained"
-                size="large"
-                sx={{ marginLeft: "10px", padding: "0 2rem", fontSize: '1.2rem', fontWeight: 'bold', textTransform: "unset", borderRadius: '12px', color: 'white', bgcolor: '#ED5F1E', ':hover': { bgcolor: "#ED5F1EB5" } }}
-              >
-                Create Admin
-              </Button>
-            </Grid>
-          </Grid>
         </Grid>
-        {error && <div className="admin-error">{error}</div>}
       </form>
     </Container >
   )

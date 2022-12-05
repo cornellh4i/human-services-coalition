@@ -42,7 +42,7 @@ export default function ListingDetails({ Listing, handleDelete}: { Listing: any 
    // Creates a single listing card
    <Card style={{backgroundColor: "#F5F5F5"}} 
      sx={{
-      ':hover': { boxShadow: 20 },
+      ':hover': { boxShadow: 20, cursor: 'pointer' },
       width: "300px",
       height: "310px",
       borderRadius: "10px",
