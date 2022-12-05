@@ -40,10 +40,10 @@ export default function ListingDetails({ Listing, handleDelete}: { Listing: any 
   const navigate = useNavigate();
   return(
  
-  // Creates a single listing card
-  <Card style={{backgroundColor: "#F5F5F5"}} sx={{
-     width: "350px",
-     height: "340px",
+   // Creates a single listing card
+   <Card style={{backgroundColor: "#F5F5F5"}} sx={{
+     width: "300px",
+     height: "310px",
      borderRadius: "10px",
      boxShadow: "0px 2px 4px rgba(0,0,0,0.25)",
      flex: "none",
@@ -77,7 +77,7 @@ export default function ListingDetails({ Listing, handleDelete}: { Listing: any 
  
     {/* Creates the gray area at the top of the card that should display a picture of the listing */}
      <CardContent style={{backgroundColor: "#D9D9D9"}}>
-       <Grid sx={{width: "350px", height: "210px", left: "0px", top: "0px"}}>
+       <Grid sx={{width: "300px", height: "180px", left: "0px", top: "0px"}}>
        </Grid>
      </CardContent>
  
@@ -99,13 +99,13 @@ export default function ListingDetails({ Listing, handleDelete}: { Listing: any 
            </ThemeProvider>
          </Grid>
 
-        {/* Creates the delete and edit buttons and displays it next to the listing name */}
+        {/* Creates the delete and edit buttons and displays it next to the address */}
          <Grid item xs={3} >
-             <IconButton onClick={() => handleDelete(Listing._id)}>
-               <DeleteOutlined fontSize = "small"/>
-             </IconButton>
              <IconButton>
                <EditOutlined fontSize = "small"/>
+             </IconButton>
+             <IconButton onClick={() => handleDelete(Listing._id)}>
+               <DeleteOutlined fontSize = "small"/>
              </IconButton>
          </Grid>
  
@@ -113,7 +113,7 @@ export default function ListingDetails({ Listing, handleDelete}: { Listing: any 
          <Grid item xs={12}>
            <ThemeProvider theme = {addressTheme}>
              <Typography>
-               {Listing.landlord}
+                {Listing.landlord}
              </Typography>
            </ThemeProvider>
          </Grid>
@@ -122,11 +122,11 @@ export default function ListingDetails({ Listing, handleDelete}: { Listing: any 
          <Grid item xs={8.6} >
            <ThemeProvider theme={sizeTheme}>
             <Typography >
-                {Listing.size === "One Bed" ? "1bed" : Listing.size === "Two Bed" ? "2bed" : 
-                Listing.size === "Three Bed" ? "3bed" : Listing.size === "Four Bed" ? "4bed" : 
-                Listing.size === "Five Bed" ? "5bed"  : Listing.size === "Six Bed" ? "6bed" : 
-                Listing.size === "Studio" ? "studio" : <p></p>} / {Listing.numBath}bath
-              </Typography>
+              {Listing.size === "One Bed" ? "1bed" : Listing.size === "Two Bed" ? "2bed" : 
+              Listing.size === "Three Bed" ? "3bed" : Listing.size === "Four Bed" ? "4bed" : 
+              Listing.size === "Five Bed" ? "5bed"  : Listing.size === "Six Bed" ? "6bed" : 
+              Listing.size === "Studio" ? "studio" : <p></p>} / {Listing.numBath}bath
+            </Typography>
            </ThemeProvider>
          </Grid>  
  
