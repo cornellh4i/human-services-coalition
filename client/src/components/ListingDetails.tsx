@@ -1,5 +1,4 @@
 import { Card, CardMedia } from '@mui/material';
-import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
 import { DeleteOutlined } from '@mui/icons-material';
 import { EditOutlined } from '@mui/icons-material';
@@ -43,7 +42,7 @@ export default function ListingDetails({ Listing, handleDelete}: { Listing: any 
    // Creates a single listing card
    <Card style={{backgroundColor: "#F5F5F5"}} 
      sx={{
-      ':hover': { boxShadow: 20 },
+      ':hover': { boxShadow: 20, cursor: 'pointer' },
       width: "300px",
       height: "310px",
       borderRadius: "10px",

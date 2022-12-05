@@ -1,5 +1,5 @@
 import { DeleteOutlined, EditOutlined } from '@mui/icons-material'
-import { Card, IconButton } from '@mui/material'
+import { Card, Button, IconButton } from '@mui/material'
 import Grid from '@mui/material/Grid'
 import Typography from '@mui/material/Typography'
 import CheckIcon from '@mui/icons-material/Check';
@@ -7,7 +7,7 @@ import EmailIcon from '@mui/icons-material/Email';
 import SmartphoneIcon from '@mui/icons-material/Smartphone';
 import LinkIcon from '@mui/icons-material/Link';
 import PlaceIcon from '@mui/icons-material/Place';
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import { useLocation, useNavigate } from "react-router-dom";
 import ImageContainer from '../components/ImageContainer';
 
@@ -17,7 +17,7 @@ const ListingInformation = () => {
   // Allows us to access the state of the listing details
   const location= useLocation();
 
-  //navigation functionality
+  // Navigation functionality
   const navigate = useNavigate();
 
   return (
@@ -25,9 +25,15 @@ const ListingInformation = () => {
 
       {/* Back button */}
       <Grid item xs = {1}>
-        <IconButton onClick={() => navigate("/")}>
-          <ArrowBackIcon fontSize='large'></ArrowBackIcon> Back
-        </IconButton>
+        <Button disableElevation
+            startIcon={<ArrowBackIosNewIcon /> }
+            variant="outlined"
+            size="large"
+            onClick={() => navigate("/")}
+            sx={{ marginTop: '2rem', padding: "0 1rem", fontSize: '1.2rem', fontWeight: 'bold', textTransform: "unset", borderRadius: '15px', color: '#5D737E', borderWidth: '0.14rem', borderColor: '#5D737E', bgcolor: 'white', ':hover': { bgcolor: "#5D737EB5" } }}
+          >
+            Back
+        </Button>
       </Grid>
 
       <Grid item xs = {12}>
