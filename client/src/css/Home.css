@@ -1,0 +1,36 @@
+.body-box {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+}
+
+.side-box {
+  display: flex;
+  padding-left: 2%;
+  padding-top: 2%;
+  flex-direction: column;
+  width: 25%;
+  overflow: auto;
+}
+
+.content-box {
+  padding-top: 2%;
+  padding-left: 2%;
+  width: 75%;
+}
+
+.card {
+  width: 28%;
+  height: 200px;
+  padding: 16px;
+  min-width: 250px;
+}
+
+.listing-cards {
+  gap: 16px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: start;
+  align-items: stretch;
+  padding-left: 12px;
+}
