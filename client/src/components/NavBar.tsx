@@ -107,7 +107,7 @@ function ResponsiveAppBar() {
                   component={Link} 
                   to={setting === "Listing" ? 'listing-form' : setting === "Admin" ? 'admin-form' : setting === 'User' ? 'user-form' : ''}
                 >
-                  <Typography className='text' textAlign="center">{setting}</Typography>
+                  <Typography className='text' textAlign="left" margin='5px'>{setting}</Typography>
                 </MenuItem>
               ))}
             </Menu>
