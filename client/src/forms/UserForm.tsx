@@ -31,28 +31,31 @@ const UserForm = () => {
   const [fNameError, setFNameError] = useState(false)
   const [lNameError, setLNameError] = useState(false)
 
+  // Navigation functionality
+  const navigate = useNavigate();
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
-    if (voucherType == '') {
+    if (voucherType === '') {
       setVoucherTypeError(true)
     }
-    if (supervisor == '') {
+    if (supervisor === '') {
       setSupervisorError(true)
     }
-    if (email == '') {
+    if (email === '') {
       setEmailError(true)
     }
-    if (username == '') {
+    if (username === '') {
       setUsernameError(true)
     }
-    if (password == '') {
+    if (password === '') {
       setPasswordError(true)
     }
-    if (fName == '') {
+    if (fName === '') {
       setFNameError(true)
     }
-    if (lName == '') {
+    if (lName === '') {
       setLNameError(true)
     }
 
@@ -113,6 +116,8 @@ const UserForm = () => {
       setPasswordError(false)
       setFNameError(false)
       setLNameError(false)
+
+      navigate('/manage-profiles')
     }
   }
 
@@ -124,26 +129,23 @@ const UserForm = () => {
     setRace(event.target.value as string);
   };
 
-  // Navigation functionality
-  const navigate = useNavigate();
-
   return (
     <Container maxWidth={false}>
-      <form noValidate className="user-form" onSubmit={handleSubmit}>
-        <Grid container>
-          <Grid item xs={2} alignSelf="flex-start">
-            <Button disableElevation
-              startIcon={<ArrowBackIosNewIcon />}
-              variant="outlined"
-              size="large"
-              onClick={() => navigate("/")}
-              sx={{ marginTop: '2rem', padding: "0 1rem", fontSize: '1.2rem', fontWeight: 'bold', textTransform: "unset", borderRadius: '15px', color: '#5D737E', borderWidth: '0.14rem', borderColor: '#5D737E', bgcolor: 'white', ':hover': { bgcolor: "#5D737EB5" } }}
-            >
-              Back
-            </Button>
-          </Grid>
+      <Grid container>
+        <Grid item xs={2} alignSelf="flex-start">
+          <Button disableElevation
+            startIcon={<ArrowBackIosNewIcon />}
+            variant="outlined"
+            size="large"
+            onClick={() => navigate("/")}
+            sx={{ marginTop: '2rem', padding: "0 1rem", fontSize: '1.2rem', fontWeight: 'bold', textTransform: "unset", borderRadius: '15px', color: '#5D737E', borderWidth: '0.14rem', borderColor: '#5D737E', bgcolor: 'white', ':hover': { bgcolor: "#5D737EB5" } }}
+          >
+            Back
+          </Button>
+        </Grid>
 
-          <Grid item xs={8}>
+        <Grid item xs={8}>
+          <form noValidate className="user-form" onSubmit={handleSubmit}>
             <Grid item xs={12}>
               <Typography variant='h3' sx={{ fontSize: '1.3rem', fontWeight: 'bold', mt: '3%' }} >
                 Create A New User
@@ -494,9 +496,9 @@ const UserForm = () => {
                 </Button>
               </Box>
             </Grid>
-          </Grid>
+          </form>
         </Grid>
-      </form>
+      </Grid>
     </Container >
   )
 }

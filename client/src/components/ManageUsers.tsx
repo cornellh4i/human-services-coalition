@@ -48,10 +48,10 @@ const ManageUsers = () => {
           />
         </Grid>
 
-        <Grid container item xs={4}>
+        <Grid container item xs={5}>
           <Box sx={{ display: "flex", justifyContent: "right", alignItems: 'center', marginLeft: '5rem' }}>
             <Typography sx={{ marginRight: '1rem' }}>Voucher Type</Typography>
-            <Box sx={{ minWidth: 300 }}>
+            <Box sx={{ minWidth: 275 }}>
               <FormControl fullWidth size="small"
                 sx={{ backgroundColor: '#FFFFFF', borderRadius: 1 }}>
                 <Select
@@ -73,7 +73,7 @@ const ManageUsers = () => {
 
       <Container sx={{ mt: '10px', ml: '2.5%', maxWidth: '100%', borderRadius: 0, display: 'flex', justifyContent: 'flex-start', alignItems: 'left', backgroundColor: '#D9D9D9' }}>
         <Grid container item xs={10} md={10}>
-          <Grid container columnSpacing={20}>
+          <Grid container columnSpacing={17}>
             <Grid item>
               <ColumnLabel label="First Name" ></ColumnLabel>
             </Grid>

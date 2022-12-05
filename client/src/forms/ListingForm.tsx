@@ -47,41 +47,43 @@ const ListingForm = () => {
   const [rentError, setRentError] = useState(false)
   const [bedsError, setBedsError] = useState(false)
 
+  // Navigation functionality
+  const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
-    if (landlord == '') {
+    if (landlord === '') {
       setNameError(true)
     }
-    if (landlordPhone == '') {
+    if (landlordPhone === '') {
       setNumberError(true)
     }
-    if (landlordEmail == '') {
+    if (landlordEmail === '') {
       setEmailError(true)
     }
-    if (streetAddress == '') {
+    if (streetAddress === '') {
       setAddressError(true)
     }
-    if (city == '') {
+    if (city === '') {
       setCityError(true)
     }
-    if (state == '') {
+    if (state === '') {
       setStateError(true)
     }
-    if (country == '') {
+    if (country === '') {
       setCountryError(true)
     }
-    if (zipCode == '') {
+    if (zipCode === '') {
       setZipError(true)
     }
-    if (numBath == '') {
+    if (numBath === '') {
       setBathError(true)
     }
-    if (price == '') {
+    if (price === '') {
       setRentError(true)
     }
-    if (size == '') {
+    if (size === '') {
       setBedsError(true)
     }
 
@@ -154,12 +156,10 @@ const ListingForm = () => {
       setDateAvailable('')
 
       setError(null)
-      console.log('New Listing Added', json)
+      
+      navigate("/")
     }
   }
-
-  // Navigation functionality
-  const navigate = useNavigate();
 
   return (
     <Container maxWidth={false}>
