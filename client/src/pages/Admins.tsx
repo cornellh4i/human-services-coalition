@@ -1,8 +1,6 @@
-import { useEffect, useState } from "react"
-import AdminForm from "../forms/AdminForm"
-
-//components
+import { useEffect, useState } from 'react'
 import AdminDetails from '../components/AdminDetails'
+import AdminForm from "../forms/AdminForm"
 
 const Admins = () => {
   const [Admins, setAdmins] = useState<any[]>([])
@@ -29,7 +27,6 @@ const Admins = () => {
         <AdminForm />
       </div>
     </div>
-
   )
 }
 
