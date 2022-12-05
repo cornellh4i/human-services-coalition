@@ -18,6 +18,10 @@ enum Gender {
 }
 
 const adminSchema = new Schema({
+  affiliation: {
+    type: String,
+    required: true,
+  },
   username: {
     type: String,
     required: true,
@@ -58,13 +62,13 @@ const adminSchema = new Schema({
   phone: {
     type: String
   },
+  birthdate: {
+    type: Date
+  },
   contactPref: {
     type: String,
     enum: ContactPref
-  },
-  company: {
-    type: String,
-  },
+  }
 }, { timestamps: true })
 
 module.exports = mongoose.model('Admin', adminSchema)
