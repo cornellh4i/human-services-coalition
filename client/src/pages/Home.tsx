@@ -4,9 +4,11 @@ import ListingForm from "../forms/ListingForm"
 import FilterSideBar from '../components/FilterSideBar'
 import '../css/Home.css'
 import Card from '@mui/material/Card';
+import SelectedFilters from '../components/SelectedFilters'
 
 const Home = () => {
   const [Listings, setListings] = useState<any[]>([])
+  const selected = ['Apartment', '3 beds', '2 baths', 'Pet-friendly']
 
   useEffect(() => {
     const fetchListings = async () => {
@@ -28,6 +30,10 @@ const Home = () => {
           <FilterSideBar />
         </div>
         <div className='content-box'>
+          <div className='selected-filters'>
+            {/* <SelectedFilters /> */}
+            < SelectedFilters filters={selected} > </SelectedFilters >
+          </div>
           <div className='listing-cards'>
             <Card style={{ backgroundColor: "lightgrey" }} className='card'></Card>
             <Card style={{ backgroundColor: "lightgrey" }} className='card'></Card>
