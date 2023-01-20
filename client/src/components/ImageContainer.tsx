@@ -1,4 +1,5 @@
-import { Card, CardMedia, Grid } from "@mui/material"
+import { Box, Button, Card, CardContent, CardMedia, Grid, Paper } from "@mui/material"
+import AppsIcon from '@mui/icons-material/Apps';
 
 export default function ImageContainer ({images, numImages}: {images: string[], numImages:number}) {
 
@@ -10,8 +11,8 @@ export default function ImageContainer ({images, numImages}: {images: string[], 
                     <Card>
                     <CardMedia
                         component = "img"
-                        height = "70%"
-                        width = "70%"
+                        height = "50%"
+                        width = "100%"
                         image = {images[0]}
                     />
                     </Card>
@@ -73,15 +74,22 @@ export default function ImageContainer ({images, numImages}: {images: string[], 
                 </Grid>
                 <Grid item xs = {12} padding = "5px">
                   <Card>
-                    <Grid item>
+                    <Box sx = {{ position: 'relative' }}>
                       <CardMedia
                         component = "img"
                         height = "50%"
                         width = "100%"
                         image = {images[2]}
                       />
-                      {/* <Button>Show All</Button> */}
-                    </Grid>
+                      <Box sx = {{ position: 'absolute', bottom: 10, right: 15, display: 'flex', justifyContent: 'flex-end' }}>
+                        <Button variant = "outlined"
+                                sx = {{ color: "#000000", bgcolor: "#FFFFFF", borderColor: "#000000", fontSize: "20px", textTransform: "none" }}
+                        >
+                          <AppsIcon sx={{ marginRight: "7px" }}></AppsIcon>
+                          Show All
+                        </Button>
+                      </Box>
+                    </Box>
                   </Card>
                 </Grid>
               </Grid>
