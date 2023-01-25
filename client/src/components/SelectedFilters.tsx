@@ -1,6 +1,7 @@
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
+import IconButton from '@mui/material/IconButton/IconButton';
+import ClearIcon from '@mui/icons-material/Clear';
 import '../css/Home.css'
 
 export default function SelectedFilters(props: any) {
@@ -14,9 +15,9 @@ export default function SelectedFilters(props: any) {
             <div className="item">
               <Box>
                 {filter}
-                <Button className="x-button">
-                  X
-                </Button>
+                <IconButton>
+                  <ClearIcon fontSize="small" />
+                </IconButton>
               </Box>
             </div>
           </Grid>)}
