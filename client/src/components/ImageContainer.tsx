@@ -1,4 +1,4 @@
-import { Box, Button, Card, CardContent, CardMedia, Grid, Paper } from "@mui/material"
+import { Box, Button, Card, CardMedia, Grid } from "@mui/material"
 import AppsIcon from '@mui/icons-material/Apps';
 
 export default function ImageContainer ({images, numImages}: {images: string[], numImages:number}) {

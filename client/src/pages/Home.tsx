@@ -3,10 +3,14 @@ import Grid from '@mui/material/Grid'
 import { useEffect, useState } from 'react'
 import ListingDetails from '../components/ListingDetails'
 import FilterSideBar from '../components/FilterSideBar'
+import SelectedFilters from '../components/SelectedFilters'
 import '../css/Home.css'
 
 const Home = () => {
   const [Listings, setListings] = useState<any[]>([])
+
+  // Hard coded filter list for testings
+  const selected = ['Apartment', '3 beds', '2 baths', 'Pet-friendly']
 
   useEffect(() => {
     const fetchListings = async () => {
@@ -40,8 +44,11 @@ const Home = () => {
           <FilterSideBar />
         </div>
         <div className='content-box'>
-          <div className='listing-cards'>
-            <Container>
+          <Container>
+            <div className='selected-filters'>
+              < SelectedFilters filters={selected} > </SelectedFilters >
+            </div>
+            <div className='listing-cards'>
               <Grid container spacing = {2}>
                 {Listings.map((Listing) => (             
                     <Grid item key={Listing._id}>
@@ -49,8 +56,8 @@ const Home = () => {
                     </Grid>
                 ))}
               </Grid>
-            </Container>
-          </div>
+            </div>
+          </Container>
         </div>
       </div>
     </div>
