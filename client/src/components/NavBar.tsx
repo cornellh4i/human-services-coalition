@@ -8,7 +8,7 @@ import Container from '@mui/material/Container';
 import Button from '@mui/material/Button';
 import MenuItem from '@mui/material/MenuItem';
 import { ReactComponent as Logo } from '../assets/coclogo.svg';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import '../css/NavBar.css';
 
 const pages = ['Create New', 'Manage Profiles', 'Update FMR'];
@@ -33,6 +33,13 @@ function ResponsiveAppBar() {
     setAnchorElUser(null);
   };
 
+  // Navigation functionality
+  const navigate = useNavigate();
+
+  const navigateToProfiles = () => {
+    navigate("/manage-profiles");
+  };
+
   return (
     <AppBar position="sticky" elevation={0} style={{ background: "white", borderBottom: '1px solid #D9D9D9' }}>
       <Container maxWidth="xl">
@@ -52,9 +59,8 @@ function ResponsiveAppBar() {
           }}>
             {pages.map((page) => (
               <Button
-                component={Link} to=""
                 key={page}
-                onClick={page === "Create New" ? handleOpenUserMenu : handleOpenNavMenu}
+                onClick={page === "Create New" ? handleOpenUserMenu : page === "Manage Profiles" ? navigateToProfiles : handleOpenNavMenu}
                 sx={{
                   textTransform: 'none',
                   '&:hover': { fontWeight: 'bold' }, fontSize: 16, my: 2, color: '#737171',
@@ -95,8 +101,13 @@ function ResponsiveAppBar() {
               onClose={handleCloseUserMenu}
             >
               {settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                  <Typography className='text' textAlign="center">{setting}</Typography>
+                <MenuItem 
+                  key={setting} 
+                  onClick={handleCloseUserMenu} 
+                  component={Link} 
+                  to={setting === "Listing" ? 'listing-form' : setting === "Admin" ? 'admin-form' : setting === 'User' ? 'user-form' : ''}
+                >
+                  <Typography className='text' textAlign="left" margin='5px'>{setting}</Typography>
                 </MenuItem>
               ))}
             </Menu>

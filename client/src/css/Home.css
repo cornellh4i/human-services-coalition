@@ -19,13 +19,6 @@
   width: 75%;
 }
 
-.card {
-  width: 28%;
-  height: 200px;
-  padding: 16px;
-  min-width: 250px;
-}
-
 .listing-cards {
   gap: 16px;
   display: flex;

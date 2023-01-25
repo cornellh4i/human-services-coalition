@@ -28,6 +28,7 @@ const getAdmin = async (req, res) => {
 // POST (add) a new admin
 const createAdmin = async (req, res) => {
   const {
+    affiliation,
     username,
     password,
     fName,
@@ -40,11 +41,12 @@ const createAdmin = async (req, res) => {
     email,
     phone,
     contactPref,
-    company
+    birthdate
   } = req.body
 
   try {
     const admin = await Admin.create({
+      affiliation,
       username,
       password,
       fName,
@@ -57,7 +59,7 @@ const createAdmin = async (req, res) => {
       email,
       phone,
       contactPref,
-      company
+      birthdate
     })
     res.status(200).json(admin)
   } catch (error) {
