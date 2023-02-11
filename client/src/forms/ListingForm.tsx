@@ -7,7 +7,6 @@ import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 const ListingForm = () => {
   const [webScraped, setWebScraped] = useState(false)
   const [description, setDescription] = useState('')
-  const [aptName, setAptName] = useState('')
   const [streetAddress, setStreetAddress] = useState('')
   const [city, setCity] = useState('')
   const [state, setState] = useState('')
@@ -90,7 +89,6 @@ const ListingForm = () => {
     const listing = {
       webScraped,
       description,
-      aptName,
       streetAddress,
       city,
       state,
@@ -129,7 +127,6 @@ const ListingForm = () => {
     if (response.ok) {
       setWebScraped(false)
       setDescription('')
-      setAptName('')
       setStreetAddress('')
       setCity('')
       setState('')
@@ -273,7 +270,7 @@ const ListingForm = () => {
               </FormGroup>
               <FormGroup>
                 <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'left', alignItems: 'center', marginTop: '1rem' }}>
-                  <FormLabel>Address Line 1</FormLabel>
+                  <FormLabel>Street Address</FormLabel>
                   <Typography sx={{ marginLeft: '0.3rem', color: '#E50808' }}>*</Typography>
                 </Box>
                 <TextField fullWidth
@@ -287,19 +284,6 @@ const ListingForm = () => {
                   onChange={(e) => setStreetAddress(e.target.value)}
                   value={streetAddress}
                   error={addressError}
-                />
-              </FormGroup>
-              <FormGroup>
-                <FormLabel sx={{ marginTop: '1rem' }}>Apartment Name</FormLabel>
-                <TextField fullWidth
-                  id="listing-aptName"
-                  variant="outlined"
-                  size="small"
-                  className="form-field"
-                  type="text"
-                  name="aptName"
-                  onChange={(e) => setAptName(e.target.value)}
-                  value={aptName}
                 />
               </FormGroup>
             </Box>
@@ -366,7 +350,7 @@ const ListingForm = () => {
             <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '1rem' }}>
               <FormGroup sx={{ flexGrow: '1' }}>
                 <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'left', alignItems: 'center' }}>
-                  <FormLabel>ZIP</FormLabel>
+                  <FormLabel>Zip Code</FormLabel>
                   <Typography sx={{ marginLeft: '0.3rem', color: '#E50808' }}>*</Typography>
                 </Box>
                 <TextField
@@ -407,7 +391,6 @@ const ListingForm = () => {
                   onChange={(e) => setDistTransportation(e.target.value)}
                   value={distTransportation}
                 >
-                  <MenuItem key={"Close"} value=""><em>None</em></MenuItem>
                   <MenuItem key={"Close"} value="Close">Close</MenuItem>
                   <MenuItem key={"Medium"} value="Medium">Medium</MenuItem>
                   <MenuItem key={"Far"} value="Far">Far</MenuItem>
@@ -484,7 +467,7 @@ const ListingForm = () => {
 
               <FormGroup sx={{ flexGrow: '1' }}>
                 <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'left', alignItems: 'center' }}>
-                  <FormLabel>Rent</FormLabel>
+                  <FormLabel>Monthly Rent</FormLabel>
                   <Typography sx={{ marginLeft: '0.3rem', color: '#E50808' }}>*</Typography>
                 </Box>
                 <TextField

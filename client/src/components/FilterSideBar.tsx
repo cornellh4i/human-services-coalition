@@ -66,6 +66,14 @@ export default function FilterSideBar() {
                 <FormControlLabel control={<Checkbox />} label={<h4 className='prop-text'>House</h4>} />
               </Grid>
             </Grid>
+            <Grid container spacing={1} columns={16}>
+              <Grid item xs={8}>
+                <FormControlLabel control={<Checkbox />} label={<h4 className='prop-text'>Condo</h4>} />
+              </Grid>
+              <Grid item xs={8}>
+                <FormControlLabel control={<Checkbox />} label={<h4 className='prop-text'>Single Room</h4>} />
+              </Grid>
+            </Grid>
           </FormGroup>
           <FormControl style={{ paddingRight: 10 }} className='dropdown' size="small">
             <InputLabel id="num-beds-label"># beds</InputLabel>
@@ -110,21 +118,6 @@ export default function FilterSideBar() {
           </FormGroup>
           <FormGroup>
             <FormControlLabel control={<Checkbox />} label={<h4 className='prop-text'>Pet-friendly</h4>} />
-          </FormGroup>
-          <FormGroup>
-            <FormControlLabel control={<Checkbox />} label={<h4 className='prop-text'>In-unit laundry</h4>} />
-          </FormGroup>
-          <FormGroup>
-            <FormControlLabel control={<Checkbox />} label={<h4 className='prop-text'>Wifi</h4>} />
-          </FormGroup>
-          <FormGroup>
-            <FormControlLabel control={<Checkbox />} label={<h4 className='prop-text'>Carpet</h4>} />
-          </FormGroup>
-          <FormGroup>
-            <FormControlLabel control={<Checkbox />} label={<h4 className='prop-text'>Wood flooring</h4>} />
-          </FormGroup>
-          <FormGroup>
-            <FormControlLabel control={<Checkbox />} label={<h4 className='prop-text'>Full-kitchen</h4>} />
           </FormGroup>
         </Box>
       </Grid>

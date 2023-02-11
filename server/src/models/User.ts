@@ -66,9 +66,6 @@ const userSchema = new Schema({
   race: {
     type: String
   },
-  ethnicity: {
-    type: String
-  },
   contactPref: {
     type: String,
     enum: ContactPref,
