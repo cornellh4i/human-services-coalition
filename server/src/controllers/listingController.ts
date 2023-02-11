@@ -29,6 +29,7 @@ const getListing = async (req, res) => {
 const createListing = async (req, res) => {
   const {
     webScraped,
+    description,
     streetAddress,
     city,
     state,
@@ -55,6 +56,7 @@ const createListing = async (req, res) => {
   try {
     const listing = await Listing.create({
       webScraped,
+      description,
       streetAddress,
       city,
       state,

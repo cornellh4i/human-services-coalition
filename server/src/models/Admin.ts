@@ -53,9 +53,6 @@ const adminSchema = new Schema({
   race: {
     type: String
   },
-  ethnicity: {
-    type: String
-  },
   email: {
     type: String,
   },

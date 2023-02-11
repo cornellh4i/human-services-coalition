@@ -117,6 +117,9 @@ const listingSchema = new Schema({
   },
   dateAvailable: { 
     type: Date
+  },
+  description: { 
+    type: String
   }
   
 }, { timestamps: true })

@@ -16,7 +16,6 @@ const AdminForm = () => {
   const [prefName, setPrefName] = useState('')
   const [gender, setGender] = useState('')
   const [race, setRace] = useState('')
-  const [ethnicity, setEthnicity] = useState('')
   const [email, setEmail] = useState('')
   const [phone, setPhone] = useState('')
   const [birthdate, setBirthdate] = useState('')
@@ -24,15 +23,9 @@ const AdminForm = () => {
   const [error, setError] = useState(null)
 
   const [affiliationError, setAffiliationError] = useState(false)
-  const [phoneError, setPhoneError] = useState(false)
   const [emailError, setEmailError] = useState(false)
   const [usernameError, setUsernameError] = useState(false)
   const [passwordError, setPasswordError] = useState(false)
-  const [prefNameError, setPrefNameError] = useState(false)
-  const [birthdateError, setBirthdateError] = useState(false)
-  const [genderError, setGenderError] = useState(false)
-  const [raceError, setRaceError] = useState(false)
-  const [ethnicityError, setEthnicityError] = useState(false)
   const [fNameError, setFNameError] = useState(false)
   const [lNameError, setLNameError] = useState(false)
 
@@ -45,9 +38,6 @@ const AdminForm = () => {
     if (affiliation === '') {
       setAffiliationError(true)
     }
-    if (phone === '') {
-      setPhoneError(true)
-    }
     if (email === '') {
       setEmailError(true)
     }
@@ -56,21 +46,6 @@ const AdminForm = () => {
     }
     if (password === '') {
       setPasswordError(true)
-    }
-    if (birthdate === '') {
-      setBirthdateError(true)
-    }
-    if (prefName === '') {
-      setPrefNameError(true)
-    }
-    if (gender === '') {
-      setGenderError(true)
-    }
-    if (race === '') {
-      setRaceError(true)
-    }
-    if (ethnicity === '') {
-      setEthnicityError(true)
     }
     if (fName === '') {
       setFNameError(true)
@@ -89,7 +64,6 @@ const AdminForm = () => {
       prefName,
       gender,
       race,
-      ethnicity,
       email,
       phone,
       birthdate,
@@ -120,7 +94,6 @@ const AdminForm = () => {
       setPrefName('')
       setGender('')
       setRace('')
-      setEthnicity('')
       setEmail('')
       setPhone('')
       setBirthdate('')
@@ -128,15 +101,9 @@ const AdminForm = () => {
       setError(null)
 
       setAffiliationError(false)
-      setPhoneError(false)
       setEmailError(false)
       setUsernameError(false)
       setPasswordError(false)
-      setPrefNameError(false)
-      setBirthdateError(false)
-      setGenderError(false)
-      setRaceError(false)
-      setEthnicityError(false)
       setFNameError(false)
       setLNameError(false)
 
@@ -223,7 +190,6 @@ const AdminForm = () => {
                 <FormGroup sx={{ flexGrow: '1', marginX: '1.5rem' }}>
                   <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'left', alignItems: 'center' }}>
                     <FormLabel>Phone Number</FormLabel>
-                    <Typography sx={{ marginLeft: '0.3rem', color: '#E50808' }}>*</Typography>
                   </Box>
                   <TextField fullWidth
                     id="phone"
@@ -233,8 +199,6 @@ const AdminForm = () => {
                     value={phone}
                     variant="outlined"
                     size="small"
-                    required
-                    error={phoneError}
                     type="tel"
                     placeholder="XXX-XXX-XXXX"
                     // NOT FUNCTIONAL, PATTERN IS NOT ENFORCED.
@@ -374,132 +338,111 @@ const AdminForm = () => {
               </Box>
             </Grid>
 
-            <Grid item xs={6}>
-              <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '1rem' }}>
-                <FormGroup sx={{ flexGrow: '1', marginRight: '1.5rem' }}>
-                  <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'left', alignItems: 'center' }}>
-                    <FormLabel>Preferred Name</FormLabel>
-                    <Typography sx={{ marginLeft: '0.3rem', color: '#E50808' }}>*</Typography>
-                  </Box>
-                  <TextField fullWidth
-                    id="prefName"
-                    name="prefName"
-                    className="form-field"
-                    onChange={(e) => setPrefName(e.target.value)}
-                    value={prefName}
-                    variant="outlined"
-                    size="small"
-                    type="text"
-                    required
-                    error={prefNameError}
-                  />
-                </FormGroup>
-              </Box>
+            <Grid item xs={12}>
+              <Typography variant='h3' sx={{ fontSize: '1.3rem', fontWeight: 'bold', mt: '3%' }} >
+                Additional Information
+              </Typography>
             </Grid>
 
-            <Grid item xs={6}>
+            <Grid item xs={12}>
               <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '1rem' }}>
-                <FormGroup sx={{ flexGrow: '1', marginRight: '1.5rem' }}>
-                  <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'left', alignItems: 'center' }}>
-                    <FormLabel>Birthdate</FormLabel>
-                    <Typography sx={{ marginLeft: '0.3rem', color: '#E50808' }}>*</Typography>
+                <Grid item xs={6}>
+                  <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '1rem' }}>
+                    <FormGroup sx={{ flexGrow: '1', marginRight: '1.5rem' }}>
+                      <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'left', alignItems: 'center' }}>
+                        <FormLabel>Preferred Name</FormLabel>
+                      </Box>
+                      <TextField fullWidth
+                        id="prefName"
+                        name="prefName"
+                        className="form-field"
+                        onChange={(e) => setPrefName(e.target.value)}
+                        value={prefName}
+                        variant="outlined"
+                        size="small"
+                        type="text"
+                      />
+                    </FormGroup>
                   </Box>
-                  <TextField fullWidth
-                    id="birthDate"
-                    name="birthDate"
-                    className="form-field"
-                    onChange={(e) => setBirthdate(e.target.value)}
-                    value={birthdate}
-                    variant="outlined"
-                    size="small"
-                    type="date"
-                    required
-                    error={birthdateError}
-                  />
-                </FormGroup>
-              </Box>
-            </Grid>
+                </Grid>
 
-            <Grid item xs={6}>
-              <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '1rem' }}>
-                <FormGroup sx={{ flexGrow: '1', marginRight: '1.5rem' }}>
-                  <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'left', alignItems: 'center' }}>
-                    <FormLabel>Gender</FormLabel>
-                    <Typography sx={{ marginLeft: '0.3rem', color: '#E50808' }}>*</Typography>
+                <Grid item xs={6}>
+                  <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '1rem' }}>
+                    <FormGroup sx={{ flexGrow: '1', marginRight: '1.5rem' }}>
+                      <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'left', alignItems: 'center' }}>
+                        <FormLabel>Birthdate</FormLabel>
+                      </Box>
+                      <TextField fullWidth
+                        id="birthDate"
+                        name="birthDate"
+                        className="form-field"
+                        onChange={(e) => setBirthdate(e.target.value)}
+                        value={birthdate}
+                        variant="outlined"
+                        size="small"
+                        type="date"
+                      />
+                    </FormGroup>
                   </Box>
-                  <Select
-                    value={gender}
-                    onChange={handleGenderChange}
-                    id="gender"
-                    name="gender"
-                    size="small"
-                    required
-                    error={genderError}
-                    className="select-field"
-                    fullWidth>
-                    <MenuItem value={"Male"}>Male</MenuItem>
-                    <MenuItem value={"Female"}>Female</MenuItem>
-                    <MenuItem value={"None-Binary"}>Non-Binary</MenuItem>
-                    <MenuItem value={"Other"}>Other</MenuItem>
-                    <MenuItem value={"Prefer Not to Respond"}>Prefer Not to Respond</MenuItem>
-                  </Select>
-                </FormGroup>
-              </Box>
-            </Grid>
-
-            <Grid item xs={6}>
-              <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '1rem' }}>
-                <FormGroup sx={{ flexGrow: '1', marginRight: '1.5rem' }}>
-                  <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'left', alignItems: 'center' }}>
-                    <FormLabel>Race</FormLabel>
-                    <Typography sx={{ marginLeft: '0.3rem', color: '#E50808' }}>*</Typography>
-                  </Box>
-                  <Select
-                    value={race}
-                    onChange={handleRaceChange}
-                    id="race"
-                    name="race"
-                    size="small"
-                    error={raceError}
-                    required
-                    className="select-field"
-                    fullWidth>
-                    <MenuItem value={"White"}>White</MenuItem>
-                    <MenuItem value={"Black"}>Black</MenuItem>
-                    <MenuItem value={"Asian"}>Asian</MenuItem>
-                    <MenuItem value={"Hispanic"}>Hispanic or Latino</MenuItem>
-                    <MenuItem value={"Native Hawaiian or Pacific Islander"}>Native Hawaiian or Pacific Islander</MenuItem>
-                    <MenuItem value={"Other"}>Other</MenuItem>
-                  </Select>
-                </FormGroup>
-              </Box>
-            </Grid>
-
-            <Grid item xs={6}>
-              <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '1rem' }}>
-                <FormGroup sx={{ flexGrow: '1', marginRight: '1.5rem' }}>
-                  <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'left', alignItems: 'center' }}>
-                    <FormLabel>Ethnicity</FormLabel>
-                    <Typography sx={{ marginLeft: '0.3rem', color: '#E50808' }}>*</Typography>
-                  </Box>
-                  <TextField fullWidth
-                    id="ethnicity"
-                    name="ethnicity"
-                    className="form-field"
-                    onChange={(e) => setEthnicity(e.target.value)}
-                    value={ethnicity}
-                    variant="outlined"
-                    size="small"
-                    type="text"
-                    required
-                    error={ethnicityError}
-                  />
-                </FormGroup>
+                </Grid>
               </Box>
             </Grid>
 
             <Grid item xs={12}>
-              <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}  >
+              <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '1rem' }}>
+                <Grid item xs={6}>
+                  <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '1rem' }}>
+                    <FormGroup sx={{ flexGrow: '1', marginRight: '1.5rem' }}>
+                      <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'left', alignItems: 'center' }}>
+                        <FormLabel>Gender</FormLabel>
+                      </Box>
+                      <Select
+                        value={gender}
+                        onChange={handleGenderChange}
+                        id="gender"
+                        name="gender"
+                        size="small"
+                        className="select-field"
+                        fullWidth>
+                        <MenuItem value={"Male"}>Male</MenuItem>
+                        <MenuItem value={"Female"}>Female</MenuItem>
+                        <MenuItem value={"None-Binary"}>Non-Binary</MenuItem>
+                        <MenuItem value={"Other"}>Other</MenuItem>
+                        <MenuItem value={"Prefer Not to Respond"}>Prefer Not to Respond</MenuItem>
+                      </Select>
+                    </FormGroup>
+                  </Box>
+                </Grid>
+
+                <Grid item xs={6}>
+                  <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '1rem' }}>
+                    <FormGroup sx={{ flexGrow: '1', marginRight: '1.5rem' }}>
+                      <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'left', alignItems: 'center' }}>
+                        <FormLabel>Race</FormLabel>
+                      </Box>
+                      <Select
+                        value={race}
+                        onChange={handleRaceChange}
+                        id="race"
+                        name="race"
+                        size="small"
+                        className="select-field"
+                        fullWidth>
+                        <MenuItem value={"White"}>White</MenuItem>
+                        <MenuItem value={"Black"}>Black</MenuItem>
+                        <MenuItem value={"Asian"}>Asian</MenuItem>
+                        <MenuItem value={"Hispanic"}>Hispanic or Latino</MenuItem>
+                        <MenuItem value={"Native Hawaiian or Pacific Islander"}>Native Hawaiian or Pacific Islander</MenuItem>
+                        <MenuItem value={"Other"}>Other</MenuItem>
+                      </Select>
+                    </FormGroup>
+                  </Box>
+                </Grid>
+              </Box>
+            </Grid>
+
+            <Grid item xs={12}>
+              <Box sx={{ display: 'flex', justifyContent: 'flex-end', marginTop: '1rem', marginRight: '1.5rem' }}  >
                 <Button disableElevation
                   variant="outlined"
                   size="large"

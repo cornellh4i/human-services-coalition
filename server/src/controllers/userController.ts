@@ -40,7 +40,6 @@ const createUser = async (req, res) => {
     prefName,
     gender,
     race,
-    ethnicity,
     contactPref,
     recentlyViewed
   } = req.body
@@ -60,7 +59,6 @@ const createUser = async (req, res) => {
       prefName,
       gender,
       race,
-      ethnicity,
       contactPref,
       recentlyViewed
     })
