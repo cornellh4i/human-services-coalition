@@ -86,9 +86,11 @@ const ManageProfiles = () => {
         <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }} >
           <ThemeProvider theme={theme}>
             <Typography variant="h4" sx={{ fontWeight: 'bold', mt: '1%' }}>Manage Profiles</Typography>
-            <Typography variant="subtitle1" sx={{ mt: '1.5%', ml: '71%', fontWeight: 'bold', display: 'fixed' }}>{Users.length.toString()}</Typography>
-            <Typography variant="subtitle1" sx={{ mt: '1.5%' }}>Non-Admin Users</Typography>
           </ThemeProvider>
+        </Box>
+        <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'flex-end', mr: '2.40%' }}>
+          <Typography variant="subtitle1" sx={{ fontWeight: 'bold', mr: '0.5%' }}>{Users.length.toString()}</Typography>
+          <Typography variant="subtitle1" sx={{ mr: '0.5%' }}>Non-Admin Users</Typography>
         </Box>
         <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'flex-end', mr: '2.40%' }}>
           <Typography variant="subtitle1" sx={{ fontWeight: 'bold', mr: '0.5%' }}>{Admins.length.toString()}</Typography>

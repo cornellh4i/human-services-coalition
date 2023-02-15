@@ -59,18 +59,18 @@ export default function FilterSideBar() {
           <h3 className='text'>Property Type</h3>
           <FormGroup>
             <Grid container spacing={1} columns={16}>
-              <Grid item xs={8}>
+              <Grid item xs={'auto'}>
                 <FormControlLabel control={<Checkbox />} label={<h4 className='prop-text'>Apartment</h4>} />
               </Grid>
-              <Grid item xs={8}>
+              <Grid item xs={'auto'}>
                 <FormControlLabel control={<Checkbox />} label={<h4 className='prop-text'>House</h4>} />
               </Grid>
             </Grid>
             <Grid container spacing={1} columns={16}>
-              <Grid item xs={8}>
+              <Grid item xs={'auto'}>
                 <FormControlLabel control={<Checkbox />} label={<h4 className='prop-text'>Condo</h4>} />
               </Grid>
-              <Grid item xs={8}>
+              <Grid item xs={'auto'}>
                 <FormControlLabel control={<Checkbox />} label={<h4 className='prop-text'>Single Room</h4>} />
               </Grid>
             </Grid>
