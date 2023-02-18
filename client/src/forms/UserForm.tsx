@@ -24,7 +24,6 @@ const UserForm = () => {
 
   const [voucherTypeError, setVoucherTypeError] = useState(false)
   const [supervisorError, setSupervisorError] = useState(false)
-  const [emailError, setEmailError] = useState(false)
   const [usernameError, setUsernameError] = useState(false)
   const [passwordlError, setPasswordError] = useState(false)
   const [fNameError, setFNameError] = useState(false)
@@ -41,9 +40,6 @@ const UserForm = () => {
     }
     if (supervisor === '') {
       setSupervisorError(true)
-    }
-    if (email === '') {
-      setEmailError(true)
     }
     if (username === '') {
       setUsernameError(true)
@@ -108,7 +104,6 @@ const UserForm = () => {
 
       setVoucherTypeError(false)
       setSupervisorError(false)
-      setEmailError(false)
       setUsernameError(false)
       setPasswordError(false)
       setFNameError(false)
@@ -196,7 +191,6 @@ const UserForm = () => {
                 <FormGroup sx={{ flexGrow: '1' }}>
                   <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'left', alignItems: 'center' }}>
                     <FormLabel>Email</FormLabel>
-                    <Typography sx={{ marginLeft: '0.3rem', color: '#E50808' }}>*</Typography>
                   </Box>
                   <TextField fullWidth
                     id="email"
@@ -208,7 +202,6 @@ const UserForm = () => {
                     variant="outlined"
                     size="small"
                     type="text"
-                    error={emailError}
                   />
                 </FormGroup>
 
