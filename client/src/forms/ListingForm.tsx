@@ -1,7 +1,8 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
+import { json, useParams } from "react-router-dom";
 import { Box, Button, Grid, Typography, Container, TextField, RadioGroup, FormControlLabel, Checkbox, Radio, FormControl, FormLabel, FormGroup, MenuItem, Select, IconButton } from '@mui/material';
-import { PhotoCamera } from "@mui/icons-material";
-import { useNavigate } from "react-router-dom";
+import { PhotoCamera, SetMeal } from "@mui/icons-material";
+import { useLocation, useNavigate } from "react-router-dom";
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 
 const ListingForm = () => {
@@ -32,6 +33,7 @@ const ListingForm = () => {
   const [linkApp, setLinkApp] = useState('')
   const [dateAvailable, setDateAvailable] = useState('')
   const [error, setError] = useState(null)
+  const params = useParams()
 
   // Enforces Validation
   const [nameError, setNameError] = useState(false)
@@ -48,6 +50,46 @@ const ListingForm = () => {
 
   // Navigation functionality
   const navigate = useNavigate();
+
+  const location = useLocation();
+
+  useEffect(() => {
+    if (location.state != null) { getListingDetails() }
+  }, [])
+
+  const getListingDetails = async () => {
+    let result = await fetch('/api/listing/' + location.state.id, {
+      method: 'GET'
+    })
+    let json_object = await result.json()
+
+    setStreetAddress(json_object.streetAddress)
+    setDescription(json_object.description)
+    setState(json_object.state)
+    setCity(json_object.city)
+    setCountry(json_object.country)
+    setLandlord(json_object.landlord)
+    setLandlordPhone(json_object.landlordPhone)
+    setLandlordEmail(json_object.landlordEmail)
+    setLinkApp(json_object.linkApp)
+    setLinkOrig(json_object.linkOrig)
+    setDistTransportation(json_object.distTransportation)
+    setSchoolDistrict(json_object.schoolDistrict)
+    setZipCode(json_object.zipCode)
+    setUnitType(json_object.unitType)
+    setSize(json_object.size)
+    setNumBath(json_object.numBath)
+    setPrice(json_object.price)
+    setDateAvailable(json_object.dateAvailable)
+    setSchoolDistrict(json_object.schoolDistrict)
+    setFurnishedIsTrue(json_object.furnished)
+    setPetsIsTrue(json_object.pets)
+    setUtilitiesIsTrue(json_object.utilities)
+
+
+
+
+  }
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -112,13 +154,26 @@ const ListingForm = () => {
       dateAvailable
     }
 
-    const response = await fetch('/api/listing/', {
-      method: 'POST',
-      body: JSON.stringify(listing),
-      headers: {
-        'Content-Type': 'application/json',
-      }
-    })
+
+    const response =
+
+      (location.state === null) ?
+        await fetch('/api/listing/', {
+          method: 'POST',
+          body: JSON.stringify(listing),
+          headers: {
+            'Content-Type': 'application/json',
+          }
+        })
+        : await fetch('/api/listing/' + location.state.id, {
+          method: 'PATCH',
+          body: JSON.stringify(listing),
+          headers: {
+            'Content-Type': 'application/json',
+          }
+        })
+
+
     const json = await response.json()
 
     if (!response.ok) {
@@ -153,7 +208,7 @@ const ListingForm = () => {
       setDateAvailable('')
 
       setError(null)
-      
+
       navigate("/")
     }
   }
@@ -173,7 +228,7 @@ const ListingForm = () => {
           </Button>
         </Grid>
 
-        <Grid item xs={8}> 
+        <Grid item xs={8}>
           <form noValidate className="listing-form" onSubmit={handleSubmit}>
             <Typography variant='h3' sx={{ fontSize: '1.3rem', fontWeight: 'bold', mt: '3%' }} >
               Landlord Contact Information
