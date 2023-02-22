@@ -13,10 +13,67 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import InputLabel from '@mui/material/InputLabel';
+import { useState } from "react";
 
 export default function FilterSideBar() {
   let theme = createTheme();
   theme = responsiveFontSizes(theme);
+
+  const [location, setLocation] = useState('');
+  const [minPrice, setMinPrice] = useState(0);
+  const [maxPrice, setMaxPrice] = useState(0);
+  const [property, setProperty] = useState([]);
+  const [amenities, setAmenities] = useState([]);
+  const [baths, setBaths] = useState(0);
+
+  const [beds, setBeds] = useState(0);
+
+
+  const [transit, setTransit] = useState('');
+
+  const FilterEnum = {
+    location: "location",
+    minprice: "minprice",
+    maxprice: "maxprice",
+    property: "property",
+    amenities: "amenities",
+    baths: "baths",
+    beds: "beds",
+    transit: "transit",
+  }
+
+  function handleFilterChange(filterName: string, event: { target: { value: any } }) {
+    if (filterName === FilterEnum.location) {
+      setLocation(event.target.value);
+    } else if (filterName === FilterEnum.minprice) {
+      setMinPrice(event.target.value);
+    } else if (filterName === FilterEnum.maxprice) {
+      setMaxPrice(event.target.value);
+    } else if (filterName === FilterEnum.transit) {
+      setTransit(event.target.value);
+    } else if (filterName === FilterEnum.baths) {
+      setBaths(event.target.value);
+    } else if (filterName === FilterEnum.beds) {
+      setBeds(event.target.value);
+
+    // These two cases have to update the array
+    } else if (filterName === FilterEnum.property) {
+    setProperty(event.target.value);
+    } else if (filterName === FilterEnum.amenities) {
+      setAmenities(event.target.value);
+    }
+  };
+
+  let state = {
+    categories: {
+      apartment: false,
+      condo: false,
+      house: false,
+      utilitiesIncluded: false,
+      fullFurnished: false,
+      petFriendly: false
+    }
+  };
 
   return (
     <Box sx={{
@@ -60,7 +117,17 @@ export default function FilterSideBar() {
           <FormGroup>
             <Grid container spacing={1} columns={16}>
               <Grid item xs={'auto'}>
-                <FormControlLabel control={<Checkbox />} label={<h4 className='prop-text'>Apartment</h4>} />
+                <FormControlLabel control={<Checkbox
+                          name = {"Apartment"}
+                          // checked={this.state.categories.first}
+                          
+                          // onChange = {}
+                          
+                          
+                          />} 
+
+                          label={<h4 className='prop-text'>Apartment</h4>} 
+                           />
               </Grid>
               <Grid item xs={'auto'}>
                 <FormControlLabel control={<Checkbox />} label={<h4 className='prop-text'>House</h4>} />
@@ -81,13 +148,16 @@ export default function FilterSideBar() {
               labelId="num-beds-label"
               id="num-beds"
               label="# beds"
+              onChange = {(e) => handleFilterChange(FilterEnum.beds, e)}
             >
               <MenuItem value={1}>1</MenuItem>
               <MenuItem value={2}>2</MenuItem>
               <MenuItem value={3}>3</MenuItem>
               <MenuItem value={4}>4</MenuItem>
               <MenuItem value={5}>5</MenuItem>
-              <MenuItem value={6}>6+</MenuItem>
+              <MenuItem value={6}>6</MenuItem>
+
+              
             </Select>
           </FormControl>
           <FormControl className='dropdown' size="small">
@@ -111,10 +181,10 @@ export default function FilterSideBar() {
         <Box className='box' component="span">
           <h3 className='text'>Amenities</h3>
           <FormGroup>
-            <FormControlLabel control={<Checkbox />} label={<h4 className='prop-text'>Utilities included</h4>} />
+            <FormControlLabel control={<Checkbox />} label={<h4  className='prop-text'>Utilities included</h4>} />
           </FormGroup>
           <FormGroup>
-            <FormControlLabel control={<Checkbox />} label={<h4 className='prop-text'>Fully furnished</h4>} />
+            <FormControlLabel control={<Checkbox />} label={<h4   className='prop-text'>Fully furnished</h4>} />
           </FormGroup>
           <FormGroup>
             <FormControlLabel control={<Checkbox />} label={<h4 className='prop-text'>Pet-friendly</h4>} />

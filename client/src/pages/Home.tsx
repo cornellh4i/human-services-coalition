@@ -10,7 +10,18 @@ const Home = () => {
   const [Listings, setListings] = useState<any[]>([])
 
   // Hard coded filter list for testings
-  const selected = ['Apartment', '3 beds', '2 baths', 'Pet-friendly']
+  
+  const selected = ['Apartment', '3 beds', 'steve']
+
+  function updateSelected(name: string){
+    let index = selected.indexOf(name)
+    if (index>-1) {
+      selected.splice(index, 1)
+    }
+    else { 
+      selected.push(name)
+    }
+  }
 
   useEffect(() => {
     const fetchListings = async () => {
