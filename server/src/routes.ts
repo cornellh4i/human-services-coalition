@@ -5,6 +5,7 @@ module.exports = () => {
   const {
     getListings,
     getListing,
+    getListingByCategory,
     createListing,
     updateListing,
     deleteListing,
@@ -37,6 +38,9 @@ module.exports = () => {
 
   // GET all housing listings
   router.get('/listing', getListings)
+
+  //GET housing listing by category and value
+  router.get('/listing/:category/:queryValue')
 
   // GET a specific housing listing (by id)
   router.get('/listing/:id', getListing)
@@ -85,10 +89,10 @@ module.exports = () => {
 
   //GET all FMR prices
   router.get('/fmr', getFMRprices)
-  
+
   // POST (add) FMR prices
   router.post('/fmr', createFMRprices)
-  
+
   // PATCH (edit) FMR prices  
   router.patch('/fmr/:id', updateFMRprices)
 

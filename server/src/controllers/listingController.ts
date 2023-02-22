@@ -24,6 +24,87 @@ const getListing = async (req, res) => {
   res.status(200).json(listing)
 }
 
+async function getListingByCategory(category, queryValue) {
+  let query = {};
+
+  // Set the query object based on the category
+  switch (category) {
+    case 'address':
+      // Use a case-insensitive regular expression to match similar strings
+      query['streetAddress'] = new RegExp(queryValue, 'i');
+      break;
+    case 'city':
+      query['city'] = new RegExp(queryValue, 'i');
+      break;
+    case 'state':
+      query['state'] = new RegExp(queryValue, 'i');
+      break;
+    case 'country':
+      query['country'] = new RegExp(queryValue, 'i');
+      break;
+    case 'zipCode':
+      query['zipCode'] = queryValue;
+      break;
+    case 'price':
+      query['price'] = {
+        $gte: queryValue[0],
+        $lte: queryValue[1]
+      }
+      break;
+    case 'size':
+      query['size'] = queryValue;
+      break;
+    case 'unitType':
+      query['unitType'] = { $in: queryValue };
+      break;
+    case 'numBath':
+      query['numBath'] = queryValue;
+      break;
+    case 'schoolDistrict':
+      query['schoolDistrict'] = queryValue;
+      break;
+    case 'pets':
+      query['pets'] = queryValue;
+      break;
+    case 'utilities':
+      query['utilities'] = queryValue;
+      break;
+    case 'furnished':
+      query['furnished'] = queryValue;
+      break;
+    case 'distTransportation':
+      query['distTransportation'] = queryValue;
+      break;
+    case 'landlord':
+      query['landlord'] = queryValue;
+      break;
+    case 'landlordEmail':
+      query['landlordEmail'] = queryValue;
+      break;
+    case 'landlordPhone':
+      query['landlordPhone'] = queryValue;
+      break;
+    case 'linkOrig':
+      query['linkOrig'] = queryValue;
+      break;
+    case 'linkApp':
+      query['linkApp'] = queryValue;
+      break;
+    case 'dateAvailable':
+      query['dateAvailable'] = queryValue;
+      break;
+    case 'description':
+      // Use a case-insensitive regular expression to match similar strings
+      query['description'] = new RegExp(queryValue, 'i');
+      break;
+    default:
+      throw new Error('Invalid category');
+  }
+
+  const listings = await Listing.find(query);
+
+  return listings;
+}
 
 // POST (add) a new housing listing
 const createListing = async (req, res) => {
