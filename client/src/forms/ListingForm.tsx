@@ -13,7 +13,8 @@ const ListingForm = () => {
   const [state, setState] = useState('')
   const [country, setCountry] = useState('')
   const [zipCode, setZipCode] = useState('')
-  const [pictures, setPictures] = useState('')
+  // const [pictures, setPictures] = useState('')
+  const [pictures, setPictures] = useState([''])
   const [price, setPrice] = useState('')
   const [size, setSize] = useState('')
   const [unitType, setUnitType] = useState('')
@@ -33,7 +34,7 @@ const ListingForm = () => {
   const [linkApp, setLinkApp] = useState('')
   const [dateAvailable, setDateAvailable] = useState('')
   const [error, setError] = useState(null)
-  const params = useParams()
+  const [buttonLabel, setButtonLabel] = useState('Create New Listing')
 
   // Enforces Validation
   const [nameError, setNameError] = useState(false)
@@ -51,12 +52,14 @@ const ListingForm = () => {
   // Navigation functionality
   const navigate = useNavigate();
 
+  //Location functionality to retrieve the state variable passed 
   const location = useLocation();
 
+  // contains that will prepopulate the form if location.state is not null
   useEffect(() => {
     if (location.state != null) { getListingDetails() }
   }, [])
-
+  //fetch the data related to id from the database
   const getListingDetails = async () => {
     let result = await fetch('/api/listing/' + location.state.id, {
       method: 'GET'
@@ -80,15 +83,13 @@ const ListingForm = () => {
     setSize(json_object.size)
     setNumBath(json_object.numBath)
     setPrice(json_object.price)
-    setDateAvailable(json_object.dateAvailable)
+    setDateAvailable(json_object.dateAvailable.split('T')[0]);// to make date readable
     setSchoolDistrict(json_object.schoolDistrict)
     setFurnishedIsTrue(json_object.furnished)
     setPetsIsTrue(json_object.pets)
     setUtilitiesIsTrue(json_object.utilities)
-
-
-
-
+    setPictures(json_object.pictures)
+    setButtonLabel('Save Changes')
   }
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -153,10 +154,9 @@ const ListingForm = () => {
       linkApp,
       dateAvailable
     }
-
-
+    //if location.state is null it creates a POST request to create a listing
+    //if location.state is not null it creates a PATCH request to edit the current listing
     const response =
-
       (location.state === null) ?
         await fetch('/api/listing/', {
           method: 'POST',
@@ -173,7 +173,6 @@ const ListingForm = () => {
           }
         })
 
-
     const json = await response.json()
 
     if (!response.ok) {
@@ -187,7 +186,8 @@ const ListingForm = () => {
       setState('')
       setCountry('')
       setZipCode('')
-      setPictures('')
+      // setPictures('')
+      setPictures([''])
       setPrice('')
       setSize('')
       setUnitType('')
@@ -206,12 +206,12 @@ const ListingForm = () => {
       setLinkOrig('')
       setLinkApp('')
       setDateAvailable('')
-
       setError(null)
 
       navigate("/")
     }
   }
+
 
   return (
     <Container maxWidth={false}>
@@ -633,7 +633,30 @@ const ListingForm = () => {
                 />
               </FormGroup>
 
+
               <FormGroup>
+                <FormLabel sx={{ marginTop: '1rem' }}>Upload Images</FormLabel>
+                <Button disableElevation variant='outlined' component='label' sx={{ color: '#5D737E', marginBottom: '1rem' }}>
+                  <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '8rem' }}>
+                    <PhotoCamera sx={{ fontSize: '3rem', margin: 'auto' }} />
+                    <input
+                      hidden
+                      id="listing-pictures"
+                      className="form-field"
+                      type="list"
+                      multiple={true}
+                      name="pictures"
+                      onChange={(e) => setPictures(['https://t4.ftcdn.net/jpg/02/65/15/77/360_F_265157782_7wJFjBLD47WtQljpG9ivndc5AEVTwypu.jpg',
+                        'https://t4.ftcdn.net/jpg/02/65/15/77/360_F_265157782_7wJFjBLD47WtQljpG9ivndc5AEVTwypu.jpg',
+                        'https://t4.ftcdn.net/jpg/02/65/15/77/360_F_265157782_7wJFjBLD47WtQljpG9ivndc5AEVTwypu.jpg'])}
+                      value={pictures}
+                    />
+                  </Box>
+                </Button>
+              </FormGroup>
+
+              {/* ORIGINAL CODE FOR UPLOAD IMAGES */}
+              {/* <FormGroup>
                 <FormLabel sx={{ marginTop: '1rem' }}>Upload Images</FormLabel>
                 <Button disableElevation variant='outlined' component='label' sx={{ color: '#5D737E', marginBottom: '1rem' }}>
                   <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '8rem' }}>
@@ -651,7 +674,8 @@ const ListingForm = () => {
                     />
                   </Box>
                 </Button>
-              </FormGroup>
+              </FormGroup> */}
+
             </Box>
 
             <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', marginBottom: '2rem' }}>
@@ -668,7 +692,7 @@ const ListingForm = () => {
                 size="large"
                 sx={{ marginLeft: "10px", padding: "0 2rem", fontSize: '1.2rem', fontWeight: 'bold', textTransform: "unset", borderRadius: '12px', color: 'white', bgcolor: '#ED5F1E', ':hover': { bgcolor: "#ED5F1EB5" } }}
               >
-                Create Listing
+                {buttonLabel}
               </Button>
             </Box>
           </form >
