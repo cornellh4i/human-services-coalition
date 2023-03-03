@@ -31,6 +31,7 @@ export default function FilterSideBar() {
   //BUG: ERROR WHEN SELECTED IS INITIALIZED EMPTY
   const [selected, setSelected] = useState(['steve']);
 
+
   // have to be list
   const [property, setProperty] = useState('');
   const [amenities, setAmenities] = useState('');

@@ -11,10 +11,12 @@
   },
   "license": "ISC",
   "dependencies": {
-    "@material-ui/styles": "^4.11.5",
     "@emotion/react": "^11.10.5",
     "@emotion/styled": "^11.10.5",
+    "@material-ui/styles": "^4.11.5",
     "@mui/material": "^5.10.12",
-    "react-sticky-box": "^1.0.2"
+    "react-hooks-global-state": "^2.1.0",
+    "react-sticky-box": "^1.0.2",
+    "state-pool": "^0.9.0"
   }
 }
