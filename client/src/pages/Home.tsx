@@ -11,17 +11,17 @@ const Home = () => {
 
   // Hard coded filter list for testings
   
-  const selected = ['Apartment', '3 beds', 'steve']
+  // const [selected, setSelected] = useState(['Apartment', '3 beds', 'House']);
 
-  function updateSelected(name: string){
-    let index = selected.indexOf(name)
-    if (index>-1) {
-      selected.splice(index, 1)
-    }
-    else { 
-      selected.push(name)
-    }
-  }
+  // function updateSelected(name: string){
+  //   let index = selected.indexOf(name)
+  //   if (index>-1) {
+  //     selected.splice(index, 1)
+  //   }
+  //   else { 
+  //     selected.push(name)
+  //   }
+  // }
 
   useEffect(() => {
     const fetchListings = async () => {
@@ -57,7 +57,7 @@ const Home = () => {
         <div className='content-box'>
           <Container>
             <div className='selected-filters'>
-              < SelectedFilters filters={selected} > </SelectedFilters >
+              {/* < SelectedFilters filters={selected} > </SelectedFilters > */}
             </div>
             <div className='listing-cards'>
               <Grid container spacing = {2}>
