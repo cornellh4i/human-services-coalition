@@ -1,26 +1,15 @@
 import Container from '@mui/material/Container'
 import Grid from '@mui/material/Grid'
-import React, { useEffect, useState, Component } from 'react'
+import { useEffect, useState } from 'react'
 import ListingDetails from '../components/ListingDetails'
 import FilterSideBar from '../components/FilterSideBar'
 import SelectedFilters from '../components/SelectedFilters'
 import '../css/Home.css'
-import { createStore } from 'state-pool';
-
-// Louis Stuff
-// import { createGlobalState } from 'react-hooks-global-state';
-// const initialState = { louis: [] };
-// const { useGlobalState } = createGlobalState(initialState);
-//   // const [louis, setLouis] = useGlobalState('louis');
-
 
 function Home() {
-  // const store = createStore();
-  // store.setState("selected", ['steve']);
-
-  // const [selected, setSelected] = store.useState("selected");
-
   const [Listings, setListings] = useState<any[]>([])
+
+  let [filters, setFilters] = useState(['steve']);
 
 
   useEffect(() => {
@@ -52,12 +41,12 @@ function Home() {
     <div>
       <div className='body-box'>
         <div className='side-box'>
-          <FilterSideBar />
+          <FilterSideBar filters={filters} setFilters={setFilters}> </FilterSideBar>
         </div>
         <div className='content-box'>
           <Container>
             <div className='selected-filters'>
-              {/* < SelectedFilters filters={selected} > </SelectedFilters > */}
+              <SelectedFilters filters={filters}> </SelectedFilters >
             </div>
             <div className='listing-cards'>
               <Grid container spacing={2}>

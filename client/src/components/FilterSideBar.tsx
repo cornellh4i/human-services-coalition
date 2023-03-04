@@ -15,9 +15,10 @@ import MenuItem from '@mui/material/MenuItem';
 import InputLabel from '@mui/material/InputLabel';
 import { useState } from "react";
 import '../css/Home.css';
-import SelectedFilters from '../components/SelectedFilters'
 
-export default function FilterSideBar() {
+export default function FilterSideBar({filters, setFilters}: any) {
+  let selected: any = [...filters];
+
   let theme = createTheme();
   theme = responsiveFontSizes(theme);
 
@@ -27,10 +28,6 @@ export default function FilterSideBar() {
   const [baths, setBaths] = useState('');
   const [beds, setBeds] = useState('');
   const [transit, setTransit] = useState('');
-
-  //BUG: ERROR WHEN SELECTED IS INITIALIZED EMPTY
-  const [selected, setSelected] = useState(['steve']);
-
 
   // have to be list
   const [property, setProperty] = useState('');
@@ -118,6 +115,7 @@ export default function FilterSideBar() {
     else {
       selected.push(name)
     }
+    setFilters(selected);
   }
 
   function handleFilterChange(filterName: string, event?: { target: { value: any } }, otherVal?: string) {
@@ -203,7 +201,6 @@ export default function FilterSideBar() {
         </Grid>
       </Grid>
       <Grid>
-        <SelectedFilters filters={selected} > </SelectedFilters >
         <Box className='box' component="span">
           <h3 className='text'>Location</h3>
           <TextField size="small" id="outlined-basic" label="Search by address" variant="outlined" 
