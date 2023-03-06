@@ -35,28 +35,34 @@ def processCSP():
         try:
             info = row.find('div', attrs={'class': 'featured-listing__content'}).find(
                 'div', attrs={'class': 'featured-listing__description-container'})
+            # title = info.find(
+            #     'h3', attrs={'class':"featured-listing__description-container"})
+            
             priceContainer = row.find('div', attrs={'class': 'featured-listing__content'}).find('div', attrs={
                 'class': 'featured-listing__content-footer'}).find('p', attrs={'class': 'featured-listing__price accent-color'})
             bedbath = info.find(
                 'p', attrs={'class': 'featured-listing__features'})
-            address = info.find(
-                'p', attrs={'class': 'featured-listing__address'})
-            image = row.find(
-                'div', attrs={'class': 'featured-listing__image-container'})
-
-            price = (priceContainer.text[1:]).replace(',',  '')
+            # address = info.find(
+            #     'p', attrs={'class': 'featured-listing__address'})
+            # image = row.find(
+            #     'div', attrs={'class': 'featured-listing__image-container'})
+            
+            price = priceContainer.text.strip().replace("$","").replace(",","").strip()
+            
             beds = getBed(bedbath.text)
-
+            
             # Check if listing falls under fair market price
             if filterListing(int(price), beds):
+            
                 # Create empty listing
                 listing = {}
 
+                listing['title'] = 0
                 listing['webScraped'] = True
-                listing['pictures'] = image.img['src']
-                listing['price'] = priceContainer.text[1:].replace(",", "")
-                listing['size'] = "One Bed"
-                listing['numBath'] = 3
+                listing['pictures'] = 0
+                listing['price'] = price
+                listing['size'] = beds
+                listing['numBath'] = 1
                 listing['schoolDistrict'] = None
                 listing['pets'] = None
                 listing['utilities'] = None
@@ -65,7 +71,7 @@ def processCSP():
                 listing['landlord'] = "CSP Management"
                 listing['landlordEmail'] = None
                 listing['landlordPhone'] = None
-                listing['linkOrig'] = row['href']
+                listing['link'] = "https://cspmgmt.managebuilding.com/" + row['href']
 
                 # Add listing information
 
@@ -86,7 +92,7 @@ def processCSP():
         except:
             continue
 
-    print(listings)
+    
     return listings
 
 
@@ -341,13 +347,13 @@ def processApartments():
     URL4 = "https://www.apartments.com/ithaca-ny/4-bedrooms/"
 
     URLS = [URL1, URL2, URL3, URL4]
-
+    final_listing = []
     # For each bed size in apartments.com, go to each of its pages and process its listings
     for URL in URLS:
         for page in range(1, getNumPages(URL) + 1):
             url = URL + str(page) + '/'
-            processApartmentsHelper(url)
-
+            final_listing.append(processApartmentsHelper(url))
+    return final_listing
 # Get the total number of pages of listings for each bed size
 
 
@@ -392,10 +398,12 @@ def processApartmentsHelper(url):
 
     # Get each listing and add to array of listings
     table = soup.find('div', attrs={'id': 'placardContainer'})
-
+    tries = 0
+    failed = 0
     # Get each listing and add to array of listings
     for row in table.findAll('li', attrs={'mortar-wrapper'}):
         try:
+            tries += 1
             # Get the address
             try:
                 address = row.find(
@@ -493,34 +501,40 @@ def processApartmentsHelper(url):
                 listing['pictures'] = pictures
                 listing['price'] = price
                 listing['size'] = bed
+                listing['link'] = link
                 listing.update(additionalInfo)
 
                 # Print statements for debugging
-                print(listing['webScraped'])
-                print(listing['streetAddress'])
-                print(listing['city'])
-                print(listing['state'])
-                print(listing['country'])
-                print(listing['zipCode'])
-                print(listing['pictures'])
-                print(listing['price'])
-                print(listing['size'])
-                print(listing['numBath'])
-                print(listing['schoolDistrict'])
-                print(listing['pets'])
-                print(listing['utilities'])
-                print(listing['furnished'])
-                print(listing['distTransportation'])
-                print(listing['landlord'])
-                print(listing['landlordEmail'])
-                print(listing['landlordPhone'])
-                print(listing['linkApp'])
-                print()
+                # print(listing['webScraped'])
+                # print(listing['streetAddress'])
+                # print(listing['city'])
+                # print(listing['state'])
+                # print(listing['country'])
+                # print(listing['zipCode'])
+                # print(listing['pictures'])
+                # print(listing['price'])
+                # print(listing['size'])
+                # print(listing['numBath'])
+                # print(listing['schoolDistrict'])
+                # print(listing['pets'])
+                # print(listing['utilities'])
+                # print(listing['furnished'])
+                # print(listing['distTransportation'])
+                # print(listing['landlord'])
+                # print(listing['landlordEmail'])
+                # print(listing['landlordPhone'])
+                # print(listing['linkApp'])
+                # print()
 
                 listings.append(listing)
         except:
+            failed += 1
             continue
 
+    print('num tries' + str(tries))
+    print('num hit' + str(len(listings)))
+    print('num fails' + str(failed))
+    print("")
     return listings
 
 # Get the price in integer form
@@ -654,20 +668,32 @@ def getFMR(bed):
     elif bed == "6":
         return fmrSix
 
+def getNumBeds(bed):
+    if bed == "Studio":
+        return 1
+    else:
+        return int(bed)
+
 
 # Returns true if price of listing is under fair market price for listing type
 def filterListing(price, beds):
-    return price <= getFMR(beds)
+    return price*getNumBeds(beds) <= getFMR(beds)
 
 # def main():
 
-# processCSP()
+a = processCSP()
 # sys.stdout.flush()
 
 
 # processCertified()
 # processCraigslist()
-processApartments()
+#processApartments()
+print(repr(a))
+for listing in a:
+    try:
+        print(listing['link'])
+    except:
+        print('failed')
 # getIthacaRentingHelper('http://ithacarenting.com/downtown-rentals/')
 
 # if __name__ == '__main__':
