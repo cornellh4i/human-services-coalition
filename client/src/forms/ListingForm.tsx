@@ -52,14 +52,14 @@ const ListingForm = () => {
   // Navigation functionality
   const navigate = useNavigate();
 
-  //Location functionality to retrieve the state variable passed 
+  // Location functionality to retrieve the state variable passed 
   const location = useLocation();
 
-  // contains that will prepopulate the form if location.state is not null
+  // Contains what will prepopulate the form if location.state is not null
   useEffect(() => {
     if (location.state != null) { getListingDetails() }
   }, [])
-  //fetch the data related to id from the database
+  // Fetch the data related to id from the database
   const getListingDetails = async () => {
     let result = await fetch('/api/listing/' + location.state.id, {
       method: 'GET'
