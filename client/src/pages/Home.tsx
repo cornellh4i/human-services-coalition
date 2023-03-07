@@ -9,7 +9,7 @@ import '../css/Home.css'
 function Home() {
   const [Listings, setListings] = useState<any[]>([])
 
-  let [filters, setFilters] = useState(['steve']);
+  let [filters, setFilters] = useState([]);
 
 
   useEffect(() => {
@@ -46,7 +46,7 @@ function Home() {
         <div className='content-box'>
           <Container>
             <div className='selected-filters'>
-              <SelectedFilters filters={filters}> </SelectedFilters >
+              <SelectedFilters filters={filters} setFilters={setFilters}> </SelectedFilters >
             </div>
             <div className='listing-cards'>
               <Grid container spacing={2}>

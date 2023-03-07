@@ -4,7 +4,13 @@ import IconButton from '@mui/material/IconButton/IconButton';
 import ClearIcon from '@mui/icons-material/Clear';
 import '../css/Home.css'
 
-export default function SelectedFilters({filters}: any) {
+export default function SelectedFilters({ filters, setFilters }: any) {
+  let selected: any = [...filters];
+
+  function handleDelete(index: number) {
+    selected.splice(index, 1)
+    setFilters(selected)
+  }
 
   return (
     <>
@@ -16,7 +22,7 @@ export default function SelectedFilters({filters}: any) {
               <Box>
                 {filter}
                 <IconButton>
-                  <ClearIcon fontSize="small" />
+                  <ClearIcon fontSize="small" onClick={() => { handleDelete(index) }}/>
                 </IconButton>
               </Box>
             </div>
