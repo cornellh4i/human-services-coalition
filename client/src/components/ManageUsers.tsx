@@ -4,6 +4,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import React from 'react'
 import ColumnLabel from '../components/ColumnLabel'
 import { useState, useEffect } from 'react'
+import AdminModal from './AdminModal';
 
 const ManageUsers = () => {
   const [Users, setUsers] = useState<any[]>([])
@@ -21,6 +22,7 @@ const ManageUsers = () => {
   }, [])
 
   const [voucher, setVoucher] = React.useState('');
+
 
   const handleChange = (event: SelectChangeEvent) => {
     setVoucher(event.target.value as string);
@@ -51,8 +53,8 @@ const ManageUsers = () => {
         <Grid container item xs={'auto'}>
           <Box sx={{ display: "flex", justifyContent: "right", alignItems: 'center', marginLeft: '5rem' }}>
             <Typography sx={{ marginRight: '1rem' }}>Voucher Type</Typography>
-            <Box sx={{ flex:1 }}>
-              <FormControl sx={{ flex: 1,backgroundColor: '#FFFFFF', borderRadius: 1 }}>
+            <Box sx={{ flex: 1 }}>
+              <FormControl sx={{ flex: 1, backgroundColor: '#FFFFFF', borderRadius: 1 }}>
                 <Select
                   value={voucher}
                   onChange={handleChange}
@@ -70,27 +72,24 @@ const ManageUsers = () => {
         </Grid>
       </Container>
 
-      
 
- 
+      <Container maxWidth={false} sx={{ borderRadius: 0, display: 'flex', justifyContent: 'flex-start', alignItems: 'left', backgroundColor: '#D9D9D9' }}>
 
-      <Container maxWidth={false}  sx={{ borderRadius: 0, display: 'flex',  justifyContent: 'flex-start', alignItems: 'left', backgroundColor: '#D9D9D9' }}>
-        
-          <Grid container spacing={"10%"}>
-            <Grid  item sx={{ ml: "1%" }}>
-              <ColumnLabel label="First Name" ></ColumnLabel>
-            </Grid>
-            <Grid   item sx={{ ml: "0%" }}>
-              <ColumnLabel label="Last Name"></ColumnLabel>
-            </Grid>
-            <Grid  item sx={{ ml: "2%" }}>
-              <ColumnLabel label="Voucher Type"></ColumnLabel>
-            </Grid>
-            <Grid item sx={{ ml: "-1%" }}>
-              <ColumnLabel label="Created"></ColumnLabel>
-            </Grid>
+        <Grid container spacing={"10%"}>
+          <Grid item sx={{ ml: "1%" }}>
+            <ColumnLabel label="First Name" ></ColumnLabel>
           </Grid>
-        
+          <Grid item sx={{ ml: "0%" }}>
+            <ColumnLabel label="Last Name"></ColumnLabel>
+          </Grid>
+          <Grid item sx={{ ml: "2%" }}>
+            <ColumnLabel label="Voucher Type"></ColumnLabel>
+          </Grid>
+          <Grid item sx={{ ml: "-1%" }}>
+            <ColumnLabel label="Created"></ColumnLabel>
+          </Grid>
+        </Grid>
+
       </Container>
 
       <div className="users" >
@@ -98,6 +97,7 @@ const ManageUsers = () => {
           <div>
             <UserDisplayCard
               key={User._id}
+              user_id={User._id}
               fname={User.fName}
               lname={User.lName}
               voucher={User.voucherType}

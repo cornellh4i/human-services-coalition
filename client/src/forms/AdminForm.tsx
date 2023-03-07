@@ -1,7 +1,7 @@
 import { Box, Button, Container, FormControlLabel, FormGroup, FormLabel, Grid, MenuItem, Radio, RadioGroup, Select, SelectChangeEvent, TextField, Typography } from "@mui/material"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import React from "react";
 
 
@@ -20,6 +20,7 @@ const AdminForm = () => {
   const [phone, setPhone] = useState('')
   const [birthdate, setBirthdate] = useState('')
   const [contactPref, setContactPref] = useState('')
+  const [buttonLabel, setButtonLabel] = useState('Create New Admin')
   const [error, setError] = useState(null)
 
   const [affiliationError, setAffiliationError] = useState(false)
@@ -29,8 +30,42 @@ const AdminForm = () => {
   const [fNameError, setFNameError] = useState(false)
   const [lNameError, setLNameError] = useState(false)
 
-   // Navigation functionality
-   const navigate = useNavigate();
+  // Navigation functionality
+  const navigate = useNavigate();
+
+  //Location functionality to retrieve the state variable passed 
+  const location = useLocation();
+
+  // //contains that will prepopulate the form if location.state is not null
+  useEffect(() => {
+    if (location.state != null) { getListingDetails() }
+  }, [])
+  //fetch the data related to id from the database
+  const getListingDetails = async () => {
+    let result = await fetch('/api/admins/' + location.state.id.adminid, {
+      method: 'GET'
+    })
+    console.log(result)
+    let json_object = await result.json()
+
+
+    setAffiliation(json_object.affiliation)
+    setUsername(json_object.username)
+    setPassword(json_object.password)
+    setFname(json_object.fName)
+    setLname(json_object.lName)
+    setMInitial(json_object.mInitial)
+    setPrefName(json_object.username)
+    setGender(json_object.gender)
+    setRace(json_object.race)
+    setEmail(json_object.email)
+    setPhone(json_object.phone)
+    const date = // ensures split doesn't split on a null date
+      (json_object.birthdate == null) ? json_object.birthdate : json_object.birthdate.split('T')[0]
+    setBirthdate(date)// to make date readable
+    setContactPref(json_object.contactPref)
+    setButtonLabel('Save Changes')
+  }
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -70,13 +105,24 @@ const AdminForm = () => {
       contactPref
     }
 
-    const response = await fetch('/api/admins/', {
-      method: 'POST',
-      body: JSON.stringify(admin),
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    })
+    //if location.state is null it creates a POST request to create a listing
+    //if location.state is not null it creates a PATCH request to edit the current listing
+    const response =
+      (location.state === null) ?
+        await fetch('/api/admins/', {
+          method: 'POST',
+          body: JSON.stringify(admin),
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        })
+        : await fetch('/api/admins/' + location.state.id.adminid, {
+          method: 'PATCH',
+          body: JSON.stringify(admin),
+          headers: {
+            'Content-Type': 'application/json',
+          }
+        })
 
     const json = await response.json()
 
@@ -124,7 +170,7 @@ const AdminForm = () => {
       <Grid container>
         <Grid item xs={2} alignSelf="flex-start">
           <Button disableElevation
-            startIcon={<ArrowBackIosNewIcon /> }
+            startIcon={<ArrowBackIosNewIcon />}
             variant="outlined"
             size="large"
             onClick={() => navigate("/")}
@@ -456,7 +502,7 @@ const AdminForm = () => {
                   size="large"
                   sx={{ marginLeft: "10px", padding: "0 2rem", fontSize: '1.2rem', fontWeight: 'bold', textTransform: "unset", borderRadius: '12px', color: 'white', bgcolor: '#ED5F1E', ':hover': { bgcolor: "#ED5F1EB5" } }}
                 >
-                  Create Admin
+                  {buttonLabel}
                 </Button>
               </Box>
             </Grid>

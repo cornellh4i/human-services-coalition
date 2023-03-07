@@ -55,7 +55,7 @@ const ListingForm = () => {
   //Location functionality to retrieve the state variable passed 
   const location = useLocation();
 
-  // contains that will prepopulate the form if location.state is not null
+  //contains that will prepopulate the form if location.state is not null
   useEffect(() => {
     if (location.state != null) { getListingDetails() }
   }, [])

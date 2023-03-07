@@ -17,9 +17,11 @@ const Home = () => {
       const response = await fetch('/api/listing')
       console.log(response)
       const json = await response.json()
+      console.log(json)
 
       if (response.ok) {
         setListings(json)
+        console.log(Listings)
       }
     }
 
@@ -37,6 +39,7 @@ const Home = () => {
     setListings(newListings)
   }
 
+  console.log(Listings)
   return (
     <div>
       <div className='body-box'>
@@ -50,6 +53,7 @@ const Home = () => {
             </div>
             <div className='listing-cards'>
               <Grid container spacing={2}>
+
                 {Listings.map((Listing) => (
                   <Grid item key={Listing._id}>
                     <ListingDetails Listing={Listing} handleDelete={handleDelete} />
