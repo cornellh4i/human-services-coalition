@@ -63,7 +63,7 @@ function ResponsiveAppBar() {
             <IconButton
               size="large"
               onClick={handleOpenNavMenu}
-              sx={{color:"orange"}}
+              sx={{ color: "orange" }}
             >
               <MenuIcon />
             </IconButton>
@@ -95,7 +95,7 @@ function ResponsiveAppBar() {
             </Menu>
           </Box>
 
-          <Box sx={{ p: 0, flexGrow: 1, display: { xs: 'flex', md: 'none' }}}>
+          <Box sx={{ p: 0, flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
             <Button
               component={Link} to="/"
               sx={{ width: 300, p: 0, border: 0, justifyContent: "flex-start" }}>
@@ -105,7 +105,7 @@ function ResponsiveAppBar() {
 
 
           {/* Expanded View */}
-          <Box sx={{ p: 0, display: { xs: 'none', md: 'flex' }}}>
+          <Box sx={{ p: 0, display: { xs: 'none', md: 'flex' } }}>
             <Button
               component={Link} to="/"
               sx={{ width: 300, p: 0, border: 0, justifyContent: "flex-start" }}>
@@ -132,11 +132,11 @@ function ResponsiveAppBar() {
             ))}
           </Box>
 
-          <Box sx={{ flexGrow: 0}}>
+          <Box sx={{ flexGrow: 0 }}>
             <IconButton
               size="large"
               onClick={handleOpenSettingsMenu}
-              sx={{color:"orange"}}
+              sx={{ color: "orange" }}
             >
               <SettingsIcon />
             </IconButton>
@@ -161,39 +161,39 @@ function ResponsiveAppBar() {
                 <Typography textAlign="center">Profile Settings</Typography>
               </MenuItem>
               <MenuItem>
-                <Typography sx={{color:"orange"}} textAlign="center">Log out</Typography>
+                <Typography sx={{ color: "orange" }} textAlign="center">Log out</Typography>
               </MenuItem>
             </Menu>
           </Box>
 
           {/* Forms Menu */}
           <Menu
-              sx={{ mt: "45px" }}
-              id="forms-appbar"
-              anchorEl={anchorElUser}
-              anchorOrigin={{
-                vertical: "top",
-                horizontal: "right"
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: "top",
-                horizontal: "right"
-              }}
-              open={Boolean(anchorElUser)}
-              onClose={handleCloseUserMenu}
-            >
-              {forms.map((form) => (
-                <MenuItem 
-                  key={form} 
-                  onClick={handleCloseUserMenu} 
-                  component={Link} 
-                  to={form === "Listing" ? 'listing-form' : form === "Admin" ? 'admin-form' : form === 'User' ? 'user-form' : ''}
-                >
-                  <Typography textAlign="left" margin='5px'>{form}</Typography>
-                </MenuItem>
-              ))}
-            </Menu>
+            sx={{ mt: "45px" }}
+            id="forms-appbar"
+            anchorEl={anchorElUser}
+            anchorOrigin={{
+              vertical: "top",
+              horizontal: "right"
+            }}
+            keepMounted
+            transformOrigin={{
+              vertical: "top",
+              horizontal: "right"
+            }}
+            open={Boolean(anchorElUser)}
+            onClose={handleCloseUserMenu}
+          >
+            {forms.map((form) => (
+              <MenuItem
+                key={form}
+                onClick={handleCloseUserMenu}
+                component={Link}
+                to={form === "Listing" ? 'listing-form' : form === "Admin" ? 'admin-form' : form === 'User' ? 'user-form' : ''}
+              >
+                <Typography textAlign="left" margin='5px'>{form}</Typography>
+              </MenuItem>
+            ))}
+          </Menu>
         </Toolbar>
       </Container>
     </AppBar >

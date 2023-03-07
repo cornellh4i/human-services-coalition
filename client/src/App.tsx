@@ -57,7 +57,11 @@ function App() {
               />
             </Routes>
           </div>
-          <div className="login-form">
+          <div className="login-form" style={{
+            backgroundColor: 'blue',
+            width: '100%',
+            maxHeight: '100%'
+          }}>
 
             <Routes>
               <Route
