@@ -8,9 +8,10 @@ import ManageProfiles from './pages/ManageProfiles'
 import ListingForm from './forms/ListingForm'
 import AdminForm from './forms/AdminForm'
 import UserForm from './forms/UserForm'
+import LoginForm from './forms/LoginForm'
 
 function App() {
-  
+
   const theme = createTheme({
     typography: {
       fontFamily: [
@@ -53,6 +54,15 @@ function App() {
               <Route
                 path='/user-form'
                 element={<UserForm />}
+              />
+            </Routes>
+          </div>
+          <div className="login-form">
+
+            <Routes>
+              <Route
+                path='/login-form'
+                element={<LoginForm />}
               />
             </Routes>
           </div>

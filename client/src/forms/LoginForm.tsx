@@ -1,4 +1,8 @@
 import { useState } from "react"
+import { Box, Button, Container, FormControlLabel, FormGroup, FormLabel, Grid, MenuItem, Radio, RadioGroup, Select, SelectChangeEvent, TextField, Typography } from "@mui/material"
+import { ReactComponent as Logo } from '../assets/coclogo.svg';
+import { Link, useNavigate } from 'react-router-dom';
+import ColumnLabel from "../components/ColumnLabel";
 
 const LoginForm = () => {
   const [username, setUsername] = useState('')
@@ -6,7 +10,24 @@ const LoginForm = () => {
 
   return (
     <form className="login-form">
-      <h3>Login</h3>
+      <Box sx={{
+        maxWidth: '100%',
+        backgroundColor: '#D9D9D9',
+        p: '0.5%'
+      }}>
+        <Box sx={{
+          mt: '5%',
+          ml: '5%',
+          mr: '5%',
+          mb: '5%',
+          maxWidth: '100%',
+          backgroundColor: 'white',
+          p: '0.5%'
+        }}>
+
+          <Typography variant='h3' sx={{ fontSize: '1.3rem', fontWeight: 'bold', ml: '2%' }} >Continuum of Care Housing Listings</Typography>
+        </Box>
+      </Box>
 
       <label>Username:</label>
       <input
