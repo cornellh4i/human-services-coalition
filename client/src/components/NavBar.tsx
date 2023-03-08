@@ -18,15 +18,15 @@ const forms = ['Listing', 'User', 'Admin'];
 
 function ResponsiveAppBar() {
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
-  const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
+  const [anchorElForms, setAnchorElForms] = React.useState<null | HTMLElement>(null);
   const [anchorElSettings, setAnchorElSettings] = React.useState<null | HTMLElement>(null);
 
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
   };
-  const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorElUser(event.currentTarget);
+  const handleOpenFormMenu = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorElForms(event.currentTarget);
   };
   const handleOpenSettingsMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElSettings(event.currentTarget);
@@ -36,9 +36,9 @@ function ResponsiveAppBar() {
     setAnchorElNav(null);
   };
 
-  const handleCloseUserMenu = () => {
+  const handleCloseFormMenu = () => {
     handleCloseNavMenu();
-    setAnchorElUser(null);
+    setAnchorElForms(null);
   };
 
   const handleCloseSettingsMenu = () => {
@@ -51,6 +51,33 @@ function ResponsiveAppBar() {
   const navigateToProfiles = () => {
     handleCloseNavMenu();
     navigate("/manage-profiles");
+  };
+
+  const navigateToListingForm = () => {
+    handleCloseFormMenu();
+    if (window.location.href.indexOf('listing-form') > -1){
+      navigate('/listing-form');
+      window.location.reload();
+    }
+    else navigate('/listing-form');
+  };
+
+  const navigateToUserForm = () => {
+    handleCloseFormMenu();
+    if (window.location.href.indexOf('user-form') > -1){
+      navigate('/user-form');
+      window.location.reload();
+    }
+    else navigate('/user-form');
+  };
+
+  const navigateToAdminForm = () => {
+    handleCloseFormMenu();
+    if (window.location.href.indexOf('admin-form') > -1){
+      navigate('/admin-form');
+      window.location.reload();
+    }
+    else navigate('/admin-form');
   };
 
   return (
@@ -88,7 +115,7 @@ function ResponsiveAppBar() {
               }}
             >
               {pages.map((page) => (
-                <MenuItem key={page} onClick={page === "Create New" ? handleOpenUserMenu : page === "Manage Profiles" ? navigateToProfiles : handleCloseNavMenu}>
+                <MenuItem key={page} onClick={page === "Create New" ? handleOpenFormMenu : page === "Manage Profiles" ? navigateToProfiles : handleCloseNavMenu}>
                   <Typography textAlign="center">{page}</Typography>
                 </MenuItem>
               ))}
@@ -120,7 +147,7 @@ function ResponsiveAppBar() {
             {pages.map((page) => (
               <Button
                 key={page}
-                onClick={page === "Create New" ? handleOpenUserMenu : page === "Manage Profiles" ? navigateToProfiles : handleOpenNavMenu}
+                onClick={page === "Create New" ? handleOpenFormMenu : page === "Manage Profiles" ? navigateToProfiles : handleOpenNavMenu}
                 sx={{
                   textTransform: 'none',
                   '&:hover': { fontWeight: 'bold' }, fontSize: 16, my: 2, color: '#737171',
@@ -170,7 +197,7 @@ function ResponsiveAppBar() {
           <Menu
               sx={{ mt: "45px" }}
               id="forms-appbar"
-              anchorEl={anchorElUser}
+              anchorEl={anchorElForms}
               anchorOrigin={{
                 vertical: "top",
                 horizontal: "right"
@@ -180,15 +207,13 @@ function ResponsiveAppBar() {
                 vertical: "top",
                 horizontal: "right"
               }}
-              open={Boolean(anchorElUser)}
-              onClose={handleCloseUserMenu}
+              open={Boolean(anchorElForms)}
+              onClose={handleCloseFormMenu}
             >
               {forms.map((form) => (
                 <MenuItem 
                   key={form} 
-                  onClick={handleCloseUserMenu} 
-                  component={Link} 
-                  to={form === "Listing" ? 'listing-form' : form === "Admin" ? 'admin-form' : form === 'User' ? 'user-form' : ''}
+                  onClick={form === "Listing" ? navigateToListingForm : form === "Admin" ? navigateToAdminForm : form === 'User' ? navigateToUserForm : handleCloseFormMenu}
                 >
                   <Typography textAlign="left" margin='5px'>{form}</Typography>
                 </MenuItem>

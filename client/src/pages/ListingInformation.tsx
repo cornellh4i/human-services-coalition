@@ -15,21 +15,21 @@ import DeleteConfirmation from '../components/DeleteConfirmation'
 
 
 const ListingInformation = () => {
-  
+
   // Allows us to access the state of the listing details
-  const location= useLocation();
+  const location = useLocation();
 
   // Navigation functionality
   const navigate = useNavigate();
 
   //states for the delete dialog pop up
-  const[openPop, setOpenPop] = useState(false)
+  const [openPop, setOpenPop] = useState(false)
 
   //the function that calls the delete routing function
   const handleDelete = async (id: any) => {
     console.log(id)
     await fetch('/api/listing/' + id, {
-      method: 'DELETE' 
+      method: 'DELETE'
     })
     navigate("/")
   }
@@ -66,8 +66,8 @@ const ListingInformation = () => {
                   {location.state.streetAddress}
                 </Typography>
               </Grid>
-              <Grid item xs={3} sx={{display:'flex', justifyContent:'flex-end'}}>
-                <IconButton>
+              <Grid item xs={3} sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+                <IconButton onClick={() => navigate('/listing-form', { state: { id: location.state.id } })}>
                   <EditOutlined fontSize="large" />
                 </IconButton>
                 {/* <IconButton onClick={() => handleDelete(location.state.id)}></IconButton> */}
@@ -121,29 +121,29 @@ const ListingInformation = () => {
               <Grid container>
                 <Grid item xs={6}>
                   <Typography display="flex">
-                    <CheckIcon sx={{ marginRight: "5px" }}></CheckIcon> 
+                    <CheckIcon sx={{ marginRight: "5px" }}></CheckIcon>
                     {location.state.utilities == "true" ? "utilities included: gas, water, heat" : "utilities not included"}
                   </Typography>
                   <Typography display="flex">
-                    <CheckIcon sx={{ marginRight: "5px" }}></CheckIcon> 
+                    <CheckIcon sx={{ marginRight: "5px" }}></CheckIcon>
                     {location.state.pets == "true" ? "dog-friendly" : "not dog-friendly"}
                   </Typography>
                   <Typography display="flex">
-                    <CheckIcon sx={{ marginRight: "5px" }}></CheckIcon> 
+                    <CheckIcon sx={{ marginRight: "5px" }}></CheckIcon>
                     {location.state.pets == "true" ? "cat-friendly" : "not cat-friendly"}
                   </Typography>
                 </Grid>
                 <Grid item xs={6}>
                   <Typography display="flex">
-                    <CheckIcon sx={{ marginRight: "5px" }}></CheckIcon> 
+                    <CheckIcon sx={{ marginRight: "5px" }}></CheckIcon>
                     {location.state.furnished == "true" ? "fully furnished" : "not fully furnished"}
                   </Typography>
                   <Typography display="flex">
-                    <CheckIcon sx={{ marginRight: "5px" }}></CheckIcon> 
+                    <CheckIcon sx={{ marginRight: "5px" }}></CheckIcon>
                     hardwood floors
                   </Typography>
                   <Typography display="flex">
-                    <CheckIcon sx={{ marginRight: "5px" }}></CheckIcon> 
+                    <CheckIcon sx={{ marginRight: "5px" }}></CheckIcon>
                     full-kitchen
                   </Typography>
                 </Grid>
@@ -201,9 +201,9 @@ const ListingInformation = () => {
       </Grid>
     </Grid>
 
-    <DeleteConfirmation id={location.state.id} openPop={openPop} setOpenPop={setOpenPop} handleDelete={handleDelete} />
+      <DeleteConfirmation id={location.state.id} openPop={openPop} setOpenPop={setOpenPop} handleDelete={handleDelete} />
     </>
-    )
-  }
-  
-  export default ListingInformation
+  )
+}
+
+export default ListingInformation
