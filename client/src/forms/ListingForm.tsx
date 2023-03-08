@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react"
-import { json, useParams } from "react-router-dom";
-import { Box, Button, Grid, Typography, Container, TextField, RadioGroup, FormControlLabel, Checkbox, Radio, FormControl, FormLabel, FormGroup, MenuItem, Select, IconButton } from '@mui/material';
-import { PhotoCamera, SetMeal } from "@mui/icons-material";
+import { Box, Button, Grid, Typography, Container, TextField, RadioGroup, FormControlLabel, Checkbox, Radio, FormControl, FormLabel, FormGroup, MenuItem, Select } from '@mui/material';
+import { PhotoCamera } from "@mui/icons-material";
 import { useLocation, useNavigate } from "react-router-dom";
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 
@@ -13,8 +12,7 @@ const ListingForm = () => {
   const [state, setState] = useState('')
   const [country, setCountry] = useState('')
   const [zipCode, setZipCode] = useState('')
-  // const [pictures, setPictures] = useState('')
-  const [pictures, setPictures] = useState([''])
+  const [pictures, setPictures] = useState<string[]>([''])
   const [price, setPrice] = useState('')
   const [size, setSize] = useState('')
   const [unitType, setUnitType] = useState('')
@@ -59,6 +57,7 @@ const ListingForm = () => {
   useEffect(() => {
     if (location.state != null) { getListingDetails() }
   }, [])
+
   // Fetch the data related to id from the database
   const getListingDetails = async () => {
     let result = await fetch('/api/listing/' + location.state.id, {
@@ -83,7 +82,7 @@ const ListingForm = () => {
     setSize(json_object.size)
     setNumBath(json_object.numBath)
     setPrice(json_object.price)
-    setDateAvailable(json_object.dateAvailable.split('T')[0]);// to make date readable
+    if (json_object.dateAvailable != null) setDateAvailable(json_object.dateAvailable.split('T')[0]); // to make date readable
     setSchoolDistrict(json_object.schoolDistrict)
     setFurnishedIsTrue(json_object.furnished)
     setPetsIsTrue(json_object.pets)
@@ -186,7 +185,6 @@ const ListingForm = () => {
       setState('')
       setCountry('')
       setZipCode('')
-      // setPictures('')
       setPictures([''])
       setPrice('')
       setSize('')
@@ -212,6 +210,19 @@ const ListingForm = () => {
     }
   }
 
+  // const uploadImages = (e: any) => {
+  //   console.log(e.target.files)
+  //   let images = e.target.files;
+  //   if (images) {
+  //     for (let i = 0; i < images.length; i++) {
+  //       let img = URL.createObjectURL(e.target.files[i]);
+  //       if (pictures[0] === ''){
+  //         setPictures([img]);
+  //       }
+  //       else setPictures([...pictures, img]);
+  //     } 
+  //   }
+  // };
 
   return (
     <Container maxWidth={false}>
@@ -669,8 +680,7 @@ const ListingForm = () => {
                       type="file"
                       multiple={true}
                       name="pictures"
-                      onChange={(e) => setPictures(e.target.value)}
-                      value={pictures}
+                      onChange={(e) => uploadImages(e)}
                     />
                   </Box>
                 </Button>
