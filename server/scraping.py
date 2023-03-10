@@ -35,10 +35,10 @@ def processCSP():
         try:
             info = row.find('div', attrs={'class': 'featured-listing__content'}).find(
                 'div', attrs={'class': 'featured-listing__description-container'})
-            # title = info.find(
-            #     'h3', attrs={'class':"featured-listing__description-container"})
+            title = info.find(
+                'h3', attrs={'class':"featured-listing__title"}).text
             
-            priceContainer = row.find('div', attrs={'class': 'featured-listing__content'}).find('div', attrs={
+            priceContainer = info.find('div', attrs={
                 'class': 'featured-listing__content-footer'}).find('p', attrs={'class': 'featured-listing__price accent-color'})
             bedbath = info.find(
                 'p', attrs={'class': 'featured-listing__features'})
@@ -52,12 +52,27 @@ def processCSP():
             beds = getBed(bedbath.text)
             
             # Check if listing falls under fair market price
-            if filterListing(int(price), beds):
-            
+            if (int(price) > 180):
+            #filterListing(int(price), beds) and
                 # Create empty listing
                 listing = {}
-
-                listing['title'] = 0
+    #                 webScraped,
+    # pictures,
+    # price,
+    # size,
+    # numBath,
+    # schoolDistrict,
+    # pets,
+    # utilities,
+    # furnished,
+    # distTransportation,
+    # landlord,
+    # landlordEmail,
+    # landlordPhone,
+    # linkOrig,
+    # linkApp
+                print('title is ' + str(title))
+                listing['title'] = title
                 listing['webScraped'] = True
                 listing['pictures'] = 0
                 listing['price'] = price
@@ -691,7 +706,7 @@ a = processCSP()
 print(repr(a))
 for listing in a:
     try:
-        print(listing['link'])
+        print(listing['title'])
     except:
         print('failed')
 # getIthacaRentingHelper('http://ithacarenting.com/downtown-rentals/')
