@@ -26,7 +26,6 @@ const ProofSearch = () => {
 
   // //this will fetch all the information associated with the user
   useEffect(() => { getUserDetails() }, [])
-  useEffect(() => { fetchListings() }, [])
 
   //fetch the data related to id from the database
   const getUserDetails = async () => {
@@ -39,30 +38,57 @@ const ProofSearch = () => {
     console.log("AFTERRR")
     console.log(json)
 
-    setViewHistoryString(json.recentlyViewed)
+    //loops through each id to prevent having a nested list
+    //@ts-ignore
+    json.recentlyViewed.forEach(e => (viewHistoryString.push(e)))
+
+
+    // setViewHistoryString(viewHistoryString => [...viewHistoryString, json.recentlyViewed])
     console.log(json.recentlyViewed)
     console.log(viewHistoryString)
+    const asyncRes = await Promise.all(viewHistoryString.map(async (item) => {
+      const response = await fetch('/api/listing/' + item);
+      const json = await response.json();
+      Listings.push(json);
+    }));
 
+    fetchSpecificListings()
   }
 
-  const fetchListings = async () => {
-    const response = await fetch('/api/listing')
-    console.log(response)
-    const json = await response.json()
-    console.log(json)
-    setListings(json)
+  const fetchSpecificListings = async () => {
+    console.log('Listings Begin')
+    // viewHistoryString.map((listing_id) => { await fetch('/api/listing/' + parseInt(listing_id)).then(response => setListings(...response)) }
+    // )
+    // return Promise.all(viewHistoryString.map(item => await fetch('/api/listing/' + parseInt(item))))
+
     console.log(Listings)
 
   }
 
-  console.log(viewHistoryString)
-  console.log(Listings)
 
-  // // filters the listings only to the listings in the user's search history
-  console.log("'639e7c4ed272b97a6feac587'" in viewHistoryString)
-  const viewHistory = Listings.filter((Listing, _, viewHistoryString) => Listing._id in viewHistoryString)
-  console.log(viewHistory)
-  //setListings(viewHistory)
+  // const res = await Promise.map(viewHistoryString, async (v) => {
+  // }
+
+
+
+  // const fetchListings = async () => {
+  //   const response = await fetch('/api/listing')
+  //   console.log(response)
+  //   const json = await response.json()
+  //   console.log(json)
+  //   setListings(json)
+  //   console.log(Listings)
+
+  // }
+
+  // console.log(viewHistoryString)
+  // console.log(Listings)
+
+  // // // filters the listings only to the listings in the user's search history
+  // console.log("'639e7c4ed272b97a6feac587'" in viewHistoryString)
+  // const viewHistory = Listings.filter((Listing, _, viewHistoryString) => Listing._id in viewHistoryString)
+  // console.log(viewHistory)
+  // //setListings(viewHistory)
 
 
 
