@@ -40,7 +40,7 @@ module.exports = () => {
   router.get('/listing', getListings)
 
   //GET housing listing by category and value
-  router.get('/listing/:category/:queryValue')
+  router.get('/listingsByCategory', getListingByCategory);
 
   // GET a specific housing listing (by id)
   router.get('/listing/:id', getListing)

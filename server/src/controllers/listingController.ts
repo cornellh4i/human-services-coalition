@@ -24,87 +24,68 @@ const getListing = async (req, res) => {
   res.status(200).json(listing)
 }
 
-async function getListingByCategory(category, queryValue) {
+async function hello(req, res) {
+  console.log("hello")
+}
+
+
+const getListingByCategory = async (req, res) => {
   let query = {};
 
-  // Set the query object based on the category
-  switch (category) {
-    case 'address':
-      // Use a case-insensitive regular expression to match similar strings
-      query['streetAddress'] = new RegExp(queryValue, 'i');
-      break;
-    case 'city':
-      query['city'] = new RegExp(queryValue, 'i');
-      break;
-    case 'state':
-      query['state'] = new RegExp(queryValue, 'i');
-      break;
-    case 'country':
-      query['country'] = new RegExp(queryValue, 'i');
-      break;
-    case 'zipCode':
-      query['zipCode'] = queryValue;
-      break;
-    case 'price':
-      query['price'] = {
-        $gte: queryValue[0],
-        $lte: queryValue[1]
-      }
-      break;
-    case 'size':
-      query['size'] = queryValue;
-      break;
-    case 'unitType':
-      query['unitType'] = { $in: queryValue };
-      break;
-    case 'numBath':
-      query['numBath'] = queryValue;
-      break;
-    case 'schoolDistrict':
-      query['schoolDistrict'] = queryValue;
-      break;
-    case 'pets':
-      query['pets'] = queryValue;
-      break;
-    case 'utilities':
-      query['utilities'] = queryValue;
-      break;
-    case 'furnished':
-      query['furnished'] = queryValue;
-      break;
-    case 'distTransportation':
-      query['distTransportation'] = queryValue;
-      break;
-    case 'landlord':
-      query['landlord'] = queryValue;
-      break;
-    case 'landlordEmail':
-      query['landlordEmail'] = queryValue;
-      break;
-    case 'landlordPhone':
-      query['landlordPhone'] = queryValue;
-      break;
-    case 'linkOrig':
-      query['linkOrig'] = queryValue;
-      break;
-    case 'linkApp':
-      query['linkApp'] = queryValue;
-      break;
-    case 'dateAvailable':
-      query['dateAvailable'] = queryValue;
-      break;
-    case 'description':
-      // Use a case-insensitive regular expression to match similar strings
-      query['description'] = new RegExp(queryValue, 'i');
-      break;
-    default:
-      throw new Error('Invalid category');
+  // Generate switch cases dynamically based on query parameters received
+  for (const key in req.query) {
+    const queryValue = req.query[key];
+    switch (key) {
+      case 'address':
+        query['streetAddress'] = new RegExp(queryValue, 'i');
+        break;
+      case 'city':
+        query['city'] = new RegExp(queryValue, 'i');
+        break;
+      case 'price':
+        const priceRange = queryValue.split('-').map(price => parseInt(price));
+        query['price'] = {
+          $gte: priceRange[0],
+          $lte: priceRange[1]
+        }
+        break;
+      case 'unitType':
+        query['unitType'] = { $in: queryValue.split(',') };
+        break;
+      case 'numBath':
+        query['numBath'] = parseFloat(queryValue);
+        break;
+      case 'size':
+        let sizes = ["Studio", "One Bed", "Two Bed", "Three Bed",
+          "Four Bed", "Five Bed", "Six Bed"]
+        query['size'] = sizes[queryValue];
+        break;
+      case 'pets':
+        query['pets'] = queryValue;
+        break;
+      case 'utilities':
+        query['utilities'] = queryValue;
+        break;
+      case 'furnished':
+        query['furnished'] = queryValue;
+        break;
+      case 'distTransportation':
+        query['distTransportation'] = parseFloat(queryValue);
+        break;
+      default:
+        // Ignore unknown query parameters
+        break;
+    }
   }
 
   const listings = await Listing.find(query);
+  console.log(listings)
 
-  return listings;
+  res.status(200).json(listings);
 }
+
+
+
 
 // POST (add) a new housing listing
 const createListing = async (req, res) => {
@@ -205,9 +186,10 @@ const deleteListing = async (req, res) => {
 
 // Exports
 module.exports = {
+  getListingByCategory,
   getListings,
   getListing,
   createListing,
   updateListing,
-  deleteListing
+  deleteListing,
 }
