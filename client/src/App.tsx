@@ -57,20 +57,24 @@ function App() {
               />
             </Routes>
           </div>
-          <div className="login-form" style={{
-            backgroundColor: 'blue',
-            width: '100%',
-            maxHeight: '100%'
-          }}>
-
-            <Routes>
-              <Route
-                path='/login-form'
-                element={<LoginForm />}
-              />
-            </Routes>
-          </div>
         </BrowserRouter>
+        <div className="Log">
+          <ThemeProvider theme={theme}>
+            <BrowserRouter>
+              <div className="pages">
+
+                <div className="login-form">
+                  <Routes>
+                    <Route
+                      path='/login-form'
+                      element={<LoginForm />}
+                    />
+                  </Routes>
+                </div>
+              </div>
+            </BrowserRouter>
+          </ThemeProvider>
+        </div>
       </ThemeProvider>
     </div>
   );

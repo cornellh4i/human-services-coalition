@@ -10,17 +10,21 @@ const LoginForm = () => {
 
   return (
     <Box sx={{
+      display: { xs: 'flex', md: 'flex' },
       maxWidth: '100%',
       maxHeight: '100%',
       backgroundColor: '#5D737E',
       p: '0.5%'
     }}>
       <Box sx={{
+        flexGrow: 1,
+        display: { xs: 'flex', md: 'flex' },
         mt: '9rem',
         mb: '9em',
-        ml: '12rem',
-        mr: '12rem',
+        ml: { xs: '2rem', md: '12rem' },
+        mr: { xs: '2rem', md: '12rem' },
         maxWidth: '100%',
+        maxHeight: '70%',
         backgroundColor: 'white',
         p: '0.5%'
       }}>
@@ -34,22 +38,24 @@ const LoginForm = () => {
             </Button>
           </Box>
           <Box sx={{ p: 0, flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
-            <Button
-              sx={{ width: 300, p: 0, border: 0, justifyContent: "flex-start", ml: '5%' }}>
-              <Logo height={75} href="" />
-            </Button>
+            <Grid item xs={12} md={4}>
+              <Button
+                sx={{ width: 300, p: 0, border: 0, justifyContent: "flex-start", ml: '5%' }}>
+                <Logo height={75} href="" />
+              </Button>
+            </Grid>
           </Box>
 
-          <Grid item>
+          <Grid item xs={12} md={8}>
             <form noValidate className="login-form">
-              <Grid item xs={12}>
+              <Grid item>
                 <Typography variant='h6' sx={{ fontSize: '3rem', fontWeight: 'bold', textAlign: 'center' }} >Continuum of Care Housing Listings</Typography>
               </Grid>
             </form>
           </Grid>
 
 
-          <Grid item>
+          <Grid item xs={12} md={6}>
             <Box sx={{ display: 'flex', marginTop: '2%', maxWidth: '40%', marginLeft: '29%', marginBottom: '3%' }}>
               <FormGroup sx={{ flexGrow: '1', marginRight: '1.5rem' }}>
                 <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'left', alignItems: 'center' }}>
@@ -70,6 +76,9 @@ const LoginForm = () => {
               </FormGroup>
 
             </Box>
+          </Grid>
+
+          <Grid item xs={12} md={6}>
             <Box sx={{ display: 'flex', marginTop: '1%', maxWidth: '40%', marginLeft: '29%', marginBottom: '3%' }}>
               <FormGroup sx={{ flexGrow: '1', marginRight: '1.5rem' }}>
                 <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'left', alignItems: 'center' }}>
@@ -92,7 +101,7 @@ const LoginForm = () => {
           </Grid>
 
 
-          <Grid  >
+          <Grid item xs={12} md={4}>
             <Box sx={{ display: 'flex', justifyContent: 'flex-end', marginTop: '1rem', marginRight: '1.5rem', mb: '2%' }}  >
               <Button disableElevation
                 type="submit"
@@ -104,6 +113,7 @@ const LoginForm = () => {
               </Button>
             </Box>
           </Grid>
+
         </Container>
       </Box >
     </Box >
