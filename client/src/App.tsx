@@ -9,8 +9,13 @@ import ListingForm from './forms/ListingForm'
 import AdminForm from './forms/AdminForm'
 import UserForm from './forms/UserForm'
 import LoginForm from './forms/LoginForm'
+import { useState } from 'react';
 
 function App() {
+
+  const [showNav, setShowNav] = useState(false);
+  const [token, setToken] = useState();
+
 
   const theme = createTheme({
     typography: {
@@ -24,7 +29,7 @@ function App() {
     <div className="App">
       <ThemeProvider theme={theme}>
         <BrowserRouter>
-          <NavBar />
+          {showNav && <NavBar />}
           <div className="pages">
             <Routes>
               <Route
