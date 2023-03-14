@@ -1,5 +1,5 @@
 import Card from '@mui/material/Card';
-import { Typography, Container, createTheme, ThemeProvider } from '@mui/material';
+import { Typography, Container, createTheme, ThemeProvider, IconButton } from '@mui/material';
 import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
@@ -7,8 +7,10 @@ import EditIcon from '@mui/icons-material/Edit';
 import { useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import AdminModal from './AdminModal';
+import { DeleteOutlined, EditOutlined } from '@mui/icons-material';
+import DeleteConfirmation from './DeleteConfirmation';
 
-const AdminDisplayCard = ({ adminid, fname, lname, affiliation, date }: { adminid: number, fname: string, lname: string, affiliation: string, date: Date }) => {
+const AdminDisplayCard = ({ adminid, fname, lname, affiliation, date, handleDelete }: { adminid: number, fname: string, lname: string, affiliation: string, date: Date, handleDelete: (params: any) => any }) => {
 
   const theme = createTheme({
     typography: {
@@ -21,6 +23,16 @@ const AdminDisplayCard = ({ adminid, fname, lname, affiliation, date }: { admini
 
   //states for the admin modal
   const [openAdminMod, setOpenAdminMod] = useState(false)
+
+  //states for the delete dialog pop up
+  const [openPop, setOpenPop] = useState(false)
+
+  const handleClick = (event: any) => {
+    event.stopPropagation()
+    setOpenPop(true)
+  }
+
+
 
   return (
     <ThemeProvider theme={theme}>
@@ -44,7 +56,7 @@ const AdminDisplayCard = ({ adminid, fname, lname, affiliation, date }: { admini
           </Grid>
 
           <Box sx={{ display: "flex", justifyContent: "right", alignItems: 'center', marginLeft: '1.4rem', width: '15rem' }}>
-            <Button
+            {/* <Button
               variant="contained"
               startIcon={<EditIcon />}
               size="small"
@@ -52,14 +64,23 @@ const AdminDisplayCard = ({ adminid, fname, lname, affiliation, date }: { admini
               onClick={() => navigate('/admin-form', { state: { id: { adminid } } })}
             >
               Edit
-            </Button>
+            </Button> */}
+            <Grid item xs={3}>
+              <IconButton onClick={() => navigate('/admin-form', { state: { id: { adminid } } })}>
+                <EditOutlined fontSize="medium" />
+              </IconButton>
+              <IconButton onClick={(event) => handleClick(event)}>
+                <DeleteOutlined fontSize="medium" />
+              </IconButton>
+            </Grid>
           </Box>
         </Card >
       </Container>
       <AdminModal fname={fname} lname={lname} affiliation={affiliation} date={date} openAdminMod={openAdminMod} setOpenAdminMod={setOpenAdminMod} />
-
-
+      <DeleteConfirmation id={adminid} openPop={openPop} setOpenPop={setOpenPop} handleDelete={handleDelete} type={"admin"} />
     </ThemeProvider>
+
+
   );
 
 }

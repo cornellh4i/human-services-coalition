@@ -20,6 +20,16 @@ const ManageAdmins = () => {
     fetchAdmins()
   }, [])
 
+  //the function that calls the delete routing function
+  const handleDelete = async (id: any) => {
+    //console.log(id)
+    await fetch('/api/admins/' + id, {
+      method: 'DELETE'
+    })
+    // after we delete we must update the local state
+    const newAdmins = Admins.filter(Admin => Admin._id != id)
+    setAdmins(newAdmins)
+  }
   const [affiliation, setAffiliation] = React.useState('');
 
   const handleChange = (event: SelectChangeEvent) => {
@@ -97,6 +107,7 @@ const ManageAdmins = () => {
               lname={Admin.lName}
               affiliation={Admin.affiliation}
               date={Admin.createdAt}
+              handleDelete={handleDelete}
             />
             <Divider variant="middle" sx={{ marginTop: '0.5rem', bgcolor: 'black' }} />
           </div>

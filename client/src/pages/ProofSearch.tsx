@@ -7,7 +7,7 @@ import FilterSideBar from '../components/FilterSideBar'
 import SelectedFilters from '../components/SelectedFilters'
 import { useLocation, useNavigate } from "react-router-dom";
 import '../css/Home.css'
-import { Button, Typography } from '@mui/material'
+import { Button, IconButton, Typography } from '@mui/material'
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import PrintIcon from '@mui/icons-material/Print';
 
@@ -32,67 +32,18 @@ const ProofSearch = () => {
 
     const response = await fetch('/api/users/' + location.state.id,
       { method: 'GET' })
-    console.log("wrgwrg")
-    console.log(response)
+
     const json = await response.json()
-    console.log("AFTERRR")
-    console.log(json)
+    const response2 = await fetch('/api/listing', { method: 'GET' })
+    const json2 = await response2.json()
 
-    //loops through each id to prevent having a nested list
-    //@ts-ignore
-    json.recentlyViewed.forEach(e => (viewHistoryString.push(e)))
+    // setListings(json2)
+    json2.forEach((e: any) => Listings.push(e))
 
-
-    // setViewHistoryString(viewHistoryString => [...viewHistoryString, json.recentlyViewed])
-    console.log(json.recentlyViewed)
-    console.log(viewHistoryString)
-    const asyncRes = await Promise.all(viewHistoryString.map(async (item) => {
-      const response = await fetch('/api/listing/' + item);
-      const json = await response.json();
-      Listings.push(json);
-    }));
-
-    fetchSpecificListings()
-  }
-
-  const fetchSpecificListings = async () => {
-    console.log('Listings Begin')
-    // viewHistoryString.map((listing_id) => { await fetch('/api/listing/' + parseInt(listing_id)).then(response => setListings(...response)) }
-    // )
-    // return Promise.all(viewHistoryString.map(item => await fetch('/api/listing/' + parseInt(item))))
-
-    console.log(Listings)
+    const newListings = Listings.filter(Listing => json.recentlyViewed.includes(Listing._id))
+    setListings(newListings)
 
   }
-
-
-  // const res = await Promise.map(viewHistoryString, async (v) => {
-  // }
-
-
-
-  // const fetchListings = async () => {
-  //   const response = await fetch('/api/listing')
-  //   console.log(response)
-  //   const json = await response.json()
-  //   console.log(json)
-  //   setListings(json)
-  //   console.log(Listings)
-
-  // }
-
-  // console.log(viewHistoryString)
-  // console.log(Listings)
-
-  // // // filters the listings only to the listings in the user's search history
-  // console.log("'639e7c4ed272b97a6feac587'" in viewHistoryString)
-  // const viewHistory = Listings.filter((Listing, _, viewHistoryString) => Listing._id in viewHistoryString)
-  // console.log(viewHistory)
-  // //setListings(viewHistory)
-
-
-
-
   return (
     <>
       <div>
@@ -124,7 +75,9 @@ const ProofSearch = () => {
               </Grid>
             </Grid>
             <Grid item xs={6} display="flex" justifyContent="right">
-              <PrintIcon fontSize='large'></PrintIcon>
+              <IconButton>
+                <PrintIcon fontSize='large'></PrintIcon>
+              </IconButton>
             </Grid>
           </Grid>
 

@@ -1,5 +1,5 @@
 import Card from '@mui/material/Card';
-import { Typography, Container, createTheme, ThemeProvider } from '@mui/material';
+import { Typography, Container, createTheme, ThemeProvider, IconButton } from '@mui/material';
 import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
@@ -8,8 +8,10 @@ import EditIcon from '@mui/icons-material/Edit';
 import { useState } from 'react';
 import UserModal from './UserModal';
 import { useNavigate } from 'react-router-dom';
+import { DeleteOutlined, EditOutlined } from '@mui/icons-material';
+import DeleteConfirmation from './DeleteConfirmation';
 
-const UserDisplayCard = ({ user_id, fname, lname, voucher, date }: { user_id: number, fname: string, lname: string, voucher: string, date: Date }) => {
+const UserDisplayCard = ({ user_id, fname, lname, voucher, date, handleDelete }: { user_id: number, fname: string, lname: string, voucher: string, date: Date, handleDelete: (params: any) => any }) => {
 
   const theme = createTheme({
     typography: {
@@ -22,6 +24,14 @@ const UserDisplayCard = ({ user_id, fname, lname, voucher, date }: { user_id: nu
 
   //states for the admin modal
   const [openUserMod, setOpenUserMod] = useState(false)
+
+  //states for the delete dialog pop up
+  const [openPop, setOpenPop] = useState(false)
+
+  const handleClick = (event: any) => {
+    event.stopPropagation()
+    setOpenPop(true)
+  }
 
   return (
     <ThemeProvider theme={theme}>
@@ -61,19 +71,19 @@ const UserDisplayCard = ({ user_id, fname, lname, voucher, date }: { user_id: nu
               sx={{ padding: "0 5px", fontSize: '0.7rem', textTransform: "unset", borderRadius: '10px', color: 'black', bgcolor: '#D9D9D9', ':hover': { bgcolor: "#D9D9D9B5" } }}>
               View Recents
             </Button>
-            <Button
-              variant="contained"
-              startIcon={<EditIcon />}
-              size="small"
-              sx={{ marginLeft: "10px", padding: "0 5px", fontSize: '0.7rem', textTransform: "unset", borderRadius: '10px', color: 'black', bgcolor: '#D9D9D9', ':hover': { bgcolor: "#D9D9D9B5" } }}
-              onClick={() => navigate('/user-form', { state: { id: { user_id } } })}
-            >
-              Edit
-            </Button>
+            <Grid item xs={3} paddingLeft={"7%"}>
+              <IconButton onClick={() => navigate('/user-form', { state: { id: { user_id } } })}>
+                <EditOutlined fontSize="medium" />
+              </IconButton>
+              <IconButton onClick={(event) => handleClick(event)}>
+                <DeleteOutlined fontSize="medium" />
+              </IconButton>
+            </Grid>
           </Box>
         </Card >
       </Container>
       <UserModal fname={fname} lname={lname} voucher={voucher} date={date} openUserMod={openUserMod} setOpenUserMod={setOpenUserMod} />
+      <DeleteConfirmation id={user_id} openPop={openPop} setOpenPop={setOpenPop} handleDelete={handleDelete} type={"user"} />
     </ThemeProvider>
   );
 
