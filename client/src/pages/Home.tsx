@@ -15,26 +15,22 @@ const Home = () => {
   useEffect(() => {
     const fetchListings = async () => {
       const response = await fetch('/api/listing')
-      console.log(response)
       const json = await response.json()
-      console.log(json)
 
       if (response.ok) {
         setListings(json)
-        console.log(Listings)
       }
     }
 
     fetchListings()
   }, [])
 
-  //the function that calls the delete routing function
+  // The function that calls the delete routing function
   const handleDelete = async (id: any) => {
-    //console.log(id)
     await fetch('/api/listing/' + id, {
       method: 'DELETE'
     })
-    // after we delete we must update the local state
+    // After we delete we must update the local state
     const newListings = Listings.filter(Listing => Listing._id != id)
     setListings(newListings)
   }
@@ -53,7 +49,6 @@ const Home = () => {
             </div>
             <div className='listing-cards'>
               <Grid container spacing={2}>
-
                 {Listings.map((Listing) => (
                   <Grid item key={Listing._id}>
                     <ListingDetails Listing={Listing} handleDelete={handleDelete} />
