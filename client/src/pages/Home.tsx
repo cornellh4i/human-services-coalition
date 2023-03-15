@@ -15,7 +15,6 @@ const Home = () => {
   useEffect(() => {
     const fetchListings = async () => {
       const response = await fetch('/api/listing')
-      console.log(response)
       const json = await response.json()
 
       if (response.ok) {
@@ -26,17 +25,17 @@ const Home = () => {
     fetchListings()
   }, [])
 
-  //the function that calls the delete routing function
+  // The function that calls the delete routing function
   const handleDelete = async (id: any) => {
-    //console.log(id)
     await fetch('/api/listing/' + id, {
       method: 'DELETE'
     })
-    // after we delete we must update the local state
+    // After we delete we must update the local state
     const newListings = Listings.filter(Listing => Listing._id != id)
     setListings(newListings)
   }
 
+  console.log(Listings)
   return (
     <div>
       <div className='body-box'>

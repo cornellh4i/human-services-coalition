@@ -7,7 +7,7 @@ const ColumnLabel = ({ label }: { label: string }) => {
       <Button disableElevation
         endIcon={<ArrowDropDownIcon sx={{ fontSize: '80px' }} />}
         size="small"
-        sx={{ textTransform: "unset", color: '#5D737E', bgcolor: '#D9D9D9', fontSize: 15, fontStyle: 'italic', whiteSpace: 'nowrap' }}>
+        sx={{ textTransform: "unset", color: '#5D737E', fontSize: 15, fontStyle: 'italic', whiteSpace: 'nowrap' }}>
         {label}
       </Button>
     </Grid>

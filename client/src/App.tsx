@@ -8,6 +8,7 @@ import ManageProfiles from './pages/ManageProfiles'
 import ListingForm from './forms/ListingForm'
 import AdminForm from './forms/AdminForm'
 import UserForm from './forms/UserForm'
+import ProofSearch from './pages/ProofSearch';
 
 function App() {
 
@@ -37,6 +38,10 @@ function App() {
               <Route
                 path="/listing_info"
                 element={<ListingInformation />}
+              />
+              <Route
+                path="/proof_search"
+                element={<ProofSearch />}
               />
             </Routes>
           </div>

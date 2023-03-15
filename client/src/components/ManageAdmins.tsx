@@ -20,6 +20,16 @@ const ManageAdmins = () => {
     fetchAdmins()
   }, [])
 
+  //the function that calls the delete routing function
+  const handleDelete = async (id: any) => {
+    //console.log(id)
+    await fetch('/api/admins/' + id, {
+      method: 'DELETE'
+    })
+    // after we delete we must update the local state
+    const newAdmins = Admins.filter(Admin => Admin._id != id)
+    setAdmins(newAdmins)
+  }
   const [affiliation, setAffiliation] = React.useState('');
 
   const handleChange = (event: SelectChangeEvent) => {
@@ -30,11 +40,10 @@ const ManageAdmins = () => {
     <Box sx={{
       mt: '1%',
       maxWidth: '100%',
-      backgroundColor: '#D9D9D9',
       p: '0.5%'
     }}>
 
-      <Container  maxWidth={false}   sx={{ mt: '10px', maxWidth: '100%', borderRadius: 0, display: 'flex', justifyContent: 'space-between', alignItems: 'center', backgroundColor: '#D9D9D9', }}>
+      <Container maxWidth={false} sx={{ mt: '10px', maxWidth: '100%', borderRadius: 0, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <Grid container item xs={8}>
           <TextField
             sx={{ flex: 1, backgroundColor: '#FFFFFF', borderRadius: 1 }}
@@ -51,9 +60,9 @@ const ManageAdmins = () => {
         <Grid container item xs={'auto'}>
           <Box sx={{ display: "flex", justifyContent: "right", alignItems: 'center', marginLeft: '5rem' }}>
             <Typography sx={{ marginRight: '1rem' }}>Affiliation</Typography>
-            <Box sx={{ flex:1 }}>
-              <FormControl 
-                sx={{ flex: 1,backgroundColor: '#FFFFFF', borderRadius: 1 }}>
+            <Box sx={{ flex: 1 }}>
+              <FormControl
+                sx={{ flex: 1, borderRadius: 1 }}>
                 <Select
                   value={affiliation}
                   onChange={handleChange}
@@ -68,23 +77,23 @@ const ManageAdmins = () => {
         </Grid>
       </Container>
 
-      <Container maxWidth={false}  sx={{ borderRadius: 0, display: 'flex',  justifyContent: 'flex-start', alignItems: 'left', backgroundColor: '#D9D9D9' }}>
-        
-          <Grid container spacing={"10%"}>
-            <Grid  item sx={{ ml: "1%" }}>
-              <ColumnLabel label="First Name" ></ColumnLabel>
-            </Grid>
-            <Grid   item sx={{ ml: "0%" }}>
-              <ColumnLabel label="Last Name"></ColumnLabel>
-            </Grid>
-            <Grid  item sx={{ ml: "0%" }}>
-              <ColumnLabel label="Affiliation"></ColumnLabel>
-            </Grid>
-            <Grid item sx={{ ml: "3%" }}>
-              <ColumnLabel label="Created"></ColumnLabel>
-            </Grid>
+      <Container maxWidth={false} sx={{ borderRadius: 0, display: 'flex', justifyContent: 'flex-start', alignItems: 'left' }}>
+
+        <Grid container spacing={"10%"}>
+          <Grid item sx={{ ml: "1%" }}>
+            <ColumnLabel label="First Name" ></ColumnLabel>
           </Grid>
-        
+          <Grid item sx={{ ml: "0%" }}>
+            <ColumnLabel label="Last Name"></ColumnLabel>
+          </Grid>
+          <Grid item sx={{ ml: "0%" }}>
+            <ColumnLabel label="Affiliation"></ColumnLabel>
+          </Grid>
+          <Grid item sx={{ ml: "3%" }}>
+            <ColumnLabel label="Created"></ColumnLabel>
+          </Grid>
+        </Grid>
+
       </Container>
 
       <div className="admins" >
@@ -92,10 +101,12 @@ const ManageAdmins = () => {
           <div>
             <AdminDisplayCard
               key={Admin._id}
+              adminid={Admin._id}
               fname={Admin.fName}
               lname={Admin.lName}
               affiliation={Admin.affiliation}
               date={Admin.createdAt}
+              handleDelete={handleDelete}
             />
             <Divider variant="middle" sx={{ marginTop: '0.5rem', bgcolor: 'black' }} />
           </div>

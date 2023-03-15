@@ -693,6 +693,7 @@ const ListingForm = () => {
                 variant="outlined"
                 size="large"
                 sx={{ padding: "0 3.5rem", fontSize: '1.2rem', fontWeight: 'bold', textTransform: "unset", borderRadius: '12px', color: '#5D737E', borderColor: '#5D737E', bgcolor: 'white', ':hover': { bgcolor: "#5D737EB5" } }}
+                onClick={() => navigate("/")}
               >
                 Cancel
               </Button>
