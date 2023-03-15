@@ -1,4 +1,4 @@
-import { Box, Button, Card, createTheme, Grid, Modal, ThemeProvider, Typography } from "@mui/material";
+import { Box, createTheme, Grid, Modal, ThemeProvider, Typography } from "@mui/material";
 import React from "react";
 
 
@@ -45,7 +45,7 @@ export default function AdminModal({ fname, lname, affiliation, date, openAdminM
           <Box sx={style}>
             <Grid container display="flex" flexDirection="row">
               <Grid item display="flex" justifyContent="left" xs={12}>
-                <Typography variant="h6" component="h2">{fname}, {lname}</Typography>
+                <Typography variant="h6" component="h2">{fname} {lname}</Typography>
               </Grid>
               <Grid item display="flex" justifyContent="left" xs={12}>
                 <Typography>Affiliation: {affiliation}</Typography>

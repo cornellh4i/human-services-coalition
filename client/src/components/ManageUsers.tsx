@@ -4,7 +4,6 @@ import SearchIcon from '@mui/icons-material/Search';
 import React from 'react'
 import ColumnLabel from '../components/ColumnLabel'
 import { useState, useEffect } from 'react'
-import AdminModal from './AdminModal';
 
 const ManageUsers = () => {
   const [Users, setUsers] = useState<any[]>([])
@@ -43,11 +42,10 @@ const ManageUsers = () => {
     <Box sx={{
       mt: '1%',
       maxWidth: '100%',
-      backgroundColor: '#D9D9D9',
       p: '0.5%'
     }}>
 
-      <Container maxWidth={false} sx={{ mt: '10px', maxWidth: '100%', borderRadius: 0, display: 'flex', justifyContent: 'space-between', alignItems: 'center', backgroundColor: '#D9D9D9', }}>
+      <Container maxWidth={false} sx={{ mt: '10px', maxWidth: '100%', borderRadius: 0, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <Grid container item xs={8}>
           <TextField
             sx={{ flex: 1, backgroundColor: '#FFFFFF', borderRadius: 1 }}
@@ -84,7 +82,7 @@ const ManageUsers = () => {
       </Container>
 
 
-      <Container maxWidth={false} sx={{ borderRadius: 0, display: 'flex', justifyContent: 'flex-start', alignItems: 'left', backgroundColor: '#D9D9D9' }}>
+      <Container maxWidth={false} sx={{ borderRadius: 0, display: 'flex', justifyContent: 'flex-start', alignItems: 'left' }}>
 
         <Grid container spacing={"10%"}>
           <Grid item sx={{ ml: "1%" }}>

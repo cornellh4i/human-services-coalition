@@ -68,8 +68,8 @@ const UserDisplayCard = ({ user_id, fname, lname, voucher, date, handleDelete }:
               variant="contained"
               startIcon={<AccessTimeIcon />}
               size="small"
-              sx={{ padding: "0 5px", fontSize: '0.7rem', textTransform: "unset", borderRadius: '10px', color: 'black', bgcolor: '#D9D9D9', ':hover': { bgcolor: "#D9D9D9B5" } }}>
-              View Recents
+              sx={{ padding: "0 5px", fontSize: '0.7rem', textTransform: "unset", borderRadius: '10px', color: 'white', bgcolor: '#FF6933', ':hover': { bgcolor: "#FF8D33" } }}>
+              Search History
             </Button>
             <Grid item xs={3} paddingLeft={"7%"}>
               <IconButton onClick={() => navigate('/user-form', { state: { id: { user_id } } })}>

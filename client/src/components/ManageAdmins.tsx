@@ -40,11 +40,10 @@ const ManageAdmins = () => {
     <Box sx={{
       mt: '1%',
       maxWidth: '100%',
-      backgroundColor: '#D9D9D9',
       p: '0.5%'
     }}>
 
-      <Container maxWidth={false} sx={{ mt: '10px', maxWidth: '100%', borderRadius: 0, display: 'flex', justifyContent: 'space-between', alignItems: 'center', backgroundColor: '#D9D9D9', }}>
+      <Container maxWidth={false} sx={{ mt: '10px', maxWidth: '100%', borderRadius: 0, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <Grid container item xs={8}>
           <TextField
             sx={{ flex: 1, backgroundColor: '#FFFFFF', borderRadius: 1 }}
@@ -63,7 +62,7 @@ const ManageAdmins = () => {
             <Typography sx={{ marginRight: '1rem' }}>Affiliation</Typography>
             <Box sx={{ flex: 1 }}>
               <FormControl
-                sx={{ flex: 1, backgroundColor: '#FFFFFF', borderRadius: 1 }}>
+                sx={{ flex: 1, borderRadius: 1 }}>
                 <Select
                   value={affiliation}
                   onChange={handleChange}
@@ -78,7 +77,7 @@ const ManageAdmins = () => {
         </Grid>
       </Container>
 
-      <Container maxWidth={false} sx={{ borderRadius: 0, display: 'flex', justifyContent: 'flex-start', alignItems: 'left', backgroundColor: '#D9D9D9' }}>
+      <Container maxWidth={false} sx={{ borderRadius: 0, display: 'flex', justifyContent: 'flex-start', alignItems: 'left' }}>
 
         <Grid container spacing={"10%"}>
           <Grid item sx={{ ml: "1%" }}>

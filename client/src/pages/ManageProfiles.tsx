@@ -9,6 +9,11 @@ const ManageProfiles = () => {
   const theme = createTheme({
     typography: {
       fontSize: 13
+    },
+    palette: {
+      primary: {
+        main: "#FF6933"
+      }
     }
   })
   theme.typography.h4 = {
@@ -98,17 +103,19 @@ const ManageProfiles = () => {
         </Box>
 
         <Box >
-          <Tabs value={value} onChange={handleTabChange} >
+          <Tabs value={value} onChange={handleTabChange} textColor="primary" indicatorColor="primary">
             <Tab sx={{ borderWidth: "10 rem", borderColor: '#5D737E' }} label="Non-Admin" {...a11yProps(0)} />
             <Tab label="Admin" {...a11yProps(1)} />
           </Tabs>
         </Box>
-        <TabPanel value={value} index={0}>
-          <ManageUsers />
-        </TabPanel>
-        <TabPanel value={value} index={1}>
-          <ManageAdmins />
-        </TabPanel>
+        <Box>
+          <TabPanel value={value} index={0}>
+              <ManageUsers />
+          </TabPanel>
+          <TabPanel value={value} index={1}>
+            <ManageAdmins />
+          </TabPanel>
+        </Box>
       </Container >
     </ThemeProvider >
   )
