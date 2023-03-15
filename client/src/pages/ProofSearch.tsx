@@ -1,10 +1,6 @@
-
-import Container from '@mui/material/Container'
 import Grid from '@mui/material/Grid'
 import { useEffect, useState } from 'react'
 import ListingDetails from '../components/ListingDetails'
-import FilterSideBar from '../components/FilterSideBar'
-import SelectedFilters from '../components/SelectedFilters'
 import { useLocation, useNavigate } from "react-router-dom";
 import '../css/Home.css'
 import { Button, IconButton, Typography } from '@mui/material'
@@ -15,8 +11,6 @@ const ProofSearch = () => {
 
   //intialises the state for the list of houses that correspond to the specified user
   const [Listings, setListings] = useState<any[]>([])
-  const [viewHistoryString, setViewHistoryString] = useState<any[]>([])
-
 
   // Allows us to access the state of the user details - accesses the id of the user
   const location = useLocation();
@@ -84,7 +78,6 @@ const ProofSearch = () => {
           {/* Displays the listings in the user's search history */}
           <Grid container spacing={2}>
             {Listings.map((Listing) => (
-
               <Grid item key={Listing._id}>
                 <ListingDetails Listing={Listing} handleDelete={undefined} />
               </Grid>
