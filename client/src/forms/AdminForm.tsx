@@ -173,7 +173,7 @@ const AdminForm = () => {
             startIcon={<ArrowBackIosNewIcon />}
             variant="outlined"
             size="large"
-            onClick={() => navigate("/")}
+            onClick={() => navigate("/manage-profiles")}
             sx={{ marginTop: '2rem', padding: "0 1rem", fontSize: '1.2rem', fontWeight: 'bold', textTransform: "unset", borderRadius: '15px', color: '#5D737E', borderWidth: '0.14rem', borderColor: '#5D737E', bgcolor: 'white', ':hover': { bgcolor: "#5D737EB5" } }}
           >
             Back
