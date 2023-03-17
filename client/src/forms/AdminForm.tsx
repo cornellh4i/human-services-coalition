@@ -47,8 +47,7 @@ const AdminForm = () => {
     })
     console.log(result)
     let json_object = await result.json()
-
-
+    console.log(json_object)
     setAffiliation(json_object.affiliation)
     setUsername(json_object.username)
     setPassword(json_object.password)
