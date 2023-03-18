@@ -1,5 +1,4 @@
 import { Box, createTheme, Grid, Modal, ThemeProvider, Typography } from "@mui/material";
-import React from "react";
 
 
 interface OpenModalProps {
@@ -42,8 +41,6 @@ const style = {
 
 export default function AdminModal({ fname, lname, mInitial, prefName, affiliation, username, password, gender, race, email, phone, birthdate, contactPref, date, openAdminMod, setOpenAdminMod }: OpenModalProps) {
 
-  // const [open, setOpenAdminMod] = React.useState(false);
-  const handleOpen = () => setOpenAdminMod(true);
   const handleClose = () => setOpenAdminMod(false);
 
   return (
@@ -55,10 +52,13 @@ export default function AdminModal({ fname, lname, mInitial, prefName, affiliati
         >
           <Box sx={style}>
             <Grid display="flex" flexDirection="column">
+
+              {/* Displays admin name as title */}
               <Grid item display="flex" justifyContent="left" xs={12} marginBottom='5%'>
                 <Typography variant="h6" component="h1" sx={{ fontWeight: 600, fontSize: "25px", fontStyle: 'italic' }}>{fname != null ? fname : 'N/A'} {lname != null ? lname : "N/A"}</Typography>
               </Grid>
-              {/* Displays User Information in the first column */}
+
+              {/* Displays admin information */}
               <Grid container display="flex" flexDirection="row" xs={12}>
                 <Grid container display="flex" xs={6}>
                   <Grid item display="flex" justifyContent="left" xs={12} marginBottom='3%'>

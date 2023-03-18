@@ -1,4 +1,3 @@
-import { NightShelter } from "@mui/icons-material";
 import { Box, createTheme, Grid, Modal, ThemeProvider, Typography } from "@mui/material";
 
 
@@ -43,8 +42,6 @@ const style = {
 
 export default function UserModal({ fname, lname, mInitial, username, password, voucher, supervisor, birthDate, email, phone, prefName, gender, race, contactPref, date, openUserMod, setOpenUserMod }: OpenModalProps) {
 
-  // const [open, setOpenAdminMod] = React.useState(false);
-  const handleOpen = () => setOpenUserMod(true);
   const handleClose = () => setOpenUserMod(false);
 
   return (
@@ -56,10 +53,13 @@ export default function UserModal({ fname, lname, mInitial, username, password, 
         >
           <Box sx={style}>
             <Grid display="flex" flexDirection="column">
+
+              {/* Displays user name as title */}
               <Grid item display="flex" justifyContent="left" xs={12} marginBottom='5%'>
                 <Typography variant="h6" component="h1" sx={{ fontWeight: 600, fontSize: "25px", fontStyle: 'italic' }}>{fname != null ? fname : 'N/A'} {lname != null ? lname : "N/A"}</Typography>
               </Grid>
-              {/* Displays User Information in the first column */}
+
+              {/* Displays user information */}
               <Grid container display="flex" flexDirection="row" xs={12}>
                 <Grid container display="flex" xs={6}>
                   <Grid item display="flex" justifyContent="left" xs={12} marginBottom='3%'>

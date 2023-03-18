@@ -1,9 +1,7 @@
 import Card from '@mui/material/Card';
 import { Typography, Container, createTheme, ThemeProvider, IconButton, StepIconClassKey } from '@mui/material';
-import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
-import EditIcon from '@mui/icons-material/Edit';
 import { useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import AdminModal from './AdminModal';
@@ -75,15 +73,6 @@ const AdminDisplayCard = ({ adminid, fname, lname, mInitial, prefName, affiliati
           </Grid>
 
           <Box sx={{ display: "flex", justifyContent: "right", alignItems: 'center', marginLeft: '1.4rem', width: '15rem' }}>
-            {/* <Button
-              variant="contained"
-              startIcon={<EditIcon />}
-              size="small"
-              sx={{ marginLeft: "10px", padding: "0 5px", fontSize: '0.7rem', textTransform: "unset", borderRadius: '10px', color: 'black', bgcolor: '#D9D9D9', ':hover': { bgcolor: "#D9D9D9B5" } }}
-              onClick={() => navigate('/admin-form', { state: { id: { adminid } } })}
-            >
-              Edit
-            </Button> */}
             <Grid item xs={3}>
               <IconButton onClick={() => navigate('/admin-form', { state: { id: { adminid } } })}>
                 <EditOutlined fontSize="medium" />
