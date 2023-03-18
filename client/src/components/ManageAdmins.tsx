@@ -104,7 +104,17 @@ const ManageAdmins = () => {
               adminid={Admin._id}
               fname={Admin.fName}
               lname={Admin.lName}
+              mInitial={Admin.mInitial}
+              prefName={Admin.prefName}
               affiliation={Admin.affiliation}
+              username={Admin.username}
+              password={Admin.password}
+              gender={Admin.gender}
+              race={Admin.race}
+              email={Admin.email}
+              phone={Admin.phone}
+              birthdate={Admin.birthdate}
+              contactPref={Admin.contactPref}
               date={Admin.createdAt}
               handleDelete={handleDelete}
             />

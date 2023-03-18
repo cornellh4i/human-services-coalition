@@ -109,7 +109,18 @@ const ManageUsers = () => {
               user_id={User._id}
               fname={User.fName}
               lname={User.lName}
+              mInitial={User.mInitial}
+              username={User.username}
+              password={User.password}
               voucher={User.voucherType}
+              supervisor={User.supervisor}
+              birthDate={User.birthDate}
+              email={User.email}
+              phone={User.phone}
+              prefName={User.prefName}
+              gender={User.gender}
+              race={User.race}
+              contactPref={User.contactPref}
               date={User.createdAt}
               handleDelete={handleDelete}
             />
