@@ -355,12 +355,12 @@ export default function FilterSideBar({
             </Grid>
           </FormGroup>
           <FormControl style={{ paddingRight: 10 }} className='dropdown' size="small">
-            <InputLabel id="num-beds-label"># beds</InputLabel>
+            <InputLabel id="num-beds-label"># Beds</InputLabel>
             <Select
               value={numBed}
               labelId="num-beds-label"
               id="num-beds"
-              label="# beds"
+              label="# Beds"
               onChange={(e) =>
                 handleFilterChange(FilterEnum.numBed, numBed, setNumBed, e)}>
               <MenuItem value={'1'}>1</MenuItem>
@@ -372,12 +372,12 @@ export default function FilterSideBar({
             </Select>
           </FormControl>
           <FormControl className='dropdown' size="small">
-            <InputLabel id="num-baths-label"># baths</InputLabel>
+            <InputLabel id="num-baths-label"># Baths</InputLabel>
             <Select
               value={numBath}
               labelId="num-baths-label"
               id="num-baths"
-              label="# baths"
+              label="# Baths"
               onChange={(e) =>
                 handleFilterChange(FilterEnum.numBath, numBath, setNumBath, e)}>
               <MenuItem value={1}>1</MenuItem>
@@ -397,19 +397,19 @@ export default function FilterSideBar({
             <FormControlLabel control={<Checkbox
               checked={utilities}
               onChange={(e) => handleFilterChange(FilterEnum.utilities, utilities, setUtilities, e)} />}
-              label={<h4 className='prop-text'>Utilities included</h4>} />
+              label={<h4 className='prop-text'>Utilities Included</h4>} />
           </FormGroup>
           <FormGroup>
             <FormControlLabel control={<Checkbox
               checked={furnished}
               onChange={(e) => handleFilterChange(FilterEnum.furnished, furnished, setFurnished, e)} />}
-              label={<h4 className='prop-text'>Fully furnished</h4>} />
+              label={<h4 className='prop-text'>Fully Furnished</h4>} />
           </FormGroup>
           <FormGroup>
             <FormControlLabel control={<Checkbox
               checked={pets}
               onChange={(e) => handleFilterChange(FilterEnum.pets, pets, setPets, e)} />}
-              label={<h4 className='prop-text'>Pet-friendly</h4>} />
+              label={<h4 className='prop-text'>Pet-Friendly</h4>} />
           </FormGroup>
         </Box>
       </Grid>
