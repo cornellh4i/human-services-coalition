@@ -17,203 +17,239 @@ import { useState } from "react";
 import '../css/Home.css';
 
 export default function FilterSideBar({ filters, setFilters }: any) {
-  let selected: any = [...filters];
+  let selected: any = [...filters]
+  let theme = createTheme()
+  theme = responsiveFontSizes(theme)
 
-  let theme = createTheme();
-  theme = responsiveFontSizes(theme);
-
-  const [location, setLocation] = useState('');
-  const [minPrice, setMinPrice] = useState(0);
-  const [maxPrice, setMaxPrice] = useState(0);
-  const [baths, setBaths] = useState('');
-  const [beds, setBeds] = useState('');
-  const [transit, setTransit] = useState('');
-
-  console.log("render")
-
-  // have to be list
-  const [property, setProperty] = useState('');
-  const [amenities, setAmenities] = useState('');
+  const [address, setAddress] = useState('')
+  const [unitType, setUnitType] = useState('')
+  const [apartment, setApartment] = useState(false)
+  const [house, setHouse] = useState(false)
+  const [condo, setCondo] = useState(false)
+  const [single, setSingle] = useState(false)
+  const [numBath, setNumBath] = useState('')
+  const [numBed, setNumBed] = useState('')
+  const [utilities, setUtilities] = useState(false)
+  const [furnished, setFurnished] = useState(false)
+  const [pets, setPets] = useState(false)
+  const [disTransportation, setDisTransportation] = useState('')
+  const [minPrice, setMinPrice] = useState(0)
+  const [maxPrice, setMaxPrice] = useState(0)
 
   const FilterEnum = {
-    location: "location",
-    minprice: "minprice",
-    maxprice: "maxprice",
-    property: "property",
-    amenities: "amenities",
-    baths: "bath",
-    beds: "beds",
-    transit: "transit",
+    address: "address",
+    unitType: "unitType",
+    apartment: "Apartment",
+    house: "House",
+    condo: "Condo",
+    single: "Single",
+    numBath: "numBath",
+    numBed: "numBed",
+    pets: "pets",
+    utilities: "utilities",
+    furnished: "furnished",
+    disTransportation: "disTransportation",
+    minprice: "minPrice",
+    maxprice: "maxPrice",
   }
 
-  function selectedIndex(word: string) {
+  function selectedIndex(filter: string, value?: string) {
     for (let i = 0; i < selected.length; i++) {
-      if (selected[i].indexOf(word) != -1) {
-        return i
+      if (selected[i].filter === filter) {
+
+        // Undefined case for handling unitType
+        if (value != undefined) {
+          if (selected[i].value === value) {
+            return i
+          }
+        } else {
+          return i
+        }
       }
     }
     return -1
   }
 
-  function updateSelected(name: string, filterName?: string) {
-    let index = selected.indexOf(name)
+  function updateSelected(filter: string, value: any, filterState: any) {
+    let index = 0
 
-    // If name is in list, remove it (works for checkboxes)
-    if (index > -1) {
-      selected.splice(index, 1)
+    if (filter === FilterEnum.address) {
+      index = selectedIndex(filter)
+      if (index != -1) {
+        if (selected[index].value !== value && value !== "") {
+          selected.splice(index, 1)
+          selected.push({ "filter": filter, "value": value })
+        }
+        else if (value === "") {
+          selected.splice(index, 1)
+        }
+      }
+      else {
+        selected.push({ "filter": filter, "value": value })
+      }
     }
 
-    // For single-select filters
-    else if (filterName !== undefined) {
-      if (filterName === FilterEnum.baths) {
-        if (baths !== '') {
-          index = selectedIndex("bath")
-          selected.splice(index, 1)
-          selected.push(name)
-        }
-        else {
-          selected.push(name)
-        }
+    else if (filter === FilterEnum.minprice) {
+      index = selectedIndex(filter)
+      let max_index = selectedIndex(FilterEnum.maxprice)
+      let max_val = 3000
+
+      if (max_index != -1) {
+        max_val = selected[max_index].value
       }
-      else if (filterName === FilterEnum.beds) {
-        if (beds !== '') {
-          index = selectedIndex("bed")
+
+      if (index != -1) {
+        if (selected[index].value !== +value && value !== "" && +value <= max_val && +value != 0) {
           selected.splice(index, 1)
-          selected.push(name)
+          selected.push({ "filter": filter, "value": +value })
         }
-        else {
-          selected.push(name)
-        }
-      }
-      else if (filterName === FilterEnum.minprice) {
-        index = selectedIndex("+")
-        if (index != -1 && selected[index] !== name) {
+        else if (value === "") {
           selected.splice(index, 1)
         }
-        if (name !== "$+") {
-          selected.push(name)
-        }
       }
-      else if (filterName === FilterEnum.maxprice) {
-          index = selectedIndex("up to")
-          if (index != -1 && selected[index] !== name) {
-            selected.splice(index, 1)
-          }
-          if (name !== "up to $") {
-            selected.push(name)
-          }
-      }
-      else if (filterName === FilterEnum.transit) {
-        if (transit !== '') {
-          index = selectedIndex("proximity")
-          selected.splice(index, 1)
-          selected.push(name)
-        }
-        else {
-          selected.push(name)
+      else {
+        if (+value <= max_val && +value != 0) {
+          selected.push({ "filter": filter, "value": +value })
         }
       }
     }
+
+    else if (filter === FilterEnum.maxprice) {
+      index = selectedIndex(filter)
+      let min_index = selectedIndex(FilterEnum.minprice)
+      let min_val = 1
+
+      if (min_index != -1) {
+        min_val = selected[min_index].value
+      }
+
+      if (index != -1) {
+        if (selected[index].value !== +value && value !== "" && +value >= min_val && +value != 0) {
+          selected.splice(index, 1)
+          selected.push({ "filter": filter, "value": +value })
+        }
+        else if (value === "") {
+          selected.splice(index, 1)
+        }
+      }
+      else {
+        if (+value >= min_val && +value != 0) {
+          selected.push({ "filter": filter, "value": +value })
+        }
+      }
+    }
+
+    else if (filter === FilterEnum.apartment || filter === FilterEnum.house ||
+      filter === FilterEnum.condo || filter === FilterEnum.single) {
+      index = selectedIndex(FilterEnum.unitType, filter)
+      if (index != -1) {
+        selected.splice(index, 1)
+      }
+      else {
+        if (filter === FilterEnum.apartment) {
+          selected.push({ "filter": FilterEnum.unitType, "value": "Apartment" })
+        }
+        else if (filter === FilterEnum.house) {
+          selected.push({ "filter": FilterEnum.unitType, "value": "House" })
+        }
+        else if (filter === FilterEnum.condo) {
+          selected.push({ "filter": FilterEnum.unitType, "value": "Condo" })
+        }
+        else if (filter === FilterEnum.single) {
+          selected.push({ "filter": FilterEnum.unitType, "value": "Single" })
+        }
+      }
+    }
+
+    else if (filter === FilterEnum.utilities || filter === FilterEnum.furnished || filter === FilterEnum.pets) {
+      index = selectedIndex(filter)
+
+      if (index != -1) {
+        selected.splice(index, 1)
+      }
+      else {
+        selected.push({ "filter": filter, "value": value })
+      }
+    }
+
+    // For dropdown filters (Proximity, Beds, Baths)
     else {
-      selected.push(name)
+      index = selectedIndex(filter)
+      if (index != -1) {
+        selected.splice(index, 1)
+        selected.push({ "filter": filter, "value": value })
+      }
+      else {
+        selected.push({ "filter": filter, "value": value })
+      }
     }
     setFilters(selected);
   }
 
-  function handleFilterChange(filterName: string, event?: { target: { value: any } }, otherVal?: string) {
-    if (event !== undefined) {
-      if (filterName === FilterEnum.minprice) {
-        var currMinPrice = event.target.value.replace(/^0+/, "");
-        let currMinPriceString = '' + currMinPrice
-
-        if (currMinPriceString.includes('e') || currMinPriceString.includes('-')) {
-          currMinPrice = ''
+  function handleFilterChange(filterName: string, filterState: any, setFunction: Function,
+    event: { target: { value: any } }) {
+    if (filterName === FilterEnum.minprice) {
+      var currMinPrice = event.target.value.replace(/^0+/, "")
+      let currMinPriceString = '' + currMinPrice
+      if (currMinPriceString.includes('e') || currMinPriceString.includes('-')
+        || currMinPriceString.includes('.')) {
+        currMinPrice = ''
+        event.target.value = currMinPrice
+        setFunction(currMinPrice)
+      }
+      if (currMinPrice > 3000) {
+        currMinPrice = currMinPrice.slice(0, 4)
+        if (currMinPrice <= 3000) {
           event.target.value = currMinPrice
-          setMinPrice(currMinPrice);
-        }
-        if (currMinPrice > 3000) {
-          currMinPrice = currMinPrice.slice(0, 4)
-          if (currMinPrice <= 3000) {
-            event.target.value = currMinPrice
-            setMinPrice(currMinPrice);
-            updateSelected("$" + currMinPrice + "+", filterName);
-          }
-          else {
-            currMinPrice = currMinPrice.slice(0, 3)
-            event.target.value = currMinPrice
-            setMinPrice(currMinPrice);
-            updateSelected("$" + currMinPrice + "+", filterName);
-          }
-        }
-        setMinPrice(currMinPrice);
-        updateSelected("$" + currMinPrice + "+", filterName);
-
-      } else if (filterName === FilterEnum.maxprice) {
-        var currMaxPrice = event.target.value.replace(/^0+/, "");
-        let currMaxPriceString = '' + currMaxPrice
-        if (currMaxPriceString.includes('e') || currMaxPriceString.includes('-')) {
-          currMaxPrice = ''
-          event.target.value = currMaxPrice
-          setMaxPrice(currMaxPrice);
-        }
-        if (currMaxPrice > 3000) {
-          currMaxPrice = currMaxPrice.slice(0, 4)
-          if (currMaxPrice <= 3000) {
-            event.target.value = currMaxPrice
-            setMaxPrice(currMaxPrice);
-            updateSelected("up to $" + currMaxPrice, filterName);
-          }
-          else {
-            currMaxPrice = currMaxPrice.slice(0, 3)
-            event.target.value = currMaxPrice
-            setMaxPrice(currMaxPrice);
-            updateSelected("up to $" + currMaxPrice, filterName);
-          }
-        }
-        setMaxPrice(currMaxPrice);
-        updateSelected("up to $" + currMaxPrice, filterName);
-
-
-      } else if (filterName === FilterEnum.transit) {
-        setTransit(event.target.value);
-        updateSelected(event.target.value + " proximity", filterName);
-
-        console.log("Value of transit is " + transit)
-        console.log(event.target.value)
-
-
-      } else if (filterName === FilterEnum.baths) {
-        setBaths(event.target.value);
-        if (event.target.value > 1) {
-          console.log("function...")
-          updateSelected(event.target.value + " baths", filterName);
+          setFunction(currMinPrice)
+          updateSelected(filterName, currMinPrice, minPrice)
         }
         else {
-          console.log("function...")
-          updateSelected(event.target.value + " bath", filterName);
-        }
-
-
-      } else if (filterName === FilterEnum.beds) {
-        setBeds(event.target.value);
-        if (event.target.value > 1) {
-          updateSelected(event.target.value + " beds", filterName);
-        }
-        else {
-          updateSelected(event.target.value + " bed", filterName);
+          currMinPrice = currMinPrice.slice(0, 3)
+          event.target.value = currMinPrice
+          setFunction(currMinPrice)
+          updateSelected(filterName, currMinPrice, minPrice)
         }
       }
+      setFunction(currMinPrice)
+      updateSelected(filterName, currMinPrice, minPrice)
+
+    } else if (filterName === FilterEnum.maxprice) {
+      var currMaxPrice = event.target.value.replace(/^0+/, "")
+      let currMaxPriceString = '' + currMaxPrice
+      if (currMaxPriceString.includes('e') || currMaxPriceString.includes('-') 
+        || currMaxPriceString.includes('.')) {
+        currMaxPrice = ''
+        event.target.value = currMaxPrice
+        setFunction(currMaxPrice)
+      }
+      if (currMaxPrice > 3000) {
+        currMaxPrice = currMaxPrice.slice(0, 4)
+        if (currMaxPrice <= 3000) {
+          event.target.value = currMaxPrice
+          setFunction(currMaxPrice)
+          updateSelected(filterName, currMaxPrice, maxPrice)
+        }
+        else {
+          currMaxPrice = currMaxPrice.slice(0, 3)
+          event.target.value = currMaxPrice
+          setFunction(currMaxPrice)
+          updateSelected(filterName, currMaxPrice, maxPrice)
+        }
+      }
+      setFunction(currMaxPrice)
+      updateSelected(filterName, currMaxPrice, maxPrice)
     }
 
-
-    else if (otherVal !== undefined) {
-      if (filterName === FilterEnum.property) {
-        setProperty(otherVal);
-        updateSelected(otherVal);
-      } else if (filterName === FilterEnum.amenities) {
-        setAmenities(otherVal);
-        updateSelected(otherVal);
-      }
+    else if (filterName === FilterEnum.disTransportation || filterName ===
+      FilterEnum.numBath || filterName === FilterEnum.numBed || filterName ===
+      FilterEnum.pets || filterName === FilterEnum.utilities || filterName ===
+      FilterEnum.furnished || filterName === FilterEnum.address || filterName
+      === FilterEnum.apartment || filterName === FilterEnum.house ||
+      filterName === FilterEnum.condo || filterName ===
+      FilterEnum.single) {
+      setFunction(event.target.value)
+      updateSelected(filterName, event.target.value, filterState)
     }
   }
 
@@ -243,8 +279,7 @@ export default function FilterSideBar({ filters, setFilters }: any) {
         <Box className='box' component="span">
           <h3 className='text'>Location</h3>
           <TextField size="small" id="outlined-basic" label="Search by address" variant="outlined"
-            onChange={(e) => handleFilterChange(FilterEnum.location, e)}
-          // Location should have a different onChange function?
+            onChange={(e) => handleFilterChange(FilterEnum.address, address, setAddress, e)}
           />
         </Box>
       </Grid>
@@ -259,10 +294,8 @@ export default function FilterSideBar({ filters, setFilters }: any) {
             variant="outlined"
             type="number"
             helperText="up to $3000"
-            onChange={(e) => handleFilterChange(FilterEnum.minprice, e)} />
+            onChange={(e) => handleFilterChange(FilterEnum.minprice, minPrice, setMinPrice, e)} />
           <h3 className='dash'> – </h3>
-
-
           <TextField
             className='prices'
             size="small"
@@ -271,7 +304,7 @@ export default function FilterSideBar({ filters, setFilters }: any) {
             variant="outlined"
             type="number"
             helperText="up to $3000"
-            onChange={(e) => handleFilterChange(FilterEnum.maxprice, e)}
+            onChange={(e) => handleFilterChange(FilterEnum.maxprice, maxPrice, setMaxPrice, e)}
           />
         </Box>
       </Grid>
@@ -282,26 +315,26 @@ export default function FilterSideBar({ filters, setFilters }: any) {
             <Grid container spacing={1} columns={16}>
               <Grid item xs={'auto'}>
                 <FormControlLabel control={<Checkbox
-                  onChange={() => handleFilterChange(FilterEnum.amenities, undefined, "Apartment")}
+                  onChange={(e) => handleFilterChange(FilterEnum.apartment, apartment, setApartment, e)}
                 />}
                   label={<h4 className='prop-text'>Apartment</h4>}
                 />
               </Grid>
               <Grid item xs={'auto'}>
                 <FormControlLabel control={<Checkbox
-                  onChange={() => handleFilterChange(FilterEnum.amenities, undefined, "House")}
+                  onChange={(e) => handleFilterChange(FilterEnum.house, house, setHouse, e)}
                 />} label={<h4 className='prop-text'>House</h4>} />
               </Grid>
             </Grid>
             <Grid container spacing={1} columns={16}>
               <Grid item xs={'auto'}>
                 <FormControlLabel control={<Checkbox
-                  onChange={() => handleFilterChange(FilterEnum.amenities, undefined, "Condo")}
+                  onChange={(e) => handleFilterChange(FilterEnum.condo, condo, setCondo, e)}
                 />} label={<h4 className='prop-text'>Condo</h4>} />
               </Grid>
               <Grid item xs={'auto'}>
                 <FormControlLabel control={<Checkbox
-                  onChange={() => handleFilterChange(FilterEnum.amenities, undefined, "Single Room")}
+                  onChange={(e) => handleFilterChange(FilterEnum.single, single, setSingle, e)}
                 />} label={<h4 className='prop-text'>Single Room</h4>} />
               </Grid>
             </Grid>
@@ -313,15 +346,13 @@ export default function FilterSideBar({ filters, setFilters }: any) {
               id="num-beds"
               label="# beds"
               onChange={(e) =>
-                handleFilterChange(FilterEnum.beds, e)}
-            >
+                handleFilterChange(FilterEnum.numBed, numBed, setNumBed, e)}>
               <MenuItem value={'1'}>1</MenuItem>
               <MenuItem value={'2'}>2</MenuItem>
               <MenuItem value={'3'}>3</MenuItem>
               <MenuItem value={'4'}>4</MenuItem>
               <MenuItem value={'5'}>5</MenuItem>
               <MenuItem value={'6'}>6</MenuItem>
-
             </Select>
           </FormControl>
           <FormControl className='dropdown' size="small">
@@ -331,8 +362,7 @@ export default function FilterSideBar({ filters, setFilters }: any) {
               id="num-baths"
               label="# baths"
               onChange={(e) =>
-                handleFilterChange(FilterEnum.baths, e)}
-            >
+                handleFilterChange(FilterEnum.numBath, numBath, setNumBath, e)}>
               <MenuItem value={1}>1</MenuItem>
               <MenuItem value={2}>2</MenuItem>
               <MenuItem value={3}>3</MenuItem>
@@ -348,20 +378,19 @@ export default function FilterSideBar({ filters, setFilters }: any) {
           <h3 className='text'>Amenities</h3>
           <FormGroup>
             <FormControlLabel control={<Checkbox
-              onChange={() => handleFilterChange(FilterEnum.amenities, undefined, "Utilities included")} />}
+              onChange={(e) => handleFilterChange(FilterEnum.utilities, utilities, setUtilities, e)} />}
               label={<h4 className='prop-text'>Utilities included</h4>} />
           </FormGroup>
           <FormGroup>
             <FormControlLabel control={<Checkbox
-              onChange={() => handleFilterChange(FilterEnum.amenities, undefined, "Fully furnished")} />}
+              onChange={(e) => handleFilterChange(FilterEnum.furnished, furnished, setFurnished, e)} />}
               label={<h4 className='prop-text'>Fully furnished</h4>} />
           </FormGroup>
           <FormGroup>
             <FormControlLabel control={<Checkbox
-              onChange={() => handleFilterChange(FilterEnum.amenities, undefined, "Pet-friendly")} />}
+              onChange={(e) => handleFilterChange(FilterEnum.pets, pets, setPets, e)} />}
               label={<h4 className='prop-text'>Pet-friendly</h4>} />
           </FormGroup>
-
         </Box>
       </Grid>
       <Grid>
@@ -374,8 +403,8 @@ export default function FilterSideBar({ filters, setFilters }: any) {
               labelId="demo-select-small"
               id="demo-select-small"
               label="Select Proximity"
-              onChange={(e) => handleFilterChange(FilterEnum.transit, e)}
-            >
+              onChange={(e) => handleFilterChange(FilterEnum.disTransportation,
+                disTransportation, setDisTransportation, e)}>
               <MenuItem value={"Close"}>Close</MenuItem>
               <MenuItem value={"Medium"}>Medium</MenuItem>
               <MenuItem value={"Far"}>Far</MenuItem>
@@ -386,8 +415,5 @@ export default function FilterSideBar({ filters, setFilters }: any) {
       <h2></h2>
       <>
       </>
-    </Box >
-
-
-  )
+    </Box >)
 }

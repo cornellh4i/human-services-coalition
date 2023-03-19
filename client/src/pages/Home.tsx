@@ -8,9 +8,7 @@ import '../css/Home.css'
 
 function Home() {
   const [Listings, setListings] = useState<any[]>([])
-
   let [filters, setFilters] = useState([]);
-
 
   useEffect(() => {
     const fetchListings = async () => {
@@ -25,6 +23,7 @@ function Home() {
 
     fetchListings()
   }, [])
+
 
   //the function that calls the delete routing function
   const handleDelete = async (id: any) => {
