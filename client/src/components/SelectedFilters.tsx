@@ -11,8 +11,24 @@ export default function SelectedFilters({
   setFurnished, pets, setPets, disTransportation, setDisTransportation, minPrice,
   setMinPrice, maxPrice, setMaxPrice }: any) {
 
-  let selected: any = [...filters];
-  let values: any[] = [];
+  let selected: any = [...filters]
+  let values: any[] = []
+
+  function updateQuery(filterList: any) {
+    let params: any = {}
+
+    for (let i = 0; i < filterList.length; i++) {
+      let currFilter = filterList[i].filter
+      let currVal = filterList[i].value
+      params[currFilter] = currVal 
+    }
+
+    const searchParams = new URLSearchParams(Object.entries(params))
+    fetch('/api/listingsByCategory?' + searchParams)
+      .then(response => response.json())
+      .then(data => console.log(data))
+      .catch(error => console.error(error))
+  }
 
   for (let i = 0; i < selected.length; i++) {
     let currVal = selected[i].value
@@ -101,11 +117,7 @@ export default function SelectedFilters({
 
     selected.splice(index, 1)
     setFilters(selected)
-
-
-
-
-
+    updateQuery(selected)
   }
 
   return (

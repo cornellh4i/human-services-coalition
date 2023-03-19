@@ -42,13 +42,24 @@ const getListingByCategory = async (req, res) => {
       case 'city':
         query['city'] = new RegExp(queryValue, 'i');
         break;
-      case 'price':
-        const priceRange = queryValue.split('-').map(price => parseInt(price));
-        query['price'] = {
-          $gte: priceRange[0],
-          $lte: priceRange[1]
+      case 'minPrice':
+        if (query['price'] = undefined) {
+          query['price'] = {}
+          query['price']["$gte"] = queryValue
         }
-        break;
+        else {
+          query['price']["$gte"] = queryValue
+        }
+        break
+      case "maxPrice":
+        if (query['price'] = undefined) {
+          query['price'] = {}
+          query['price']["$lte"] = queryValue
+        }
+        else {
+          query['price']["$lte"] = queryValue
+        }
+        break
       case 'unitType':
         query['unitType'] = { $in: queryValue.split(',') };
         break;

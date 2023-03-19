@@ -39,8 +39,26 @@ export default function FilterSideBar({
     utilities: "utilities",
     furnished: "furnished",
     disTransportation: "disTransportation",
-    minprice: "minPrice",
-    maxprice: "maxPrice",
+    minPrice: "minPrice",
+    maxPrice: "maxPrice",
+  }
+
+  function updateQuery(filterList: any) {
+    let params: any = {}
+    console.log("CALLED")
+
+    for (let i = 0; i < filterList.length; i++) {
+      let currFilter = filterList[i].filter
+      let currVal = filterList[i].value
+      params[currFilter] = currVal
+    }
+    console.log(params)
+
+    const searchParams = new URLSearchParams(Object.entries(params))
+    fetch('/api/listingsByCategory?' + searchParams)
+      .then(response => response.json())
+      .then(data => console.log(data))
+      .catch(error => console.error(error))
   }
 
   function selectedIndex(filter: string, value?: string) {
@@ -79,9 +97,9 @@ export default function FilterSideBar({
       }
     }
 
-    else if (filter === FilterEnum.minprice) {
+    else if (filter === FilterEnum.minPrice) {
       index = selectedIndex(filter)
-      let max_index = selectedIndex(FilterEnum.maxprice)
+      let max_index = selectedIndex(FilterEnum.maxPrice)
       let max_val = 3000
 
       if (max_index != -1) {
@@ -104,9 +122,9 @@ export default function FilterSideBar({
       }
     }
 
-    else if (filter === FilterEnum.maxprice) {
+    else if (filter === FilterEnum.maxPrice) {
       index = selectedIndex(filter)
-      let min_index = selectedIndex(FilterEnum.minprice)
+      let min_index = selectedIndex(FilterEnum.minPrice)
       let min_val = 1
 
       if (min_index != -1) {
@@ -196,12 +214,14 @@ export default function FilterSideBar({
         selected.push({ "filter": filter, "value": value })
       }
     }
-    setFilters(selected);
+
+    setFilters(selected)
+    updateQuery(selected)
   }
 
   function handleFilterChange(filterName: string, filterState: any, setFunction: Function,
     event: { target: { value: any } }) {
-    if (filterName === FilterEnum.minprice) {
+    if (filterName === FilterEnum.minPrice) {
       var currMinPrice = event.target.value.replace(/^0+/, "")
       let currMinPriceString = '' + currMinPrice
       if (currMinPriceString.includes('e') || currMinPriceString.includes('-')
@@ -227,7 +247,7 @@ export default function FilterSideBar({
       setFunction(currMinPrice)
       updateSelected(filterName, currMinPrice, minPrice)
 
-    } else if (filterName === FilterEnum.maxprice) {
+    } else if (filterName === FilterEnum.maxPrice) {
       var currMaxPrice = event.target.value.replace(/^0+/, "")
       let currMaxPriceString = '' + currMaxPrice
       if (currMaxPriceString.includes('e') || currMaxPriceString.includes('-')
@@ -308,7 +328,7 @@ export default function FilterSideBar({
             variant="outlined"
             type="number"
             helperText="up to $3000"
-            onChange={(e) => handleFilterChange(FilterEnum.minprice, minPrice, setMinPrice, e)} />
+            onChange={(e) => handleFilterChange(FilterEnum.minPrice, minPrice, setMinPrice, e)} />
           <h3 className='dash'> – </h3>
           <TextField
             value={maxPrice}
@@ -319,7 +339,7 @@ export default function FilterSideBar({
             variant="outlined"
             type="number"
             helperText="up to $3000"
-            onChange={(e) => handleFilterChange(FilterEnum.maxprice, maxPrice, setMaxPrice, e)}
+            onChange={(e) => handleFilterChange(FilterEnum.maxPrice, maxPrice, setMaxPrice, e)}
           />
         </Box>
       </Grid>

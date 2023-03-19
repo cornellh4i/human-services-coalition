@@ -8,8 +8,7 @@ import '../css/Home.css'
 
 function Home() {
   const [Listings, setListings] = useState<any[]>([])
-
-  let [filters, setFilters] = useState([]);
+  let [filters, setFilters] = useState([])
   let [unitType, setUnitType] = useState('')
   let [apartment, setApartment] = useState(false)
   let [house, setHouse] = useState(false)
