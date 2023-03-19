@@ -8,7 +8,22 @@ import '../css/Home.css'
 
 function Home() {
   const [Listings, setListings] = useState<any[]>([])
+
   let [filters, setFilters] = useState([]);
+  let [unitType, setUnitType] = useState('')
+  let [apartment, setApartment] = useState(false)
+  let [house, setHouse] = useState(false)
+  let [address, setAddress] = useState('')
+  let [condo, setCondo] = useState(false)
+  let [single, setSingle] = useState(false)
+  let [numBath, setNumBath] = useState('')
+  let [numBed, setNumBed] = useState('')
+  let [utilities, setUtilities] = useState(false)
+  let [furnished, setFurnished] = useState(false)
+  let [pets, setPets] = useState(false)
+  let [disTransportation, setDisTransportation] = useState('')
+  let [minPrice, setMinPrice] = useState('')
+  let [maxPrice, setMaxPrice] = useState('')
 
   useEffect(() => {
     const fetchListings = async () => {
@@ -20,10 +35,8 @@ function Home() {
         setListings(json)
       }
     }
-
     fetchListings()
   }, [])
-
 
   //the function that calls the delete routing function
   const handleDelete = async (id: any) => {
@@ -40,12 +53,44 @@ function Home() {
     <div>
       <div className='body-box'>
         <div className='side-box'>
-          <FilterSideBar filters={filters} setFilters={setFilters}> </FilterSideBar>
+          <FilterSideBar
+            filters={filters} setFilters={setFilters}
+            unitType={unitType} setUnitType={setUnitType}
+            apartment={apartment} setApartment={setApartment}
+            house={house} setHouse={setHouse}
+            address={address} setAddress={setAddress}
+            condo={condo} setCondo={setCondo}
+            single={single} setSingle={setSingle}
+            numBath={numBath} setNumBath={setNumBath}
+            numBed={numBed} setNumBed={setNumBed}
+            utilities={utilities} setUtilities={setUtilities}
+            furnished={furnished} setFurnished={setFurnished}
+            pets={pets} setPets={setPets}
+            disTransportation={disTransportation} setDisTransportation={setDisTransportation}
+            minPrice={minPrice} setMinPrice={setMinPrice}
+            maxPrice={maxPrice} setMaxPrice={setMaxPrice}>
+          </FilterSideBar>
         </div>
         <div className='content-box'>
           <Container>
             <div className='selected-filters'>
-              <SelectedFilters filters={filters} setFilters={setFilters}> </SelectedFilters >
+              <SelectedFilters
+                filters={filters} setFilters={setFilters}
+                unitType={unitType} setUnitType={setUnitType}
+                apartment={apartment} setApartment={setApartment}
+                house={house} setHouse={setHouse}
+                address={address} setAddress={setAddress}
+                condo={condo} setCondo={setCondo}
+                single={single} setSingle={setSingle}
+                numBath={numBath} setNumBath={setNumBath}
+                numBed={numBed} setNumBed={setNumBed}
+                utilities={utilities} setUtilities={setUtilities}
+                furnished={furnished} setFurnished={setFurnished}
+                pets={pets} setPets={setPets}
+                disTransportation={disTransportation} setDisTransportation={setDisTransportation}
+                minPrice={minPrice} setMinPrice={setMinPrice}
+                maxPrice={maxPrice} setMaxPrice={setMaxPrice}>
+              </SelectedFilters >
             </div>
             <div className='listing-cards'>
               <Grid container spacing={2}>

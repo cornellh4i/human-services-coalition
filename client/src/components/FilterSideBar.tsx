@@ -16,25 +16,15 @@ import InputLabel from '@mui/material/InputLabel';
 import { useState } from "react";
 import '../css/Home.css';
 
-export default function FilterSideBar({ filters, setFilters }: any) {
+export default function FilterSideBar({
+  filters, setFilters, unitType, setUnitType, apartment, setApartment, house,
+  setHouse, address, setAddress, condo, setCondo, single, setSingle, numBath,
+  setNumBath, numBed, setNumBed, utilities, setUtilities, furnished,
+  setFurnished, pets, setPets, disTransportation, setDisTransportation, minPrice,
+  setMinPrice, maxPrice, setMaxPrice }: any) {
   let selected: any = [...filters]
   let theme = createTheme()
   theme = responsiveFontSizes(theme)
-
-  const [address, setAddress] = useState('')
-  const [unitType, setUnitType] = useState('')
-  const [apartment, setApartment] = useState(false)
-  const [house, setHouse] = useState(false)
-  const [condo, setCondo] = useState(false)
-  const [single, setSingle] = useState(false)
-  const [numBath, setNumBath] = useState('')
-  const [numBed, setNumBed] = useState('')
-  const [utilities, setUtilities] = useState(false)
-  const [furnished, setFurnished] = useState(false)
-  const [pets, setPets] = useState(false)
-  const [disTransportation, setDisTransportation] = useState('')
-  const [minPrice, setMinPrice] = useState(0)
-  const [maxPrice, setMaxPrice] = useState(0)
 
   const FilterEnum = {
     address: "address",
@@ -142,8 +132,22 @@ export default function FilterSideBar({ filters, setFilters }: any) {
     else if (filter === FilterEnum.apartment || filter === FilterEnum.house ||
       filter === FilterEnum.condo || filter === FilterEnum.single) {
       index = selectedIndex(FilterEnum.unitType, filter)
+
       if (index != -1) {
         selected.splice(index, 1)
+
+        if (filter === FilterEnum.apartment) {
+          setApartment(false)
+        }
+        else if (filter === FilterEnum.house) {
+          setHouse(false)
+        }
+        else if (filter === FilterEnum.condo) {
+          setCondo(false)
+        }
+        else if (filter === FilterEnum.single) {
+          setSingle(false)
+        }
       }
       else {
         if (filter === FilterEnum.apartment) {
@@ -163,9 +167,18 @@ export default function FilterSideBar({ filters, setFilters }: any) {
 
     else if (filter === FilterEnum.utilities || filter === FilterEnum.furnished || filter === FilterEnum.pets) {
       index = selectedIndex(filter)
-
       if (index != -1) {
         selected.splice(index, 1)
+
+        if (filter === FilterEnum.utilities) {
+          setUtilities(false)
+        }
+        else if (filter === FilterEnum.furnished) {
+          setFurnished(false)
+        }
+        else if (filter === FilterEnum.pets) {
+          setPets(false)
+        }
       }
       else {
         selected.push({ "filter": filter, "value": value })
@@ -217,7 +230,7 @@ export default function FilterSideBar({ filters, setFilters }: any) {
     } else if (filterName === FilterEnum.maxprice) {
       var currMaxPrice = event.target.value.replace(/^0+/, "")
       let currMaxPriceString = '' + currMaxPrice
-      if (currMaxPriceString.includes('e') || currMaxPriceString.includes('-') 
+      if (currMaxPriceString.includes('e') || currMaxPriceString.includes('-')
         || currMaxPriceString.includes('.')) {
         currMaxPrice = ''
         event.target.value = currMaxPrice
@@ -287,6 +300,7 @@ export default function FilterSideBar({ filters, setFilters }: any) {
         <Box className='box' component="span">
           <h3 className='text'>Price</h3>
           <TextField
+            value={minPrice}
             className='prices'
             size="small"
             id="outlined-basic"
@@ -297,6 +311,7 @@ export default function FilterSideBar({ filters, setFilters }: any) {
             onChange={(e) => handleFilterChange(FilterEnum.minprice, minPrice, setMinPrice, e)} />
           <h3 className='dash'> – </h3>
           <TextField
+            value={maxPrice}
             className='prices'
             size="small"
             id="outlined-basic"
@@ -314,26 +329,26 @@ export default function FilterSideBar({ filters, setFilters }: any) {
           <FormGroup>
             <Grid container spacing={1} columns={16}>
               <Grid item xs={'auto'}>
-                <FormControlLabel control={<Checkbox
+                <FormControlLabel control={<Checkbox checked={apartment}
                   onChange={(e) => handleFilterChange(FilterEnum.apartment, apartment, setApartment, e)}
                 />}
                   label={<h4 className='prop-text'>Apartment</h4>}
                 />
               </Grid>
               <Grid item xs={'auto'}>
-                <FormControlLabel control={<Checkbox
+                <FormControlLabel control={<Checkbox checked={house}
                   onChange={(e) => handleFilterChange(FilterEnum.house, house, setHouse, e)}
                 />} label={<h4 className='prop-text'>House</h4>} />
               </Grid>
             </Grid>
             <Grid container spacing={1} columns={16}>
               <Grid item xs={'auto'}>
-                <FormControlLabel control={<Checkbox
+                <FormControlLabel control={<Checkbox checked={condo}
                   onChange={(e) => handleFilterChange(FilterEnum.condo, condo, setCondo, e)}
                 />} label={<h4 className='prop-text'>Condo</h4>} />
               </Grid>
               <Grid item xs={'auto'}>
-                <FormControlLabel control={<Checkbox
+                <FormControlLabel control={<Checkbox checked={single}
                   onChange={(e) => handleFilterChange(FilterEnum.single, single, setSingle, e)}
                 />} label={<h4 className='prop-text'>Single Room</h4>} />
               </Grid>
@@ -342,6 +357,7 @@ export default function FilterSideBar({ filters, setFilters }: any) {
           <FormControl style={{ paddingRight: 10 }} className='dropdown' size="small">
             <InputLabel id="num-beds-label"># beds</InputLabel>
             <Select
+              value={numBed}
               labelId="num-beds-label"
               id="num-beds"
               label="# beds"
@@ -358,6 +374,7 @@ export default function FilterSideBar({ filters, setFilters }: any) {
           <FormControl className='dropdown' size="small">
             <InputLabel id="num-baths-label"># baths</InputLabel>
             <Select
+              value={numBath}
               labelId="num-baths-label"
               id="num-baths"
               label="# baths"
@@ -378,16 +395,19 @@ export default function FilterSideBar({ filters, setFilters }: any) {
           <h3 className='text'>Amenities</h3>
           <FormGroup>
             <FormControlLabel control={<Checkbox
+              checked={utilities}
               onChange={(e) => handleFilterChange(FilterEnum.utilities, utilities, setUtilities, e)} />}
               label={<h4 className='prop-text'>Utilities included</h4>} />
           </FormGroup>
           <FormGroup>
             <FormControlLabel control={<Checkbox
+              checked={furnished}
               onChange={(e) => handleFilterChange(FilterEnum.furnished, furnished, setFurnished, e)} />}
               label={<h4 className='prop-text'>Fully furnished</h4>} />
           </FormGroup>
           <FormGroup>
             <FormControlLabel control={<Checkbox
+              checked={pets}
               onChange={(e) => handleFilterChange(FilterEnum.pets, pets, setPets, e)} />}
               label={<h4 className='prop-text'>Pet-friendly</h4>} />
           </FormGroup>
@@ -399,6 +419,7 @@ export default function FilterSideBar({ filters, setFilters }: any) {
           <FormControl sx={{ width: 200 }} size="small">
             <InputLabel id="demo-select-small">Select Proximity</InputLabel>
             <Select
+              value={disTransportation}
               autoWidth
               labelId="demo-select-small"
               id="demo-select-small"

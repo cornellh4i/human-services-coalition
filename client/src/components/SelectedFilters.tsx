@@ -4,7 +4,13 @@ import IconButton from '@mui/material/IconButton/IconButton';
 import ClearIcon from '@mui/icons-material/Clear';
 import '../css/Home.css'
 
-export default function SelectedFilters({ filters, setFilters }: any) {
+export default function SelectedFilters({
+  filters, setFilters, unitType, setUnitType, apartment, setApartment, house,
+  setHouse, address, setAddress, condo, setCondo, single, setSingle, numBath,
+  setNumBath, numBed, setNumBed, utilities, setUtilities, furnished,
+  setFurnished, pets, setPets, disTransportation, setDisTransportation, minPrice,
+  setMinPrice, maxPrice, setMaxPrice }: any) {
+
   let selected: any = [...filters];
   let values: any[] = [];
 
@@ -51,8 +57,55 @@ export default function SelectedFilters({ filters, setFilters }: any) {
   }
 
   function handleDelete(index: number) {
+    if (selected[index].filter === "unitType") {
+      if (selected[index].value === "Condo") {
+        setCondo(false)
+      }
+      else if (selected[index].value === "House") {
+        setHouse(false)
+      }
+      else if (selected[index].value === "Apartment") {
+        setApartment(false)
+      }
+      else if (selected[index].value === "Single") {
+        setSingle(false)
+      }
+    }
+    else if (selected[index].filter === "numBath") {
+      setNumBath('')
+    }
+    else if (selected[index].filter === "numBed") {
+      setNumBed('')
+    }
+    else if (selected[index].filter === "minPrice") {
+      setMinPrice('')
+    }
+    else if (selected[index].filter === "maxPrice") {
+      setMaxPrice('')
+    }
+    else if (selected[index].filter === "pets") {
+      setPets(false)
+    }
+    else if (selected[index].filter === "furnished") {
+      setFurnished(false)
+    }
+    else if (selected[index].filter === "utilities") {
+      setUtilities(false)
+    }
+    else if (selected[index].filter === "disTransportation") {
+      setDisTransportation('')
+    }
+    else if (selected[index].filter === "address") {
+      setAddress('')
+    }
+
     selected.splice(index, 1)
     setFilters(selected)
+
+
+
+
+
   }
 
   return (
