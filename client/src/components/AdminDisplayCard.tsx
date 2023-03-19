@@ -1,16 +1,33 @@
 import Card from '@mui/material/Card';
-import { Typography, Container, createTheme, ThemeProvider, IconButton } from '@mui/material';
-import Button from '@mui/material/Button';
+import { Typography, Container, createTheme, ThemeProvider, IconButton, StepIconClassKey } from '@mui/material';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
-import EditIcon from '@mui/icons-material/Edit';
 import { useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import AdminModal from './AdminModal';
 import { DeleteOutlined, EditOutlined } from '@mui/icons-material';
 import DeleteConfirmation from './DeleteConfirmation';
 
-const AdminDisplayCard = ({ adminid, fname, lname, affiliation, date, handleDelete }: { adminid: number, fname: string, lname: string, affiliation: string, date: Date, handleDelete: (params: any) => any }) => {
+interface AdminDisplayCardProps {
+  adminid: number
+  fname: string
+  lname: string
+  mInitial: string
+  prefName: string
+  affiliation: string
+  username: string
+  password: string
+  gender: string
+  race: string
+  email: string
+  phone: string
+  birthdate: Date
+  contactPref: string
+  date: Date
+  handleDelete: (params: any) => any
+}
+
+const AdminDisplayCard = ({ adminid, fname, lname, mInitial, prefName, affiliation, username, password, gender, race, email, phone, birthdate, contactPref, date, handleDelete }: AdminDisplayCardProps) => {
 
   const theme = createTheme({
     typography: {
@@ -56,15 +73,6 @@ const AdminDisplayCard = ({ adminid, fname, lname, affiliation, date, handleDele
           </Grid>
 
           <Box sx={{ display: "flex", justifyContent: "right", alignItems: 'center', marginLeft: '1.4rem', width: '15rem' }}>
-            {/* <Button
-              variant="contained"
-              startIcon={<EditIcon />}
-              size="small"
-              sx={{ marginLeft: "10px", padding: "0 5px", fontSize: '0.7rem', textTransform: "unset", borderRadius: '10px', color: 'black', bgcolor: '#D9D9D9', ':hover': { bgcolor: "#D9D9D9B5" } }}
-              onClick={() => navigate('/admin-form', { state: { id: { adminid } } })}
-            >
-              Edit
-            </Button> */}
             <Grid item xs={3}>
               <IconButton onClick={() => navigate('/admin-form', { state: { id: { adminid } } })}>
                 <EditOutlined fontSize="medium" />
@@ -76,7 +84,7 @@ const AdminDisplayCard = ({ adminid, fname, lname, affiliation, date, handleDele
           </Box>
         </Card >
       </Container>
-      <AdminModal fname={fname} lname={lname} affiliation={affiliation} date={date} openAdminMod={openAdminMod} setOpenAdminMod={setOpenAdminMod} />
+      <AdminModal fname={fname} lname={lname} mInitial={mInitial} prefName={prefName} affiliation={affiliation} username={username} password={password} gender={gender} race={race} email={email} phone={phone} birthdate={birthdate} contactPref={contactPref} date={date} openAdminMod={openAdminMod} setOpenAdminMod={setOpenAdminMod} />
       <DeleteConfirmation id={adminid} openPop={openPop} setOpenPop={setOpenPop} handleDelete={handleDelete} type={"admin"} />
     </ThemeProvider>
 
