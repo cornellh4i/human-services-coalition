@@ -55,7 +55,7 @@ export default function AdminModal({ fname, lname, mInitial, prefName, affiliati
 
               {/* Displays admin name as title */}
               <Grid item display="flex" justifyContent="left" xs={12} marginBottom='5%'>
-                <Typography variant="h6" component="h1" sx={{ fontWeight: 600, fontSize: "25px", fontStyle: 'italic' }}>{fname != null ? fname : 'N/A'} {lname != null ? lname : "N/A"}</Typography>
+                <Typography variant="h6" component="h1" sx={{ fontWeight: 600, fontSize: "25px" }}>{fname ? fname : 'N/A'} {lname ? lname : "N/A"}</Typography>
               </Grid>
 
               {/* Displays admin information */}
