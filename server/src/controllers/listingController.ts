@@ -66,19 +66,25 @@ const getListingByCategory = async (req, res) => {
       case 'numBath':
         query['numBath'] = parseFloat(queryValue);
         break;
-      case 'size':
+      case 'numBed':
         let sizes = ["Studio", "One Bed", "Two Bed", "Three Bed",
           "Four Bed", "Five Bed", "Six Bed"]
-        query['size'] = sizes[queryValue];
+        query['size'] = sizes[parseInt(queryValue)];
         break;
       case 'pets':
-        query['pets'] = queryValue;
+        if (queryValue == 'on') {
+          query['pets'] = "true";
+        }
         break;
       case 'utilities':
-        query['utilities'] = queryValue;
+        if (queryValue == 'on') {
+          query['utilities'] = "true";
+        }
         break;
       case 'furnished':
-        query['furnished'] = queryValue;
+        if (queryValue == 'on') {
+          query['furnished'] = "true";
+        }
         break;
       case 'distTransportation':
         query['distTransportation'] = parseFloat(queryValue);
