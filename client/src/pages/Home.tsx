@@ -7,7 +7,7 @@ import SelectedFilters from '../components/SelectedFilters'
 import '../css/Home.css'
 
 function Home() {
-  const [Listings, setListings] = useState<any[]>([])
+  let [Listings, setListings] = useState<any[]>([])
   let [filters, setFilters] = useState([])
   let [unitType, setUnitType] = useState('')
   let [apartment, setApartment] = useState(false)
@@ -53,6 +53,7 @@ function Home() {
       <div className='body-box'>
         <div className='side-box'>
           <FilterSideBar
+            listings={Listings} setListings={setListings}
             filters={filters} setFilters={setFilters}
             unitType={unitType} setUnitType={setUnitType}
             apartment={apartment} setApartment={setApartment}
@@ -74,6 +75,7 @@ function Home() {
           <Container>
             <div className='selected-filters'>
               <SelectedFilters
+                listings={Listings} setListings={setListings}
                 filters={filters} setFilters={setFilters}
                 unitType={unitType} setUnitType={setUnitType}
                 apartment={apartment} setApartment={setApartment}

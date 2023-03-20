@@ -17,6 +17,7 @@ import { useState } from "react";
 import '../css/Home.css';
 
 export default function FilterSideBar({
+  listing, setListings,
   filters, setFilters, unitType, setUnitType, apartment, setApartment, house,
   setHouse, address, setAddress, condo, setCondo, single, setSingle, numBath,
   setNumBath, numBed, setNumBed, utilities, setUtilities, furnished,
@@ -57,7 +58,7 @@ export default function FilterSideBar({
     const searchParams = new URLSearchParams(Object.entries(params))
     fetch('/api/listingsByCategory?' + searchParams)
       .then(response => response.json())
-      .then(data => console.log(data))
+      .then(data => setListings(data))
       .catch(error => console.error(error))
   }
 

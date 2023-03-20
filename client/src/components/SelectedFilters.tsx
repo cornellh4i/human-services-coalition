@@ -5,6 +5,7 @@ import ClearIcon from '@mui/icons-material/Clear';
 import '../css/Home.css'
 
 export default function SelectedFilters({
+  Listings, setListings,
   filters, setFilters, unitType, setUnitType, apartment, setApartment, house,
   setHouse, address, setAddress, condo, setCondo, single, setSingle, numBath,
   setNumBath, numBed, setNumBed, utilities, setUtilities, furnished,
@@ -20,13 +21,13 @@ export default function SelectedFilters({
     for (let i = 0; i < filterList.length; i++) {
       let currFilter = filterList[i].filter
       let currVal = filterList[i].value
-      params[currFilter] = currVal 
+      params[currFilter] = currVal
     }
 
     const searchParams = new URLSearchParams(Object.entries(params))
     fetch('/api/listingsByCategory?' + searchParams)
       .then(response => response.json())
-      .then(data => console.log(data))
+      .then(data => setListings(data))
       .catch(error => console.error(error))
   }
 
