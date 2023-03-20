@@ -4,14 +4,33 @@ import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
-import EditIcon from '@mui/icons-material/Edit';
 import { useState } from 'react';
 import UserModal from './UserModal';
 import { useNavigate } from 'react-router-dom';
 import { DeleteOutlined, EditOutlined } from '@mui/icons-material';
 import DeleteConfirmation from './DeleteConfirmation';
 
-const UserDisplayCard = ({ user_id, fname, lname, voucher, date, handleDelete }: { user_id: number, fname: string, lname: string, voucher: string, date: Date, handleDelete: (params: any) => any }) => {
+interface UserDisplayCardProps {
+  user_id: number
+  fname: string
+  lname: string
+  mInitial: string
+  username: string
+  password: string
+  voucher: string
+  supervisor: string
+  birthDate: Date
+  email: string
+  phone: string
+  prefName: string
+  gender: string
+  race: string
+  contactPref: string
+  date: Date
+  handleDelete: (params: any) => any
+}
+
+const UserDisplayCard = ({ user_id, fname, lname, mInitial, username, password, voucher, supervisor, birthDate, email, phone, prefName, gender, race, contactPref, date, handleDelete }: UserDisplayCardProps) => {
 
   const theme = createTheme({
     typography: {
@@ -82,7 +101,7 @@ const UserDisplayCard = ({ user_id, fname, lname, voucher, date, handleDelete }:
           </Box>
         </Card >
       </Container>
-      <UserModal fname={fname} lname={lname} voucher={voucher} date={date} openUserMod={openUserMod} setOpenUserMod={setOpenUserMod} />
+      <UserModal fname={fname} lname={lname} mInitial={mInitial} username={username} password={password} voucher={voucher} supervisor={supervisor} birthDate={birthDate} email={email} phone={phone} prefName={prefName} gender={gender} race={race} contactPref={contactPref} date={date} openUserMod={openUserMod} setOpenUserMod={setOpenUserMod} />
       <DeleteConfirmation id={user_id} openPop={openPop} setOpenPop={setOpenPop} handleDelete={handleDelete} type={"user"} />
     </ThemeProvider>
   );

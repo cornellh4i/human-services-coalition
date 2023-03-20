@@ -1,11 +1,20 @@
 import { Box, createTheme, Grid, Modal, ThemeProvider, Typography } from "@mui/material";
-import React from "react";
 
 
 interface OpenModalProps {
   fname: string
   lname: string
+  mInitial: string
+  prefName: string
   affiliation: string
+  username: string
+  password: string
+  gender: string
+  race: string
+  email: string
+  phone: string
+  birthdate: Date
+  contactPref: string
   date: Date
   openAdminMod: boolean;
   setOpenAdminMod: (trigger: boolean) => void;
@@ -21,18 +30,17 @@ const style = {
   position: 'absolute' as 'absolute',
   top: '50%',
   left: '50%',
+  borderRadius: '16px',
   transform: 'translate(-50%, -50%)',
-  width: 400,
+  width: 500,
   bgcolor: 'background.paper',
-  border: '2px solid #000',
+  border: '5px solid #ED5F1E',
   boxShadow: 24,
   p: 4,
 };
 
-export default function AdminModal({ fname, lname, affiliation, date, openAdminMod, setOpenAdminMod }: OpenModalProps) {
+export default function AdminModal({ fname, lname, mInitial, prefName, affiliation, username, password, gender, race, email, phone, birthdate, contactPref, date, openAdminMod, setOpenAdminMod }: OpenModalProps) {
 
-  // const [open, setOpenAdminMod] = React.useState(false);
-  const handleOpen = () => setOpenAdminMod(true);
   const handleClose = () => setOpenAdminMod(false);
 
   return (
@@ -43,15 +51,89 @@ export default function AdminModal({ fname, lname, affiliation, date, openAdminM
           onClose={handleClose}
         >
           <Box sx={style}>
-            <Grid container display="flex" flexDirection="row">
-              <Grid item display="flex" justifyContent="left" xs={12}>
-                <Typography variant="h6" component="h2">{fname} {lname}</Typography>
+            <Grid display="flex" flexDirection="column">
+
+              {/* Displays admin name as title */}
+              <Grid item display="flex" justifyContent="left" xs={12} marginBottom='5%'>
+                <Typography variant="h6" component="h1" sx={{ fontWeight: 600, fontSize: "25px" }}>{fname ? fname : 'N/A'} {lname ? lname : "N/A"}</Typography>
               </Grid>
-              <Grid item display="flex" justifyContent="left" xs={12}>
-                <Typography>Affiliation: {affiliation}</Typography>
-              </Grid>
-              <Grid item display="flex" justifyContent="left" xs={12}>
-                <Typography>Profile Created: {date.toString().substring(5, 7) + "/" + date.toString().substring(8, 10) + "/" + date.toString().substring(0, 4)}</Typography>
+
+              {/* Displays admin information */}
+              <Grid container display="flex" flexDirection="row" xs={12}>
+                <Grid container display="flex" xs={6}>
+                  <Grid item display="flex" justifyContent="left" xs={12} marginBottom='3%'>
+                    <Typography sx={{ fontWeight: 600 }}>First Name:</Typography>
+                    &nbsp;
+                    <Typography>{fname ? fname : "N/A"}</Typography>
+                  </Grid>
+                  <Grid item display="flex" justifyContent="left" xs={12} marginBottom='3%'>
+                    <Typography sx={{ fontWeight: 600 }}>Last Name:</Typography>
+                    &nbsp;
+                    <Typography>{lname ? lname : "N/A"}</Typography>
+                  </Grid>
+                  <Grid item display="flex" justifyContent="left" xs={12} marginBottom='3%'>
+                    <Typography sx={{ fontWeight: 600 }}>Middle Name Initial:</Typography>
+                    &nbsp;
+                    <Typography>{mInitial ? mInitial : "N/A"}</Typography>
+                  </Grid>
+                  <Grid item display="flex" justifyContent="left" xs={12} marginBottom='3%'>
+                    <Typography sx={{ fontWeight: 600 }}>Preferred Name:</Typography>
+                    &nbsp;
+                    <Typography>{prefName ? prefName : "N/A"}</Typography>
+                  </Grid>
+                  <Grid item display="flex" justifyContent="left" xs={12} marginBottom='3%'>
+                    <Typography sx={{ fontWeight: 600 }}>Birth Date:</Typography>
+                    &nbsp;
+                    <Typography>{birthdate ? birthdate.toString().substring(5, 7) + "/" + birthdate.toString().substring(8, 10) + "/" + birthdate.toString().substring(0, 4) : "N/A"}</Typography>
+                  </Grid>
+                  <Grid item display="flex" justifyContent="left" xs={12} marginBottom='3%'>
+                    <Typography sx={{ fontWeight: 600 }}>Gender:</Typography>
+                    &nbsp;
+                    <Typography>{gender ? gender : "N/A"}</Typography>
+                  </Grid>
+                  <Grid item display="flex" justifyContent="left" xs={12}>
+                    <Typography sx={{ fontWeight: 600 }}>Race:</Typography>
+                    &nbsp;
+                    <Typography>{race ? race : "N/A"}</Typography>
+                  </Grid>
+                </Grid>
+                <Grid container display="flex" xs={6}>
+                  <Grid item display="flex" justifyContent="left" xs={12} marginBottom='3%'>
+                    <Typography sx={{ fontWeight: 600 }}>Affiliation:</Typography>
+                    &nbsp;
+                    <Typography>{affiliation ? affiliation : "N/A"}</Typography>
+                  </Grid>
+                  <Grid item display="flex" justifyContent="left" xs={12} marginBottom='3%'>
+                    <Typography sx={{ fontWeight: 600 }}>Username:</Typography>
+                    &nbsp;
+                    <Typography>{username ? username : "N/A"}</Typography>
+                  </Grid>
+                  <Grid item display="flex" justifyContent="left" xs={12} marginBottom='3%'>
+                    <Typography sx={{ fontWeight: 600 }}>Password:</Typography>
+                    &nbsp;
+                    <Typography>{password ? password : "N/A"}</Typography>
+                  </Grid>
+                  <Grid item display="flex" justifyContent="left" xs={12} marginBottom='3%'>
+                    <Typography sx={{ fontWeight: 600 }}>Email:</Typography>
+                    &nbsp;
+                    <Typography>{email ? email : "N/A"}</Typography>
+                  </Grid>
+                  <Grid item display="flex" justifyContent="left" xs={12} marginBottom='3%'>
+                    <Typography sx={{ fontWeight: 600 }}>Phone Number:</Typography>
+                    &nbsp;
+                    <Typography>{phone ? phone : "N/A"}</Typography>
+                  </Grid>
+                  <Grid item display="flex" justifyContent="left" xs={12} marginBottom='3%'>
+                    <Typography sx={{ fontWeight: 600 }}>Contact Preference:</Typography>
+                    &nbsp;
+                    <Typography>{contactPref ? contactPref : "N/A"}</Typography>
+                  </Grid>
+                  <Grid item display="flex" justifyContent="left" xs={12}>
+                    <Typography sx={{ fontWeight: 600 }}>Profile Created:</Typography>
+                    &nbsp;
+                    <Typography>{date.toString().substring(5, 7) + "/" + date.toString().substring(8, 10) + "/" + date.toString().substring(0, 4)}</Typography>
+                  </Grid>
+                </Grid>
               </Grid>
             </Grid>
           </Box>

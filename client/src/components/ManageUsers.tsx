@@ -20,13 +20,12 @@ const ManageUsers = () => {
     fetchUsers()
   }, [])
 
-  //the function that calls the delete routing function
+  // The function that calls the delete routing function
   const handleDelete = async (id: any) => {
-    //console.log(id)
     await fetch('/api/users/' + id, {
       method: 'DELETE'
     })
-    // after we delete we must update the local state
+    // After we delete we must update the local state
     const newUsers = Users.filter(User => User._id != id)
     setUsers(newUsers)
   }
@@ -109,7 +108,18 @@ const ManageUsers = () => {
               user_id={User._id}
               fname={User.fName}
               lname={User.lName}
+              mInitial={User.mInitial}
+              username={User.username}
+              password={User.password}
               voucher={User.voucherType}
+              supervisor={User.supervisor}
+              birthDate={User.birthDate}
+              email={User.email}
+              phone={User.phone}
+              prefName={User.prefName}
+              gender={User.gender}
+              race={User.race}
+              contactPref={User.contactPref}
               date={User.createdAt}
               handleDelete={handleDelete}
             />
