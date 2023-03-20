@@ -1,6 +1,16 @@
 const Admin = require("../models/Admin");
 import mongoose from 'mongoose';
 
+//GET admins based off sort
+const getSortFilter = async (req, res) => {
+  let admins;
+  let sortObject = {};
+  sortObject[req.params.sortName] = req.param.sortOrder;
+  admins = await Admin.find({}).sort(sortObject)
+  res.status(200).json(admins);
+
+}
+
 // GET all admin
 const getAdmins = async (req, res) => {
   const admins = await Admin.find({}).sort({ createdAt: -1 })
@@ -109,6 +119,7 @@ module.exports = {
   getAdmins,
   createAdmin,
   deleteAdmin,
-  updateAdmin
+  updateAdmin,
+  getSortFilter
 }
 

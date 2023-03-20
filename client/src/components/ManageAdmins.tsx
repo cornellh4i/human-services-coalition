@@ -5,12 +5,16 @@ import React from 'react'
 import ColumnLabel from '../components/ColumnLabel'
 import { useState, useEffect } from 'react'
 
+
 const ManageAdmins = () => {
   const [Admins, setAdmins] = useState<any[]>([])
+  const [sortOrder, setSortOrder] = useState(0)
+  const [sortName, setSortName] = useState("None")
 
   useEffect(() => {
     const fetchAdmins = async () => {
-      const response = await fetch('/api/admins')
+
+      const response = await fetch('/api/admins/')
       const json = await response.json()
 
       if (response.ok) {
@@ -20,6 +24,38 @@ const ManageAdmins = () => {
     fetchAdmins()
   }, [])
 
+  async function handleToggle(name: string) {
+    if (sortName == name) {
+      setSortOrder((sortOrder + 1) % 3)
+    }
+    else {
+
+      setSortOrder(1)
+      setSortName(name)
+    }
+    let sortOrderQuery = 0
+    if (sortOrder == 1) {
+      sortOrderQuery = 1
+    }
+    else if (sortOrder == 2) {
+      sortOrderQuery = -1
+    }
+    console.log("name: " + name)
+    console.log("sort name: " + sortName)
+    console.log(sortOrder);
+    console.log(sortOrderQuery);
+    const fetchAdmins = async () => {
+      const response = await fetch('/api/admins/' + sortOrderQuery + '/' + sortName)
+      const json = await response.json()
+      if (response.ok) {
+        setAdmins(json)
+      }
+
+    }
+    fetchAdmins()
+    console.log("Toggled!");
+
+  }
   const [affiliation, setAffiliation] = React.useState('');
 
   const handleChange = (event: SelectChangeEvent) => {
@@ -34,7 +70,7 @@ const ManageAdmins = () => {
       p: '0.5%'
     }}>
 
-      <Container  maxWidth={false}   sx={{ mt: '10px', maxWidth: '100%', borderRadius: 0, display: 'flex', justifyContent: 'space-between', alignItems: 'center', backgroundColor: '#D9D9D9', }}>
+      <Container maxWidth={false} sx={{ mt: '10px', maxWidth: '100%', borderRadius: 0, display: 'flex', justifyContent: 'space-between', alignItems: 'center', backgroundColor: '#D9D9D9', }}>
         <Grid container item xs={8}>
           <TextField
             sx={{ flex: 1, backgroundColor: '#FFFFFF', borderRadius: 1 }}
@@ -51,9 +87,9 @@ const ManageAdmins = () => {
         <Grid container item xs={'auto'}>
           <Box sx={{ display: "flex", justifyContent: "right", alignItems: 'center', marginLeft: '5rem' }}>
             <Typography sx={{ marginRight: '1rem' }}>Affiliation</Typography>
-            <Box sx={{ flex:1 }}>
-              <FormControl 
-                sx={{ flex: 1,backgroundColor: '#FFFFFF', borderRadius: 1 }}>
+            <Box sx={{ flex: 1 }}>
+              <FormControl
+                sx={{ flex: 1, backgroundColor: '#FFFFFF', borderRadius: 1 }}>
                 <Select
                   value={affiliation}
                   onChange={handleChange}
@@ -68,23 +104,24 @@ const ManageAdmins = () => {
         </Grid>
       </Container>
 
-      <Container maxWidth={false}  sx={{ borderRadius: 0, display: 'flex',  justifyContent: 'flex-start', alignItems: 'left', backgroundColor: '#D9D9D9' }}>
-        
-          <Grid container spacing={"10%"}>
-            <Grid  item sx={{ ml: "1%" }}>
-              <ColumnLabel label="First Name" ></ColumnLabel>
-            </Grid>
-            <Grid   item sx={{ ml: "0%" }}>
-              <ColumnLabel label="Last Name"></ColumnLabel>
-            </Grid>
-            <Grid  item sx={{ ml: "0%" }}>
-              <ColumnLabel label="Affiliation"></ColumnLabel>
-            </Grid>
-            <Grid item sx={{ ml: "3%" }}>
-              <ColumnLabel label="Created"></ColumnLabel>
-            </Grid>
+      <Container maxWidth={false} sx={{ borderRadius: 0, display: 'flex', justifyContent: 'flex-start', alignItems: 'left', backgroundColor: '#D9D9D9' }}>
+
+        <Grid container spacing={"10%"}>
+          <Grid item sx={{ ml: "1%" }}>
+            <ColumnLabel label="First Name"
+              onClick={() => handleToggle("fName")}></ColumnLabel>
           </Grid>
-        
+          <Grid item sx={{ ml: "0%" }}>
+            <ColumnLabel label="Last Name" onClick={() => handleToggle("lName")}></ColumnLabel>
+          </Grid>
+          <Grid item sx={{ ml: "0%" }}>
+            <ColumnLabel label="Affiliation" onClick={() => handleToggle("affiliation")}></ColumnLabel>
+          </Grid>
+          <Grid item sx={{ ml: "3%" }}>
+            <ColumnLabel label="Created" onClick={() => handleToggle("createdAt")}></ColumnLabel>
+          </Grid>
+        </Grid>
+
       </Container>
 
       <div className="admins" >
@@ -101,7 +138,7 @@ const ManageAdmins = () => {
           </div>
         ))}
       </div>
-    </Box>
+    </Box >
   )
 }
 

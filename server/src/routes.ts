@@ -23,7 +23,8 @@ module.exports = () => {
     getAdmins,
     createAdmin,
     deleteAdmin,
-    updateAdmin
+    updateAdmin,
+    getSortFilter
   } = require("./controllers/adminController")
 
   const {
@@ -66,6 +67,8 @@ module.exports = () => {
   // DELETE a specific user
   router.delete('/users/:id', deleteUser)
 
+  //GET admins based off sort
+  router.get('/admins/:sortOrder/:sortName', getSortFilter)
 
   // GET all admins
   router.get('/admins', getAdmins)
@@ -85,10 +88,10 @@ module.exports = () => {
 
   //GET all FMR prices
   router.get('/fmr', getFMRprices)
-  
+
   // POST (add) FMR prices
   router.post('/fmr', createFMRprices)
-  
+
   // PATCH (edit) FMR prices  
   router.patch('/fmr/:id', updateFMRprices)
 
