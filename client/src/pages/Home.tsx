@@ -9,10 +9,9 @@ import '../css/Home.css'
 function Home() {
   let [Listings, setListings] = useState<any[]>([])
   let [filters, setFilters] = useState([])
-  let [unitType, setUnitType] = useState('')
+  let [address, setAddress] = useState('')
   let [apartment, setApartment] = useState(false)
   let [house, setHouse] = useState(false)
-  let [address, setAddress] = useState('')
   let [condo, setCondo] = useState(false)
   let [single, setSingle] = useState(false)
   let [numBath, setNumBath] = useState('')
@@ -55,7 +54,7 @@ function Home() {
           <FilterSideBar
             listings={Listings} setListings={setListings}
             filters={filters} setFilters={setFilters}
-            unitType={unitType} setUnitType={setUnitType}
+            // unitType={unitType} setUnitType={setUnitType}
             apartment={apartment} setApartment={setApartment}
             house={house} setHouse={setHouse}
             address={address} setAddress={setAddress}
@@ -77,7 +76,6 @@ function Home() {
               <SelectedFilters
                 listings={Listings} setListings={setListings}
                 filters={filters} setFilters={setFilters}
-                unitType={unitType} setUnitType={setUnitType}
                 apartment={apartment} setApartment={setApartment}
                 house={house} setHouse={setHouse}
                 address={address} setAddress={setAddress}

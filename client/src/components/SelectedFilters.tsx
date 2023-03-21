@@ -5,12 +5,9 @@ import ClearIcon from '@mui/icons-material/Clear';
 import '../css/Home.css'
 
 export default function SelectedFilters({
-  Listings, setListings,
-  filters, setFilters, unitType, setUnitType, apartment, setApartment, house,
-  setHouse, address, setAddress, condo, setCondo, single, setSingle, numBath,
-  setNumBath, numBed, setNumBed, utilities, setUtilities, furnished,
-  setFurnished, pets, setPets, disTransportation, setDisTransportation, minPrice,
-  setMinPrice, maxPrice, setMaxPrice }: any) {
+  setListings, filters, setFilters, setApartment, setHouse, setAddress, 
+  setCondo, setSingle, setNumBath, setNumBed, setUtilities, setFurnished, 
+  setPets, setDisTransportation, setMinPrice, setMaxPrice }: any) {
 
   let selected: any = [...filters]
   let values: any[] = []
@@ -56,8 +53,17 @@ export default function SelectedFilters({
     else if (selected[i].filter === "maxPrice") {
       values.push("Up To $" + currVal)
     }
-    else if (selected[i].filter === "unitType") {
-      values.push(currVal)
+    else if (selected[i].filter === "apartment") {
+      values.push("Apartment")
+    }
+    else if (selected[i].filter === "house") {
+      values.push("House")
+    }
+    else if (selected[i].filter === "condo") {
+      values.push("Condo")
+    }
+    else if (selected[i].filter === "single") {
+      values.push("Single Room")
     }
     else if (selected[i].filter === "pets") {
       values.push("Pet-Friendly")
@@ -74,19 +80,17 @@ export default function SelectedFilters({
   }
 
   function handleDelete(index: number) {
-    if (selected[index].filter === "unitType") {
-      if (selected[index].value === "Condo") {
-        setCondo(false)
-      }
-      else if (selected[index].value === "House") {
-        setHouse(false)
-      }
-      else if (selected[index].value === "Apartment") {
-        setApartment(false)
-      }
-      else if (selected[index].value === "Single") {
-        setSingle(false)
-      }
+    if (selected[index].filter === "condo") {
+      setCondo(false)
+    }
+    else if (selected[index].filter === "house") {
+      setHouse(false)
+    }
+    else if (selected[index].filter === "apartment") {
+      setApartment(false)
+    }
+    else if (selected[index].filter === "single") {
+      setSingle(false)
     }
     else if (selected[index].filter === "numBath") {
       setNumBath('')

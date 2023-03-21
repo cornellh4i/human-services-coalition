@@ -17,23 +17,21 @@ import { useState } from "react";
 import '../css/Home.css';
 
 export default function FilterSideBar({
-  listing, setListings,
-  filters, setFilters, unitType, setUnitType, apartment, setApartment, house,
-  setHouse, address, setAddress, condo, setCondo, single, setSingle, numBath,
-  setNumBath, numBed, setNumBed, utilities, setUtilities, furnished,
-  setFurnished, pets, setPets, disTransportation, setDisTransportation, minPrice,
-  setMinPrice, maxPrice, setMaxPrice }: any) {
+  setListings,filters, setFilters, apartment, setApartment, house, setHouse, 
+  address, setAddress, condo, setCondo, single, setSingle, numBath, setNumBath, 
+  numBed, setNumBed, utilities, setUtilities, furnished, setFurnished, pets, 
+  setPets, disTransportation, setDisTransportation, minPrice, setMinPrice, 
+  maxPrice, setMaxPrice }: any) {
   let selected: any = [...filters]
   let theme = createTheme()
   theme = responsiveFontSizes(theme)
 
   const FilterEnum = {
     address: "address",
-    unitType: "unitType",
-    apartment: "Apartment",
-    house: "House",
-    condo: "Condo",
-    single: "Single",
+    apartment: "apartment",
+    house: "house",
+    condo: "condo",
+    single: "single",
     numBath: "numBath",
     numBed: "numBed",
     pets: "pets",
@@ -46,14 +44,12 @@ export default function FilterSideBar({
 
   function updateQuery(filterList: any) {
     let params: any = {}
-    console.log("CALLED")
 
     for (let i = 0; i < filterList.length; i++) {
       let currFilter = filterList[i].filter
       let currVal = filterList[i].value
       params[currFilter] = currVal
     }
-    console.log(params)
 
     const searchParams = new URLSearchParams(Object.entries(params))
     fetch('/api/listingsByCategory?' + searchParams)
@@ -62,18 +58,10 @@ export default function FilterSideBar({
       .catch(error => console.error(error))
   }
 
-  function selectedIndex(filter: string, value?: string) {
+  function selectedIndex(filter: string) {
     for (let i = 0; i < selected.length; i++) {
       if (selected[i].filter === filter) {
-
-        // Undefined case for handling unitType
-        if (value != undefined) {
-          if (selected[i].value === value) {
-            return i
-          }
-        } else {
-          return i
-        }
+        return i
       }
     }
     return -1
@@ -148,18 +136,21 @@ export default function FilterSideBar({
       }
     }
 
-    else if (filter === FilterEnum.apartment || filter === FilterEnum.house ||
-      filter === FilterEnum.condo || filter === FilterEnum.single) {
-      index = selectedIndex(FilterEnum.unitType, filter)
+    // for checkboxes (unit type + amenities)
+    else if (filter === FilterEnum.utilities || filter === FilterEnum.furnished
+      || filter === FilterEnum.pets || filter === FilterEnum.apartment || filter
+      === FilterEnum.house || filter === FilterEnum.condo || filter ===
+      FilterEnum.single) {
+      index = selectedIndex(filter)
 
       if (index != -1) {
         selected.splice(index, 1)
 
-        if (filter === FilterEnum.apartment) {
-          setApartment(false)
-        }
-        else if (filter === FilterEnum.house) {
+        if (filter === FilterEnum.house) {
           setHouse(false)
+        }
+        else if (filter === FilterEnum.apartment) {
+          setApartment(false)
         }
         else if (filter === FilterEnum.condo) {
           setCondo(false)
@@ -167,29 +158,7 @@ export default function FilterSideBar({
         else if (filter === FilterEnum.single) {
           setSingle(false)
         }
-      }
-      else {
-        if (filter === FilterEnum.apartment) {
-          selected.push({ "filter": FilterEnum.unitType, "value": "Apartment" })
-        }
-        else if (filter === FilterEnum.house) {
-          selected.push({ "filter": FilterEnum.unitType, "value": "House" })
-        }
-        else if (filter === FilterEnum.condo) {
-          selected.push({ "filter": FilterEnum.unitType, "value": "Condo" })
-        }
-        else if (filter === FilterEnum.single) {
-          selected.push({ "filter": FilterEnum.unitType, "value": "Single" })
-        }
-      }
-    }
-
-    else if (filter === FilterEnum.utilities || filter === FilterEnum.furnished || filter === FilterEnum.pets) {
-      index = selectedIndex(filter)
-      if (index != -1) {
-        selected.splice(index, 1)
-
-        if (filter === FilterEnum.utilities) {
+        else if (filter === FilterEnum.utilities) {
           setUtilities(false)
         }
         else if (filter === FilterEnum.furnished) {
