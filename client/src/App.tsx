@@ -16,6 +16,9 @@ function App() {
   const [showNav, setShowNav] = useState(false);
   const [token, setToken] = useState();
 
+  if (!token) {
+    return <LoginForm setToken={setToken} />
+  }
 
   const theme = createTheme({
     typography: {
@@ -63,23 +66,7 @@ function App() {
             </Routes>
           </div>
         </BrowserRouter>
-        <div className="Log">
-          <ThemeProvider theme={theme}>
-            <BrowserRouter>
-              <div className="pages">
 
-                <div className="login-form">
-                  <Routes>
-                    <Route
-                      path='/login-form'
-                      element={<LoginForm />}
-                    />
-                  </Routes>
-                </div>
-              </div>
-            </BrowserRouter>
-          </ThemeProvider>
-        </div>
       </ThemeProvider>
     </div>
   );
