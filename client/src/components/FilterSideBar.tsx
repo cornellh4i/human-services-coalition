@@ -17,10 +17,10 @@ import { useState } from "react";
 import '../css/Home.css';
 
 export default function FilterSideBar({
-  setListings,filters, setFilters, apartment, setApartment, house, setHouse, 
-  address, setAddress, condo, setCondo, single, setSingle, numBath, setNumBath, 
-  numBed, setNumBed, utilities, setUtilities, furnished, setFurnished, pets, 
-  setPets, disTransportation, setDisTransportation, minPrice, setMinPrice, 
+  setListings, filters, setFilters, apartment, setApartment, house, setHouse,
+  address, setAddress, condo, setCondo, single, setSingle, numBath, setNumBath,
+  numBed, setNumBed, utilities, setUtilities, furnished, setFurnished, pets,
+  setPets, disTransportation, setDisTransportation, minPrice, setMinPrice,
   maxPrice, setMaxPrice }: any) {
   let selected: any = [...filters]
   let theme = createTheme()
@@ -353,6 +353,7 @@ export default function FilterSideBar({
               label="# Beds"
               onChange={(e) =>
                 handleFilterChange(FilterEnum.numBed, numBed, setNumBed, e)}>
+              <MenuItem value={'0'}>Studio</MenuItem>
               <MenuItem value={'1'}>1</MenuItem>
               <MenuItem value={'2'}>2</MenuItem>
               <MenuItem value={'3'}>3</MenuItem>

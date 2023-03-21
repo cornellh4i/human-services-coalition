@@ -40,7 +40,10 @@ export default function SelectedFilters({
       }
     }
     else if (selected[i].filter === "numBed") {
-      if (currVal > 1) {
+      if (currVal == 0) {
+        values.push("Studio")
+      }
+      else if (currVal > 1) {
         values.push(currVal + " Beds")
       }
       else {
