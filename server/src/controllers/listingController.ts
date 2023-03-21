@@ -61,6 +61,46 @@ const getListingByCategory = async (req, res) => {
       case 'unitType':
         query['unitType'] = { $in: queryValue.split(',') };
         break;
+      case 'house':
+        if (queryValue == "on") {
+          if (query['unitType'] == undefined) {
+            query['unitType'] = { $in: ["House"] }
+          }
+          else {
+            query['unitType']['$in'].push("House")
+          }
+        }
+        break;
+      case 'condo':
+        if (queryValue == "on") {
+          if (query['unitType'] == undefined) {
+            query['unitType'] = { $in: ["Condo"] }
+          }
+          else {
+            query['unitType']['$in'].push("Condo")
+          }
+        }
+        break;
+      case 'apartment':
+        if (queryValue == "on") {
+          if (query['unitType'] == undefined) {
+            query['unitType'] = { $in: ["Apartment"] }
+          }
+          else {
+            query['unitType']['$in'].push("Apartment")
+          }
+        }
+        break;
+      case 'single':
+        if (queryValue == "on") {
+          if (query['unitType'] == undefined) {
+            query['unitType'] = { $in: ["Single"] }
+          }
+          else {
+            query['unitType']['$in'].push("Single")
+          }
+        }
+        break;
       case 'numBath':
         query['numBath'] = parseFloat(queryValue);
         break;
@@ -84,8 +124,8 @@ const getListingByCategory = async (req, res) => {
           query['furnished'] = "true";
         }
         break;
-      case 'distTransportation':
-        query['distTransportation'] = parseFloat(queryValue);
+      case 'disTransportation':
+        query['distTransportation'] = queryValue;
         break;
       default:
         // Ignore unknown query parameters

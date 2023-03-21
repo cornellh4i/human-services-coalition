@@ -5,8 +5,8 @@ import ClearIcon from '@mui/icons-material/Clear';
 import '../css/Home.css'
 
 export default function SelectedFilters({
-  setListings, filters, setFilters, setApartment, setHouse, setAddress, 
-  setCondo, setSingle, setNumBath, setNumBed, setUtilities, setFurnished, 
+  setListings, filters, setFilters, setApartment, setHouse, setAddress,
+  setCondo, setSingle, setNumBath, setNumBed, setUtilities, setFurnished,
   setPets, setDisTransportation, setMinPrice, setMaxPrice }: any) {
 
   let selected: any = [...filters]
@@ -20,7 +20,7 @@ export default function SelectedFilters({
       let currVal = filterList[i].value
       params[currFilter] = currVal
     }
-
+    console.log(params)
     const searchParams = new URLSearchParams(Object.entries(params))
     fetch('/api/listingsByCategory?' + searchParams)
       .then(response => response.json())
