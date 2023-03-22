@@ -9,7 +9,7 @@ import Button from '@mui/material/Button';
 import MenuItem from '@mui/material/MenuItem';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
-import SettingsIcon from '@mui/icons-material/Settings';
+import LogoutIcon from '@mui/icons-material/Logout';
 import { ReactComponent as Logo } from '../assets/coclogo.svg';
 import { Link, useNavigate } from 'react-router-dom';
 
@@ -19,7 +19,7 @@ const forms = ['Listing', 'User', 'Admin'];
 function ResponsiveAppBar() {
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
   const [anchorElForms, setAnchorElForms] = React.useState<null | HTMLElement>(null);
-  const [anchorElSettings, setAnchorElSettings] = React.useState<null | HTMLElement>(null);
+  const [anchorElLogout, setAnchorElLogout] = React.useState<null | HTMLElement>(null);
 
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
@@ -28,8 +28,8 @@ function ResponsiveAppBar() {
   const handleOpenFormMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElForms(event.currentTarget);
   };
-  const handleOpenSettingsMenu = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorElSettings(event.currentTarget);
+  const handleOpenLogoutMenu = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorElLogout(event.currentTarget);
   };
 
   const handleCloseNavMenu = () => {
@@ -41,8 +41,8 @@ function ResponsiveAppBar() {
     setAnchorElForms(null);
   };
 
-  const handleCloseSettingsMenu = () => {
-    setAnchorElSettings(null);
+  const handleCloseLogoutMenu = () => {
+    setAnchorElLogout(null);
   };
 
   // Navigation functionality
@@ -168,16 +168,16 @@ function ResponsiveAppBar() {
           <Box sx={{ flexGrow: 0 }}>
             <IconButton
               size="large"
-              onClick={handleOpenSettingsMenu}
+              onClick={handleOpenLogoutMenu}
               sx={{ color: "orange" }}
             >
-              <SettingsIcon />
+              <LogoutIcon />
             </IconButton>
 
-            {/* Settings Menu */}
+            {/* Logout Menu */}
             <Menu
-              id="settings-appbar"
-              anchorEl={anchorElSettings}
+              id="logout-appbar"
+              anchorEl={anchorElLogout}
               anchorOrigin={{
                 vertical: 'bottom',
                 horizontal: 'right',
@@ -187,12 +187,9 @@ function ResponsiveAppBar() {
                 vertical: 'top',
                 horizontal: 'right',
               }}
-              open={Boolean(anchorElSettings)}
-              onClose={handleCloseSettingsMenu}
+              open={Boolean(anchorElLogout)}
+              onClose={handleCloseLogoutMenu}
             >
-              <MenuItem>
-                <Typography textAlign="center">Profile Settings</Typography>
-              </MenuItem>
               <MenuItem>
                 <Typography sx={{ color: "orange" }} textAlign="center">Log out</Typography>
               </MenuItem>
