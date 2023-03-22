@@ -36,8 +36,7 @@ def processCSP():
             info = row.find('div', attrs={'class': 'featured-listing__content'}).find(
                 'div', attrs={'class': 'featured-listing__description-container'})
             title = info.find(
-                'h3', attrs={'class':"featured-listing__title"}).text
-            
+                'h3', attrs={'class':"featured-listing__title"}).text            
             priceContainer = info.find('div', attrs={
                 'class': 'featured-listing__content-footer'}).find('p', attrs={'class': 'featured-listing__price accent-color'})
             bedbath = info.find(
@@ -56,27 +55,16 @@ def processCSP():
             #filterListing(int(price), beds) and
                 # Create empty listing
                 listing = {}
-    #                 webScraped,
-    # pictures,
-    # price,
-    # size,
-    # numBath,
-    # schoolDistrict,
-    # pets,
-    # utilities,
-    # furnished,
-    # distTransportation,
-    # landlord,
-    # landlordEmail,
-    # landlordPhone,
-    # linkOrig,
-    # linkApp
-                print('title is ' + str(title))
-                listing['title'] = title
+                listing['streetAddress'] = title
                 listing['webScraped'] = True
+                listing['city'] = 'Ithaca'
+                listing['state'] = 'NY'
+                listing['country'] = 'US'
+                listing['zipcode'] = 14850
                 listing['pictures'] = 0
                 listing['price'] = price
                 listing['size'] = beds
+                listing['unitType'] = None
                 listing['numBath'] = 1
                 listing['schoolDistrict'] = None
                 listing['pets'] = None
@@ -84,9 +72,10 @@ def processCSP():
                 listing['furnished'] = None
                 listing['distTransportation'] = None
                 listing['landlord'] = "CSP Management"
-                listing['landlordEmail'] = None
-                listing['landlordPhone'] = None
-                listing['link'] = "https://cspmgmt.managebuilding.com/" + row['href']
+                listing['landlordEmail'] = 'info@cspmanagement.com'
+                listing['landlordPhone'] = '6072776961'
+                listing['linkOrig'] = "https://cspmgmt.managebuilding.com/" + row['href']
+                listing['description'] = 0
 
                 # Add listing information
 
