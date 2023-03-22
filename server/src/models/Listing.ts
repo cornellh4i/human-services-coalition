@@ -28,8 +28,8 @@ enum Distance {
 
 enum BooleanType {
   NoInput = "",
-  Close = "true",
-  Medium = "false"
+  True = "true",
+  False = "false"
 }
 
 
@@ -115,13 +115,13 @@ const listingSchema = new Schema({
   linkApp: {
     type: String
   },
-  dateAvailable: { 
+  dateAvailable: {
     type: Date
   },
-  description: { 
+  description: {
     type: String
   }
-  
+
 }, { timestamps: true })
 
 module.exports = mongoose.model('Listing', listingSchema)

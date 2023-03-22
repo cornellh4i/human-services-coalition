@@ -6,11 +6,22 @@ import FilterSideBar from '../components/FilterSideBar'
 import SelectedFilters from '../components/SelectedFilters'
 import '../css/Home.css'
 
-const Home = () => {
-  const [Listings, setListings] = useState<any[]>([])
-
-  // Hard coded filter list for testings
-  const selected = ['Apartment', '3 beds', '2 baths', 'Pet-friendly']
+function Home() {
+  let [Listings, setListings] = useState<any[]>([])
+  let [filters, setFilters] = useState([])
+  let [address, setAddress] = useState('')
+  let [apartment, setApartment] = useState(false)
+  let [house, setHouse] = useState(false)
+  let [condo, setCondo] = useState(false)
+  let [single, setSingle] = useState(false)
+  let [numBath, setNumBath] = useState('')
+  let [numBed, setNumBed] = useState('')
+  let [utilities, setUtilities] = useState(false)
+  let [furnished, setFurnished] = useState(false)
+  let [pets, setPets] = useState(false)
+  let [disTransportation, setDisTransportation] = useState('')
+  let [minPrice, setMinPrice] = useState('')
+  let [maxPrice, setMaxPrice] = useState('')
 
   useEffect(() => {
     const fetchListings = async () => {
@@ -21,7 +32,6 @@ const Home = () => {
         setListings(json)
       }
     }
-
     fetchListings()
   }, [])
 
@@ -35,17 +45,49 @@ const Home = () => {
     setListings(newListings)
   }
 
-  console.log(Listings)
   return (
     <div>
       <div className='body-box'>
         <div className='side-box'>
-          <FilterSideBar />
+          <FilterSideBar
+            listings={Listings} setListings={setListings}
+            filters={filters} setFilters={setFilters}
+            // unitType={unitType} setUnitType={setUnitType}
+            apartment={apartment} setApartment={setApartment}
+            house={house} setHouse={setHouse}
+            address={address} setAddress={setAddress}
+            condo={condo} setCondo={setCondo}
+            single={single} setSingle={setSingle}
+            numBath={numBath} setNumBath={setNumBath}
+            numBed={numBed} setNumBed={setNumBed}
+            utilities={utilities} setUtilities={setUtilities}
+            furnished={furnished} setFurnished={setFurnished}
+            pets={pets} setPets={setPets}
+            disTransportation={disTransportation} setDisTransportation={setDisTransportation}
+            minPrice={minPrice} setMinPrice={setMinPrice}
+            maxPrice={maxPrice} setMaxPrice={setMaxPrice}>
+          </FilterSideBar>
         </div>
         <div className='content-box'>
           <Container>
             <div className='selected-filters'>
-              < SelectedFilters filters={selected} > </SelectedFilters >
+              <SelectedFilters
+                listings={Listings} setListings={setListings}
+                filters={filters} setFilters={setFilters}
+                apartment={apartment} setApartment={setApartment}
+                house={house} setHouse={setHouse}
+                address={address} setAddress={setAddress}
+                condo={condo} setCondo={setCondo}
+                single={single} setSingle={setSingle}
+                numBath={numBath} setNumBath={setNumBath}
+                numBed={numBed} setNumBed={setNumBed}
+                utilities={utilities} setUtilities={setUtilities}
+                furnished={furnished} setFurnished={setFurnished}
+                pets={pets} setPets={setPets}
+                disTransportation={disTransportation} setDisTransportation={setDisTransportation}
+                minPrice={minPrice} setMinPrice={setMinPrice}
+                maxPrice={maxPrice} setMaxPrice={setMaxPrice}>
+              </SelectedFilters >
             </div>
             <div className='listing-cards'>
               <Grid container spacing={2}>
@@ -60,8 +102,9 @@ const Home = () => {
         </div>
       </div>
     </div>
-  )
+  );
 }
 
-export default Home
+
+export default Home;
 
