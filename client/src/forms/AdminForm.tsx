@@ -45,9 +45,8 @@ const AdminForm = () => {
     let result = await fetch('/api/admins/' + location.state.id.adminid, {
       method: 'GET'
     })
-    console.log(result)
     let json_object = await result.json()
-    console.log(json_object)
+
     setAffiliation(json_object.affiliation)
     setUsername(json_object.username)
     setPassword(json_object.password)
