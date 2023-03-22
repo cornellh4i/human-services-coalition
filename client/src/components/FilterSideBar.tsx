@@ -13,7 +13,6 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import InputLabel from '@mui/material/InputLabel';
-import { useState } from "react";
 import '../css/Home.css';
 
 export default function FilterSideBar({
@@ -22,6 +21,7 @@ export default function FilterSideBar({
   numBed, setNumBed, utilities, setUtilities, furnished, setFurnished, pets,
   setPets, disTransportation, setDisTransportation, minPrice, setMinPrice,
   maxPrice, setMaxPrice }: any) {
+    
   let selected: any = [...filters]
   let theme = createTheme()
   theme = responsiveFontSizes(theme)

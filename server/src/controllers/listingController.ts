@@ -24,11 +24,7 @@ const getListing = async (req, res) => {
   res.status(200).json(listing)
 }
 
-async function hello(req, res) {
-  console.log("hello")
-}
-
-
+// GET housing listings based on filters
 const getListingByCategory = async (req, res) => {
   let query = {};
 
