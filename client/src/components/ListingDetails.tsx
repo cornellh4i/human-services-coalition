@@ -8,48 +8,48 @@ import { createTheme, Grid } from '@mui/material';
 import { useNavigate } from "react-router-dom";
 import { useState } from 'react';
 import DeleteConfirmation from './DeleteConfirmation';
- 
+
 const listingTheme = createTheme({
- typography: {
-   fontSize: 15,
-   fontWeightRegular: 700,
+  typography: {
+    fontSize: 15,
+    fontWeightRegular: 700,
   }
 });
 const addressTheme = createTheme({
- typography: {
-   fontSize: 15,
-   fontWeightRegular: 400,
- } ,
+  typography: {
+    fontSize: 15,
+    fontWeightRegular: 400,
+  },
 });
 const sizeTheme = createTheme({
- typography: {
-   fontSize: 15,
-   fontWeightRegular: 400,
- }
+  typography: {
+    fontSize: 15,
+    fontWeightRegular: 400,
+  }
 });
 const priceTheme = createTheme({
- typography: {
-   fontSize: 15,
-   fontWeightRegular: 700,
- }
+  typography: {
+    fontSize: 15,
+    fontWeightRegular: 700,
+  }
 });
 
-export default function ListingDetails({ Listing, handleDelete}: { Listing: any , handleDelete: any}){
+export default function ListingDetails({ Listing, handleDelete }: { Listing: any, handleDelete: any }) {
 
   // define handle click function
   const navigate = useNavigate();
 
   //states for the delete dialog pop up
-  const[openPop, setOpenPop] = useState(false)
+  const [openPop, setOpenPop] = useState(false)
 
   const handleClick = (event: any) => {
     event.stopPropagation()
     setOpenPop(true)
   }
 
-  return(
- 
-   <>
+  return (
+
+    <>
       {/* Creates a single listing card */}
       <Card style={{ backgroundColor: "#FFFFFF" }}
         sx={{
@@ -63,32 +63,7 @@ export default function ListingDetails({ Listing, handleDelete}: { Listing: any 
           flexGrow: 0
         }}
         elevation={10}
-        onClick={() => navigate("/listing_info", {
-          state: {
-            id: Listing._id,
-            streetAddress: Listing.streetAddress,
-            city: Listing.city,
-            state: Listing.state,
-            country: Listing.country,
-            zipCode: Listing.zipCode,
-            pictures: Listing.pictures,
-            price: Listing.price,
-            size: Listing.size,
-            unitType: Listing.unitType,
-            numBath: Listing.numBath,
-            schoolDistrict: Listing.schoolDistrict,
-            pets: Listing.pets,
-            utilities: Listing.utilities,
-            furnished: Listing.furnished,
-            distTransportation: Listing.distTransportation,
-            landlord: Listing.landlord,
-            landlordEmail: Listing.landlordEmail,
-            landlordPhone: Listing.landlordPhone,
-            linkOrig: Listing.linkOrig,
-            linkApp: Listing.linkApp,
-            dateAvailable: Listing.dateAvailable
-          }
-        })}
+
       >
 
         {/* Displays a picture of the listing at the top of the card */}
@@ -96,7 +71,33 @@ export default function ListingDetails({ Listing, handleDelete}: { Listing: any 
           component="img"
           height="210px"
           width="300px"
-          image={ Listing.pictures[0] } />
+          image={Listing.pictures[0]}
+          onClick={() => navigate("/listing_info", {
+            state: {
+              id: Listing._id,
+              streetAddress: Listing.streetAddress,
+              city: Listing.city,
+              state: Listing.state,
+              country: Listing.country,
+              zipCode: Listing.zipCode,
+              pictures: Listing.pictures,
+              price: Listing.price,
+              size: Listing.size,
+              unitType: Listing.unitType,
+              numBath: Listing.numBath,
+              schoolDistrict: Listing.schoolDistrict,
+              pets: Listing.pets,
+              utilities: Listing.utilities,
+              furnished: Listing.furnished,
+              distTransportation: Listing.distTransportation,
+              landlord: Listing.landlord,
+              landlordEmail: Listing.landlordEmail,
+              landlordPhone: Listing.landlordPhone,
+              linkOrig: Listing.linkOrig,
+              linkApp: Listing.linkApp,
+              dateAvailable: Listing.dateAvailable
+            }
+          })} />
 
         {/* Displays the listing information in a grid at the bottom of the card */}
         <Grid
@@ -118,7 +119,7 @@ export default function ListingDetails({ Listing, handleDelete}: { Listing: any 
 
             {/* Creates the delete and edit buttons and displays it next to the address */}
             <Grid item xs={3}>
-              <IconButton>
+              <IconButton onClick={() => navigate('/listing-form', { state: { id: Listing._id } })}>
                 <EditOutlined fontSize="small" />
               </IconButton>
               <IconButton onClick={(event) => handleClick(event)}>
@@ -159,8 +160,8 @@ export default function ListingDetails({ Listing, handleDelete}: { Listing: any 
           </Grid>
         </Grid>
       </Card>
-      <DeleteConfirmation id={Listing._id} openPop={openPop} setOpenPop={setOpenPop} handleDelete={handleDelete} />
-      </>
+      <DeleteConfirmation id={Listing._id} openPop={openPop} setOpenPop={setOpenPop} handleDelete={handleDelete} type="listing" />
+    </>
 
- )
+  )
 }

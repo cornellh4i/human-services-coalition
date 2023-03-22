@@ -1,7 +1,7 @@
 import { Box, Button, Container, FormControlLabel, FormGroup, FormLabel, Grid, MenuItem, Radio, RadioGroup, Select, SelectChangeEvent, TextField, Typography } from "@mui/material"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import React from "react";
 
 const UserForm = () => {
@@ -20,6 +20,7 @@ const UserForm = () => {
   const [gender, setGender] = useState('')
   const [race, setRace] = useState('')
   const [contactPref, setContactPref] = useState('')
+  const [buttonLabel, setButtonLabel] = useState('Create New User')
   const [error, setError] = useState(null)
 
   const [voucherTypeError, setVoucherTypeError] = useState(false)
@@ -31,6 +32,43 @@ const UserForm = () => {
 
   // Navigation functionality
   const navigate = useNavigate();
+
+  //Location functionality to retrieve the state variable passed 
+  const location = useLocation();
+
+
+  // //contains that will prepopulate the form if location.state is not null
+  useEffect(() => {
+    if (location.state != null) { getUserDetails() }
+  }, [])
+  //fetch the data related to id from the database
+  const getUserDetails = async () => {
+    let result = await fetch('/api/users/' + location.state.id.user_id, {
+      method: 'GET'
+    })
+    let json_object = await result.json()
+
+    setUsername(json_object.username)
+    setPassword(json_object.password)
+    setVoucherType(json_object.voucherType)
+    setFName(json_object.fName)
+    setLName(json_object.lName)
+    setSupervisor(json_object.supervisor)
+    setMInitial(json_object.mInitial)
+    setPrefName(json_object.username)
+    setGender(json_object.gender)
+    setRace(json_object.race)
+    setEmail(json_object.email)
+    setPhone(json_object.phone)
+    setPrefName(json_object.prefName)
+
+    const date = // ensures split doesn't split on a null date
+      (json_object.birthDate == null) ? json_object.birthDate : json_object.birthDate.split('T')[0]
+    setBirthDate(date)// to make date readable
+    setContactPref(json_object.contactPref)
+    setButtonLabel('Save Changes')
+
+  }
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -71,13 +109,24 @@ const UserForm = () => {
       contactPref,
     }
 
-    const response = await fetch('/api/users/', {
-      method: 'POST',
-      body: JSON.stringify(user),
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    })
+    //if location.state is null it creates a POST request to create a listing
+    //if location.state is not null it creates a PATCH request to edit the current listing
+    const response =
+      (location.state === null) ?
+        await fetch('/api/users/', {
+          method: 'POST',
+          body: JSON.stringify(user),
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        })
+        : await fetch('/api/users/' + location.state.id.user_id, {
+          method: 'PATCH',
+          body: JSON.stringify(user),
+          headers: {
+            'Content-Type': 'application/json',
+          }
+        })
 
     const json = await response.json()
 
@@ -129,7 +178,7 @@ const UserForm = () => {
             startIcon={<ArrowBackIosNewIcon />}
             variant="outlined"
             size="large"
-            onClick={() => navigate("/")}
+            onClick={() => navigate("/manage-profiles")}
             sx={{ marginTop: '2rem', padding: "0 1rem", fontSize: '1.2rem', fontWeight: 'bold', textTransform: "unset", borderRadius: '15px', color: '#5D737E', borderWidth: '0.14rem', borderColor: '#5D737E', bgcolor: 'white', ':hover': { bgcolor: "#5D737EB5" } }}
           >
             Back
@@ -461,6 +510,7 @@ const UserForm = () => {
                   variant="outlined"
                   size="large"
                   sx={{ padding: "0 3.5rem", fontSize: '1.2rem', fontWeight: 'bold', textTransform: "unset", borderRadius: '12px', color: '#5D737E', borderColor: '#5D737E', bgcolor: 'white', ':hover': { bgcolor: "#5D737EB5" } }}
+                  onClick={() => navigate("/manage-profiles")}
                 >
                   Cancel
                 </Button>
@@ -470,7 +520,7 @@ const UserForm = () => {
                   size="large"
                   sx={{ marginLeft: "10px", padding: "0 2rem", fontSize: '1.2rem', fontWeight: 'bold', textTransform: "unset", borderRadius: '12px', color: 'white', bgcolor: '#ED5F1E', ':hover': { bgcolor: "#ED5F1EB5" } }}
                 >
-                  Create User
+                  {buttonLabel}
                 </Button>
               </Box>
             </Grid>

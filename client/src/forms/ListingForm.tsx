@@ -1,7 +1,7 @@
-import React, { useState } from "react"
-import { Box, Button, Grid, Typography, Container, TextField, RadioGroup, FormControlLabel, Checkbox, Radio, FormControl, FormLabel, FormGroup, MenuItem, Select, IconButton } from '@mui/material';
+import React, { useEffect, useState } from "react"
+import { Box, Button, Grid, Typography, Container, TextField, RadioGroup, FormControlLabel, Checkbox, Radio, FormControl, FormLabel, FormGroup, MenuItem, Select } from '@mui/material';
 import { PhotoCamera } from "@mui/icons-material";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 
 const ListingForm = () => {
@@ -12,7 +12,7 @@ const ListingForm = () => {
   const [state, setState] = useState('')
   const [country, setCountry] = useState('')
   const [zipCode, setZipCode] = useState('')
-  const [pictures, setPictures] = useState('')
+  const [pictures, setPictures] = useState<string[]>([''])
   const [price, setPrice] = useState('')
   const [size, setSize] = useState('')
   const [unitType, setUnitType] = useState('')
@@ -32,6 +32,7 @@ const ListingForm = () => {
   const [linkApp, setLinkApp] = useState('')
   const [dateAvailable, setDateAvailable] = useState('')
   const [error, setError] = useState(null)
+  const [buttonLabel, setButtonLabel] = useState('Create New Listing')
 
   // Enforces Validation
   const [nameError, setNameError] = useState(false)
@@ -48,6 +49,47 @@ const ListingForm = () => {
 
   // Navigation functionality
   const navigate = useNavigate();
+
+  // Location functionality to retrieve the state variable passed 
+  const location = useLocation();
+
+  // Contains what will prepopulate the form if location.state is not null
+  useEffect(() => {
+    if (location.state != null) { getListingDetails() }
+  }, [])
+
+  // Fetch the data related to id from the database
+  const getListingDetails = async () => {
+    let result = await fetch('/api/listing/' + location.state.id, {
+      method: 'GET'
+    })
+    let json_object = await result.json()
+
+    setStreetAddress(json_object.streetAddress)
+    setDescription(json_object.description)
+    setState(json_object.state)
+    setCity(json_object.city)
+    setCountry(json_object.country)
+    setLandlord(json_object.landlord)
+    setLandlordPhone(json_object.landlordPhone)
+    setLandlordEmail(json_object.landlordEmail)
+    setLinkApp(json_object.linkApp)
+    setLinkOrig(json_object.linkOrig)
+    setDistTransportation(json_object.distTransportation)
+    setSchoolDistrict(json_object.schoolDistrict)
+    setZipCode(json_object.zipCode)
+    setUnitType(json_object.unitType)
+    setSize(json_object.size)
+    setNumBath(json_object.numBath)
+    setPrice(json_object.price)
+    if (json_object.dateAvailable != null) setDateAvailable(json_object.dateAvailable.split('T')[0]); // to make date readable
+    setSchoolDistrict(json_object.schoolDistrict)
+    setFurnishedIsTrue(json_object.furnished)
+    setPetsIsTrue(json_object.pets)
+    setUtilitiesIsTrue(json_object.utilities)
+    setPictures(json_object.pictures)
+    setButtonLabel('Save Changes')
+  }
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -111,14 +153,25 @@ const ListingForm = () => {
       linkApp,
       dateAvailable
     }
+    //if location.state is null it creates a POST request to create a listing
+    //if location.state is not null it creates a PATCH request to edit the current listing
+    const response =
+      (location.state === null) ?
+        await fetch('/api/listing/', {
+          method: 'POST',
+          body: JSON.stringify(listing),
+          headers: {
+            'Content-Type': 'application/json',
+          }
+        })
+        : await fetch('/api/listing/' + location.state.id, {
+          method: 'PATCH',
+          body: JSON.stringify(listing),
+          headers: {
+            'Content-Type': 'application/json',
+          }
+        })
 
-    const response = await fetch('/api/listing/', {
-      method: 'POST',
-      body: JSON.stringify(listing),
-      headers: {
-        'Content-Type': 'application/json',
-      }
-    })
     const json = await response.json()
 
     if (!response.ok) {
@@ -132,7 +185,7 @@ const ListingForm = () => {
       setState('')
       setCountry('')
       setZipCode('')
-      setPictures('')
+      setPictures([''])
       setPrice('')
       setSize('')
       setUnitType('')
@@ -151,12 +204,25 @@ const ListingForm = () => {
       setLinkOrig('')
       setLinkApp('')
       setDateAvailable('')
-
       setError(null)
-      
+
       navigate("/")
     }
   }
+
+  // const uploadImages = (e: any) => {
+  //   console.log(e.target.files)
+  //   let images = e.target.files;
+  //   if (images) {
+  //     for (let i = 0; i < images.length; i++) {
+  //       let img = URL.createObjectURL(e.target.files[i]);
+  //       if (pictures[0] === ''){
+  //         setPictures([img]);
+  //       }
+  //       else setPictures([...pictures, img]);
+  //     } 
+  //   }
+  // };
 
   return (
     <Container maxWidth={false}>
@@ -173,7 +239,7 @@ const ListingForm = () => {
           </Button>
         </Grid>
 
-        <Grid item xs={8}> 
+        <Grid item xs={8}>
           <form noValidate className="listing-form" onSubmit={handleSubmit}>
             <Typography variant='h3' sx={{ fontSize: '1.3rem', fontWeight: 'bold', mt: '3%' }} >
               Landlord Contact Information
@@ -578,7 +644,30 @@ const ListingForm = () => {
                 />
               </FormGroup>
 
+
               <FormGroup>
+                <FormLabel sx={{ marginTop: '1rem' }}>Upload Images</FormLabel>
+                <Button disableElevation variant='outlined' component='label' sx={{ color: '#5D737E', marginBottom: '1rem' }}>
+                  <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '8rem' }}>
+                    <PhotoCamera sx={{ fontSize: '3rem', margin: 'auto' }} />
+                    <input
+                      hidden
+                      id="listing-pictures"
+                      className="form-field"
+                      type="list"
+                      multiple={true}
+                      name="pictures"
+                      onChange={(e) => setPictures(['https://t4.ftcdn.net/jpg/02/65/15/77/360_F_265157782_7wJFjBLD47WtQljpG9ivndc5AEVTwypu.jpg',
+                        'https://t4.ftcdn.net/jpg/02/65/15/77/360_F_265157782_7wJFjBLD47WtQljpG9ivndc5AEVTwypu.jpg',
+                        'https://t4.ftcdn.net/jpg/02/65/15/77/360_F_265157782_7wJFjBLD47WtQljpG9ivndc5AEVTwypu.jpg'])}
+                      value={pictures}
+                    />
+                  </Box>
+                </Button>
+              </FormGroup>
+
+              {/* ORIGINAL CODE FOR UPLOAD IMAGES */}
+              {/* <FormGroup>
                 <FormLabel sx={{ marginTop: '1rem' }}>Upload Images</FormLabel>
                 <Button disableElevation variant='outlined' component='label' sx={{ color: '#5D737E', marginBottom: '1rem' }}>
                   <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '8rem' }}>
@@ -591,12 +680,12 @@ const ListingForm = () => {
                       type="file"
                       multiple={true}
                       name="pictures"
-                      onChange={(e) => setPictures(e.target.value)}
-                      value={pictures}
+                      onChange={(e) => uploadImages(e)}
                     />
                   </Box>
                 </Button>
-              </FormGroup>
+              </FormGroup> */}
+
             </Box>
 
             <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', marginBottom: '2rem' }}>
@@ -604,6 +693,7 @@ const ListingForm = () => {
                 variant="outlined"
                 size="large"
                 sx={{ padding: "0 3.5rem", fontSize: '1.2rem', fontWeight: 'bold', textTransform: "unset", borderRadius: '12px', color: '#5D737E', borderColor: '#5D737E', bgcolor: 'white', ':hover': { bgcolor: "#5D737EB5" } }}
+                onClick={() => navigate("/")}
               >
                 Cancel
               </Button>
@@ -613,7 +703,7 @@ const ListingForm = () => {
                 size="large"
                 sx={{ marginLeft: "10px", padding: "0 2rem", fontSize: '1.2rem', fontWeight: 'bold', textTransform: "unset", borderRadius: '12px', color: 'white', bgcolor: '#ED5F1E', ':hover': { bgcolor: "#ED5F1EB5" } }}
               >
-                Create Listing
+                {buttonLabel}
               </Button>
             </Box>
           </form >

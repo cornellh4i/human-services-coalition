@@ -18,15 +18,15 @@ const forms = ['Listing', 'User', 'Admin'];
 
 function ResponsiveAppBar() {
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
-  const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
+  const [anchorElForms, setAnchorElForms] = React.useState<null | HTMLElement>(null);
   const [anchorElSettings, setAnchorElSettings] = React.useState<null | HTMLElement>(null);
 
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
   };
-  const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorElUser(event.currentTarget);
+  const handleOpenFormMenu = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorElForms(event.currentTarget);
   };
   const handleOpenSettingsMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElSettings(event.currentTarget);
@@ -36,9 +36,9 @@ function ResponsiveAppBar() {
     setAnchorElNav(null);
   };
 
-  const handleCloseUserMenu = () => {
+  const handleCloseFormMenu = () => {
     handleCloseNavMenu();
-    setAnchorElUser(null);
+    setAnchorElForms(null);
   };
 
   const handleCloseSettingsMenu = () => {
@@ -53,6 +53,38 @@ function ResponsiveAppBar() {
     navigate("/manage-profiles");
   };
 
+  const navigateToFMRForm = () => {
+    handleCloseFormMenu();
+    navigate('/fmr-form');
+  };
+
+  const navigateToListingForm = () => {
+    handleCloseFormMenu();
+    if (window.location.href.indexOf('listing-form') > -1) {
+      navigate('/listing-form');
+      window.location.reload();
+    }
+    else navigate('/listing-form');
+  };
+
+  const navigateToUserForm = () => {
+    handleCloseFormMenu();
+    if (window.location.href.indexOf('user-form') > -1) {
+      navigate('/user-form');
+      window.location.reload();
+    }
+    else navigate('/user-form');
+  };
+
+  const navigateToAdminForm = () => {
+    handleCloseFormMenu();
+    if (window.location.href.indexOf('admin-form') > -1) {
+      navigate('/admin-form');
+      window.location.reload();
+    }
+    else navigate('/admin-form');
+  };
+
   return (
     <AppBar position="sticky" elevation={0} style={{ background: "white", borderBottom: '1px solid #D9D9D9' }}>
       <Container maxWidth="xl">
@@ -63,7 +95,7 @@ function ResponsiveAppBar() {
             <IconButton
               size="large"
               onClick={handleOpenNavMenu}
-              sx={{color:"orange"}}
+              sx={{ color: "orange" }}
             >
               <MenuIcon />
             </IconButton>
@@ -88,14 +120,15 @@ function ResponsiveAppBar() {
               }}
             >
               {pages.map((page) => (
-                <MenuItem key={page} onClick={page === "Create New" ? handleOpenUserMenu : page === "Manage Profiles" ? navigateToProfiles : handleCloseNavMenu}>
+                <MenuItem key={page}
+                  onClick={page === "Create New" ? handleOpenFormMenu : page === "Manage Profiles" ? navigateToProfiles : page == "Update FMR" ? navigateToFMRForm : handleCloseNavMenu}>
                   <Typography textAlign="center">{page}</Typography>
                 </MenuItem>
               ))}
             </Menu>
           </Box>
 
-          <Box sx={{ p: 0, flexGrow: 1, display: { xs: 'flex', md: 'none' }}}>
+          <Box sx={{ p: 0, flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
             <Button
               component={Link} to="/"
               sx={{ width: 300, p: 0, border: 0, justifyContent: "flex-start" }}>
@@ -105,7 +138,7 @@ function ResponsiveAppBar() {
 
 
           {/* Expanded View */}
-          <Box sx={{ p: 0, display: { xs: 'none', md: 'flex' }}}>
+          <Box sx={{ p: 0, display: { xs: 'none', md: 'flex' } }}>
             <Button
               component={Link} to="/"
               sx={{ width: 300, p: 0, border: 0, justifyContent: "flex-start" }}>
@@ -120,7 +153,7 @@ function ResponsiveAppBar() {
             {pages.map((page) => (
               <Button
                 key={page}
-                onClick={page === "Create New" ? handleOpenUserMenu : page === "Manage Profiles" ? navigateToProfiles : handleOpenNavMenu}
+                onClick={page === "Create New" ? handleOpenFormMenu : page === "Manage Profiles" ? navigateToProfiles : page == "Update FMR" ? navigateToFMRForm : handleOpenNavMenu}
                 sx={{
                   textTransform: 'none',
                   '&:hover': { fontWeight: 'bold' }, fontSize: 16, my: 2, color: '#737171',
@@ -132,11 +165,11 @@ function ResponsiveAppBar() {
             ))}
           </Box>
 
-          <Box sx={{ flexGrow: 0}}>
+          <Box sx={{ flexGrow: 0 }}>
             <IconButton
               size="large"
               onClick={handleOpenSettingsMenu}
-              sx={{color:"orange"}}
+              sx={{ color: "orange" }}
             >
               <SettingsIcon />
             </IconButton>
@@ -161,39 +194,37 @@ function ResponsiveAppBar() {
                 <Typography textAlign="center">Profile Settings</Typography>
               </MenuItem>
               <MenuItem>
-                <Typography sx={{color:"orange"}} textAlign="center">Log out</Typography>
+                <Typography sx={{ color: "orange" }} textAlign="center">Log out</Typography>
               </MenuItem>
             </Menu>
           </Box>
 
           {/* Forms Menu */}
           <Menu
-              sx={{ mt: "45px" }}
-              id="forms-appbar"
-              anchorEl={anchorElUser}
-              anchorOrigin={{
-                vertical: "top",
-                horizontal: "right"
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: "top",
-                horizontal: "right"
-              }}
-              open={Boolean(anchorElUser)}
-              onClose={handleCloseUserMenu}
-            >
-              {forms.map((form) => (
-                <MenuItem 
-                  key={form} 
-                  onClick={handleCloseUserMenu} 
-                  component={Link} 
-                  to={form === "Listing" ? 'listing-form' : form === "Admin" ? 'admin-form' : form === 'User' ? 'user-form' : ''}
-                >
-                  <Typography textAlign="left" margin='5px'>{form}</Typography>
-                </MenuItem>
-              ))}
-            </Menu>
+            sx={{ mt: "45px" }}
+            id="forms-appbar"
+            anchorEl={anchorElForms}
+            anchorOrigin={{
+              vertical: "top",
+              horizontal: "right"
+            }}
+            keepMounted
+            transformOrigin={{
+              vertical: "top",
+              horizontal: "right"
+            }}
+            open={Boolean(anchorElForms)}
+            onClose={handleCloseFormMenu}
+          >
+            {forms.map((form) => (
+              <MenuItem
+                key={form}
+                onClick={form === "Listing" ? navigateToListingForm : form === "Admin" ? navigateToAdminForm : form === 'User' ? navigateToUserForm : handleCloseFormMenu}
+              >
+                <Typography textAlign="left" margin='5px'>{form}</Typography>
+              </MenuItem>
+            ))}
+          </Menu>
         </Toolbar>
       </Container>
     </AppBar >
