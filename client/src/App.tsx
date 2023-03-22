@@ -8,7 +8,10 @@ import ManageProfiles from './pages/ManageProfiles'
 import ListingForm from './forms/ListingForm'
 import AdminForm from './forms/AdminForm'
 import UserForm from './forms/UserForm'
+
 import ProofSearch from './pages/ProofSearch';
+import FmrForm from './forms/FmrForm';
+
 
 function App() {
 
@@ -59,6 +62,11 @@ function App() {
                 path='/user-form'
                 element={<UserForm />}
               />
+              <Route
+                path='/fmr-form'
+                element={<FmrForm />}
+              />
+
             </Routes>
           </div>
         </BrowserRouter>
