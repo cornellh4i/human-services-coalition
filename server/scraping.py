@@ -33,26 +33,27 @@ def processCSP():
     # Get each listing and add to array of listings
     for row in table.findAll('a', attrs={'class': 'featured-listing accent-color-border-on-hover'}):
         try:
+            print('here')
             info = row.find('div', attrs={'class': 'featured-listing__content'}).find(
                 'div', attrs={'class': 'featured-listing__description-container'})
             title = info.find(
-                'h3', attrs={'class':"featured-listing__title"}).text            
-            priceContainer = info.find('div', attrs={
-                'class': 'featured-listing__content-footer'}).find('p', attrs={'class': 'featured-listing__price accent-color'})
-            bedbath = info.find(
-                'p', attrs={'class': 'featured-listing__features'})
+                'h3', attrs={'class':"featured-listing__title"}).text       
+            beds = row['data-bedrooms']
+            baths = row['data-bathrooms']
+            # bedbath = info.find(
+            #     'p', attrs={'class': 'featured-listing__features'})
             # address = info.find(
             #     'p', attrs={'class': 'featured-listing__address'})
             # image = row.find(
             #     'div', attrs={'class': 'featured-listing__image-container'})
             
-            price = priceContainer.text.strip().replace("$","").replace(",","").strip()
+            price = int(row['data-rent'])
             
-            beds = getBed(bedbath.text)
             
             # Check if listing falls under fair market price
-            if (int(price) > 180):
-            #filterListing(int(price), beds) and
+            #260 is price of parking
+            if ( int(price) < filterListing(int(price), beds) and int(price) > 260):
+            # int(price) < 200 andfilterListing(int(price), beds)
                 # Create empty listing
                 listing = {}
                 listing['streetAddress'] = title
@@ -61,15 +62,15 @@ def processCSP():
                 listing['state'] = 'NY'
                 listing['country'] = 'US'
                 listing['zipcode'] = 14850
-                listing['pictures'] = 0
+                listing['pictures'] = []
                 listing['price'] = price
                 listing['size'] = beds
                 listing['unitType'] = None
-                listing['numBath'] = 1
+                listing['numBath'] = baths
                 listing['schoolDistrict'] = None
-                listing['pets'] = None
-                listing['utilities'] = None
-                listing['furnished'] = None
+                listing['pets'] = False
+                listing['utilities'] = False
+                listing['furnished'] = False
                 listing['distTransportation'] = None
                 listing['landlord'] = "CSP Management"
                 listing['landlordEmail'] = 'info@cspmanagement.com'
@@ -101,245 +102,245 @@ def processCSP():
 
 
 # Returns an array of listings from certified properties under fair market prices
-def processCertified():
-    URL = "https://www.certifiedpropertiesinc.com/property-listings/"
+# def processCertified():
+#     URL = "https://www.certifiedpropertiesinc.com/property-listings/"
 
-    # Get HTML content from specified URL
-    r = requests.get(URL)
+#     # Get HTML content from specified URL
+#     r = requests.get(URL)
 
-    # Create Beautiful Soup object with HTML content
-    soup = BeautifulSoup(r.content, 'html5lib')
+#     # Create Beautiful Soup object with HTML content
+#     soup = BeautifulSoup(r.content, 'html5lib')
 
-    # Array to store listings
-    listings = []
+#     # Array to store listings
+#     listings = []
 
-    table = soup.find('div', attrs={'class': 'es-listing es-layout-2_col'})
+#     table = soup.find('div', attrs={'class': 'es-listing es-layout-2_col'})
 
-    # Get each listing and add to array of listings
-    for row in table.findAll('div', attrs={'class': 'es-property-inner'}):
-        try:
-            info = row.find('div', attrs={'class': 'es-property-info'})
-            titleText = info.find('div', attrs={
-                                  'class': 'es-col-view'}).h2.find('a', attrs={'class': 'es-property-link'}).text
-            priceText = info.find('div', attrs={
-                                  'class': 'es-col-view'}).find('span', attrs={'class': 'es-price'}).text
-            imageLinkContainer = row.find('div', attrs={
-                                          'class': 'es-property-thumbnail'}).find('div', attrs={'class': 'es-thumbnail'}).a
+#     # Get each listing and add to array of listings
+#     for row in table.findAll('div', attrs={'class': 'es-property-inner'}):
+#         try:
+#             info = row.find('div', attrs={'class': 'es-property-info'})
+#             titleText = info.find('div', attrs={
+#                                   'class': 'es-col-view'}).h2.find('a', attrs={'class': 'es-property-link'}).text
+#             priceText = info.find('div', attrs={
+#                                   'class': 'es-col-view'}).find('span', attrs={'class': 'es-price'}).text
+#             imageLinkContainer = row.find('div', attrs={
+#                                           'class': 'es-property-thumbnail'}).find('div', attrs={'class': 'es-thumbnail'}).a
 
-            # Create empty listing
-            listing = {}
+#             # Create empty listing
+#             listing = {}
 
-            # Find bed and bath in bottom section, both are under same class tag. Could have neither
-            for bedBath in info.find('div', attrs={'class': 'es-bottom-info'}).find('div', attrs={'class': 'es-bottom-icon__list'}).findAll('span', attrs={'class': 'es-bottom-icon'}):
-                try:
-                    if "bed" in bedBath.text.strip():
-                        listing['bed'] = bedBath.text.strip()
-                    elif "bath" in bedBath.text.strip():
-                        listing['bath'] = bedBath.text.strip()
-                except:
-                    continue
+#             # Find bed and bath in bottom section, both are under same class tag. Could have neither
+#             for bedBath in info.find('div', attrs={'class': 'es-bottom-info'}).find('div', attrs={'class': 'es-bottom-icon__list'}).findAll('span', attrs={'class': 'es-bottom-icon'}):
+#                 try:
+#                     if "bed" in bedBath.text.strip():
+#                         listing['bed'] = bedBath.text.strip()
+#                     elif "bath" in bedBath.text.strip():
+#                         listing['bath'] = bedBath.text.strip()
+#                 except:
+#                     continue
 
-            price = (priceText[2:-3]).replace(',',  '')
-            beds = getBed(listing['bed'])
+#             price = (priceText[2:-3]).replace(',',  '')
+#             beds = getBed(listing['bed'])
 
-            # Check if listing falls under fair market price
-            if filterListing(int(price), beds):
-                # Add listing information
+#             # Check if listing falls under fair market price
+#             if filterListing(int(price), beds):
+#                 # Add listing information
 
-                # listing['title'] = titleText
-                # listing['price'] = "$" + priceText[2:]
-                # listing['img'] = imageLinkContainer.img['src']
-                # listing['url'] = imageLinkContainer['href']
+#                 # listing['title'] = titleText
+#                 # listing['price'] = "$" + priceText[2:]
+#                 # listing['img'] = imageLinkContainer.img['src']
+#                 # listing['url'] = imageLinkContainer['href']
 
-                listing['webScraped'] = True
-                listing['pictures'] = imageLinkContainer.img['src']
-                listing['price'] = int(price)
-                listing['size'] = "One Bed"
-                listing['numBath'] = 3
-                listing['schoolDistrict'] = None
-                listing['pets'] = None
-                listing['utilities'] = None
-                listing['furnished'] = None
-                listing['distTransportation'] = None
-                listing['landlord'] = "Certified Properties"
-                listing['landlordEmail'] = None
-                listing['landlordPhone'] = None
-                listing['linkOrig'] = imageLinkContainer['href']
+#                 listing['webScraped'] = True
+#                 listing['pictures'] = imageLinkContainer.img['src']
+#                 listing['price'] = int(price)
+#                 listing['size'] = "One Bed"
+#                 listing['numBath'] = 3
+#                 listing['schoolDistrict'] = None
+#                 listing['pets'] = None
+#                 listing['utilities'] = None
+#                 listing['furnished'] = None
+#                 listing['distTransportation'] = None
+#                 listing['landlord'] = "Certified Properties"
+#                 listing['landlordEmail'] = None
+#                 listing['landlordPhone'] = None
+#                 listing['linkOrig'] = imageLinkContainer['href']
 
-                # Print statements for debugging
-                # print(listing['title'])
-                # print(listing['price'])
-                # print(listing['bed'])
-                # print(listing['bath'])
-                print(listing)
+#                 # Print statements for debugging
+#                 # print(listing['title'])
+#                 # print(listing['price'])
+#                 # print(listing['bed'])
+#                 # print(listing['bath'])
+#                 print(listing)
 
-                listings.append(listing)
-        except:
-            continue
+#                 listings.append(listing)
+#         except:
+#             continue
 
-    return listings
+#     return listings
 
-# Returns an array of listings from Craigslist under fair market prices (all pages)
-
-
-def processCraigslist():
-    first_url = "https://ithaca.craigslist.org/search/apa"
-    urls = "https://ithaca.craigslist.org/search/apa?s="
-
-    # Get HTML content from first page of Craigslist
-    r = requests.get(first_url)
-
-    # Create Beautiful Soup object with HTML content
-    soup = BeautifulSoup(r.content, 'html5lib')
-
-    # Get number of total listings
-    totalListings = int(
-        (soup.find('span', attrs={'class': 'totalcount'}).text))
-
-    # Update listings to hold listings from first page
-    listings = processCraigslistHelper(first_url)
-
-    # Iterate through all the pages and get all listings under FMR
-    start = 120
-    while start < totalListings:
-        listings + processCraigslistHelper(urls+str(start))
-        start += 120
-
-    return listings
+# # Returns an array of listings from Craigslist under fair market prices (all pages)
 
 
-# Returns an array of listings from Craigslist under fair market prices (only 1 page)
-def processCraigslistHelper(url):
-    # Get HTML content from specified URL
-    r = requests.get(url)
+# def processCraigslist():
+#     first_url = "https://ithaca.craigslist.org/search/apa"
+#     urls = "https://ithaca.craigslist.org/search/apa?s="
 
-    # Create Beautiful Soup object with HTML content
-    soup = BeautifulSoup(r.content, 'html5lib')
+#     # Get HTML content from first page of Craigslist
+#     r = requests.get(first_url)
 
-    # Array to store listings
-    listings = []
+#     # Create Beautiful Soup object with HTML content
+#     soup = BeautifulSoup(r.content, 'html5lib')
 
-    rows = soup.find('ul', attrs={'class': 'rows'})
+#     # Get number of total listings
+#     totalListings = int(
+#         (soup.find('span', attrs={'class': 'totalcount'}).text))
 
-    # Get each listing and add to array of listings
-    for row in rows.findAll('li', attrs={'class': 'result-row'}):
-        try:
-            info = row.find('div', attrs={'class': 'result-info'})
-            title = info.h3.text
-            priceText = info.find('span', attrs={
-                'class': 'result-meta'}).find('span', attrs={'class': 'result-price'}).text
-            price = (priceText[1:]).replace(',', '')
-            try:
-                beds = info.find('span', attrs={
-                    'class': 'result-meta'}).find('span', attrs={'class': 'housing'}).text
-                beds = beds.strip()
-                beds = beds[0:3]
-                if 'br' not in beds:
-                    beds = "Studio"
-                else:
-                    beds = beds[0:1]
-            except:
-                beds = "Studio"
-            url = info.h3.a['href']
+#     # Update listings to hold listings from first page
+#     listings = processCraigslistHelper(first_url)
 
-            # Create empty listing
-            listing = {}
+#     # Iterate through all the pages and get all listings under FMR
+#     start = 120
+#     while start < totalListings:
+#         listings + processCraigslistHelper(urls+str(start))
+#         start += 120
 
-            # Check if listing falls under fair market price
-            if filterListing(int(price), beds):
-                # Add listing information
-                listing['title'] = title.strip()
-                listing['price'] = priceText
-                listing['beds'] = beds
-                listing['url'] = url
-                # Get bathrooms and pictures
-                listing.update(getCraigslistAdditional(url))
-
-                # Print statements for debugging
-                print(listing['title'])
-                print(listing['price'])
-                print(listing['address'])
-                print(listing['beds'])
-                print(listing['url'])
-
-                listings.append(listing)
-
-        except:
-            continue
-
-    return listings
+#     return listings
 
 
-# Get additonal info from Craigslist such as bathrooms, pictures, and address
-def getCraigslistAdditional(url):
-    r = requests.get(url)
-    soup = BeautifulSoup(r.content, 'html5lib')
-    info = {}
+# # Returns an array of listings from Craigslist under fair market prices (only 1 page)
+# def processCraigslistHelper(url):
+#     # Get HTML content from specified URL
+#     r = requests.get(url)
 
-    # Get number of bathrooms
-    bathrooms = soup.find(
-        'span', attrs={'class': 'shared-line-bubble'}).text.strip()
-    bathrooms = bathrooms[len(bathrooms) - 3]
-    info['bathrooms'] = bathrooms
+#     # Create Beautiful Soup object with HTML content
+#     soup = BeautifulSoup(r.content, 'html5lib')
 
-    # Get images
-    pics = []
-    imageHead = soup.find('div', attrs={'id': 'thumbs'})
-    for pic in imageHead.findAll('a'):
-        pics.append(pic['href'])
-    info['pics'] = pics
+#     # Array to store listings
+#     listings = []
 
-    # Get address
-    address = soup.find('div', attrs={'class': 'mapaddress'}).text.strip()
-    info['address'] = address
+#     rows = soup.find('ul', attrs={'class': 'rows'})
 
-    return info
+#     # Get each listing and add to array of listings
+#     for row in rows.findAll('li', attrs={'class': 'result-row'}):
+#         try:
+#             info = row.find('div', attrs={'class': 'result-info'})
+#             title = info.h3.text
+#             priceText = info.find('span', attrs={
+#                 'class': 'result-meta'}).find('span', attrs={'class': 'result-price'}).text
+#             price = (priceText[1:]).replace(',', '')
+#             try:
+#                 beds = info.find('span', attrs={
+#                     'class': 'result-meta'}).find('span', attrs={'class': 'housing'}).text
+#                 beds = beds.strip()
+#                 beds = beds[0:3]
+#                 if 'br' not in beds:
+#                     beds = "Studio"
+#                 else:
+#                     beds = beds[0:1]
+#             except:
+#                 beds = "Studio"
+#             url = info.h3.a['href']
 
+#             # Create empty listing
+#             listing = {}
 
-def getIthacaRentingHelper(url):
-    r = requests.get(url)
-    soup = BeautifulSoup(r.content, 'html5lib')
+#             # Check if listing falls under fair market price
+#             if filterListing(int(price), beds):
+#                 # Add listing information
+#                 listing['title'] = title.strip()
+#                 listing['price'] = priceText
+#                 listing['beds'] = beds
+#                 listing['url'] = url
+#                 # Get bathrooms and pictures
+#                 listing.update(getCraigslistAdditional(url))
 
-    listings = []
+#                 # Print statements for debugging
+#                 print(listing['title'])
+#                 print(listing['price'])
+#                 print(listing['address'])
+#                 print(listing['beds'])
+#                 print(listing['url'])
 
-    units = soup.find('div', attrs={'class': 'units'})
-    print(soup)
-    for unit in soup.findAll('div', attrs={'class': 'unit-list'}):
-        print("hi")
-        # Get beds
-        bedbath = unit.find('div', attrs={'class': 'unit-type'}).text.strip()
-        if 'BR' not in bedbath:
-            beds = "Studio"
-            baths = 0
-        else:
-            beds = (int)(bedbath[0:1])
-            baths = (int)(bedbath[4:5])
-        # Get price, if no price listed, set to large number
-        try:
-            price = (int)(unit.find('div', attrs={'id': 'unitPrice'}))
-        except:
-            price = 100000
-        # Get url
-        url = unit.a['href']
+#                 listings.append(listing)
 
-        listing = {}
+#         except:
+#             continue
 
-        if filterListing(price, beds):
-            listing['price'] = price
-            listing['size'] = beds
-            listing['numBaths'] = baths
-            listing['linkOrig'] = url
-
-        print(listing['price'])
-        print(listing['size'])
-        print(listing['numBaths'])
-        print(listing['linkOrig'])
+#     return listings
 
 
-def getIthacaRentingInfo(url):
-    r = requests.get(url)
-    soup = BeautifulSoup(r.content, 'html5lib')
-    info = {}
+# # Get additonal info from Craigslist such as bathrooms, pictures, and address
+# def getCraigslistAdditional(url):
+#     r = requests.get(url)
+#     soup = BeautifulSoup(r.content, 'html5lib')
+#     info = {}
+
+#     # Get number of bathrooms
+#     bathrooms = soup.find(
+#         'span', attrs={'class': 'shared-line-bubble'}).text.strip()
+#     bathrooms = bathrooms[len(bathrooms) - 3]
+#     info['bathrooms'] = bathrooms
+
+#     # Get images
+#     pics = []
+#     imageHead = soup.find('div', attrs={'id': 'thumbs'})
+#     for pic in imageHead.findAll('a'):
+#         pics.append(pic['href'])
+#     info['pics'] = pics
+
+#     # Get address
+#     address = soup.find('div', attrs={'class': 'mapaddress'}).text.strip()
+#     info['address'] = address
+
+#     return info
+
+
+# def getIthacaRentingHelper(url):
+#     r = requests.get(url)
+#     soup = BeautifulSoup(r.content, 'html5lib')
+
+#     listings = []
+
+#     units = soup.find('div', attrs={'class': 'units'})
+#     print(soup)
+#     for unit in soup.findAll('div', attrs={'class': 'unit-list'}):
+#         print("hi")
+#         # Get beds
+#         bedbath = unit.find('div', attrs={'class': 'unit-type'}).text.strip()
+#         if 'BR' not in bedbath:
+#             beds = "Studio"
+#             baths = 0
+#         else:
+#             beds = (int)(bedbath[0:1])
+#             baths = (int)(bedbath[4:5])
+#         # Get price, if no price listed, set to large number
+#         try:
+#             price = (int)(unit.find('div', attrs={'id': 'unitPrice'}))
+#         except:
+#             price = 100000
+#         # Get url
+#         url = unit.a['href']
+
+#         listing = {}
+
+#         if filterListing(price, beds):
+#             listing['price'] = price
+#             listing['size'] = beds
+#             listing['numBaths'] = baths
+#             listing['linkOrig'] = url
+
+#         print(listing['price'])
+#         print(listing['size'])
+#         print(listing['numBaths'])
+#         print(listing['linkOrig'])
+
+
+# def getIthacaRentingInfo(url):
+#     r = requests.get(url)
+#     soup = BeautifulSoup(r.content, 'html5lib')
+#     info = {}
 
 
 # Returns an array of listings from apartments.com under fair market prices
@@ -459,10 +460,12 @@ def processApartmentsHelper(url):
                                            'class': 'placard-content'}).find('span', attrs={'class': 'property-beds'}).text
 
             # Get the URL of listing
+            print('ehre')
             linkContainer = row.find('section', attrs={
                 'class': 'placard-content'}).find('a', attrs={'class': 'property-link'})
+            print('cnt')
             link = linkContainer['href']
-
+            print(link)
             # Get pictures of listing
             pictures = []
             pictureContainer = row.find(
@@ -685,20 +688,10 @@ def filterListing(price, beds):
 
 # def main():
 
-a = processCSP()
-# sys.stdout.flush()
-
-
-# processCertified()
-# processCraigslist()
-#processApartments()
-print(repr(a))
-for listing in a:
-    try:
-        print(listing['title'])
-    except:
-        print('failed')
-# getIthacaRentingHelper('http://ithacarenting.com/downtown-rentals/')
+a = processApartments()
+c = processCSP()
+out = a.extend(c)
+print(out)
 
 # if __name__ == '__main__':
 #     main()
