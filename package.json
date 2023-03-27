@@ -15,6 +15,9 @@
     "@emotion/styled": "^11.10.5",
     "@material-ui/styles": "^4.11.5",
     "@mui/material": "^5.10.12",
+    "aws-sdk": "^2.1343.0",
+    "fs": "^0.0.1-security",
+    "multer": "^1.4.5-lts.1",
     "react-hooks-global-state": "^2.1.0",
     "react-sticky-box": "^1.0.2"
   }
