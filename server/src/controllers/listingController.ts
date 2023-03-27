@@ -1,5 +1,9 @@
 const Listing = require("../models/Listing");
 import mongoose from 'mongoose';
+import multer from 'multer';
+import uploadFile from '../utils/s3';
+
+import { successJson, errorJson } from '../utils/jsonResponses';
 
 // GET all housing listings
 const getListings = async (req, res) => {
@@ -213,9 +217,16 @@ const updateListing = async (req, res) => {
     if (!listing) {
       return res.status(400).json({ error: 'No such listing' })
     }
+    const file = req.file;
+    const name = req.body.name;
+    const s3Response = await uploadFile(file, name);
+
+    res.send(successJson(s3Response));
     res.status(200).json(listing)
+
   } catch (error) {
     res.status(400).json({ error: (error as Error).message })
+    res.send(errorJson(error));
   }
 }
 

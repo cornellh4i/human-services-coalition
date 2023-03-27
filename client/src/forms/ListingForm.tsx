@@ -12,7 +12,8 @@ const ListingForm = () => {
   const [state, setState] = useState('')
   const [country, setCountry] = useState('')
   const [zipCode, setZipCode] = useState('')
-  const [pictures, setPictures] = useState<string[]>([''])
+  // const [pictures, setPictures] = useState<string[]>([''])
+  const [pictures, setPictures] = useState('')
   const [price, setPrice] = useState('')
   const [size, setSize] = useState('')
   const [unitType, setUnitType] = useState('')
@@ -87,7 +88,7 @@ const ListingForm = () => {
     setFurnishedIsTrue(json_object.furnished)
     setPetsIsTrue(json_object.pets)
     setUtilitiesIsTrue(json_object.utilities)
-    setPictures(json_object.pictures)
+    //setPictures(json_object.pictures)
     setButtonLabel('Save Changes')
   }
 
@@ -185,7 +186,8 @@ const ListingForm = () => {
       setState('')
       setCountry('')
       setZipCode('')
-      setPictures([''])
+      // setPictures([''])
+      setPictures('')
       setPrice('')
       setSize('')
       setUnitType('')
@@ -645,7 +647,7 @@ const ListingForm = () => {
               </FormGroup>
 
 
-              <FormGroup>
+              {/* <FormGroup>
                 <FormLabel sx={{ marginTop: '1rem' }}>Upload Images</FormLabel>
                 <Button disableElevation variant='outlined' component='label' sx={{ color: '#5D737E', marginBottom: '1rem' }}>
                   <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '8rem' }}>
@@ -664,10 +666,10 @@ const ListingForm = () => {
                     />
                   </Box>
                 </Button>
-              </FormGroup>
+              </FormGroup> */}
 
               {/* ORIGINAL CODE FOR UPLOAD IMAGES */}
-              {/* <FormGroup>
+              <FormGroup>
                 <FormLabel sx={{ marginTop: '1rem' }}>Upload Images</FormLabel>
                 <Button disableElevation variant='outlined' component='label' sx={{ color: '#5D737E', marginBottom: '1rem' }}>
                   <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '8rem' }}>
@@ -680,11 +682,11 @@ const ListingForm = () => {
                       type="file"
                       multiple={true}
                       name="pictures"
-                      onChange={(e) => uploadImages(e)}
+                      onChange={(e) => setPictures(e.target.value)}
                     />
                   </Box>
                 </Button>
-              </FormGroup> */}
+              </FormGroup>
 
             </Box>
 

@@ -1,3 +1,5 @@
+import multer from 'multer';
+
 module.exports = () => {
   const express = require("express");
   const router = express.Router();
@@ -48,8 +50,10 @@ module.exports = () => {
   // POST (add) a new housing listing
   router.post('/listing', createListing)
 
+  const upload = multer({ dest: "uploads/" });
+
   // PATCH (edit) a specific housing listing
-  router.patch('/listing/:id', updateListing)
+  router.patch('/listing/:id', upload.single('image'), updateListing)
 
   // DELETE a specific housing listing
   router.delete('/listing/:id', deleteListing)
