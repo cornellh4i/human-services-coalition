@@ -1,6 +1,7 @@
 import Express from "express";
 /**** Node.js libraries *****/
 const path = require('path');
+const passport = require('passport');
 
 /**** External libraries ****/
 const express = require('express');
@@ -13,6 +14,7 @@ const app = express();
 
 function createServer() {
   const routes = require("./routes")();
+  const auth = require('./auth');
 
   app.use(bodyParser.json());
   app.use(bodyParser.urlencoded({ extended: false }));
@@ -21,7 +23,9 @@ function createServer() {
   app.use(express.static(path.resolve('..', 'client', 'build')));
 
   /**** Add routes ****/
-  app.use("/api", routes);
+  app.use("/api", passport.authenticate('jwt', { session: true }), routes);
+  app.use('/auth', auth);
+
 
 
   // "Redirect" all non-API GET requests to React's entry point (index.html)

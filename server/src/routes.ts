@@ -34,9 +34,9 @@ module.exports = () => {
   } = require("./controllers/fmrController")
 
   /**** Routes ****/
-  router.post('/login', async (req, res) => {
-    return res.status(400).json({ error: 'Not implemented' })
-  })
+  // router.post('/login', async (req, res) => {
+  //   return res.status(400).json({ error: 'Not implemented' })
+  // })
 
   // GET all housing listings
   router.get('/listing', getListings)

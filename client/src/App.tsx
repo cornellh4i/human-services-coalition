@@ -13,12 +13,12 @@ import { useState } from 'react';
 
 function App() {
 
-  const [showNav, setShowNav] = useState(false);
-  const [token, setToken] = useState();
+  // const [showNav, setShowNav] = useState(false);
+  // const [token, setToken] = useState();
 
-  if (!token) {
-    return <LoginForm setToken={setToken} />
-  }
+  // // if (!token) {
+  //   return <LoginForm setToken={setToken} />
+  // }
 
   const theme = createTheme({
     typography: {
@@ -32,7 +32,7 @@ function App() {
     <div className="App">
       <ThemeProvider theme={theme}>
         <BrowserRouter>
-          {showNav && <NavBar />}
+          {<NavBar />}
           <div className="pages">
             <Routes>
               <Route
@@ -62,6 +62,10 @@ function App() {
               <Route
                 path='/user-form'
                 element={<UserForm />}
+              />
+              <Route
+                path='/login-form'
+                element={<LoginForm />}
               />
             </Routes>
           </div>

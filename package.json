@@ -11,10 +11,14 @@
   },
   "license": "ISC",
   "dependencies": {
-    "@material-ui/styles": "^4.11.5",
     "@emotion/react": "^11.10.5",
     "@emotion/styled": "^11.10.5",
+    "@material-ui/styles": "^4.11.5",
     "@mui/material": "^5.10.12",
+    "jsonwebtoken": "^9.0.0",
+    "passport": "^0.6.0",
+    "passport-jwt": "^4.0.1",
+    "passport-local": "^1.0.0",
     "react-sticky-box": "^1.0.2"
   }
 }

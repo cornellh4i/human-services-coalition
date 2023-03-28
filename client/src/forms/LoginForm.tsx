@@ -3,35 +3,35 @@ import { Box, Button, Container, FormGroup, FormLabel, Grid, MenuItem, Radio, Ra
 import { ReactComponent as Logo } from '../assets/coclogo.svg';
 import PropTypes from 'prop-types';
 
-async function loginUser(credentials: any) {
-  const response = await fetch('/api/login/', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(credentials)
-  })
-  const json = await response.json()
-  console.log(json)
+// async function loginUser(credentials: any) {
+//   const response = await fetch('/api/login/', {
+//     method: 'POST',
+//     headers: {
+//       'Content-Type': 'application/json'
+//     },
+//     body: JSON.stringify(credentials)
+//   })
+//   const json = await response.json()
+//   console.log(json)
 
 
-  if (response.ok) {
-    return json
-  }
-}
+//   if (response.ok) {
+//     return json
+//   }
+// }
 
-export default function LoginForm({ setToken }: { setToken: any }) {
+export default function LoginForm() {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log("hi");
-    const token = await loginUser({
-      username,
-      password
-    });
-    setToken(token);
+    // console.log("hi");
+    // const token = await loginUser({
+    //   username,
+    //   password
+    // });
+    // setToken(token);
   }
 
   return (
@@ -77,11 +77,10 @@ export default function LoginForm({ setToken }: { setToken: any }) {
             <Grid item xs={12} md={8}>
 
               <Grid item xs={12} md={8}>
-                <form noValidate className="login-form">
-                  <Grid item>
-                    <Typography variant='h6' sx={{ fontSize: { xs: '2rem', md: '3rem' }, fontWeight: 'bold', textAlign: 'center' }} >Continuum of Care Housing Listings</Typography>
-                  </Grid>
-                </form>
+
+                <Grid item>
+                  <Typography variant='h6' sx={{ fontSize: { xs: '2rem', md: '3rem' }, fontWeight: 'bold', textAlign: 'center' }} >Continuum of Care Housing Listings</Typography>
+                </Grid>
               </Grid>
             </Grid>
 
@@ -153,7 +152,7 @@ export default function LoginForm({ setToken }: { setToken: any }) {
   )
 }
 
-LoginForm.propTypes = {
-  setToken: PropTypes.func.isRequired
-};
+// LoginForm.propTypes = {
+//   setToken: PropTypes.func.isRequired
+// };
 
