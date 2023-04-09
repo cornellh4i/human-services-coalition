@@ -211,22 +211,29 @@ const updateListing = async (req, res) => {
   }
 
   try {
+    console.log("BEFORE_FIND")
     const listing = await Listing.findOneAndUpdate({ _id: id }, {
       ...req.body
     })
     if (!listing) {
       return res.status(400).json({ error: 'No such listing' })
     }
-
+    console.log("BEFORE_MULTER")
     //multer
     const file = req.file;
     const name = req.body.name;
+
+    console.log("BEFORE_MULTER_UPLOAD")
+
     const s3Response = await uploadFile(file, name);
 
+    console.log("SAVED")
     res.send(successJson(s3Response));
     res.status(200).json(listing)
 
+
   } catch (error) {
+    console.log("NOT_SAVED")
     res.status(400).json({ error: (error as Error).message })
     res.send(errorJson(error));
   }
