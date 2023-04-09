@@ -217,6 +217,8 @@ const updateListing = async (req, res) => {
     if (!listing) {
       return res.status(400).json({ error: 'No such listing' })
     }
+
+    //multer
     const file = req.file;
     const name = req.body.name;
     const s3Response = await uploadFile(file, name);
