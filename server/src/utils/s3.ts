@@ -20,6 +20,7 @@ function uploadFile(file: any, name: string) {
   //send a file from frontend and download onto backend with multer and then take that 
   //and sed to aws
 
+  console.log("uploading file")
   //get file from server -- fs 
   const fileStream = fs.createReadStream(file.path)
   const uploadParams = {
@@ -30,4 +31,15 @@ function uploadFile(file: any, name: string) {
   return s3.upload(uploadParams).promise()
 }
 
-export default uploadFile;
+function getFileStream(fileKey: any) {
+  const downloadParams = {
+    Key: fileKey,
+    Bucket: bucketName
+  }
+  return s3.getObject(downloadParams).createReadStream()
+}
+
+export default {
+  uploadFile,
+  getFileStream
+};

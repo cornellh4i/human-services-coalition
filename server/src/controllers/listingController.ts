@@ -1,7 +1,10 @@
 const Listing = require("../models/Listing");
 import mongoose from 'mongoose';
 import multer from 'multer';
-import uploadFile from '../utils/s3';
+// const multer = require('multer');
+// const multerS3 = require('multer-s3');
+const fs = require('fs').promises;
+import s3utils from '../utils/s3';
 
 import { successJson, errorJson } from '../utils/jsonResponses';
 
@@ -221,20 +224,26 @@ const updateListing = async (req, res) => {
     console.log("BEFORE_MULTER")
     //multer
     const file = req.file;
+    if (!file) {
+      res.send(errorJson("No file uploaded"));
+      return;
+    }
     const name = req.body.name;
 
     console.log("BEFORE_MULTER_UPLOAD")
 
-    const s3Response = await uploadFile(file, name);
+    const s3Response = await s3utils.uploadFile(file, name);
+    //await fs.unlink(file.path);
+
 
     console.log("SAVED")
-    res.send(successJson(s3Response));
-    res.status(200).json(listing)
-
+    res.send(successJson({ imagePath: `images/${s3Response.key}` }));
+    //res.status(200).json(listing)
 
   } catch (error) {
     console.log("NOT_SAVED")
-    res.status(400).json({ error: (error as Error).message })
+    //res.status(400).json({ error: (error as Error).message })
+    console.log(error)
     res.send(errorJson(error));
   }
 }
@@ -250,7 +259,6 @@ const deleteListing = async (req, res) => {
   if (!listing) {
     return res.status(400).json({ error: 'No such listing' })
   }
-
   res.status(200).json(listing)
 }
 

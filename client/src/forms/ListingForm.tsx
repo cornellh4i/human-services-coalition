@@ -242,7 +242,7 @@ const ListingForm = () => {
         </Grid>
 
         <Grid item xs={8}>
-          <form noValidate className="listing-form" onSubmit={handleSubmit}>
+          <form action="/upload" encType="multipart/form-data" noValidate className="listing-form" onSubmit={handleSubmit}>
             <Typography variant='h3' sx={{ fontSize: '1.3rem', fontWeight: 'bold', mt: '3%' }} >
               Landlord Contact Information
             </Typography>
