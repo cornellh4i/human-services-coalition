@@ -7,6 +7,82 @@ import { useState, useEffect } from 'react'
 
 const ManageUsers = () => {
   const [Users, setUsers] = useState<any[]>([])
+  let [search, setSearch] = useState('')
+  let [voucher, setVoucher] = useState('')
+  let [filters, setFilters] = useState([])
+  let selected: any = [...filters]
+
+  const FilterEnum = {
+    voucher: "voucher",
+    search: "search"
+  }
+
+  function updateQuery(filterList: any) {
+    let params: any = {}
+
+    for (let i = 0; i < filterList.length; i++) {
+      let currFilter = filterList[i].filter
+      let currVal = filterList[i].value
+      params[currFilter] = currVal
+    }
+
+    const searchParams = new URLSearchParams(Object.entries(params))
+    // Have to do this
+    // fetch('/api/listingsByCategory?' + searchParams)
+    //   .then(response => response.json())
+    //   .then(data => setListings(data))
+    //   .catch(error => console.error(error))
+  }
+
+  function selectedIndex(filter: string) {
+    for (let i = 0; i < selected.length; i++) {
+      if (selected[i].filter === filter) {
+        return i
+      }
+    }
+    return -1
+  }
+
+  function updateSelected(filter: string, value: any, filterState: any) {
+    let index = 0
+
+    // Search case
+    if (filter === FilterEnum.search) {
+      index = selectedIndex(filter)
+      if (index !== -1) {
+        if (selected[index].value !== value && value !== "") {
+          selected.splice(index, 1)
+          selected.push({ "filter": filter, "value": value })
+        }
+        else if (value === "") {
+          selected.splice(index, 1)
+        }
+      }
+      else {
+        selected.push({ "filter": filter, "value": value })
+      }
+    }
+    // Affiliation case
+    else {
+      index = selectedIndex(filter)
+      if (index !== -1) {
+        selected.splice(index, 1)
+        selected.push({ "filter": filter, "value": value })
+      }
+      else {
+        selected.push({ "filter": filter, "value": value })
+      }
+    }
+    setFilters(selected)
+    console.log(selected)
+  }
+
+  updateQuery(selected)
+  function handleFilterChange(filterName: string, filterState: any, setFunction: Function,
+    event: { target: { value: any } }) {
+    setFunction(event.target.value)
+    updateSelected(filterName, event.target.value, filterState)
+  }
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -30,12 +106,9 @@ const ManageUsers = () => {
     setUsers(newUsers)
   }
 
-
-  const [voucher, setVoucher] = React.useState('');
-
-  const handleChange = (event: SelectChangeEvent) => {
-    setVoucher(event.target.value as string);
-  };
+  // const handleChange = (event: SelectChangeEvent) => {
+  //   setVoucher(event.target.value as string);
+  // };
 
   return (
     <Box sx={{
@@ -55,6 +128,7 @@ const ManageUsers = () => {
                 <SearchIcon />
               </InputAdornment>,
             }}
+            onChange={(e) => handleFilterChange(FilterEnum.search, search, setSearch, e)}
           />
         </Grid>
 
@@ -65,14 +139,15 @@ const ManageUsers = () => {
               <FormControl sx={{ flex: 1, backgroundColor: '#FFFFFF', borderRadius: 1 }}>
                 <Select
                   value={voucher}
-                  onChange={handleChange}
+                  onChange={(e) => handleFilterChange(FilterEnum.voucher,
+                    voucher, setVoucher, e)}
                   displayEmpty>
-                  <MenuItem value="">All Vouchers</MenuItem>
-                  <MenuItem value={10}>Voucher I</MenuItem>
-                  <MenuItem value={20}>Voucher II</MenuItem>
-                  <MenuItem value={30}>Voucher III</MenuItem>
-                  <MenuItem value={40}>Voucher IV</MenuItem>
-                  <MenuItem value={50}>Other</MenuItem>
+                  <MenuItem value="All">All Vouchers</MenuItem>
+                  <MenuItem value="Voucher I">Voucher I</MenuItem>
+                  <MenuItem value="Voucher II">Voucher II</MenuItem>
+                  <MenuItem value="Voucher III">Voucher III</MenuItem>
+                  <MenuItem value="Voucher IV">Voucher IV</MenuItem>
+                  <MenuItem value="Other">Other</MenuItem>
                 </Select>
               </FormControl>
             </Box>
@@ -80,21 +155,20 @@ const ManageUsers = () => {
         </Grid>
       </Container>
 
-
       <Container maxWidth={false} sx={{ borderRadius: 0, display: 'flex', justifyContent: 'flex-start', alignItems: 'left' }}>
 
         <Grid container spacing={"10%"}>
           <Grid item sx={{ ml: "1%" }}>
-            <ColumnLabel label="First Name" ></ColumnLabel>
+            <ColumnLabel label="First Name" ascending={false}></ColumnLabel>
           </Grid>
           <Grid item sx={{ ml: "0%" }}>
-            <ColumnLabel label="Last Name"></ColumnLabel>
+            <ColumnLabel label="Last Name" ascending={false}></ColumnLabel>
           </Grid>
           <Grid item sx={{ ml: "2%" }}>
-            <ColumnLabel label="Voucher Type"></ColumnLabel>
+            <ColumnLabel label="Voucher Type" ascending={false}></ColumnLabel>
           </Grid>
           <Grid item sx={{ ml: "-1%" }}>
-            <ColumnLabel label="Created"></ColumnLabel>
+            <ColumnLabel label="Created" ascending={true}></ColumnLabel>
           </Grid>
         </Grid>
 
