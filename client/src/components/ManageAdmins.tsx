@@ -25,19 +25,24 @@ const ManageAdmins = () => {
   }, [])
 
   async function handleToggle(name: string) {
+    let localSortOrder = 0
+    let localSortName = "None"
     if (sortName == name) {
       setSortOrder((sortOrder + 1) % 3)
+      localSortOrder = (sortOrder + 1) % 3
+      localSortName = name
     }
     else {
-
+      localSortOrder = 1
+      localSortName = name
       setSortOrder(1)
       setSortName(name)
     }
     let sortOrderQuery = 0
-    if (sortOrder == 1) {
+    if (localSortOrder == 1) {
       sortOrderQuery = 1
     }
-    else if (sortOrder == 2) {
+    else if (localSortOrder == 2) {
       sortOrderQuery = -1
     }
     console.log("name: " + name)
@@ -45,7 +50,10 @@ const ManageAdmins = () => {
     console.log(sortOrder);
     console.log(sortOrderQuery);
     const fetchAdmins = async () => {
-      const response = await fetch('/api/admins/' + sortOrderQuery + '/' + sortName)
+      const response = await fetch('/api/admins/' + sortOrderQuery + '/' + localSortName)
+      if (localSortOrder == 0) {
+        const response = await fetch('/api/admins/')
+      }
       const json = await response.json()
       if (response.ok) {
         setAdmins(json)
