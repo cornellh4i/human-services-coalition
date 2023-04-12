@@ -51,9 +51,10 @@ module.exports = () => {
   router.post('/listing', createListing)
 
   const upload = multer({ dest: "uploads/" });
+  // upload.single("pictures")
 
   // PATCH (edit) a specific housing listing
-  router.patch('/listing/:id', upload.single('image'), updateListing)
+  router.patch('/listing/:id', upload.array("pictures"), updateListing)
 
   // DELETE a specific housing listing
   router.delete('/listing/:id', deleteListing)

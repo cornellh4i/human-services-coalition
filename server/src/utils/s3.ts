@@ -6,8 +6,8 @@ const S3 = require('aws-sdk/clients/s3')
 
 const bucketName = 'h4i-workshop'
 const region = 'us-east-2'
-const accessKeyId = ''
-const secretAccessKey = ''
+const accessKeyId = 'AKIAS5JROXG2AX2L7RHS'
+const secretAccessKey = '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'
 
 const s3 = new S3({
   region,

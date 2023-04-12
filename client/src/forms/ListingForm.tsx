@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react"
-import { Box, Button, Grid, Typography, Container, TextField, RadioGroup, FormControlLabel, Checkbox, Radio, FormControl, FormLabel, FormGroup, MenuItem, Select } from '@mui/material';
+import { Box, Button, Grid, Typography, Container, TextField, RadioGroup, FormControlLabel, Checkbox, Radio, FormControl, FormLabel, FormGroup, MenuItem, Select, formControlClasses } from '@mui/material';
 import { PhotoCamera } from "@mui/icons-material";
 import { useLocation, useNavigate } from "react-router-dom";
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
@@ -13,7 +13,7 @@ const ListingForm = () => {
   const [country, setCountry] = useState('')
   const [zipCode, setZipCode] = useState('')
   // const [pictures, setPictures] = useState<string[]>([''])
-  const [pictures, setPictures] = useState('')
+  const [pictures, setPictures] = useState<File[]>([]);
   const [price, setPrice] = useState('')
   const [size, setSize] = useState('')
   const [unitType, setUnitType] = useState('')
@@ -53,6 +53,8 @@ const ListingForm = () => {
 
   // Location functionality to retrieve the state variable passed 
   const location = useLocation();
+  console.log("THE STATE")
+  console.log(location.state)
 
   // Contains what will prepopulate the form if location.state is not null
   useEffect(() => {
@@ -92,6 +94,7 @@ const ListingForm = () => {
     setButtonLabel('Save Changes')
   }
 
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
@@ -129,6 +132,10 @@ const ListingForm = () => {
       setBedsError(true)
     }
 
+    //convert everything to form data and just use that -- helps with images
+    //scrap listing and add everything to form data
+    const form_data = new FormData();
+
     const listing = {
       webScraped,
       description,
@@ -154,23 +161,48 @@ const ListingForm = () => {
       linkApp,
       dateAvailable
     }
+
+    form_data.append("webScraped", new Blob([webScraped.toString()], { type: 'text/plain' }))
+    form_data.append("description", description)
+    form_data.append("streetAddress", streetAddress)
+    form_data.append("city", city)
+    form_data.append("state", state)
+    form_data.append("country", country)
+    form_data.append("zipCode", zipCode)
+    pictures.forEach(picture => { console.log("TESTTTINGGGG"); form_data.append("pictures", picture) }) //to handle multiple /one pciture 
+    form_data.append("price", price)
+    form_data.append("size", size)
+    form_data.append("unitType", unitType)
+    form_data.append("numBath", numBath)
+    form_data.append("schoolDistrict", schoolDistrict)
+    form_data.append("pets", new Blob([pets.toString()], { type: 'text/plain' }))
+    form_data.append("utilities", new Blob([utilities.toString()], { type: 'text/plain' }))
+    form_data.append("furnished", new Blob([furnished.toString()], { type: 'text/plain' }))
+    form_data.append("distTransportation", distTransportation)
+    form_data.append("landlord", landlord)
+    form_data.append("landlordEmail", landlordEmail)
+    form_data.append("landlordPhone", landlordPhone)
+    form_data.append("linkOrig", linkOrig)
+    form_data.append("linkApp", linkApp)
+    form_data.append("dateAvailable", dateAvailable)
+    // form_data.entries().forEach(pair => { console.log(pair[0] + ', ' + pair[1]) }
+    console.log(form_data.has("pictures"))
+
+
     //if location.state is null it creates a POST request to create a listing
     //if location.state is not null it creates a PATCH request to edit the current listing
+
+    //changed from  JSON.stringify(listing) to form_data
     const response =
       (location.state === null) ?
         await fetch('/api/listing/', {
           method: 'POST',
-          body: JSON.stringify(listing),
-          headers: {
-            'Content-Type': 'application/json',
-          }
+          body: form_data,
         })
         : await fetch('/api/listing/' + location.state.id, {
           method: 'PATCH',
-          body: JSON.stringify(listing),
-          headers: {
-            'Content-Type': 'application/json',
-          }
+          body: form_data,
+
         })
 
     const json = await response.json()
@@ -187,7 +219,7 @@ const ListingForm = () => {
       setCountry('')
       setZipCode('')
       // setPictures([''])
-      setPictures('')
+      //setPictures('')
       setPrice('')
       setSize('')
       setUnitType('')
@@ -682,12 +714,16 @@ const ListingForm = () => {
                       type="file"
                       multiple={true}
                       name="pictures"
-                      onChange={(e) => setPictures(e.target.value)}
+                      onChange={(e) => {
+                        const files = e.target.files; // get the selected files
+                        if (files) {
+                          setPictures(Array.from(files))
+                        }
+                      }}
                     />
                   </Box>
                 </Button>
               </FormGroup>
-
             </Box>
 
             <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', marginBottom: '2rem' }}>

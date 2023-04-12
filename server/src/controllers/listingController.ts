@@ -208,6 +208,7 @@ const createListing = async (req, res) => {
 // PATCH (edit) a specific housing listing
 const updateListing = async (req, res) => {
   const { id } = req.params
+  console.log(req)
 
   if (!mongoose.Types.ObjectId.isValid(id)) {
     return res.status(404).json({ error: 'No such listing' })
@@ -222,6 +223,8 @@ const updateListing = async (req, res) => {
       return res.status(400).json({ error: 'No such listing' })
     }
     console.log("BEFORE_MULTER")
+
+
     //multer
     const file = req.file;
     if (!file) {
