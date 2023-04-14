@@ -88,6 +88,7 @@ const deleteUser = async (req, res) => {
 // PATCH (edit) a specific user
 const updateUser = async (req, res) => {
   const { id } = req.params
+  console.log(req.body)
 
   if (!mongoose.Types.ObjectId.isValid(id)) {
     return res.status(404).json({ error: 'No such user' })

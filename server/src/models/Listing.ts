@@ -60,7 +60,7 @@ const listingSchema = new Schema({
   },
   pictures: {
     type: Array,
-    required: true
+    required: false
   },
   price: {
     type: Number,

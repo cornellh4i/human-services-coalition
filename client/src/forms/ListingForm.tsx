@@ -53,8 +53,7 @@ const ListingForm = () => {
 
   // Location functionality to retrieve the state variable passed 
   const location = useLocation();
-  console.log("THE STATE")
-  console.log(location.state)
+
 
   // Contains what will prepopulate the form if location.state is not null
   useEffect(() => {
@@ -134,7 +133,8 @@ const ListingForm = () => {
 
     //convert everything to form data and just use that -- helps with images
     //scrap listing and add everything to form data
-    const form_data = new FormData();
+    // const form_data = new FormData();
+    const formPictures = new FormData();
 
     const listing = {
       webScraped,
@@ -161,49 +161,71 @@ const ListingForm = () => {
       linkApp,
       dateAvailable
     }
+    pictures.forEach(picture => { console.log("TESTTTINGGGG1"); formPictures.append("pictures", picture) })
 
-    form_data.append("webScraped", new Blob([webScraped.toString()], { type: 'text/plain' }))
-    form_data.append("description", description)
-    form_data.append("streetAddress", streetAddress)
-    form_data.append("city", city)
-    form_data.append("state", state)
-    form_data.append("country", country)
-    form_data.append("zipCode", zipCode)
-    pictures.forEach(picture => { console.log("TESTTTINGGGG"); form_data.append("pictures", picture) }) //to handle multiple /one pciture 
-    form_data.append("price", price)
-    form_data.append("size", size)
-    form_data.append("unitType", unitType)
-    form_data.append("numBath", numBath)
-    form_data.append("schoolDistrict", schoolDistrict)
-    form_data.append("pets", new Blob([pets.toString()], { type: 'text/plain' }))
-    form_data.append("utilities", new Blob([utilities.toString()], { type: 'text/plain' }))
-    form_data.append("furnished", new Blob([furnished.toString()], { type: 'text/plain' }))
-    form_data.append("distTransportation", distTransportation)
-    form_data.append("landlord", landlord)
-    form_data.append("landlordEmail", landlordEmail)
-    form_data.append("landlordPhone", landlordPhone)
-    form_data.append("linkOrig", linkOrig)
-    form_data.append("linkApp", linkApp)
-    form_data.append("dateAvailable", dateAvailable)
+    // form_data.append("webScraped", new Blob([webScraped.toString()], { type: 'text/plain' }))
+    // form_data.append("description", description)
+    // form_data.append("streetAddress", streetAddress)
+    // form_data.append("city", city)
+    // form_data.append("state", state)
+    // form_data.append("country", country)
+    // form_data.append("zipCode", zipCode)
+    // pictures.forEach(picture => { console.log("TESTTTINGGGG"); form_data.append("pictures", picture) }) //to handle multiple /one pciture 
+    // form_data.append("price", price)
+    // form_data.append("size", size)
+    // form_data.append("unitType", unitType)
+    // form_data.append("numBath", numBath)
+    // form_data.append("schoolDistrict", schoolDistrict)
+    // form_data.append("pets", new Blob([pets.toString()], { type: 'text/plain' }))
+    // form_data.append("utilities", new Blob([utilities.toString()], { type: 'text/plain' }))
+    // form_data.append("furnished", new Blob([furnished.toString()], { type: 'text/plain' }))
+    // form_data.append("distTransportation", distTransportation)
+    // form_data.append("landlord", landlord)
+    // form_data.append("landlordEmail", landlordEmail)
+    // form_data.append("landlordPhone", landlordPhone)
+    // form_data.append("linkOrig", linkOrig)
+    // form_data.append("linkApp", linkApp)
+    // form_data.append("dateAvailable", dateAvailable)
     // form_data.entries().forEach(pair => { console.log(pair[0] + ', ' + pair[1]) }
-    console.log(form_data.has("pictures"))
+    console.log("HASPICTUREWWEESESG")
+    // console.log(form_data.has("pictures"))
 
 
     //if location.state is null it creates a POST request to create a listing
     //if location.state is not null it creates a PATCH request to edit the current listing
 
     //changed from  JSON.stringify(listing) to form_data
+    console.log(JSON.stringify(listing));
     const response =
       (location.state === null) ?
         await fetch('/api/listing/', {
           method: 'POST',
-          body: form_data,
+          body: JSON.stringify(listing),
+          headers: {
+            'Content-Type': 'application/json'
+          }
         })
         : await fetch('/api/listing/' + location.state.id, {
           method: 'PATCH',
-          body: form_data,
-
+          body: JSON.stringify(listing),
+          headers: {
+            'Content-Type': 'application/json'
+          }
         })
+
+    if (location.state === null) {
+      // pass, create new listin
+    } else {
+      console.log('xdgiusemgun')
+      const call2 = await fetch('api/listingPicture/' + location.state.id, {
+        method: 'PATCH',
+        body: formPictures,
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      })
+      // second fetch here to update picture
+    }
 
     const json = await response.json()
 

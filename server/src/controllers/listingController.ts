@@ -199,7 +199,8 @@ const createListing = async (req, res) => {
       linkApp,
       dateAvailable
     })
-    res.status(200).json(listing)
+
+    res.status(200).json({ id: listing._id })
   } catch (error) {
     res.status(400).json({ error: (error as Error).message })
   }
@@ -208,7 +209,8 @@ const createListing = async (req, res) => {
 // PATCH (edit) a specific housing listing
 const updateListing = async (req, res) => {
   const { id } = req.params
-  console.log(req)
+  console.log("BODDDDDDYYYYYYYYY")
+  console.log(req.body)
 
   if (!mongoose.Types.ObjectId.isValid(id)) {
     return res.status(404).json({ error: 'No such listing' })
@@ -222,26 +224,9 @@ const updateListing = async (req, res) => {
     if (!listing) {
       return res.status(400).json({ error: 'No such listing' })
     }
-    console.log("BEFORE_MULTER")
 
-
-    //multer
-    const file = req.file;
-    if (!file) {
-      res.send(errorJson("No file uploaded"));
-      return;
-    }
-    const name = req.body.name;
-
-    console.log("BEFORE_MULTER_UPLOAD")
-
-    const s3Response = await s3utils.uploadFile(file, name);
-    //await fs.unlink(file.path);
-
-
-    console.log("SAVED")
-    res.send(successJson({ imagePath: `images/${s3Response.key}` }));
-    //res.status(200).json(listing)
+    res.status(200).json(listing)
+    //res.status(200).json({ id: listing._id })
 
   } catch (error) {
     console.log("NOT_SAVED")
@@ -249,6 +234,12 @@ const updateListing = async (req, res) => {
     console.log(error)
     res.send(errorJson(error));
   }
+}
+
+const updateListingPicture = async (req, res) => {
+  const { id } = req.params
+  console.log('PICTUREEEEWEWEWEFHFHAUPDATTINGGGEFAHF AUF AG FGA WF')
+  res.status(200).json({ id: id })
 }
 
 // DELETE a specific housing listing
@@ -274,4 +265,5 @@ module.exports = {
   createListing,
   updateListing,
   deleteListing,
+  updateListingPicture
 }
