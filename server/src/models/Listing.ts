@@ -8,18 +8,54 @@ enum Size {
   TwoBed = "Two Bed",
   ThreeBed = "Three Bed",
   FourBed = "Four Bed",
-  FiveBed = "Five Bed"
+  FiveBed = "Five Bed",
+  SixBed = "Six Bed"
+}
+
+enum UnitType {
+  House = "House",
+  Apartment = "Apartment",
+  Condo = "Condo",
+  SingleRoom = "Single Room"
 }
 
 enum Distance {
+  NoInput = "",
   Close = "Close",
   Medium = "Medium",
   Far = "Far"
 }
 
+enum BooleanType {
+  NoInput = "",
+  True = "true",
+  False = "false"
+}
+
+
 const listingSchema = new Schema({
   webScraped: {
     type: Boolean,
+    required: true
+  },
+  streetAddress: {
+    type: String,
+    required: true
+  },
+  city: {
+    type: String,
+    required: true
+  },
+  state: {
+    type: String,
+    required: true
+  },
+  country: {
+    type: String,
+    required: true
+  },
+  zipCode: {
+    type: String,
     required: true
   },
   pictures: {
@@ -35,6 +71,11 @@ const listingSchema = new Schema({
     enum: Size,
     required: true
   },
+  unitType: {
+    type: String,
+    enum: UnitType,
+    required: true
+  },
   numBath: {
     type: Number,
     required: true
@@ -43,13 +84,16 @@ const listingSchema = new Schema({
     type: String
   },
   pets: {
-    type: Boolean
+    type: String,
+    enum: BooleanType
   },
   utilities: {
-    type: Boolean
+    type: String,
+    enum: BooleanType
   },
   furnished: {
-    type: Boolean
+    type: String,
+    enum: BooleanType
   },
   distTransportation: {
     type: String,
@@ -70,7 +114,14 @@ const listingSchema = new Schema({
   },
   linkApp: {
     type: String
+  },
+  dateAvailable: {
+    type: Date
+  },
+  description: {
+    type: String
   }
+
 }, { timestamps: true })
 
 module.exports = mongoose.model('Listing', listingSchema)

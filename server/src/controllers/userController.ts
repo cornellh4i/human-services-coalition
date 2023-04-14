@@ -1,4 +1,4 @@
-const User = require("../src/models/User");
+const User = require("../models/User");
 import mongoose from 'mongoose';
 
 // GET all users
@@ -29,9 +29,9 @@ const createUser = async (req, res) => {
   const {
     username,
     password,
+    voucherType,
     fName,
     lName,
-    dateCreated,
     supervisor,
     mInitial,
     birthDate,
@@ -40,7 +40,6 @@ const createUser = async (req, res) => {
     prefName,
     gender,
     race,
-    ethnicity,
     contactPref,
     recentlyViewed
   } = req.body
@@ -49,9 +48,9 @@ const createUser = async (req, res) => {
     const user = await User.create({
       username,
       password,
+      voucherType,
       fName,
       lName,
-      dateCreated,
       supervisor,
       mInitial,
       birthDate,
@@ -60,7 +59,6 @@ const createUser = async (req, res) => {
       prefName,
       gender,
       race,
-      ethnicity,
       contactPref,
       recentlyViewed
     })
