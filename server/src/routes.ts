@@ -78,6 +78,8 @@ module.exports = () => {
   // DELETE a specific admin
   router.delete('/admins/:id', deleteAdmin)
 
+  //router.post(createlising, function)
+  
   return router;
 }
 

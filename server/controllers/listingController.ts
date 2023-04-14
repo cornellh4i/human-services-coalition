@@ -1,6 +1,7 @@
 const Listing = require("../src/models/Listing");
 import mongoose from 'mongoose';
 import { json } from 'stream/consumers';
+import { spawn } from 'child_process';
 
 // GET all housing listings
 const getListings = async (req, res) => {
@@ -71,51 +72,19 @@ const createListing = async (req, res) => {
 }
 
 const createScrapedListing = async (req, res) => {
-  // dummy data to test post
-  // const listing = {};
-  // listing['webScraped'] = true;
-  // listing['pictures'] = "link";
-  // listing['price'] = 2;
-  // listing['size'] = "One Bed";
-  // listing['numBath'] = 3;
-  // listing['schoolDistrict'] = null;
-  // listing['pets'] = null;
-  // listing['utilities'] = null;
-  // listing['furnished'] = null;
-  // listing['distTransportation'] = null;
-  // listing['landlord'] = "Certified Properties"
-  // listing['landlordEmail'] = null;
-  // listing['landlordPhone'] = null;
-  // listing['linkOrig'] = "sample link";
-
   // collect data from script
-  const spawn = require('child_process').spawn;
-  //const scraping = spawn(process.env.HOMEBREW_PREFIX + '/bin/python', ['scraping.py']);
-  const scraping = spawn('python', ['scraping.py']);
 
+  const pythonProcess = spawn('python', ['scraping.py']);
+  
   //const listings = [];
-
-  var listing = "s";
-  //console.log(process.env.HOMEBREW_PREFIX + '/bin/python', ['scraping.py']);
-
-  scraping.stdout.on('data', function() {
-    console.log("calling python script");
-    // res.status(200).json("collecting");
-    // console.log(data.toString());
-    // listing = data.toString();
-
-    // res.send(data.toString());
-    // listings.push(data.toString());
+  pythonProcess.stdout.on('data', (data) => {
+    console.log(`stdout: ${data}`);
   });
-
-  scraping.stderr.on('data', (data) => {
+  
+  pythonProcess.stderr.on('data', (data) => {
     console.error(`stderr: ${data}`);
   });
 
-  scraping.on('close', async (code: any) => {
-    console.log(`childt process close all stdio with code ${code}`);
-    res.status(200).json(listing);
-  })
 }
   //res.status(200).json(listing);
 
