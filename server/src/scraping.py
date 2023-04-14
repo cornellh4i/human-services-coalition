@@ -58,12 +58,13 @@ def webScraping():
                     # int(price) < 200 andfilterListing(int(price), beds)
                     # Create empty listing
                     listing = {}
-                    listing['streetAddress'] = title
                     listing['webScraped'] = True
+                    listing['description'] = None
+                    listing['streetAddress'] = title
                     listing['city'] = 'Ithaca'
                     listing['state'] = 'NY'
                     listing['country'] = 'US'
-                    listing['zipcode'] = 14850
+                    listing['zipCode'] = 14850
                     listing['pictures'] = []
                     listing['price'] = price
                     listing['size'] = beds
@@ -78,7 +79,7 @@ def webScraping():
                     listing['landlordEmail'] = 'info@cspmanagement.com'
                     listing['landlordPhone'] = '6072776961'
                     listing['linkOrig'] = "https://cspmgmt.managebuilding.com/" + row['href']
-                    listing['description'] = 0
+                    listing['dateAvailable'] = None
 
                     # Add listing information
 
@@ -259,6 +260,7 @@ def webScraping():
                 if filterListing(price, getBed(bed)):
                     # Add listing information
                     listing['webScraped'] = True
+                    listing['description'] = None
                     listing['streetAddress'] = streetAddress
                     listing['city'] = "Ithaca"
                     listing['state'] = "NY"
@@ -267,9 +269,20 @@ def webScraping():
                     listing['pictures'] = pictures
                     listing['price'] = price
                     listing['size'] = bed
-                    listing['link'] = link
-                    listing.update(additionalInfo)
+                    listing['unitType'] = None
+                    listing['numBath'] = 0
+                    listing['schoolDistrict'] = None
+                    listing['pets'] = False
+                    listing['utilities'] = False
+                    listing['furnished'] = False
+                    listing['distTransportation'] = None
+                    listing['landlord'] = "Apartments.com"
+                    listing['landlordEmail'] = ''
+                    listing['landlordPhone'] = ''
+                    listing['linkOrig'] = link
+                    listing['dateAvailable'] = None
 
+    
                     # Print statements for debugging
                     # print(listing['webScraped'])
                     # print(listing['streetAddress'])
