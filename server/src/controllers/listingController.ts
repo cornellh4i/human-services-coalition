@@ -136,6 +136,18 @@ const getListingByCategory = async (req, res) => {
 }
 
 
+// POST (add) webscraped listings
+const createScrapedListing = async (req, res) => {
+  // collect data from script
+  const pythonProcess = spawn('python', ['scraping.py']);
+  //const listings = [];
+  pythonProcess.stdout.on('data', (data) => {
+    console.log(`stdout: ${data}`);
+  });
+  pythonProcess.stderr.on('data', (data) => {
+    console.error(`stderr: ${data}`);
+  });
+}
 
 
 // POST (add) a new housing listing
@@ -241,6 +253,7 @@ module.exports = {
   getListings,
   getListing,
   createListing,
+  createScrapedListing,
   updateListing,
   deleteListing,
 }

@@ -7,6 +7,7 @@ module.exports = () => {
     getListing,
     getListingByCategory,
     createListing,
+    createScrapedListing,
     updateListing,
     deleteListing,
   } = require("./controllers/listingController")
@@ -47,6 +48,9 @@ module.exports = () => {
 
   // POST (add) a new housing listing
   router.post('/listing', createListing)
+
+  // POST (add) webscraped listings
+  router.post('/scraped', createScrapedListing)
 
   // PATCH (edit) a specific housing listing
   router.patch('/listing/:id', updateListing)
