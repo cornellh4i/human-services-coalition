@@ -20,6 +20,7 @@ const UserForm = () => {
   const [gender, setGender] = useState('')
   const [race, setRace] = useState('')
   const [contactPref, setContactPref] = useState('')
+  const [additionalDays, setAdditionalDays] = useState('')
   const [buttonLabel, setButtonLabel] = useState('Create New User')
   const [error, setError] = useState(null)
 
@@ -66,6 +67,7 @@ const UserForm = () => {
       (json_object.birthDate == null) ? json_object.birthDate : json_object.birthDate.split('T')[0]
     setBirthDate(date)// to make date readable
     setContactPref(json_object.contactPref)
+    setAdditionalDays(json_object.additionalDays)
     setButtonLabel('Save Changes')
 
   }
@@ -107,6 +109,7 @@ const UserForm = () => {
       gender,
       race,
       contactPref,
+      additionalDays
     }
 
     //if location.state is null it creates a POST request to create a listing
@@ -149,6 +152,7 @@ const UserForm = () => {
       setGender('')
       setRace('')
       setContactPref('')
+      setAdditionalDays('')
       setError(null)
 
       setVoucherTypeError(false)
@@ -437,6 +441,27 @@ const UserForm = () => {
                   <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '1rem' }}>
                     <FormGroup sx={{ flexGrow: '1', marginRight: '1.5rem' }}>
                       <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'left', alignItems: 'center' }}>
+                        <FormLabel>Additional Days</FormLabel>
+                      </Box>
+                      <TextField fullWidth
+                        id="additionalDays"
+                        name="additionalDays"
+                        className="form-field"
+                        onChange={(e) => setAdditionalDays(e.target.value)}
+                        value={additionalDays}
+                        variant="outlined"
+                        size="small"
+                        type="number"
+                      />
+                    </FormGroup>
+                  </Box>
+                </Grid>
+
+
+                <Grid item xs={6}>
+                  <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '1rem' }}>
+                    <FormGroup sx={{ flexGrow: '1', marginRight: '1.5rem' }}>
+                      <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'left', alignItems: 'center' }}>
                         <FormLabel>Birthdate</FormLabel>
                       </Box>
                       <TextField fullWidth
@@ -501,8 +526,12 @@ const UserForm = () => {
                     </FormGroup>
                   </Box>
                 </Grid>
+
+
               </Box>
             </Grid>
+
+
 
             <Grid item xs={12}>
               <Box sx={{ display: 'flex', justifyContent: 'flex-end', marginTop: '1rem', marginRight: '1.5rem' }}  >

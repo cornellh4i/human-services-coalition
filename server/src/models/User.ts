@@ -72,6 +72,10 @@ const userSchema = new Schema({
   },
   recentlyViewed: {
     type: Array
+  },
+  additionalDays: {
+    type: Number,
+    default: 0
   }
 }, { timestamps: true })
 

@@ -31,6 +31,37 @@ const ManageUsers = () => {
   }
 
 
+  const accountTime = () => {
+    for (let i = 0; i < Users.length; i++) {
+      const date = new Date();
+      const created = new Date(Users[i].createdAt);
+      let addDays = Users[i].additionalDays;
+      addDays = addDays * 86400000;
+      let timeDiff = date.getTime() - created.getTime();
+      if (timeDiff > 10368000000 + addDays) {
+        handleDelete(Users[i]);
+      }
+    }
+  };
+
+  const daysRemaining = (): number => {
+    for (let i = 0; i < Users.length; i++) {
+      const date = new Date();
+      const created = new Date(Users[i].createdAt);
+      let addDays = Users[i].additionalDays;
+      let totalDays = 120 + addDays;
+      addDays = addDays * 86400000;
+      let timeDiff = date.getTime() - created.getTime();
+      if (timeDiff <= 10368000000 + addDays) {
+        return totalDays - (timeDiff / 86400000);
+      }
+    }
+    return 0;
+  };
+
+
+  //const newUsers = accountTime()
+
   const [voucher, setVoucher] = React.useState('');
 
   const handleChange = (event: SelectChangeEvent) => {
@@ -121,6 +152,7 @@ const ManageUsers = () => {
               race={User.race}
               contactPref={User.contactPref}
               date={User.createdAt}
+              daysLeft={daysRemaining()}
               handleDelete={handleDelete}
             />
             <Divider variant="middle" sx={{ marginTop: '0.5rem', bgcolor: 'black' }} />
