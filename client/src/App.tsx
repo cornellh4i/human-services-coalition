@@ -8,6 +8,7 @@ import ManageProfiles from './pages/ManageProfiles'
 import ListingForm from './forms/ListingForm'
 import AdminForm from './forms/AdminForm'
 import UserForm from './forms/UserForm'
+import LoginForm from './forms/LoginForm'
 
 import ProofSearch from './pages/ProofSearch';
 import FmrForm from './forms/FmrForm';
@@ -51,6 +52,10 @@ function App() {
           <div className="forms">
             <Routes>
               <Route
+                  path='/login-form'
+                  element={<LoginForm />}
+                />
+              <Route
                 path='/listing-form'
                 element={<ListingForm />}
               />
@@ -66,7 +71,6 @@ function App() {
                 path='/fmr-form'
                 element={<FmrForm />}
               />
-
             </Routes>
           </div>
         </BrowserRouter>
