@@ -18,6 +18,20 @@ const ManageUsers = () => {
       }
     }
     fetchUsers()
+
+    const accountTime = async () => {
+      for (let i = 0; i < Users.length; i++) {
+        const date = new Date();
+        const created = new Date(Users[i].createdAt);
+        let addDays = Users[i].additionalDays;
+        addDays = addDays * 86400000;
+        let timeDiff = date.getTime() - created.getTime();
+        if (timeDiff > 10368000000 + addDays) {
+          handleDelete(Users[i]._id);
+        }
+      }
+    }
+    accountTime()
   }, [])
 
   // The function that calls the delete routing function
@@ -29,20 +43,6 @@ const ManageUsers = () => {
     const newUsers = Users.filter(User => User._id != id)
     setUsers(newUsers)
   }
-
-
-  const accountTime = () => {
-    for (let i = 0; i < Users.length; i++) {
-      const date = new Date();
-      const created = new Date(Users[i].createdAt);
-      let addDays = Users[i].additionalDays;
-      addDays = addDays * 86400000;
-      let timeDiff = date.getTime() - created.getTime();
-      if (timeDiff > 10368000000 + addDays) {
-        handleDelete(Users[i]);
-      }
-    }
-  };
 
   const daysRemaining = (): number => {
     for (let i = 0; i < Users.length; i++) {
@@ -59,8 +59,6 @@ const ManageUsers = () => {
     return 0;
   };
 
-
-  //const newUsers = accountTime()
 
   const [voucher, setVoucher] = React.useState('');
 
