@@ -24,6 +24,119 @@ const getListing = async (req, res) => {
   res.status(200).json(listing)
 }
 
+// GET housing listings based on filters
+const getListingByCategory = async (req, res) => {
+  let query = {};
+
+  // Generate switch cases dynamically based on query parameters received
+  for (const key in req.query) {
+    const queryValue = req.query[key];
+    switch (key) {
+      case 'address':
+        query['streetAddress'] = new RegExp(queryValue, 'i');
+        break;
+      case 'city':
+        query['city'] = new RegExp(queryValue, 'i');
+        break;
+      case 'minPrice':
+        if (query['price'] == undefined) {
+          query['price'] = { $gte: queryValue }
+        }
+        else {
+          query['price']['$gte'] = queryValue
+        }
+        break;
+      case "maxPrice":
+        if (query['price'] == undefined) {
+          query['price'] = { $lte: queryValue }
+        }
+        else {
+          query['price']['$lte'] = queryValue
+        }
+        break;
+      case 'unitType':
+        query['unitType'] = { $in: queryValue.split(',') };
+        break;
+      case 'house':
+        if (queryValue == "on") {
+          if (query['unitType'] == undefined) {
+            query['unitType'] = { $in: ["House"] }
+          }
+          else {
+            query['unitType']['$in'].push("House")
+          }
+        }
+        break;
+      case 'condo':
+        if (queryValue == "on") {
+          if (query['unitType'] == undefined) {
+            query['unitType'] = { $in: ["Condo"] }
+          }
+          else {
+            query['unitType']['$in'].push("Condo")
+          }
+        }
+        break;
+      case 'apartment':
+        if (queryValue == "on") {
+          if (query['unitType'] == undefined) {
+            query['unitType'] = { $in: ["Apartment"] }
+          }
+          else {
+            query['unitType']['$in'].push("Apartment")
+          }
+        }
+        break;
+      case 'single':
+        if (queryValue == "on") {
+          if (query['unitType'] == undefined) {
+            query['unitType'] = { $in: ["Single"] }
+          }
+          else {
+            query['unitType']['$in'].push("Single")
+          }
+        }
+        break;
+      case 'numBath':
+        query['numBath'] = parseFloat(queryValue);
+        break;
+      case 'numBed':
+        let sizes = ["Studio", "One Bed", "Two Bed", "Three Bed",
+          "Four Bed", "Five Bed", "Six Bed"]
+        query['size'] = sizes[parseInt(queryValue)];
+        break;
+      case 'pets':
+        if (queryValue == 'on') {
+          query['pets'] = "true";
+        }
+        break;
+      case 'utilities':
+        if (queryValue == 'on') {
+          query['utilities'] = "true";
+        }
+        break;
+      case 'furnished':
+        if (queryValue == 'on') {
+          query['furnished'] = "true";
+        }
+        break;
+      case 'disTransportation':
+        query['distTransportation'] = queryValue;
+        break;
+      default:
+        // Ignore unknown query parameters
+        break;
+    }
+  }
+
+  const listings = await Listing.find(query);
+  console.log(listings)
+
+  res.status(200).json(listings);
+}
+
+
+
 
 // POST (add) a new housing listing
 const createListing = async (req, res) => {
@@ -124,9 +237,10 @@ const deleteListing = async (req, res) => {
 
 // Exports
 module.exports = {
+  getListingByCategory,
   getListings,
   getListing,
   createListing,
   updateListing,
-  deleteListing
+  deleteListing,
 }

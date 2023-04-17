@@ -160,7 +160,7 @@ export default function ListingDetails({ Listing, handleDelete }: { Listing: any
           </Grid>
         </Grid>
       </Card>
-      <DeleteConfirmation id={Listing._id} openPop={openPop} setOpenPop={setOpenPop} handleDelete={handleDelete} />
+      <DeleteConfirmation id={Listing._id} openPop={openPop} setOpenPop={setOpenPop} handleDelete={handleDelete} type="listing" />
     </>
 
   )

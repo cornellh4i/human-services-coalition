@@ -5,6 +5,7 @@ module.exports = () => {
   const {
     getListings,
     getListing,
+    getListingByCategory,
     createListing,
     updateListing,
     deleteListing,
@@ -38,6 +39,9 @@ module.exports = () => {
 
   // GET all housing listings
   router.get('/listing', getListings)
+
+  //GET housing listing by category and value
+  router.get('/listingsByCategory', getListingByCategory);
 
   // GET a specific housing listing (by id)
   router.get('/listing/:id', getListing)

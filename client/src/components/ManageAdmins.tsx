@@ -8,8 +8,104 @@ import { useState, useEffect } from 'react'
 
 const ManageAdmins = () => {
   const [Admins, setAdmins] = useState<any[]>([])
-  const [sortOrder, setSortOrder] = useState(0)
-  const [sortName, setSortName] = useState("None")
+  let [sortOrder, setSortOrder] = useState(0)
+  let [sortName, setSortName] = useState("None")
+  let [search, setSearch] = useState('')
+  let [affiliation, setAffiliation] = useState('');
+  let [filters, setFilters] = useState([])
+  let selected: any = [...filters]
+
+  const FilterEnum = {
+    affiliation: "affiliation",
+    search: "search"
+  }
+
+  function updateQuery(filterList: any) {
+    let params: any = {}
+
+    for (let i = 0; i < filterList.length; i++) {
+      let currFilter = filterList[i].filter
+      let currVal = filterList[i].value
+      params[currFilter] = currVal
+    }
+
+    const searchParams = new URLSearchParams(Object.entries(params))
+    // Have to do this
+    // fetch('/api/listingsByCategory?' + searchParams)
+    //   .then(response => response.json())
+    //   .then(data => setListings(data))
+    //   .catch(error => console.error(error))
+  }
+
+
+  function selectedIndex(filter: string) {
+    for (let i = 0; i < selected.length; i++) {
+      if (selected[i].filter === filter) {
+        return i
+      }
+    }
+    return -1
+  }
+
+  function updateSelected(filter: string, value: any, filterState: any) {
+    let index = 0
+
+    // Search case
+    if (filter === FilterEnum.search) {
+      index = selectedIndex(filter)
+      if (index !== -1) {
+        if (selected[index].value !== value && value !== "") {
+          selected.splice(index, 1)
+          selected.push({ "filter": filter, "value": value })
+        }
+        else if (value === "") {
+          selected.splice(index, 1)
+        }
+      }
+      else {
+        selected.push({ "filter": filter, "value": value })
+      }
+    }
+    // Affiliation case
+    else {
+      index = selectedIndex(filter)
+      if (index !== -1) {
+        selected.splice(index, 1)
+        selected.push({ "filter": filter, "value": value })
+      }
+      else {
+        selected.push({ "filter": filter, "value": value })
+      }
+    }
+    setFilters(selected)
+    console.log(selected)
+  }
+
+  updateQuery(selected)
+  function handleFilterChange(filterName: string, filterState: any, setFunction: Function,
+    event: { target: { value: any } }) {
+    setFunction(event.target.value)
+    updateSelected(filterName, event.target.value, filterState)
+
+  }
+  useEffect(() => {
+    const fetchAdmins = async () => {
+
+      let localAffiliation = affiliation
+      if (localAffiliation == '') {
+        localAffiliation = "None"
+      }
+      const response = await fetch('/api/admins/' + search + '/' +
+        sortName + '/' + sortOrder + '/' + localAffiliation)
+      console.log('/api/admins/' + search + '/' +
+        sortName + '/' + sortOrder + '/' + localAffiliation)
+      const json = await response.json()
+      if (response.ok) {
+        setAdmins(json)
+      }
+    }
+    fetchAdmins()
+  }, [search, affiliation, sortOrder, sortName, filters])
 
   useEffect(() => {
     const fetchAdmins = async () => {
@@ -24,61 +120,43 @@ const ManageAdmins = () => {
     fetchAdmins()
   }, [])
 
-  async function handleToggle(name: string) {
-    let localSortOrder = 0
-    let localSortName = "None"
+
+
+
+  async function handleSortToggle(name: string) {
+
     if (sortName == name) {
       setSortOrder((sortOrder + 1) % 3)
-      localSortOrder = (sortOrder + 1) % 3
-      localSortName = name
     }
     else {
-      localSortOrder = 1
-      localSortName = name
       setSortOrder(1)
       setSortName(name)
     }
-    let sortOrderQuery = 0
-    if (localSortOrder == 1) {
-      sortOrderQuery = 1
-    }
-    else if (localSortOrder == 2) {
-      sortOrderQuery = -1
-    }
-    console.log("name: " + name)
-    console.log("sort name: " + sortName)
-    console.log(sortOrder);
-    console.log(sortOrderQuery);
-    const fetchAdmins = async () => {
-      const response = await fetch('/api/admins/' + sortOrderQuery + '/' + localSortName)
-      if (localSortOrder == 0) {
-        const response = await fetch('/api/admins/')
-      }
-      const json = await response.json()
-      if (response.ok) {
-        setAdmins(json)
-      }
-
-    }
-    fetchAdmins()
-    console.log("Toggled!");
 
   }
-  const [affiliation, setAffiliation] = React.useState('');
 
-  const handleChange = (event: SelectChangeEvent) => {
-    setAffiliation(event.target.value as string);
-  };
+  // The function that calls the delete routing function
+  const handleDelete = async (id: any) => {
+    await fetch('/api/admins/' + id, {
+      method: 'DELETE'
+    })
+    // After we delete we must update the local state
+    const newAdmins = Admins.filter(Admin => Admin._id !== id)
+    setAdmins(newAdmins)
+  }
+
+  // const handleChange = (event: SelectChangeEvent) => {
+  //   setAffiliation(event.target.value as string);
+  // };
 
   return (
     <Box sx={{
       mt: '1%',
       maxWidth: '100%',
-      backgroundColor: '#D9D9D9',
       p: '0.5%'
     }}>
 
-      <Container maxWidth={false} sx={{ mt: '10px', maxWidth: '100%', borderRadius: 0, display: 'flex', justifyContent: 'space-between', alignItems: 'center', backgroundColor: '#D9D9D9', }}>
+      <Container maxWidth={false} sx={{ mt: '10px', maxWidth: '100%', borderRadius: 0, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <Grid container item xs={8}>
           <TextField
             sx={{ flex: 1, backgroundColor: '#FFFFFF', borderRadius: 1 }}
@@ -89,6 +167,7 @@ const ManageAdmins = () => {
                 <SearchIcon />
               </InputAdornment>,
             }}
+            onChange={(e) => handleFilterChange(FilterEnum.search, search, setSearch, e)}
           />
         </Grid>
 
@@ -97,14 +176,15 @@ const ManageAdmins = () => {
             <Typography sx={{ marginRight: '1rem' }}>Affiliation</Typography>
             <Box sx={{ flex: 1 }}>
               <FormControl
-                sx={{ flex: 1, backgroundColor: '#FFFFFF', borderRadius: 1 }}>
+                sx={{ flex: 1, borderRadius: 1 }}>
                 <Select
                   value={affiliation}
-                  onChange={handleChange}
+                  onChange={(e) => handleFilterChange(FilterEnum.affiliation,
+                    affiliation, setAffiliation, e)}
                   displayEmpty>
-                  <MenuItem value="">All Affiliations</MenuItem>
-                  <MenuItem value={10}>HSC</MenuItem>
-                  <MenuItem value={20}>Non-HSC</MenuItem>
+                  <MenuItem value="All">All Affiliations</MenuItem>
+                  <MenuItem value="HSC">HSC</MenuItem>
+                  <MenuItem value="Non-HSC">Non-HSC</MenuItem>
                 </Select>
               </FormControl>
             </Box>
@@ -117,16 +197,16 @@ const ManageAdmins = () => {
         <Grid container spacing={"10%"}>
           <Grid item sx={{ ml: "1%" }}>
             <ColumnLabel label="First Name"
-              onClick={() => handleToggle("fName")}></ColumnLabel>
+              ascending={false} onClick={() => handleSortToggle("fName")}></ColumnLabel>
           </Grid>
           <Grid item sx={{ ml: "0%" }}>
-            <ColumnLabel label="Last Name" onClick={() => handleToggle("lName")}></ColumnLabel>
+            <ColumnLabel ascending={false} label="Last Name" onClick={() => handleSortToggle("lName")}></ColumnLabel>
           </Grid>
           <Grid item sx={{ ml: "0%" }}>
-            <ColumnLabel label="Affiliation" onClick={() => handleToggle("affiliation")}></ColumnLabel>
+            <ColumnLabel ascending={false} label="Affiliation" onClick={() => handleSortToggle("affiliation")}></ColumnLabel>
           </Grid>
           <Grid item sx={{ ml: "3%" }}>
-            <ColumnLabel label="Created" onClick={() => handleToggle("createdAt")}></ColumnLabel>
+            <ColumnLabel ascending={true} label="Created" onClick={() => handleSortToggle("createdAt")}></ColumnLabel>
           </Grid>
         </Grid>
 
@@ -137,10 +217,22 @@ const ManageAdmins = () => {
           <div>
             <AdminDisplayCard
               key={Admin._id}
+              adminid={Admin._id}
               fname={Admin.fName}
               lname={Admin.lName}
+              mInitial={Admin.mInitial}
+              prefName={Admin.prefName}
               affiliation={Admin.affiliation}
+              username={Admin.username}
+              password={Admin.password}
+              gender={Admin.gender}
+              race={Admin.race}
+              email={Admin.email}
+              phone={Admin.phone}
+              birthdate={Admin.birthdate}
+              contactPref={Admin.contactPref}
               date={Admin.createdAt}
+              handleDelete={handleDelete}
             />
             <Divider variant="middle" sx={{ marginTop: '0.5rem', bgcolor: 'black' }} />
           </div>

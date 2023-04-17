@@ -201,7 +201,7 @@ const ListingInformation = () => {
       </Grid>
     </Grid>
 
-      <DeleteConfirmation id={location.state.id} openPop={openPop} setOpenPop={setOpenPop} handleDelete={handleDelete} />
+      <DeleteConfirmation id={location.state.id} openPop={openPop} setOpenPop={setOpenPop} handleDelete={handleDelete} type={"listing"} />
     </>
   )
 }
