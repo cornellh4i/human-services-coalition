@@ -4,16 +4,19 @@ const path = require('path');
 
 /**** External libraries ****/
 const express = require('express'); 
+const passport = require('passport');
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
 const cors = require('cors');
 
 /**** Configuration ****/
+require('./auth');
 const app = express(); 
 
 function createServer() {
   const routes = require("./routes")();
 
+  app.use(passport.initialize());
   app.use(bodyParser.json()); 
   app.use(bodyParser.urlencoded({ extended: false }));
   app.use(morgan('combined')); 

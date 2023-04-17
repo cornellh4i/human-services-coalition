@@ -15,6 +15,11 @@
     "@emotion/styled": "^11.10.5",
     "@material-ui/styles": "^4.11.5",
     "@mui/material": "^5.10.12",
+    "bcrypt": "^4.0.1",
+    "jsonwebtoken": "^8.5.1",
+    "passport": "^0.4.1",
+    "passport-jwt": "^4.0.0",
+    "passport-local": "^1.0.0",
     "react-hooks-global-state": "^2.1.0",
     "react-sticky-box": "^1.0.2"
   }

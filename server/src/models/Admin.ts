@@ -2,6 +2,8 @@ const mongoose = require('mongoose')
 
 import { Schema } from 'mongoose';
 
+const bcrypt = require('bcrypt');
+
 enum ContactPref {
   NoInput = "",
   Email = "Email",

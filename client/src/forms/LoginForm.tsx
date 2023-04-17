@@ -51,9 +51,7 @@ const LoginForm = () => {
             </Box>
 
             <Grid item xs={12} md={8}>
-
               <Grid item xs={12} md={8}>
-
                 <Grid item>
                   <Typography variant='h6' sx={{ fontSize: { xs: '2rem', md: '3rem' }, fontWeight: 'bold', textAlign: 'center' }} >Continuum of Care Housing Listings</Typography>
                 </Grid>
@@ -80,7 +78,6 @@ const LoginForm = () => {
                     value={username}
                   />
                 </FormGroup>
-
               </Box>
             </Grid>
 
@@ -108,7 +105,6 @@ const LoginForm = () => {
 
 
             <Grid item xs={12} md={4}>
-
               <Box sx={{ display: 'flex', justifyContent: 'flex-end', marginTop: '1rem', marginRight: '1.5rem', mb: '2%' }}  >
                 <Button disableElevation
                   type="submit"
