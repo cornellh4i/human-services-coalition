@@ -98,6 +98,11 @@ export default function UserModal({ fname, lname, mInitial, username, password, 
                     &nbsp;
                     <Typography>{race ? race : "N/A"}</Typography>
                   </Grid>
+                  <Grid item display="flex" justifyContent="left" xs={12} marginBottom='3%'>
+                    <Typography sx={{ fontWeight: 600 }}>Remainder Days:</Typography>
+                    &nbsp;
+                    <Typography>{daysLeft ? daysLeft : 0}</Typography>
+                  </Grid>
                 </Grid>
                 <Grid container display="flex" xs={6}>
                   <Grid item display="flex" justifyContent="left" xs={12} marginBottom='3%'>
@@ -134,11 +139,6 @@ export default function UserModal({ fname, lname, mInitial, username, password, 
                     <Typography sx={{ fontWeight: 600 }}>Contact Preference:</Typography>
                     &nbsp;
                     <Typography>{contactPref ? contactPref : "N/A"}</Typography>
-                  </Grid>
-                  <Grid item display="flex" justifyContent="left" xs={12} marginBottom='3%'>
-                    <Typography sx={{ fontWeight: 600 }}>Days Remaining:</Typography>
-                    &nbsp;
-                    <Typography>{daysLeft ? daysLeft : 0}</Typography>
                   </Grid>
                   <Grid item display="flex" justifyContent="left" xs={12}>
                     <Typography sx={{ fontWeight: 600 }}>Profile Created:</Typography>
