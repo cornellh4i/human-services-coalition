@@ -1,13 +1,45 @@
 import { useState } from "react"
 import { Box, Button, Container, FormGroup, FormLabel, Grid, TextField, Typography } from "@mui/material"
 import { ReactComponent as Logo } from '../assets/coclogo.svg';
+import { useNavigate } from "react-router-dom";
 
 const LoginForm = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
+  const [error, setError] = useState(null)
+
+  // Navigation functionality
+  const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    const loginInfo = {
+      username,
+      password
+    }
+
+    const response = await fetch('/api/login/', {
+          method: 'POST',
+          body: JSON.stringify(loginInfo),
+          headers: {
+            'Content-Type': 'application/json',
+          }
+        })
+
+    const json = await response.json()
+
+    if (!response.ok) {
+      setError(json.error)
+    }
+    if (response.ok) {
+      setUsername('')
+      setPassword('')
+
+      setError(null)
+      console.log('Logged In', json)
+      navigate('/')
+    }
   }
 
   return (
