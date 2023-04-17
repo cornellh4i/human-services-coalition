@@ -72,7 +72,7 @@ module.exports = () => {
   router.delete('/users/:id', deleteUser)
 
   //GET admins based off sort
-  router.get('/admins/:sortOrder/:sortName', getSortFilter)
+  router.get('/admins/:searchText/:sortName/:sortOrder/:affiliation', getSortFilter)
 
   // GET all admins
   router.get('/admins', getAdmins)
