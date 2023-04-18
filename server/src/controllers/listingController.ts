@@ -182,7 +182,6 @@ const createListing = async (req, res) => {
       state,
       country,
       zipCode,
-      pictures,
       price,
       size,
       unitType,
@@ -209,8 +208,6 @@ const createListing = async (req, res) => {
 // PATCH (edit) a specific housing listing
 const updateListing = async (req, res) => {
   const { id } = req.params
-  console.log("BODDDDDDYYYYYYYYY")
-  console.log(req.body)
 
   if (!mongoose.Types.ObjectId.isValid(id)) {
     return res.status(404).json({ error: 'No such listing' })
@@ -225,7 +222,7 @@ const updateListing = async (req, res) => {
       return res.status(400).json({ error: 'No such listing' })
     }
 
-    res.status(200).json(listing)
+    res.status(200).json({id: id})
     //res.status(200).json({ id: listing._id })
 
   } catch (error) {
@@ -238,7 +235,7 @@ const updateListing = async (req, res) => {
 
 const updateListingPicture = async (req, res) => {
   const { id } = req.params
-  console.log('PICTUREEEEWEWEWEFHFHAUPDATTINGGGEFAHF AUF AG FGA WF')
+  // ADD CODE HERE TO UPLOAD TO S3
   res.status(200).json({ id: id })
 }
 

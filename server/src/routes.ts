@@ -57,7 +57,7 @@ module.exports = () => {
 
   // PATCH (edit) a specific housing listing
   router.patch('/listing/:id', updateListing)
-  router.patch('/listingPicture/:id', upload.single("pictures"), updateListingPicture)
+  router.patch('/listingPicture/:id', upload.array("pictures"), updateListingPicture)
 
   // DELETE a specific housing listing
   router.delete('/listing/:id', deleteListing)

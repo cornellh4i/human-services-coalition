@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React, { BaseSyntheticEvent, useEffect, useState } from "react"
 import { Box, Button, Grid, Typography, Container, TextField, RadioGroup, FormControlLabel, Checkbox, Radio, FormControl, FormLabel, FormGroup, MenuItem, Select, formControlClasses } from '@mui/material';
 import { PhotoCamera } from "@mui/icons-material";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -47,6 +47,13 @@ const ListingForm = () => {
   const [bathError, setBathError] = useState(false)
   const [rentError, setRentError] = useState(false)
   const [bedsError, setBedsError] = useState(false)
+
+  // Picture upload
+  const [files, setFiles] = useState<File[]>([]);
+
+  const fileSelected = (event: BaseSyntheticEvent) => {
+    setFiles(event.target.files[0])
+  }
 
   // Navigation functionality
   const navigate = useNavigate();
@@ -131,11 +138,6 @@ const ListingForm = () => {
       setBedsError(true)
     }
 
-    //convert everything to form data and just use that -- helps with images
-    //scrap listing and add everything to form data
-    // const form_data = new FormData();
-    const formPictures = new FormData();
-
     const listing = {
       webScraped,
       description,
@@ -161,42 +163,10 @@ const ListingForm = () => {
       linkApp,
       dateAvailable
     }
-    pictures.forEach(picture => { console.log("TESTTTINGGGG1"); formPictures.append("pictures", picture) })
-
-    // form_data.append("webScraped", new Blob([webScraped.toString()], { type: 'text/plain' }))
-    // form_data.append("description", description)
-    // form_data.append("streetAddress", streetAddress)
-    // form_data.append("city", city)
-    // form_data.append("state", state)
-    // form_data.append("country", country)
-    // form_data.append("zipCode", zipCode)
-    // pictures.forEach(picture => { console.log("TESTTTINGGGG"); form_data.append("pictures", picture) }) //to handle multiple /one pciture 
-    // form_data.append("price", price)
-    // form_data.append("size", size)
-    // form_data.append("unitType", unitType)
-    // form_data.append("numBath", numBath)
-    // form_data.append("schoolDistrict", schoolDistrict)
-    // form_data.append("pets", new Blob([pets.toString()], { type: 'text/plain' }))
-    // form_data.append("utilities", new Blob([utilities.toString()], { type: 'text/plain' }))
-    // form_data.append("furnished", new Blob([furnished.toString()], { type: 'text/plain' }))
-    // form_data.append("distTransportation", distTransportation)
-    // form_data.append("landlord", landlord)
-    // form_data.append("landlordEmail", landlordEmail)
-    // form_data.append("landlordPhone", landlordPhone)
-    // form_data.append("linkOrig", linkOrig)
-    // form_data.append("linkApp", linkApp)
-    // form_data.append("dateAvailable", dateAvailable)
-    // form_data.entries().forEach(pair => { console.log(pair[0] + ', ' + pair[1]) }
-    console.log("HASPICTUREWWEESESG")
-    // console.log(form_data.has("pictures"))
-
 
     //if location.state is null it creates a POST request to create a listing
     //if location.state is not null it creates a PATCH request to edit the current listing
-
-    //changed from  JSON.stringify(listing) to form_data
-    console.log(JSON.stringify(listing));
-    const response =
+    const response1 =
       (location.state === null) ?
         await fetch('/api/listing/', {
           method: 'POST',
@@ -213,26 +183,27 @@ const ListingForm = () => {
           }
         })
 
-    if (location.state === null) {
-      // pass, create new listin
-    } else {
-      console.log('xdgiusemgun')
-      const call2 = await fetch('api/listingPicture/' + location.state.id, {
+    // Get listing ID from response to use in picture upload
+    const json = await response1.json();
+    const id = json.id;
+
+    // If the user is uploading an image as well, then we need to send a second request to update the picture
+    if (files.length > 0) {
+      const formData = new FormData();
+      files.forEach((file) => {
+        formData.append('pictures', file);
+      });
+      
+      const response = await fetch('api/listingPicture/' + id, {
         method: 'PATCH',
-        body: formPictures,
-        headers: {
-          'Content-Type': 'multipart/form-data'
-        }
-      })
-      // second fetch here to update picture
+        body: formData
+      });
     }
 
-    const json = await response.json()
-
-    if (!response.ok) {
+    if (!response1.ok) {
       setError(json.error)
     }
-    if (response.ok) {
+    if (response1.ok) {
       setWebScraped(false)
       setDescription('')
       setStreetAddress('')
@@ -240,8 +211,7 @@ const ListingForm = () => {
       setState('')
       setCountry('')
       setZipCode('')
-      // setPictures([''])
-      //setPictures('')
+      setFiles([])
       setPrice('')
       setSize('')
       setUnitType('')
@@ -737,11 +707,10 @@ const ListingForm = () => {
                       multiple={true}
                       name="pictures"
                       onChange={(e) => {
-                        const files = e.target.files; // get the selected files
-                        if (files) {
-                          setPictures(Array.from(files))
+                        if (e.target.files) {
+                          setFiles(Array.from(e.target.files));
                         }
-                      }}
+                      } }
                     />
                   </Box>
                 </Button>
