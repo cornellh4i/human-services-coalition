@@ -6,6 +6,8 @@ import Typography from '@mui/material/Typography';
 import { padding, spacing } from "@mui/system";
 import { useNavigate } from "react-router-dom";
 import { useState } from 'react';
+import { IconButton, Snackbar } from "@mui/material";
+import CloseIcon from '@mui/icons-material/Close';
 
 
 //interface for declaring what props the PopUp can take
@@ -22,40 +24,59 @@ export default function ConfirmPopUp({ id, openPop, action, type }: Confirmation
   //states for the delete dialog pop up
   const [openPopp, setOpenPop] = useState(false)
 
+  const handlePopUp = () => {
+    setOpenPop(!openPop)
+
+  }
+
+  const message = `${type} Successfully ${action}`;
+
   return (
 
-    <Dialog
+    <Snackbar
       open={openPop}
-      PaperProps={{ sx: { width: '35%', height: '30%', borderRadius: '10px' } }}
-      hideBackdrop={true}
-    >
-      <Grid flexDirection="column">
-        <Grid container marginTop="15px">
+      message={message}
+      autoHideDuration={5000}
+      onClose={() => setOpenPop(!openPop)}
+      action={
+        <IconButton size="small" color="inherit" onClick={() => setOpenPop(!openPop)}>
+          <CloseIcon />
+        </IconButton>
+      }
+    />
 
-          {/* Grid item for the PopUpTitle */}
-          <Grid item xs={15} alignItems="center" flexDirection="row" flexWrap="wrap">
-            <Typography
-              display="flex"
-              sx={{ fontSize: '28px', fontWeight: 700, padding: "30px 40px 0px 40px", alignItems: 'center', textAlign: 'center' }}
-            >
-              {type} Succesfully {action}
-            </Typography>
-          </Grid>
+    // <Dialog
+    //   open={openPop}
+    //   PaperProps={{ sx: { width: '100%', height: '20%', borderRadius: '10px' } }}
+    //   hideBackdrop={true}
+    // >
+    //   <Grid flexDirection="column">
+    //     <Grid container direction='row' marginTop="15px">
 
-          {/* Grid Item for Buttons */}
-          <Grid item xs direction='row' style={{ display: 'flex', justifyContent: "center", alignItems: "center", padding: "8px 0px" }}>
-            <DialogActions>
-              <Button variant='outlined'
-                sx={{ color: "#5D737E", borderColor: "#5D737E", width: 175, textTransform: "none", fontSize: "1.2rem", fontWeight: "bold", borderRadius: "12px", bgcolor: "white", ":hover": { bgcolor: "#5D737EB5" }, padding: "0px 2px" }}
-                onClick={() => setOpenPop(!openPop)}
-              >
-                Close
-              </Button>
+    //       {/* Grid item for the PopUpTitle */}
+    //       <Grid item xs={15} alignItems="center" flexDirection="row" flexWrap="wrap">
+    //         <Typography
+    //           display="flex"
+    //           sx={{ fontSize: '28px', fontWeight: 700 }}
+    //         >
+    //           {type} Successfully {action}
+    //         </Typography>
+    //       </Grid>
 
-            </DialogActions>
-          </Grid>
-        </Grid>
-      </Grid>
-    </Dialog>
+    //       {/* Grid Item for Buttons */}
+    //       <Grid item xs style={{ display: 'flex', justifyContent: "center", alignItems: "center", padding: "8px 0px" }}>
+    //         <DialogActions>
+    //           <Button variant='outlined'
+    //             sx={{ color: "#5D737E", borderColor: "#5D737E", width: 175, textTransform: "none", fontSize: "1.2rem", fontWeight: "bold", borderRadius: "12px", bgcolor: "white", ":hover": { bgcolor: "#5D737EB5" }, padding: "0px 2px" }}
+    //             onClick={() => setOpenPop(!openPop)}
+    //           >
+    //             Close
+    //           </Button>
+
+    //         </DialogActions>
+    //       </Grid>
+    //     </Grid>
+    //   </Grid>
+    // </Dialog>
   )
 }
