@@ -4,6 +4,8 @@ import DialogActions from "@mui/material/DialogActions";
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import { padding, spacing } from "@mui/system";
+import ConfirmPopUp from './ConfirmPopUp';
+
 
 
 //interface for declaring what props the PopUp can take
@@ -21,11 +23,12 @@ export default function DeleteConfirmation({ id, openPop, setOpenPop, handleDele
     const handlePopUpDelete = () => {
         handleDelete(id)
         setOpenPop(!openPop)
+
     }
 
     return (
 
-        <Dialog
+        <><Dialog
             open={openPop}
             PaperProps={{ sx: { width: '35%', height: '30%', borderRadius: '10px' } }}
         >
@@ -61,6 +64,6 @@ export default function DeleteConfirmation({ id, openPop, setOpenPop, handleDele
                     </Grid>
                 </Grid>
             </Grid>
-        </Dialog>
+        </Dialog><ConfirmPopUp id={id} openPop={openPop} action="Deleted" type="Listing" /></>
     )
 }
