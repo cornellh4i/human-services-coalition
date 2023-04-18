@@ -93,12 +93,12 @@ export default function UserModal({ fname, lname, mInitial, username, password, 
                     &nbsp;
                     <Typography>{gender ? gender : "N/A"}</Typography>
                   </Grid>
-                  <Grid item display="flex" justifyContent="left" xs={12}>
+                  <Grid item display="flex" justifyContent="left" xs={12} marginBottom='3%'>
                     <Typography sx={{ fontWeight: 600 }}>Race:</Typography>
                     &nbsp;
                     <Typography>{race ? race : "N/A"}</Typography>
                   </Grid>
-                  <Grid item display="flex" justifyContent="left" xs={12} marginBottom='3%'>
+                  <Grid item display="flex" justifyContent="left" xs={12}>
                     <Typography sx={{ fontWeight: 600 }}>Remainder Days:</Typography>
                     &nbsp;
                     <Typography>{daysLeft ? daysLeft : 0}</Typography>

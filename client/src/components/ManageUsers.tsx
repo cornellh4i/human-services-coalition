@@ -53,7 +53,7 @@ const ManageUsers = () => {
     addDays = addDays * 86400000;
     let timeDiff = date.getTime() - created.getTime();
     if (timeDiff <= 10368000000 + addDays) {
-      return Math.floor(totalDays - (timeDiff / 86400000));
+      return Math.floor((totalDays - (timeDiff / 86400000) + 1));
     }
     return 0;
   };
