@@ -15,20 +15,6 @@ const ManageAdmins = () => {
   let [filters, setFilters] = useState([])
   let selected: any = [...filters]
 
-  useEffect(() => {
-    const fetchAdmins = async () => {
-
-      const response = await fetch('/api/admins/')
-      const json = await response.json()
-
-      if (response.ok) {
-        setAdmins(json)
-      }
-    }
-    fetchAdmins()
-  }, [])
-
-
 
   const FilterEnum = {
     affiliation: "affiliation",

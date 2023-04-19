@@ -7,6 +7,51 @@ const getUsers = async (req, res) => {
   res.status(200).json(users)
 }
 
+//GET users according to sort
+const getSortUsers = async (req, res) => {
+  const search = req.query.search || '';
+  const sortName = req.query.sortName || '';
+  const sortOrder = req.query.sortOrder || '';
+  const voucher = req.query.voucher || '';
+  console.log(search)
+  console.log(sortName)
+  console.log(sortOrder)
+  console.log(voucher)
+
+  let filter = search ? {
+    $or: [
+      { fName: { $regex: new RegExp(search, 'i') } },
+      { lName: { $regex: new RegExp(search, 'i') } },
+      { voucher: { $regex: new RegExp(search, 'i') } },
+    ]
+  } : {};
+
+  let sortObject = {};
+  if (sortName) {
+    if (sortOrder) {
+      sortObject[sortName] = sortOrder;
+    } else {
+      sortObject[sortName] = 'asc';
+    }
+  }
+  if (voucher == 'Voucher I') {
+    filter["voucher"] = { $regex: /Voucher I/ };
+  } else if (voucher == 'Voucher II') {
+    filter["voucher"] = { $regex: /Voucher II/ };
+  } else if (voucher == 'Voucher III') {
+    filter["voucher"] = { $regex: /Voucher III/ };
+  } else if (voucher == 'Voucher IV') {
+    filter["voucher"] = { $regex: /Voucher IV/ };
+  }
+  else if (voucher == "None") {
+    filter["affiliation"] = { $not: /Voucher/ };
+  }
+
+  const users = await User.find(filter).sort(sortObject);
+
+  res.status(200).json(users);
+};
+
 // GET a specific user
 const getUser = async (req, res) => {
   const { id } = req.params
@@ -112,5 +157,6 @@ module.exports = {
   getUsers,
   createUser,
   deleteUser,
-  updateUser
+  updateUser,
+  getSortUsers
 }

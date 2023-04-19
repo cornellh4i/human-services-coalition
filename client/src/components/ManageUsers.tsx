@@ -9,6 +9,8 @@ import { useState, useEffect } from 'react'
 
 const ManageUsers = () => {
   const [Users, setUsers] = useState<any[]>([])
+  let [sortOrder, setSortOrder] = useState(-1)
+  let [sortName, setSortName] = useState('createdAt')
   let [search, setSearch] = useState('')
   let [voucher, setVoucher] = useState('')
   let [filters, setFilters] = useState([])
@@ -27,13 +29,6 @@ const ManageUsers = () => {
       let currVal = filterList[i].value
       params[currFilter] = currVal
     }
-
-    const searchParams = new URLSearchParams(Object.entries(params))
-    // Have to do this
-    // fetch('/api/listingsByCategory?' + searchParams)
-    //   .then(response => response.json())
-    //   .then(data => setListings(data))
-    //   .catch(error => console.error(error))
   }
 
   function selectedIndex(filter: string) {
@@ -97,10 +92,36 @@ const ManageUsers = () => {
     }
     fetchUsers()
   }, [])
-  function handleFirstNameClick() {
-    console.log("First Name clicked!");
-  }
 
+  useEffect(() => {
+    const fetchAdmins = async () => {
+      let params = {
+        search: search,
+        sortName: sortName,
+        sortOrder: sortOrder.toString(),
+        voucher: voucher
+      }
+      let searchParams = new URLSearchParams(params)
+
+      const response = await fetch('/api/user/sort?' + searchParams)
+      const json = await response.json()
+      if (response.ok) {
+        setUsers(json)
+      }
+    }
+    fetchAdmins()
+  }, [search, voucher, sortOrder, sortName, filters])
+
+
+  async function handleSortToggle(name: string) {
+    if (sortName == name) {
+      setSortOrder(sortOrder * -1)
+    }
+    else {
+      setSortOrder(-1)
+      setSortName(name)
+    }
+  }
   // The function that calls the delete routing function
   const handleDelete = async (id: any) => {
     await fetch('/api/users/' + id, {
@@ -169,16 +190,16 @@ const ManageUsers = () => {
         <Grid container spacing={"10%"}>
           <Grid item sx={{ ml: "1%" }}>
             <ColumnLabel label="First Name"
-              ascending={false} onClick={handleFirstNameClick}></ColumnLabel>
+              ascending={sortName == 'fName' && sortOrder == -1} onClick={() => handleSortToggle("fName")}></ColumnLabel>
           </Grid>
           <Grid item sx={{ ml: "0%" }}>
-            <ColumnLabel label="Last Name" ascending={false} onClick={handleFirstNameClick}></ColumnLabel>
+            <ColumnLabel label="Last Name" ascending={sortName == 'lName' && sortOrder == -1} onClick={() => handleSortToggle("lName")}></ColumnLabel>
           </Grid>
           <Grid item sx={{ ml: "0%" }}>
-            <ColumnLabel label="Affiliation" ascending={false} onClick={handleFirstNameClick}></ColumnLabel>
+            <ColumnLabel label="Affiliation" ascending={sortName == 'affiliation' && sortOrder == -1} onClick={() => handleSortToggle("affiliation")}></ColumnLabel>
           </Grid>
           <Grid item sx={{ ml: "3%" }}>
-            <ColumnLabel label="Created" ascending={false} onClick={handleFirstNameClick}></ColumnLabel>
+            <ColumnLabel label="Created" ascending={sortName == 'createdAt' && sortOrder == -1} onClick={() => handleSortToggle("createdAt")}></ColumnLabel>
           </Grid>
         </Grid>
 
