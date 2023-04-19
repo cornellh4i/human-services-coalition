@@ -11,12 +11,12 @@ const ManageUsers = () => {
   let [sortOrder, setSortOrder] = useState(-1)
   let [sortName, setSortName] = useState('createdAt')
   let [search, setSearch] = useState('')
-  let [voucher, setVoucher] = useState('')
+  let [voucherType, setVoucherType] = useState('')
   let [filters, setFilters] = useState([])
   let selected: any = [...filters]
 
   const FilterEnum = {
-    voucher: "voucher",
+    voucherType: "voucherType",
     search: "search"
   }
 
@@ -62,10 +62,10 @@ const ManageUsers = () => {
   //   setFilters(selected)
   //   console.log(selected)
   // }
-  
+
   // updateQuery(selected)
 
-    // function updateQuery(filterList: any) {
+  // function updateQuery(filterList: any) {
   //   let params: any = {}
 
   //   for (let i = 0; i < filterList.length; i++) {
@@ -99,7 +99,7 @@ const ManageUsers = () => {
         search: search,
         sortName: sortName,
         sortOrder: sortOrder.toString(),
-        voucher: voucher
+        voucherType: voucherType
       }
       let searchParams = new URLSearchParams(params)
 
@@ -110,7 +110,7 @@ const ManageUsers = () => {
       }
     }
     fetchUsers()
-  }, [search, voucher, sortOrder, sortName, filters])
+  }, [search, voucherType, sortOrder, sortName, filters])
 
 
   async function handleSortToggle(name: string) {
@@ -165,8 +165,8 @@ const ManageUsers = () => {
             <Box sx={{ flex: 1 }}>
               <FormControl sx={{ flex: 1, backgroundColor: '#FFFFFF', borderRadius: 1 }}>
                 <Select
-                  value={voucher}
-                  onChange={(e) => handleFilterChange(FilterEnum.voucher, setVoucher, e)}
+                  value={voucherType}
+                  onChange={(e) => handleFilterChange(FilterEnum.voucherType, setVoucherType, e)}
                   displayEmpty>
                   <MenuItem value="All">All Vouchers</MenuItem>
                   <MenuItem value="Voucher I">Voucher I</MenuItem>
@@ -192,7 +192,7 @@ const ManageUsers = () => {
             <ColumnLabel label="Last Name" ascending={sortName == 'lName' && sortOrder == -1} onClick={() => handleSortToggle("lName")}></ColumnLabel>
           </Grid>
           <Grid item sx={{ ml: "0%" }}>
-            <ColumnLabel label="Voucher" ascending={sortName == 'voucher' && sortOrder == -1} onClick={() => handleSortToggle("voucher")}></ColumnLabel>
+            <ColumnLabel label="Voucher" ascending={sortName == 'voucherType' && sortOrder == -1} onClick={() => handleSortToggle("voucherType")}></ColumnLabel>
           </Grid>
           <Grid item sx={{ ml: "3%" }}>
             <ColumnLabel label="Created" ascending={sortName == 'createdAt' && sortOrder == -1} onClick={() => handleSortToggle("createdAt")}></ColumnLabel>
