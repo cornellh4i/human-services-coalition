@@ -8,11 +8,21 @@ const LoginForm = () => {
   const [password, setPassword] = useState('')
   const [error, setError] = useState(null)
 
+  const [usernameError, setUsernameError] = useState(false)
+  const [passwordError, setPasswordError] = useState(false)
+
   // Navigation functionality
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    if (username === '') {
+      setUsernameError(true)
+    }
+    if (password === '') {
+      setPasswordError(true)
+    }
 
     const loginInfo = {
       username,
@@ -35,6 +45,9 @@ const LoginForm = () => {
     if (response.ok) {
       setUsername('')
       setPassword('')
+
+      setUsernameError(false)
+      setPasswordError(false)
 
       setError(null)
       console.log('Logged In', json)
@@ -108,6 +121,7 @@ const LoginForm = () => {
                     size="small"
                     onChange={(e) => setUsername(e.target.value)}
                     value={username}
+                    error={usernameError}
                   />
                 </FormGroup>
               </Box>
@@ -130,6 +144,7 @@ const LoginForm = () => {
                     size="small"
                     onChange={(e) => setPassword(e.target.value)}
                     value={password}
+                    error={passwordError}
                   />
                 </FormGroup>
               </Box>
