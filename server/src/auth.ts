@@ -5,6 +5,7 @@ const JWTstrategy = require('passport-jwt').Strategy;
 const ExtractJWT = require('passport-jwt').ExtractJwt;
 
 const User = require("./models/User");
+const Admin = require("./models/Admin");
 
 passport.use(
   'login',
@@ -15,19 +16,25 @@ passport.use(
     },
     async (username, password, done) => {
       try {
-        const user = await User.findOne({ username });
+        let account = await User.findOne({ username });
+        let account_type = 0; // 0 = user
 
-        if (!user) {
-          return done(null, false, { message: 'User not found' });
+        if (!account) {
+          account = await Admin.findOne({ username });
+          account_type = 1; // 1 = admin
+
+          if (!account) {
+            return done(null, false, -1, { message: 'User not found' });
+          }
         }
 
-        const validate = await user.isValidPassword(password);
+        const validate = await account.isValidPassword(password);
 
         if (!validate) {
-          return done(null, false, { message: 'Wrong Password' });
+          return done(null, false, -1, { message: 'Wrong Password' });
         }
 
-        return done(null, user, { message: 'Logged in Successfully' });
+        return done(null, account, account_type, { message: 'Logged in Successfully' });
       } catch (error) {
         return done(error);
       }

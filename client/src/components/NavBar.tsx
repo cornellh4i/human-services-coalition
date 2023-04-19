@@ -85,6 +85,11 @@ function ResponsiveAppBar() {
     else navigate('/admin-form');
   };
 
+  const navigateToLoginForm = () => {
+    handleCloseLogoutMenu();
+    navigate('/login-form');
+  };
+
   return (
     <AppBar position="sticky" elevation={0} style={{ background: "white", borderBottom: '1px solid #D9D9D9' }}>
       <Container maxWidth="xl">
@@ -191,7 +196,7 @@ function ResponsiveAppBar() {
               onClose={handleCloseLogoutMenu}
             >
               <MenuItem>
-                <Typography sx={{ color: "orange" }} textAlign="center">Log out</Typography>
+                <Typography sx={{ color: "orange" }} textAlign="center" onClick={navigateToLoginForm}>Log out</Typography>
               </MenuItem>
             </Menu>
           </Box>

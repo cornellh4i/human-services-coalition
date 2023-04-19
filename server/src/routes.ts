@@ -108,22 +108,22 @@ module.exports = () => {
     async (req, res, next) => {
       passport.authenticate(
         'login',
-        async (err, user, info) => {
+        async (err, account, account_type, info) => {
           try {
-            if (err || !user) {
+            if (err || !account) {
               const error = new Error('An error occurred.');
   
               return next(error);
             }
   
             req.login(
-              user,
+              account,
               { session: false },
               async (error) => {
                 if (error) return next(error);
   
-                const body = { _id: user._id, username: user.username };
-                const token = jwt.sign({ user: body }, 'TOP_SECRET');
+                const body = {type: account_type, _id: account._id, username: account.username };
+                const token = jwt.sign({ account: body }, 'TOP_SECRET');
   
                 return res.json({ token });
               }
