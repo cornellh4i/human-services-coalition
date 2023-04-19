@@ -6,8 +6,9 @@ import Typography from '@mui/material/Typography';
 import { padding, spacing } from "@mui/system";
 import { useNavigate } from "react-router-dom";
 import { useState } from 'react';
-import { IconButton, Snackbar } from "@mui/material";
+import { Card, CardContent, IconButton, Snackbar } from "@mui/material";
 import CloseIcon from '@mui/icons-material/Close';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 
 
 //interface for declaring what props the PopUp can take
@@ -29,54 +30,85 @@ export default function ConfirmPopUp({ id, openPop, action, type }: Confirmation
 
   }
 
-  const message = `${type} Successfully ${action}`;
+  const message = `${type} Successfully ${action}!`;
 
   return (
+    <div>
+      {/* Confirmation popup dialog */}
+      <Dialog
+        open={openPop}
+        onClose={() => setOpenPop(!openPop)}
+        maxWidth="sm"
+        fullWidth={true}
+        PaperProps={{
+          sx: {
+            width: "95%",
+            maxWidth: "unset",
+            position: "absolute",
+            top: "8%"
+          },
+        }}
+      >
+        <Card sx={{ borderLeft: '6px solid #ED5F1E', height: '80%' }}>
+          <CardContent sx={{ justifyContent: 'center' }}>
+            {/* adjust height from 2vh to make the popup taller/shorter */}
+            <Grid container direction='row' justifyContent='center' alignItems='center' width='100%' height="2vh" >
+              <Grid container xs={10}>
+                <Grid item xs={1} sx={{ marginLeft: '10px' }}>
+                  <CheckCircleIcon sx={{ color: "#ED5F1E" }}></CheckCircleIcon>
+                </Grid>
+                <Grid item xs={8} sx={{ fontFamily: "'Poppins', sans-serif", fontStyle: 'italic', fontWeight: 600, paddingInlineEnd: '3px' }}>
+                  {message}
+                </Grid>
+              </Grid>
+              <Grid item xs={2} sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+                <Button variant='outlined'
+                  sx={{ color: "#ED5F1E", borderColor: "#ED5F1E", width: 90, fontStyle: 'italic', textTransform: "none", fontSize: "0.9rem", fontWeight: "bold", borderRadius: "12px", borderWidth: '3px', bgcolor: "white", ":hover": { bgcolor: "#5D737EB5" }, padding: "0px 2px" }}
+                  onClick={() => setOpenPop(!openPop)}
+                >
+                  Close
+                </Button>
+              </Grid>
+            </Grid>
+          </CardContent>
+        </Card>
+      </Dialog>
+    </div>
 
-    <Snackbar
-      open={openPop}
-      message={message}
-      autoHideDuration={5000}
-      onClose={() => setOpenPop(!openPop)}
-      action={
-        <IconButton size="small" color="inherit" onClick={() => setOpenPop(!openPop)}>
-          <CloseIcon />
-        </IconButton>
-      }
-    />
-
-    // <Dialog
+    // <Snackbar
     //   open={openPop}
-    //   PaperProps={{ sx: { width: '100%', height: '20%', borderRadius: '10px' } }}
-    //   hideBackdrop={true}
+    //   autoHideDuration={2000}
+    //   anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+    //   onClose={() => setOpenPop(!openPop)}
+    //   action={
+    //     <IconButton size="small" color="inherit" onClick={() => setOpenPop(!openPop)}>
+    //       <CloseIcon />
+    //     </IconButton>
+    //   }
+    //   sx={{ maxWidth: '100%' }}
     // >
-    //   <Grid flexDirection="column">
-    //     <Grid container direction='row' marginTop="15px">
-
-    //       {/* Grid item for the PopUpTitle */}
-    //       <Grid item xs={15} alignItems="center" flexDirection="row" flexWrap="wrap">
-    //         <Typography
-    //           display="flex"
-    //           sx={{ fontSize: '28px', fontWeight: 700 }}
-    //         >
-    //           {type} Successfully {action}
-    //         </Typography>
+    //   <Card sx={{ borderLeft: '6px solid #ED5F1E' }}>
+    //     <CardContent sx={{ justifyContent: 'center' }}>
+    //       <Grid>
+    //         <Grid container flexDirection='row' justifyContent='center' alignItems='center'>
+    //           <Grid item xs={1}>
+    //             <CheckCircleIcon sx={{ color: "#ED5F1E" }}></CheckCircleIcon>
+    //           </Grid>
+    //           <Grid item xs={8} sx={{ fontFamily: "'Poppins', sans-serif", fontStyle: 'italic', fontWeight: 600, paddingInlineEnd: '3px' }}>
+    //             {message}
+    //           </Grid>
+    //           <Grid item xs={3} alignItems='flex-end'>
+    //             <Button variant='outlined'
+    //               sx={{ color: "#ED5F1E", borderColor: "#ED5F1E", width: 90, fontStyle: 'italic', textTransform: "none", fontSize: "0.9rem", fontWeight: "bold", borderRadius: "12px", borderWidth: '3px', bgcolor: "white", ":hover": { bgcolor: "#5D737EB5" }, padding: "0px 2px" }}
+    //               onClick={() => setOpenPop(!openPop)}
+    //             >
+    //               Close
+    //             </Button>
+    //           </Grid>
+    //         </Grid>
     //       </Grid>
-
-    //       {/* Grid Item for Buttons */}
-    //       <Grid item xs style={{ display: 'flex', justifyContent: "center", alignItems: "center", padding: "8px 0px" }}>
-    //         <DialogActions>
-    //           <Button variant='outlined'
-    //             sx={{ color: "#5D737E", borderColor: "#5D737E", width: 175, textTransform: "none", fontSize: "1.2rem", fontWeight: "bold", borderRadius: "12px", bgcolor: "white", ":hover": { bgcolor: "#5D737EB5" }, padding: "0px 2px" }}
-    //             onClick={() => setOpenPop(!openPop)}
-    //           >
-    //             Close
-    //           </Button>
-
-    //         </DialogActions>
-    //       </Grid>
-    //     </Grid>
-    //   </Grid>
-    // </Dialog>
+    //     </CardContent>
+    //   </Card>
+    // </Snackbar>
   )
 }
