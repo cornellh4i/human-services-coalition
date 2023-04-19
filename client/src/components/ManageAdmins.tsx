@@ -8,8 +8,8 @@ import { useState, useEffect } from 'react'
 
 const ManageAdmins = () => {
   const [Admins, setAdmins] = useState<any[]>([])
-  let [sortOrder, setSortOrder] = useState(0)
-  let [sortName, setSortName] = useState("None")
+  let [sortOrder, setSortOrder] = useState(-1)
+  let [sortName, setSortName] = useState('createdAt')
   let [search, setSearch] = useState('')
   let [affiliation, setAffiliation] = useState('');
   let [filters, setFilters] = useState([])
@@ -105,7 +105,7 @@ const ManageAdmins = () => {
       }
     }
     fetchAdmins()
-  }, [search, affiliation, sortOrder, sortName, filters])
+  }, [affiliation, search, sortOrder, sortName, filters])
 
   useEffect(() => {
     const fetchAdmins = async () => {
@@ -126,10 +126,10 @@ const ManageAdmins = () => {
   async function handleSortToggle(name: string) {
 
     if (sortName == name) {
-      setSortOrder((sortOrder + 1) % 3)
+      setSortOrder(sortOrder * -1)
     }
     else {
-      setSortOrder(1)
+      setSortOrder(-1)
       setSortName(name)
     }
 
@@ -197,16 +197,16 @@ const ManageAdmins = () => {
         <Grid container spacing={"10%"}>
           <Grid item sx={{ ml: "1%" }}>
             <ColumnLabel label="First Name"
-              ascending={false} onClick={() => handleSortToggle("fName")}></ColumnLabel>
+              ascending={sortName == 'fName' && sortOrder == -1} onClick={() => handleSortToggle("fName")}></ColumnLabel>
           </Grid>
           <Grid item sx={{ ml: "0%" }}>
-            <ColumnLabel ascending={false} label="Last Name" onClick={() => handleSortToggle("lName")}></ColumnLabel>
+            <ColumnLabel ascending={sortName == 'lName' && sortOrder == -1} label="Last Name" onClick={() => handleSortToggle("lName")}></ColumnLabel>
           </Grid>
           <Grid item sx={{ ml: "0%" }}>
-            <ColumnLabel ascending={false} label="Affiliation" onClick={() => handleSortToggle("affiliation")}></ColumnLabel>
+            <ColumnLabel ascending={sortName == 'affiliation' && sortOrder == -1} label="Affiliation" onClick={() => handleSortToggle("affiliation")}></ColumnLabel>
           </Grid>
           <Grid item sx={{ ml: "3%" }}>
-            <ColumnLabel ascending={true} label="Created" onClick={() => handleSortToggle("createdAt")}></ColumnLabel>
+            <ColumnLabel ascending={sortName == 'createdAt' && sortOrder == -1} label="Created" onClick={() => handleSortToggle("createdAt")}></ColumnLabel>
           </Grid>
         </Grid>
 
