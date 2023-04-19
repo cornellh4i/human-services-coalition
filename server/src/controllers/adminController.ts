@@ -42,9 +42,6 @@ const getSortFilter = async (req, res) => {
   res.status(200).json(admins);
 };
 
-
-
-
 // GET all admin
 const getAdmins = async (req, res) => {
   const admins = await Admin.find({}).sort({ createdAt: -1 })
