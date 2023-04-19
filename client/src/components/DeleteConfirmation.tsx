@@ -4,6 +4,7 @@ import DialogActions from "@mui/material/DialogActions";
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import { padding, spacing } from "@mui/system";
+import { useEffect, useState } from "react";
 import ConfirmPopUp from './ConfirmPopUp';
 
 
@@ -19,17 +20,35 @@ interface DeleteConfirmationProps {
 
 export default function DeleteConfirmation({ id, openPop, setOpenPop, handleDelete, type }: DeleteConfirmationProps) {
 
+    // const [confirmPop, setConfirmPop] = useState(false)
     // function for deleting the listing and clearing the PopUp all in one
-    const handlePopUpDelete = () => {
+    const handlePopUpDelete = (event: any) => {
+        event.stopPropagation()
         handleDelete(id)
-        setOpenPop(!openPop)
-
+        // setConfirmPop(true)
+        // setOpenPop(false)
+        // setTimeout(() => {
+        //     setConfirmPop(true);
+        // }, 300);
     }
+
+    // useEffect(() => {
+    //     console.log(confirmPop); // this will log the updated value of confirmPop
+    // }, [confirmPop]);
+
+    // const handleConfirmPop = () => {
+    //     setConfirmPop(!confirmPop)
+    // }
+
+    // const handleClose = () => {
+    //     setConfirmPop(!confirmPop)
+    // }
 
     return (
 
         <><Dialog
             open={openPop}
+            // onClose={() => handleClose}
             PaperProps={{ sx: { width: '35%', height: '30%', borderRadius: '10px' } }}
         >
             <Grid flexDirection="column">
@@ -50,13 +69,13 @@ export default function DeleteConfirmation({ id, openPop, setOpenPop, handleDele
                         <DialogActions>
                             <Button variant='outlined'
                                 sx={{ color: "#5D737E", borderColor: "#5D737E", width: 175, textTransform: "none", fontSize: "1.2rem", fontWeight: "bold", borderRadius: "12px", bgcolor: "white", ":hover": { bgcolor: "#5D737EB5" }, padding: "0px 2px" }}
-                                onClick={() => setOpenPop(!openPop)}
+                                onClick={() => { setOpenPop(!openPop) }}
                             >
                                 Cancel
                             </Button>
                             <Button variant='contained'
                                 sx={{ color: "#FFFFFF", bgcolor: "#ED5F1E", ':hover': { bgcolor: "#ED5F1EB5" }, textTransform: "none", width: 175, fontSize: "1.2rem", fontWeight: "bold", borderRadius: "12px", padding: "0px 2px" }}
-                                onClick={() => handlePopUpDelete()}
+                                onClick={(event) => { handlePopUpDelete(event); }}
                             >
                                 Confirm
                             </Button>
@@ -64,6 +83,8 @@ export default function DeleteConfirmation({ id, openPop, setOpenPop, handleDele
                     </Grid>
                 </Grid>
             </Grid>
-        </Dialog><ConfirmPopUp id={id} openPop={openPop} action="Deleted" type="Listing" /></>
+        </Dialog>
+            {/* <ConfirmPopUp openConfirmPop={confirmPop} setConfirmPop={setConfirmPop} action="Deleted" type="Listing" /> */}
+        </>
     )
 }

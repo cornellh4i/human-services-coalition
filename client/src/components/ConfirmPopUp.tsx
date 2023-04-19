@@ -5,39 +5,63 @@ import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import { padding, spacing } from "@mui/system";
 import { useNavigate } from "react-router-dom";
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Card, CardContent, IconButton, Snackbar } from "@mui/material";
 import CloseIcon from '@mui/icons-material/Close';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import { open } from "fs/promises";
 
 
 //interface for declaring what props the PopUp can take
 interface ConfirmationProps {
-  id: number;
-  openPop: boolean;
+  setConfirmPop: (trigger: boolean) => void;
+  openConfirmPop: boolean;
   action: string;
   type: string
 }
 
-export default function ConfirmPopUp({ id, openPop, action, type }: ConfirmationProps) {
+// const handleClose = () => {
+//   setConfirmPop(!openConfirmPop)
+// }
 
+// // export default function ExampleDialog({ openPop, setOpenPop, message }) {
+// const [showDialog, setShowDialog] = useState(openPop);
 
-  //states for the delete dialog pop up
-  const [openPopp, setOpenPop] = useState(false)
+// useEffect(() => {
+//   if (openPop) {
+//     setShowDialog(true);
+//     const timeout = setTimeout(() => {
+//       setShowDialog(false);
+//       setOpenPop(false);
+//     }, 5000);
+//     return () => clearTimeout(timeout);
+//   }
+// }, [openPop, setOpenPop]);
 
-  const handlePopUp = () => {
-    setOpenPop(!openPop)
+export default function ConfirmPopUp({ openConfirmPop, setConfirmPop, action, type }: ConfirmationProps) {
 
+  const handleClose = () => {
+    setConfirmPop(false)
   }
+
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      handleClose();
+    }, 3000);
+
+    return () => {
+      console.log("ConfirmPopUp unmounted!");
+      clearTimeout(timeoutId);
+    };
+  }, [openConfirmPop]);
 
   const message = `${type} Successfully ${action}!`;
 
   return (
-    <div>
-      {/* Confirmation popup dialog */}
+    <>
+      {console.log('ConfirmPopUp rendered')}
       <Dialog
-        open={openPop}
-        onClose={() => setOpenPop(!openPop)}
+        open={openConfirmPop}
         maxWidth="sm"
         fullWidth={true}
         PaperProps={{
@@ -64,7 +88,9 @@ export default function ConfirmPopUp({ id, openPop, action, type }: Confirmation
               <Grid item xs={2} sx={{ display: 'flex', justifyContent: 'flex-end' }}>
                 <Button variant='outlined'
                   sx={{ color: "#ED5F1E", borderColor: "#ED5F1E", width: 90, fontStyle: 'italic', textTransform: "none", fontSize: "0.9rem", fontWeight: "bold", borderRadius: "12px", borderWidth: '3px', bgcolor: "white", ":hover": { bgcolor: "#5D737EB5" }, padding: "0px 2px" }}
-                  onClick={() => setOpenPop(!openPop)}
+                  onClick={() => {
+                    handleClose()
+                  }}
                 >
                   Close
                 </Button>
@@ -73,7 +99,34 @@ export default function ConfirmPopUp({ id, openPop, action, type }: Confirmation
           </CardContent>
         </Card>
       </Dialog>
-    </div>
+
+    </>
+
+    // // //states for the delete dialog pop up
+
+    // const [showDialog, setShowDialog] = useState(openConfirmPop);
+
+    // console.log(openConfirmPop)
+    // // console.log(showDialog)
+
+    // useEffect(() => {
+    //   if (openConfirmPop) {
+    //     setShowDialog(true);
+    //     console.log(showDialog + "HIIII")
+    //     const timeout = setTimeout(() => {
+    //       console.log("setTimeout called");
+    //       console.log(showDialog + "CLOSEEEEE")
+    //       setShowDialog(false);
+    //       setConfirmPop(false);
+    //       // console.log("HIIIIII")
+    //       // console.log(openConfirmPop)
+    //     }, 5000);
+    //     return () => clearTimeout(timeout);
+    //   }
+    // }, [openConfirmPop, setConfirmPop]);
+
+
+
 
     // <Snackbar
     //   open={openPop}
@@ -110,5 +163,49 @@ export default function ConfirmPopUp({ id, openPop, action, type }: Confirmation
     //     </CardContent>
     //   </Card>
     // </Snackbar>
+
+
+
+
+
   )
 }
+{/* <Dialog
+        open={openConfirmPop}
+        maxWidth="sm"
+        fullWidth={true}
+        PaperProps={{
+          sx: {
+            width: "95%",
+            maxWidth: "unset",
+            position: "absolute",
+            top: "8%"
+          },
+        }}
+      >
+        <Card sx={{ borderLeft: '6px solid #ED5F1E', height: '80%' }}>
+          <CardContent sx={{ justifyContent: 'center' }}>
+            {/* adjust height from 2vh to make the popup taller/shorter */}
+      //       <Grid container direction='row' justifyContent='center' alignItems='center' width='100%' height="2vh" >
+      //         <Grid container xs={10}>
+      //           <Grid item xs={1} sx={{ marginLeft: '10px' }}>
+      //             <CheckCircleIcon sx={{ color: "#ED5F1E" }}></CheckCircleIcon>
+      //           </Grid>
+      //           <Grid item xs={8} sx={{ fontFamily: "'Poppins', sans-serif", fontStyle: 'italic', fontWeight: 600, paddingInlineEnd: '3px' }}>
+      //             {message}
+      //           </Grid>
+      //         </Grid>
+      //         <Grid item xs={2} sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+      //           <Button variant='outlined'
+      //             sx={{ color: "#ED5F1E", borderColor: "#ED5F1E", width: 90, fontStyle: 'italic', textTransform: "none", fontSize: "0.9rem", fontWeight: "bold", borderRadius: "12px", borderWidth: '3px', bgcolor: "white", ":hover": { bgcolor: "#5D737EB5" }, padding: "0px 2px" }}
+      //             onClick={() => {
+      //               handleClose()
+      //             }}
+      //           >
+      //             Close
+      //           </Button>
+      //         </Grid>
+      //       </Grid>
+      //     </CardContent>
+      //   </Card>
+      // </Dialog> */}

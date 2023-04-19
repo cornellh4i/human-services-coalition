@@ -5,6 +5,7 @@ import ListingDetails from '../components/ListingDetails'
 import FilterSideBar from '../components/FilterSideBar'
 import SelectedFilters from '../components/SelectedFilters'
 import '../css/Home.css'
+import ConfirmPopUp from '../components/ConfirmPopUp'
 
 function Home() {
   let [Listings, setListings] = useState<any[]>([])
@@ -35,6 +36,8 @@ function Home() {
     fetchListings()
   }, [])
 
+  const [confirmPop, setConfirmPop] = useState(false)
+
   // The function that calls the delete routing function
   const handleDelete = async (id: any) => {
     await fetch('/api/listing/' + id, {
@@ -43,10 +46,11 @@ function Home() {
     // After we delete we must update the local state
     const newListings = Listings.filter(Listing => Listing._id != id)
     setListings(newListings)
+    setConfirmPop(true)
   }
 
   return (
-    <div>
+    <><div>
       <div className='body-box'>
         <div className='side-box'>
           <FilterSideBar
@@ -87,7 +91,7 @@ function Home() {
                 disTransportation={disTransportation} setDisTransportation={setDisTransportation}
                 minPrice={minPrice} setMinPrice={setMinPrice}
                 maxPrice={maxPrice} setMaxPrice={setMaxPrice}>
-              </SelectedFilters >
+              </SelectedFilters>
             </div>
             <div className='listing-cards'>
               <Grid container spacing={2}>
@@ -102,6 +106,7 @@ function Home() {
         </div>
       </div>
     </div>
+      <ConfirmPopUp openConfirmPop={confirmPop} setConfirmPop={setConfirmPop} action="Deleted" type="Listing" /></>
   );
 }
 
