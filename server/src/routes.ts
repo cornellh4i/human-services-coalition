@@ -12,6 +12,7 @@ module.exports = () => {
     updateListing,
     deleteListing,
     updateListingPicture,
+    getListingPicture
   } = require("./controllers/listingController")
 
   const {
@@ -47,6 +48,9 @@ module.exports = () => {
 
   // GET a specific housing listing (by id)
   router.get('/listing/:id', getListing)
+
+  //GET the picture for a specific listing
+  router.get('/listingPicture/:id', getListingPicture)
 
   // POST (add) a new housing listing
   router.post('/listing', createListing)

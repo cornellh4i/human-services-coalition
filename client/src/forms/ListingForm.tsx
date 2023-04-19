@@ -34,6 +34,7 @@ const ListingForm = () => {
   const [dateAvailable, setDateAvailable] = useState('')
   const [error, setError] = useState(null)
   const [buttonLabel, setButtonLabel] = useState('Create New Listing')
+  const [org, setOrg] = useState('')
 
   // Enforces Validation
   const [nameError, setNameError] = useState(false)
@@ -64,16 +65,19 @@ const ListingForm = () => {
 
   // Contains what will prepopulate the form if location.state is not null
   useEffect(() => {
+
     if (location.state != null) { getListingDetails() }
   }, [])
 
   // Fetch the data related to id from the database
   const getListingDetails = async () => {
+
     let result = await fetch('/api/listing/' + location.state.id, {
       method: 'GET'
     })
     let json_object = await result.json()
-
+    setOrg(json_object.streetAddress)
+    console.log(org)
     setStreetAddress(json_object.streetAddress)
     setDescription(json_object.description)
     setState(json_object.state)
@@ -192,8 +196,9 @@ const ListingForm = () => {
       const formData = new FormData();
       files.forEach((file) => {
         formData.append('pictures', file);
+        formData.append('name', streetAddress)
       });
-      
+
       const response = await fetch('api/listingPicture/' + id, {
         method: 'PATCH',
         body: formData
@@ -235,20 +240,6 @@ const ListingForm = () => {
       navigate("/")
     }
   }
-
-  // const uploadImages = (e: any) => {
-  //   console.log(e.target.files)
-  //   let images = e.target.files;
-  //   if (images) {
-  //     for (let i = 0; i < images.length; i++) {
-  //       let img = URL.createObjectURL(e.target.files[i]);
-  //       if (pictures[0] === ''){
-  //         setPictures([img]);
-  //       }
-  //       else setPictures([...pictures, img]);
-  //     } 
-  //   }
-  // };
 
   return (
     <Container maxWidth={false}>
@@ -710,7 +701,7 @@ const ListingForm = () => {
                         if (e.target.files) {
                           setFiles(Array.from(e.target.files));
                         }
-                      } }
+                      }}
                     />
                   </Box>
                 </Button>

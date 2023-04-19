@@ -214,7 +214,6 @@ const updateListing = async (req, res) => {
   }
 
   try {
-    console.log("BEFORE_FIND")
     const listing = await Listing.findOneAndUpdate({ _id: id }, {
       ...req.body
     })
@@ -222,7 +221,7 @@ const updateListing = async (req, res) => {
       return res.status(400).json({ error: 'No such listing' })
     }
 
-    res.status(200).json({id: id})
+    res.status(200).json({ id: id })
     //res.status(200).json({ id: listing._id })
 
   } catch (error) {
@@ -232,11 +231,73 @@ const updateListing = async (req, res) => {
     res.send(errorJson(error));
   }
 }
-
+//before this is called multer is called - middleware between front end and backend
+//steps in and takes the pictures and downloads it onto server (/uploads) folder MAGIC
+//use s3 module i have a file at this location, name for file and bucket to upload 
 const updateListingPicture = async (req, res) => {
   const { id } = req.params
   // ADD CODE HERE TO UPLOAD TO S3
-  res.status(200).json({ id: id })
+
+  try {
+    const files = req.files;
+    console.log("PRINTING THEEE FILEEEEE")
+    //console.log(files)
+    // We should check if the file exists, if it doesn't, return an error
+    if (!files) {
+      res.send(errorJson("No file uploaded"));
+      return;
+    }
+    // Now we send the file to S3 using our s3utils
+    // 'name' is the text entered into the input field
+    // and this is what the name of the file will be in s3
+    var i = 0;
+    var pics: string[] = []
+    files.forEach(async (file) => {
+      console.log("NAMEMMMEJNNJKNJWIEFNWJIN")
+      console.log(req.body.name)
+      const name = String(req.body.name + i);
+      pics.push(name)
+      i = i + 1;
+      const result = await s3utils.uploadFile(file, name)
+    })
+    console.log("jgnerngiwnj rjiegnij")
+    console.log(pics)
+    console.log("AHHHHHHHHHHHHHHBEWFJHBWFUBWEBEBFWBWFIWNS")
+    Listing.findOneAndUpdate(
+      { _id: id }, // Filter: find the listing with the given ID
+      { $set: { pictures: pics } }, // Update: set the "pictures" field to the "pics" array
+      (err, updatedListing) => {
+        if (err) {
+          console.error('Error updating listing:', err);
+        } else {
+          console.log('Updated listing:', updatedListing);
+        }
+      }
+    );
+
+    //console.log(result)
+    // Now we delete the file from the /uploads folder since it has been uploaded
+    // await fs.unlink(file.path);
+    // Here you can return anything, I'm choosing to return the path to the image
+    res.send(successJson({}));
+
+  } catch (error) {
+    res.send(errorJson(error));
+
+    // res.status(200).json({ id: id })
+  }
+}
+const getListingPicture = async (req, res) => {
+  const { id } = req.params
+  const response = s3utils.getFileStream(id)
+  if (response) {
+    response.createReadStream().on('error', e => {
+      console.log(e);
+    }).pipe(res);
+  }
+  console.log("PIPE2wnfwoifniwono")
+  console.log("PIPE1")
+  //response.pipe(res)
 }
 
 // DELETE a specific housing listing
@@ -262,5 +323,6 @@ module.exports = {
   createListing,
   updateListing,
   deleteListing,
-  updateListingPicture
+  updateListingPicture,
+  getListingPicture
 }
