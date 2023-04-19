@@ -15,27 +15,26 @@ const ManageAdmins = () => {
   let [filters, setFilters] = useState([])
   let selected: any = [...filters]
 
+  useEffect(() => {
+    const fetchAdmins = async () => {
+
+      const response = await fetch('/api/admins/')
+      const json = await response.json()
+
+      if (response.ok) {
+        setAdmins(json)
+      }
+    }
+    fetchAdmins()
+  }, [])
+
+
+
   const FilterEnum = {
     affiliation: "affiliation",
     search: "search"
   }
 
-  function updateQuery(filterList: any) {
-    let params: any = {}
-
-    for (let i = 0; i < filterList.length; i++) {
-      let currFilter = filterList[i].filter
-      let currVal = filterList[i].value
-      params[currFilter] = currVal
-    }
-
-    const searchParams = new URLSearchParams(Object.entries(params))
-    // Have to do this
-    // fetch('/api/listingsByCategory?' + searchParams)
-    //   .then(response => response.json())
-    //   .then(data => setListings(data))
-    //   .catch(error => console.error(error))
-  }
 
 
   function selectedIndex(filter: string) {
@@ -47,7 +46,7 @@ const ManageAdmins = () => {
     return -1
   }
 
-  function updateSelected(filter: string, value: any, filterState: any) {
+  function updateSelected(filter: string, value: any) {
     let index = 0
 
     // Search case
@@ -81,31 +80,14 @@ const ManageAdmins = () => {
     console.log(selected)
   }
 
-  updateQuery(selected)
-  function handleFilterChange(filterName: string, filterState: any, setFunction: Function,
+  // updateQuery(selected)
+
+  function handleFilterChange(filterName: string, setFunction: Function,
     event: { target: { value: any } }) {
     setFunction(event.target.value)
-    updateSelected(filterName, event.target.value, filterState)
-
+    // updateSelected(filterName, event.target.value)
   }
-  useEffect(() => {
-    const fetchAdmins = async () => {
 
-      let localAffiliation = affiliation
-      if (localAffiliation == '') {
-        localAffiliation = "None"
-      }
-      const response = await fetch('/api/admins/' + search + '/' +
-        sortName + '/' + sortOrder + '/' + localAffiliation)
-      console.log('/api/admins/' + search + '/' +
-        sortName + '/' + sortOrder + '/' + localAffiliation)
-      const json = await response.json()
-      if (response.ok) {
-        setAdmins(json)
-      }
-    }
-    fetchAdmins()
-  }, [affiliation, search, sortOrder, sortName, filters])
 
   useEffect(() => {
     const fetchAdmins = async () => {
@@ -120,11 +102,28 @@ const ManageAdmins = () => {
     fetchAdmins()
   }, [])
 
+  useEffect(() => {
+    const fetchAdmins = async () => {
+      let params = {
+        search: search,
+        sortName: sortName,
+        sortOrder: sortOrder.toString(),
+        affiliation: affiliation
+      }
+      let searchParams = new URLSearchParams(params)
+
+      const response = await fetch('/api/admins/sort?' + searchParams)
+      const json = await response.json()
+      if (response.ok) {
+        setAdmins(json)
+      }
+    }
+    fetchAdmins()
+  }, [search, affiliation, sortOrder, sortName, filters])
 
 
 
   async function handleSortToggle(name: string) {
-
     if (sortName == name) {
       setSortOrder(sortOrder * -1)
     }
@@ -167,7 +166,7 @@ const ManageAdmins = () => {
                 <SearchIcon />
               </InputAdornment>,
             }}
-            onChange={(e) => handleFilterChange(FilterEnum.search, search, setSearch, e)}
+            onChange={(e) => handleFilterChange(FilterEnum.search, setSearch, e)}
           />
         </Grid>
 
@@ -179,8 +178,7 @@ const ManageAdmins = () => {
                 sx={{ flex: 1, borderRadius: 1 }}>
                 <Select
                   value={affiliation}
-                  onChange={(e) => handleFilterChange(FilterEnum.affiliation,
-                    affiliation, setAffiliation, e)}
+                  onChange={(e) => handleFilterChange(FilterEnum.affiliation, setAffiliation, e)}
                   displayEmpty>
                   <MenuItem value="All">All Affiliations</MenuItem>
                   <MenuItem value="HSC">HSC</MenuItem>
@@ -204,13 +202,13 @@ const ManageAdmins = () => {
           </Grid>
           <Grid item sx={{ ml: "0%" }}>
             <ColumnLabel ascending={sortName == 'affiliation' && sortOrder == -1} label="Affiliation" onClick={() => handleSortToggle("affiliation")}></ColumnLabel>
-          </Grid>
+          </Grid >
           <Grid item sx={{ ml: "3%" }}>
             <ColumnLabel ascending={sortName == 'createdAt' && sortOrder == -1} label="Created" onClick={() => handleSortToggle("createdAt")}></ColumnLabel>
           </Grid>
-        </Grid>
+        </Grid >
 
-      </Container>
+      </Container >
 
       <div className="admins" >
         {Admins && Admins.map((Admin) => (

@@ -3,47 +3,38 @@ import mongoose from 'mongoose';
 
 //GET admins based off sort
 const getSortFilter = async (req, res) => {
-  console.log("ran")
-  const searchText = req.params.searchText || '';
-  const sortOrder = req.params.sortOrder || '';
-  const affiliation = req.params.affiliation || '';
-  let sortName = ""
-  if (req.sortName != "None") {
-    sortName = req.sortName
-    console.log(sortName)
-  }
-  console.log(searchText)
+  const search = req.query.search || '';
+  const sortName = req.query.sortName || '';
+  const sortOrder = req.query.sortOrder || '';
+  const affiliation = req.query.affiliation || '';
 
-  const filter = searchText ? {
+  let filter = search ? {
     $or: [
-      { fName: { $regex: new RegExp(searchText, 'i') } },
-      { lName: { $regex: new RegExp(searchText, 'i') } },
-      { affiliation: { $regex: new RegExp(searchText, 'i') } },
-      //{ createdAt: { $regex: new RegExp(searchText, 'i') } }
+      { fName: { $regex: new RegExp(search, 'i') } },
+      { lName: { $regex: new RegExp(search, 'i') } },
+      { affiliation: { $regex: new RegExp(search, 'i') } },
     ]
   } : {};
 
   const sortObject = {};
-  if (sortName != "" && sortName != undefined) {
+  if (sortName) {
     if (sortOrder) {
       sortObject[sortName] = sortOrder;
     } else {
       sortObject[sortName] = 'asc';
     }
   }
-  if (affiliation === 'HSC') {
-    sortObject[affiliation] = { $regex: /HSC/ };
-  } else if (affiliation === 'Non-HSC') {
-    sortObject[affiliation] = { $not: /HSC/ };
+  if (affiliation == 'HSC') {
+    console.log("run")
+    filter["affiliation"] = { $regex: /HSC/ };
+  } else if (affiliation == 'Non-HSC') {
+    filter["affiliation"] = { $not: /HSC/ };
   }
 
   const admins = await Admin.find(filter).sort(sortObject);
 
   res.status(200).json(admins);
 };
-
-
-
 
 // GET all admin
 const getAdmins = async (req, res) => {
