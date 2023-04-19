@@ -52,6 +52,7 @@ const LoginForm = () => {
       setError(null)
       console.log('Logged In', json)
       navigate('/')
+      window.location.reload();
     }
   }
 

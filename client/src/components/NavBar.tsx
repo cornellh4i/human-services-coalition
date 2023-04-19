@@ -88,6 +88,7 @@ function ResponsiveAppBar() {
   const navigateToLoginForm = () => {
     handleCloseLogoutMenu();
     navigate('/login-form');
+    window.location.reload();
   };
 
   return (

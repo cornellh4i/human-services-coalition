@@ -23,12 +23,12 @@ function App() {
       ].join(','),
     },
   });
-
+  
   return (
     <div className="App">
       <ThemeProvider theme={theme}>
         <BrowserRouter>
-          <NavBar />
+          {window.location.href.indexOf('login-form') > -1 ? "" : <NavBar />}
           <div className="pages">
             <Routes>
               <Route
