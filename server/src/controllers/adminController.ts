@@ -39,7 +39,6 @@ const getSortAdmins = async (req, res) => {
 // GET all admin
 const getAdmins = async (req, res) => {
   const admins = await Admin.find({}).sort({ createdAt: -1 })
-
   res.status(200).json(admins)
 }
 

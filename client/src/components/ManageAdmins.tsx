@@ -15,13 +15,10 @@ const ManageAdmins = () => {
   let [filters, setFilters] = useState([])
   let selected: any = [...filters]
 
-
   const FilterEnum = {
     affiliation: "affiliation",
     search: "search"
   }
-
-
 
   function selectedIndex(filter: string) {
     for (let i = 0; i < selected.length; i++) {
@@ -32,39 +29,39 @@ const ManageAdmins = () => {
     return -1
   }
 
-  function updateSelected(filter: string, value: any) {
-    let index = 0
+  // function updateSelected(filter: string, value: any) {
+  //   let index = 0
 
-    // Search case
-    if (filter === FilterEnum.search) {
-      index = selectedIndex(filter)
-      if (index !== -1) {
-        if (selected[index].value !== value && value !== "") {
-          selected.splice(index, 1)
-          selected.push({ "filter": filter, "value": value })
-        }
-        else if (value === "") {
-          selected.splice(index, 1)
-        }
-      }
-      else {
-        selected.push({ "filter": filter, "value": value })
-      }
-    }
-    // Affiliation case
-    else {
-      index = selectedIndex(filter)
-      if (index !== -1) {
-        selected.splice(index, 1)
-        selected.push({ "filter": filter, "value": value })
-      }
-      else {
-        selected.push({ "filter": filter, "value": value })
-      }
-    }
-    setFilters(selected)
-    console.log(selected)
-  }
+  //   // Search case
+  //   if (filter === FilterEnum.search) {
+  //     index = selectedIndex(filter)
+  //     if (index !== -1) {
+  //       if (selected[index].value !== value && value !== "") {
+  //         selected.splice(index, 1)
+  //         selected.push({ "filter": filter, "value": value })
+  //       }
+  //       else if (value === "") {
+  //         selected.splice(index, 1)
+  //       }
+  //     }
+  //     else {
+  //       selected.push({ "filter": filter, "value": value })
+  //     }
+  //   }
+  //   // Affiliation case
+  //   else {
+  //     index = selectedIndex(filter)
+  //     if (index !== -1) {
+  //       selected.splice(index, 1)
+  //       selected.push({ "filter": filter, "value": value })
+  //     }
+  //     else {
+  //       selected.push({ "filter": filter, "value": value })
+  //     }
+  //   }
+  //   setFilters(selected)
+  //   console.log(selected)
+  // }
 
   // updateQuery(selected)
 
@@ -74,16 +71,22 @@ const ManageAdmins = () => {
     // updateSelected(filterName, event.target.value)
   }
 
-
   useEffect(() => {
     const fetchAdmins = async () => {
-
       const response = await fetch('/api/admins/')
       const json = await response.json()
 
       if (response.ok) {
         setAdmins(json)
-      }
+      }  // function updateQuery(filterList: any) {
+        //   let params: any = {}
+      
+        //   for (let i = 0; i < filterList.length; i++) {
+        //     let currFilter = filterList[i].filter
+        //     let currVal = filterList[i].value
+        //     params[currFilter] = currVal
+        //   }
+        // }
     }
     fetchAdmins()
   }, [])
@@ -108,7 +111,6 @@ const ManageAdmins = () => {
   }, [search, affiliation, sortOrder, sortName, filters])
 
 
-
   async function handleSortToggle(name: string) {
     if (sortName == name) {
       setSortOrder(sortOrder * -1)
@@ -117,7 +119,6 @@ const ManageAdmins = () => {
       setSortOrder(-1)
       setSortName(name)
     }
-
   }
 
   // The function that calls the delete routing function

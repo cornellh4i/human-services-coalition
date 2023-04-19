@@ -1,18 +1,13 @@
 const User = require("../models/User");
 import mongoose from 'mongoose';
 
-// GET all users
-const getUsers = async (req, res) => {
-  const users = await User.find({}).sort({ createdAt: -1 })
-  res.status(200).json(users)
-}
-
 //GET users according to sort
 const getSortUsers = async (req, res) => {
   const search = req.query.search || '';
   const sortName = req.query.sortName || '';
   const sortOrder = req.query.sortOrder || '';
   const voucher = req.query.voucher || '';
+
   console.log(search)
   console.log(sortName)
   console.log(sortOrder)
@@ -22,7 +17,7 @@ const getSortUsers = async (req, res) => {
     $or: [
       { fName: { $regex: new RegExp(search, 'i') } },
       { lName: { $regex: new RegExp(search, 'i') } },
-      { voucher: { $regex: new RegExp(search, 'i') } },
+      { voucherType: { $regex: new RegExp(search, 'i') } },
     ]
   } : {};
 
@@ -35,22 +30,27 @@ const getSortUsers = async (req, res) => {
     }
   }
   if (voucher == 'Voucher I') {
-    filter["voucher"] = { $regex: /Voucher I/ };
+    filter["voucherType"] = { $regex: /Voucher I/ };
   } else if (voucher == 'Voucher II') {
-    filter["voucher"] = { $regex: /Voucher II/ };
+    filter["voucherType"] = { $regex: /Voucher II/ };
   } else if (voucher == 'Voucher III') {
-    filter["voucher"] = { $regex: /Voucher III/ };
+    filter["voucherType"] = { $regex: /Voucher III/ };
   } else if (voucher == 'Voucher IV') {
-    filter["voucher"] = { $regex: /Voucher IV/ };
-  }
-  else if (voucher == "None") {
-    filter["affiliation"] = { $not: /Voucher/ };
+    filter["voucherType"] = { $regex: /Voucher IV/ };
+  } else if (voucher == "Other") {
+    filter["voucherType"] = { $not: /Voucher/ };
   }
 
   const users = await User.find(filter).sort(sortObject);
 
   res.status(200).json(users);
 };
+
+// GET all users
+const getUsers = async (req, res) => {
+  const users = await User.find({}).sort({ createdAt: -1 })
+  res.status(200).json(users)
+}
 
 // GET a specific user
 const getUser = async (req, res) => {

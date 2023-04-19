@@ -6,7 +6,6 @@ import ColumnLabel from '../components/ColumnLabel'
 import { useState, useEffect } from 'react'
 
 
-
 const ManageUsers = () => {
   const [Users, setUsers] = useState<any[]>([])
   let [sortOrder, setSortOrder] = useState(-1)
@@ -21,16 +20,6 @@ const ManageUsers = () => {
     search: "search"
   }
 
-  function updateQuery(filterList: any) {
-    let params: any = {}
-
-    for (let i = 0; i < filterList.length; i++) {
-      let currFilter = filterList[i].filter
-      let currVal = filterList[i].value
-      params[currFilter] = currVal
-    }
-  }
-
   function selectedIndex(filter: string) {
     for (let i = 0; i < selected.length; i++) {
       if (selected[i].filter === filter) {
@@ -40,50 +29,61 @@ const ManageUsers = () => {
     return -1
   }
 
-  function updateSelected(filter: string, value: any, filterState: any) {
-    let index = 0
+  // function updateSelected(filter: string, value: any, filterState: any) {
+  //   let index = 0
 
-    // Search case
-    if (filter === FilterEnum.search) {
-      index = selectedIndex(filter)
-      if (index !== -1) {
-        if (selected[index].value !== value && value !== "") {
-          selected.splice(index, 1)
-          selected.push({ "filter": filter, "value": value })
-        }
-        else if (value === "") {
-          selected.splice(index, 1)
-        }
-      }
-      else {
-        selected.push({ "filter": filter, "value": value })
-      }
-    }
-    // Affiliation case
-    else {
-      index = selectedIndex(filter)
-      if (index !== -1) {
-        selected.splice(index, 1)
-        selected.push({ "filter": filter, "value": value })
-      }
-      else {
-        selected.push({ "filter": filter, "value": value })
-      }
-    }
-    setFilters(selected)
-    console.log(selected)
-  }
+  //   // Search case
+  //   if (filter === FilterEnum.search) {
+  //     index = selectedIndex(filter)
+  //     if (index !== -1) {
+  //       if (selected[index].value !== value && value !== "") {
+  //         selected.splice(index, 1)
+  //         selected.push({ "filter": filter, "value": value })
+  //       }
+  //       else if (value === "") {
+  //         selected.splice(index, 1)
+  //       }
+  //     }
+  //     else {
+  //       selected.push({ "filter": filter, "value": value })
+  //     }
+  //   }
+  //   // Affiliation case
+  //   else {
+  //     index = selectedIndex(filter)
+  //     if (index !== -1) {
+  //       selected.splice(index, 1)
+  //       selected.push({ "filter": filter, "value": value })
+  //     }
+  //     else {
+  //       selected.push({ "filter": filter, "value": value })
+  //     }
+  //   }
+  //   setFilters(selected)
+  //   console.log(selected)
+  // }
+  
+  // updateQuery(selected)
 
-  updateQuery(selected)
-  function handleFilterChange(filterName: string, filterState: any, setFunction: Function,
+    // function updateQuery(filterList: any) {
+  //   let params: any = {}
+
+  //   for (let i = 0; i < filterList.length; i++) {
+  //     let currFilter = filterList[i].filter
+  //     let currVal = filterList[i].value
+  //     params[currFilter] = currVal
+  //   }
+  // }
+
+  function handleFilterChange(filterName: string, setFunction: Function,
     event: { target: { value: any } }) {
     setFunction(event.target.value)
-    updateSelected(filterName, event.target.value, filterState)
+    // updateSelected(filterName, event.target.value, filterState)
   }
 
   useEffect(() => {
     const fetchUsers = async () => {
-      const response = await fetch('/api/users')
+      const response = await fetch('/api/users/')
       const json = await response.json()
 
       if (response.ok) {
@@ -94,7 +94,7 @@ const ManageUsers = () => {
   }, [])
 
   useEffect(() => {
-    const fetchAdmins = async () => {
+    const fetchUsers = async () => {
       let params = {
         search: search,
         sortName: sortName,
@@ -103,13 +103,13 @@ const ManageUsers = () => {
       }
       let searchParams = new URLSearchParams(params)
 
-      const response = await fetch('/api/user/sort?' + searchParams)
+      const response = await fetch('/api/users/sort?' + searchParams)
       const json = await response.json()
       if (response.ok) {
         setUsers(json)
       }
     }
-    fetchAdmins()
+    fetchUsers()
   }, [search, voucher, sortOrder, sortName, filters])
 
 
@@ -122,6 +122,7 @@ const ManageUsers = () => {
       setSortName(name)
     }
   }
+
   // The function that calls the delete routing function
   const handleDelete = async (id: any) => {
     await fetch('/api/users/' + id, {
@@ -154,7 +155,7 @@ const ManageUsers = () => {
                 <SearchIcon />
               </InputAdornment>,
             }}
-            onChange={(e) => handleFilterChange(FilterEnum.search, search, setSearch, e)}
+            onChange={(e) => handleFilterChange(FilterEnum.search, setSearch, e)}
           />
         </Grid>
 
@@ -165,8 +166,7 @@ const ManageUsers = () => {
               <FormControl sx={{ flex: 1, backgroundColor: '#FFFFFF', borderRadius: 1 }}>
                 <Select
                   value={voucher}
-                  onChange={(e) => handleFilterChange(FilterEnum.voucher,
-                    voucher, setVoucher, e)}
+                  onChange={(e) => handleFilterChange(FilterEnum.voucher, setVoucher, e)}
                   displayEmpty>
                   <MenuItem value="All">All Vouchers</MenuItem>
                   <MenuItem value="Voucher I">Voucher I</MenuItem>
@@ -181,10 +181,6 @@ const ManageUsers = () => {
         </Grid>
       </Container>
 
-
-
-
-
       <Container maxWidth={false} sx={{ borderRadius: 0, display: 'flex', justifyContent: 'flex-start', alignItems: 'left', backgroundColor: '#D9D9D9' }}>
 
         <Grid container spacing={"10%"}>
@@ -196,7 +192,7 @@ const ManageUsers = () => {
             <ColumnLabel label="Last Name" ascending={sortName == 'lName' && sortOrder == -1} onClick={() => handleSortToggle("lName")}></ColumnLabel>
           </Grid>
           <Grid item sx={{ ml: "0%" }}>
-            <ColumnLabel label="Affiliation" ascending={sortName == 'affiliation' && sortOrder == -1} onClick={() => handleSortToggle("affiliation")}></ColumnLabel>
+            <ColumnLabel label="Voucher" ascending={sortName == 'voucher' && sortOrder == -1} onClick={() => handleSortToggle("voucher")}></ColumnLabel>
           </Grid>
           <Grid item sx={{ ml: "3%" }}>
             <ColumnLabel label="Created" ascending={sortName == 'createdAt' && sortOrder == -1} onClick={() => handleSortToggle("createdAt")}></ColumnLabel>
