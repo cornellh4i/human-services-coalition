@@ -6,6 +6,7 @@ import FilterSideBar from '../components/FilterSideBar'
 import SelectedFilters from '../components/SelectedFilters'
 import '../css/Home.css'
 import ConfirmPopUp from '../components/ConfirmPopUp'
+import { useLocation, useNavigate } from 'react-router-dom'
 
 function Home() {
   let [Listings, setListings] = useState<any[]>([])
@@ -24,6 +25,16 @@ function Home() {
   let [minPrice, setMinPrice] = useState('')
   let [maxPrice, setMaxPrice] = useState('')
 
+  const [confirmDeletePop, setConfirmDeletePop] = useState(false)
+  const [confirmCreatePop, setConfirmCreatePop] = useState(false)
+  const [confirmEditPop, setConfirmEditPop] = useState(false)
+
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const action = searchParams.get("action");
+
+  const navigate = useNavigate();
+
   useEffect(() => {
     const fetchListings = async () => {
       const response = await fetch('/api/listing')
@@ -34,9 +45,17 @@ function Home() {
       }
     }
     fetchListings()
-  }, [])
 
-  const [confirmPop, setConfirmPop] = useState(false)
+    if (action === "create") {
+      setConfirmCreatePop(true)
+      navigate("/")
+    } else if (action === "edit") {
+      setConfirmEditPop(true)
+      navigate("/")
+    }
+
+
+  }, [])
 
   // The function that calls the delete routing function
   const handleDelete = async (id: any) => {
@@ -46,7 +65,7 @@ function Home() {
     // After we delete we must update the local state
     const newListings = Listings.filter(Listing => Listing._id != id)
     setListings(newListings)
-    setConfirmPop(true)
+    setConfirmDeletePop(true)
   }
 
   return (
@@ -106,7 +125,9 @@ function Home() {
         </div>
       </div>
     </div>
-      <ConfirmPopUp openConfirmPop={confirmPop} setConfirmPop={setConfirmPop} action="Deleted" type="Listing" /></>
+      <ConfirmPopUp openConfirmPop={confirmDeletePop} setConfirmPop={setConfirmDeletePop} action="Deleted" type="Listing" />
+      <ConfirmPopUp openConfirmPop={confirmCreatePop} setConfirmPop={setConfirmCreatePop} action="Created" type="Listing" />
+      <ConfirmPopUp openConfirmPop={confirmEditPop} setConfirmPop={setConfirmEditPop} action="Edited" type="Listing" /></>
   );
 }
 

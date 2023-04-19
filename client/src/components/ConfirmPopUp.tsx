@@ -20,24 +20,6 @@ interface ConfirmationProps {
   type: string
 }
 
-// const handleClose = () => {
-//   setConfirmPop(!openConfirmPop)
-// }
-
-// // export default function ExampleDialog({ openPop, setOpenPop, message }) {
-// const [showDialog, setShowDialog] = useState(openPop);
-
-// useEffect(() => {
-//   if (openPop) {
-//     setShowDialog(true);
-//     const timeout = setTimeout(() => {
-//       setShowDialog(false);
-//       setOpenPop(false);
-//     }, 5000);
-//     return () => clearTimeout(timeout);
-//   }
-// }, [openPop, setOpenPop]);
-
 export default function ConfirmPopUp({ openConfirmPop, setConfirmPop, action, type }: ConfirmationProps) {
 
   const handleClose = () => {
@@ -102,31 +84,6 @@ export default function ConfirmPopUp({ openConfirmPop, setConfirmPop, action, ty
 
     </>
 
-    // // //states for the delete dialog pop up
-
-    // const [showDialog, setShowDialog] = useState(openConfirmPop);
-
-    // console.log(openConfirmPop)
-    // // console.log(showDialog)
-
-    // useEffect(() => {
-    //   if (openConfirmPop) {
-    //     setShowDialog(true);
-    //     console.log(showDialog + "HIIII")
-    //     const timeout = setTimeout(() => {
-    //       console.log("setTimeout called");
-    //       console.log(showDialog + "CLOSEEEEE")
-    //       setShowDialog(false);
-    //       setConfirmPop(false);
-    //       // console.log("HIIIIII")
-    //       // console.log(openConfirmPop)
-    //     }, 5000);
-    //     return () => clearTimeout(timeout);
-    //   }
-    // }, [openConfirmPop, setConfirmPop]);
-
-
-
 
     // <Snackbar
     //   open={openPop}
@@ -164,48 +121,5 @@ export default function ConfirmPopUp({ openConfirmPop, setConfirmPop, action, ty
     //   </Card>
     // </Snackbar>
 
-
-
-
-
   )
 }
-{/* <Dialog
-        open={openConfirmPop}
-        maxWidth="sm"
-        fullWidth={true}
-        PaperProps={{
-          sx: {
-            width: "95%",
-            maxWidth: "unset",
-            position: "absolute",
-            top: "8%"
-          },
-        }}
-      >
-        <Card sx={{ borderLeft: '6px solid #ED5F1E', height: '80%' }}>
-          <CardContent sx={{ justifyContent: 'center' }}>
-            {/* adjust height from 2vh to make the popup taller/shorter */}
-      //       <Grid container direction='row' justifyContent='center' alignItems='center' width='100%' height="2vh" >
-      //         <Grid container xs={10}>
-      //           <Grid item xs={1} sx={{ marginLeft: '10px' }}>
-      //             <CheckCircleIcon sx={{ color: "#ED5F1E" }}></CheckCircleIcon>
-      //           </Grid>
-      //           <Grid item xs={8} sx={{ fontFamily: "'Poppins', sans-serif", fontStyle: 'italic', fontWeight: 600, paddingInlineEnd: '3px' }}>
-      //             {message}
-      //           </Grid>
-      //         </Grid>
-      //         <Grid item xs={2} sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-      //           <Button variant='outlined'
-      //             sx={{ color: "#ED5F1E", borderColor: "#ED5F1E", width: 90, fontStyle: 'italic', textTransform: "none", fontSize: "0.9rem", fontWeight: "bold", borderRadius: "12px", borderWidth: '3px', bgcolor: "white", ":hover": { bgcolor: "#5D737EB5" }, padding: "0px 2px" }}
-      //             onClick={() => {
-      //               handleClose()
-      //             }}
-      //           >
-      //             Close
-      //           </Button>
-      //         </Grid>
-      //       </Grid>
-      //     </CardContent>
-      //   </Card>
-      // </Dialog> */}

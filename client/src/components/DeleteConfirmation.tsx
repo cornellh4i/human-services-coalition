@@ -20,35 +20,16 @@ interface DeleteConfirmationProps {
 
 export default function DeleteConfirmation({ id, openPop, setOpenPop, handleDelete, type }: DeleteConfirmationProps) {
 
-    // const [confirmPop, setConfirmPop] = useState(false)
     // function for deleting the listing and clearing the PopUp all in one
     const handlePopUpDelete = (event: any) => {
         event.stopPropagation()
         handleDelete(id)
-        // setConfirmPop(true)
-        // setOpenPop(false)
-        // setTimeout(() => {
-        //     setConfirmPop(true);
-        // }, 300);
     }
-
-    // useEffect(() => {
-    //     console.log(confirmPop); // this will log the updated value of confirmPop
-    // }, [confirmPop]);
-
-    // const handleConfirmPop = () => {
-    //     setConfirmPop(!confirmPop)
-    // }
-
-    // const handleClose = () => {
-    //     setConfirmPop(!confirmPop)
-    // }
 
     return (
 
         <><Dialog
             open={openPop}
-            // onClose={() => handleClose}
             PaperProps={{ sx: { width: '35%', height: '30%', borderRadius: '10px' } }}
         >
             <Grid flexDirection="column">
@@ -84,7 +65,6 @@ export default function DeleteConfirmation({ id, openPop, setOpenPop, handleDele
                 </Grid>
             </Grid>
         </Dialog>
-            {/* <ConfirmPopUp openConfirmPop={confirmPop} setConfirmPop={setConfirmPop} action="Deleted" type="Listing" /> */}
         </>
     )
 }
