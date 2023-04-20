@@ -250,8 +250,8 @@ const updateListingPicture = async (req, res) => {
       res.send(errorJson("No file uploaded"));
       return;
     }
-    console.log("PRINTING THEEE body")
-    console.log(req.body)
+
+    //console.log(req.body)
     var temparr: string[] = req.body.arr
     console.log("thIS IS OLD TEMPADR")
 
