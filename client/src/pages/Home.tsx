@@ -25,13 +25,15 @@ function Home() {
   let [minPrice, setMinPrice] = useState('')
   let [maxPrice, setMaxPrice] = useState('')
 
-  const [confirmDeletePop, setConfirmDeletePop] = useState(false)
-  const [confirmCreatePop, setConfirmCreatePop] = useState(false)
-  const [confirmEditPop, setConfirmEditPop] = useState(false)
+  const [confirmDeleteListingPop, setConfirmDeleteListingPop] = useState(false)
+  const [confirmCreateListingPop, setConfirmCreateListingPop] = useState(false)
+  const [confirmEditListingPop, setConfirmEditListingPop] = useState(false)
+  const [confirmSetFMRPop, setConfirmSetFMRPop] = useState(false)
 
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const action = searchParams.get("action");
+  const type = searchParams.get("type");
 
   const navigate = useNavigate();
 
@@ -46,14 +48,16 @@ function Home() {
     }
     fetchListings()
 
-    if (action === "create") {
-      setConfirmCreatePop(true)
+    if (action === "create" && type === "listing") {
+      setConfirmCreateListingPop(true)
       navigate("/")
-    } else if (action === "edit") {
-      setConfirmEditPop(true)
+    } else if (action === "edit" && type === "listing") {
+      setConfirmEditListingPop(true)
+      navigate("/")
+    } else if (action === "set" && type === "fmr") {
+      setConfirmSetFMRPop(true)
       navigate("/")
     }
-
 
   }, [])
 
@@ -65,7 +69,7 @@ function Home() {
     // After we delete we must update the local state
     const newListings = Listings.filter(Listing => Listing._id != id)
     setListings(newListings)
-    setConfirmDeletePop(true)
+    setConfirmDeleteListingPop(true)
   }
 
   return (
@@ -125,9 +129,11 @@ function Home() {
         </div>
       </div>
     </div>
-      <ConfirmPopUp openConfirmPop={confirmDeletePop} setConfirmPop={setConfirmDeletePop} action="Deleted" type="Listing" />
-      <ConfirmPopUp openConfirmPop={confirmCreatePop} setConfirmPop={setConfirmCreatePop} action="Created" type="Listing" />
-      <ConfirmPopUp openConfirmPop={confirmEditPop} setConfirmPop={setConfirmEditPop} action="Edited" type="Listing" /></>
+      <ConfirmPopUp openConfirmPop={confirmDeleteListingPop} setConfirmPop={setConfirmDeleteListingPop} action="deleted" type="Listing" />
+      <ConfirmPopUp openConfirmPop={confirmCreateListingPop} setConfirmPop={setConfirmCreateListingPop} action="created" type="New Listing" />
+      <ConfirmPopUp openConfirmPop={confirmEditListingPop} setConfirmPop={setConfirmEditListingPop} action="updated" type="Listing" />
+      <ConfirmPopUp openConfirmPop={confirmSetFMRPop} setConfirmPop={setConfirmSetFMRPop} action="updated" type="FMR Values" />
+    </>
   );
 }
 

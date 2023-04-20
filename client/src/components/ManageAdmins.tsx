@@ -4,9 +4,11 @@ import SearchIcon from '@mui/icons-material/Search';
 import React from 'react'
 import ColumnLabel from '../components/ColumnLabel'
 import { useState, useEffect } from 'react'
+import ConfirmPopUp from './ConfirmPopUp';
 
 const ManageAdmins = () => {
   const [Admins, setAdmins] = useState<any[]>([])
+  const [confirmDeletePop, setConfirmDeletePop] = useState(false)
 
   useEffect(() => {
     const fetchAdmins = async () => {
@@ -28,6 +30,7 @@ const ManageAdmins = () => {
     // After we delete we must update the local state
     const newAdmins = Admins.filter(Admin => Admin._id != id)
     setAdmins(newAdmins)
+    setConfirmDeletePop(true)
   }
   const [affiliation, setAffiliation] = React.useState('');
 
@@ -36,7 +39,7 @@ const ManageAdmins = () => {
   };
 
   return (
-    <Box sx={{
+    <><Box sx={{
       mt: '1%',
       maxWidth: '100%',
       p: '0.5%'
@@ -52,8 +55,7 @@ const ManageAdmins = () => {
               endAdornment: <InputAdornment position="end">
                 <SearchIcon />
               </InputAdornment>,
-            }}
-          />
+            }} />
         </Grid>
 
         <Grid container item xs={'auto'}>
@@ -80,7 +82,7 @@ const ManageAdmins = () => {
 
         <Grid container spacing={"10%"}>
           <Grid item sx={{ ml: "1%" }}>
-            <ColumnLabel label="First Name" ></ColumnLabel>
+            <ColumnLabel label="First Name"></ColumnLabel>
           </Grid>
           <Grid item sx={{ ml: "0%" }}>
             <ColumnLabel label="Last Name"></ColumnLabel>
@@ -95,7 +97,7 @@ const ManageAdmins = () => {
 
       </Container>
 
-      <div className="admins" >
+      <div className="admins">
         {Admins && Admins.map((Admin) => (
           <div>
             <AdminDisplayCard
@@ -115,13 +117,14 @@ const ManageAdmins = () => {
               birthdate={Admin.birthdate}
               contactPref={Admin.contactPref}
               date={Admin.createdAt}
-              handleDelete={handleDelete}
-            />
+              handleDelete={handleDelete} />
             <Divider variant="middle" sx={{ marginTop: '0.5rem', bgcolor: 'black' }} />
           </div>
         ))}
       </div>
     </Box>
+      <ConfirmPopUp openConfirmPop={confirmDeletePop} setConfirmPop={setConfirmDeletePop} action="deleted" type="Admin" />
+    </>
   )
 }
 

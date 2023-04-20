@@ -3,10 +3,6 @@ import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
-import { padding, spacing } from "@mui/system";
-import { useEffect, useState } from "react";
-import ConfirmPopUp from './ConfirmPopUp';
-
 
 
 //interface for declaring what props the PopUp can take

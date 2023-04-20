@@ -4,9 +4,11 @@ import SearchIcon from '@mui/icons-material/Search';
 import React from 'react'
 import ColumnLabel from '../components/ColumnLabel'
 import { useState, useEffect } from 'react'
+import ConfirmPopUp from './ConfirmPopUp';
 
 const ManageUsers = () => {
   const [Users, setUsers] = useState<any[]>([])
+  const [confirmDeletePop, setConfirmDeletePop] = useState(false)
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -28,6 +30,7 @@ const ManageUsers = () => {
     // After we delete we must update the local state
     const newUsers = Users.filter(User => User._id != id)
     setUsers(newUsers)
+    setConfirmDeletePop(true)
   }
 
 
@@ -38,7 +41,7 @@ const ManageUsers = () => {
   };
 
   return (
-    <Box sx={{
+    <><Box sx={{
       mt: '1%',
       maxWidth: '100%',
       p: '0.5%'
@@ -54,8 +57,7 @@ const ManageUsers = () => {
               endAdornment: <InputAdornment position="end">
                 <SearchIcon />
               </InputAdornment>,
-            }}
-          />
+            }} />
         </Grid>
 
         <Grid container item xs={'auto'}>
@@ -85,7 +87,7 @@ const ManageUsers = () => {
 
         <Grid container spacing={"10%"}>
           <Grid item sx={{ ml: "1%" }}>
-            <ColumnLabel label="First Name" ></ColumnLabel>
+            <ColumnLabel label="First Name"></ColumnLabel>
           </Grid>
           <Grid item sx={{ ml: "0%" }}>
             <ColumnLabel label="Last Name"></ColumnLabel>
@@ -100,7 +102,7 @@ const ManageUsers = () => {
 
       </Container>
 
-      <div className="users" >
+      <div className="users">
         {Users && Users.map((User) => (
           <div>
             <UserDisplayCard
@@ -121,13 +123,12 @@ const ManageUsers = () => {
               race={User.race}
               contactPref={User.contactPref}
               date={User.createdAt}
-              handleDelete={handleDelete}
-            />
+              handleDelete={handleDelete} />
             <Divider variant="middle" sx={{ marginTop: '0.5rem', bgcolor: 'black' }} />
           </div>
         ))}
       </div>
-    </Box>
+    </Box><ConfirmPopUp openConfirmPop={confirmDeletePop} setConfirmPop={setConfirmDeletePop} action="deleted" type="User" /></>
   )
 }
 

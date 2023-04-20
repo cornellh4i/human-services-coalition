@@ -3,7 +3,6 @@ import { Box, Button, Grid, Typography, Container, TextField, RadioGroup, FormCo
 import { PhotoCamera } from "@mui/icons-material";
 import { useLocation, useNavigate } from "react-router-dom";
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
-import ConfirmPopUp from "../components/ConfirmPopUp";
 
 const ListingForm = () => {
   const [webScraped, setWebScraped] = useState(false)
@@ -155,7 +154,7 @@ const ListingForm = () => {
       dateAvailable
     }
 
-    const action = (location.state === null) ? "Created" : "Edited"
+    const action = (location.state === null) ? "create" : "edit"
 
     //if location.state is null it creates a POST request to create a listing
     //if location.state is not null it creates a PATCH request to edit the current listing
@@ -210,12 +209,10 @@ const ListingForm = () => {
       setDateAvailable('')
       setError(null)
 
-      // navigate("/")
-
-      if (action === "Created") {
-        navigate("/?action=create")
-      } else if (action === "Edited") {
-        navigate("/?action=edit")
+      if (action === "create") {
+        navigate("/?action=create&type=listing")
+      } else if (action === "edit") {
+        navigate("/?action=edit&type=listing")
       }
     }
   }

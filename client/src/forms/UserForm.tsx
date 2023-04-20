@@ -109,6 +109,8 @@ const UserForm = () => {
       contactPref,
     }
 
+    const action = (location.state === null) ? "create" : "edit"
+
     //if location.state is null it creates a POST request to create a listing
     //if location.state is not null it creates a PATCH request to edit the current listing
     const response =
@@ -158,7 +160,11 @@ const UserForm = () => {
       setFNameError(false)
       setLNameError(false)
 
-      navigate('/manage-profiles')
+      if (action === "create") {
+        navigate("/manage-profiles?action=create&type=user")
+      } else if (action === "edit") {
+        navigate("/manage-profiles?action=edit&type=user")
+      }
     }
   }
 
@@ -169,6 +175,8 @@ const UserForm = () => {
   const handleRaceChange = (event: SelectChangeEvent) => {
     setRace(event.target.value as string);
   };
+
+  const title = (location.state === null) ? "Create a New User" : "Edit User";
 
   return (
     <Container maxWidth={false}>
@@ -189,7 +197,7 @@ const UserForm = () => {
           <form noValidate className="user-form" onSubmit={handleSubmit}>
             <Grid item xs={12}>
               <Typography variant='h3' sx={{ fontSize: '1.3rem', fontWeight: 'bold', mt: '3%' }} >
-                Create A New User
+                {title}
               </Typography>
             </Grid>
 
