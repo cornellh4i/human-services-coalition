@@ -13,7 +13,7 @@ const ListingForm = () => {
   const [country, setCountry] = useState('')
   const [zipCode, setZipCode] = useState('')
   // const [pictures, setPictures] = useState<string[]>([''])
-  const [pictures, setPictures] = useState<File[]>([]);
+  const [pictures, setPictures] = useState<string[]>([]);
   const [price, setPrice] = useState('')
   const [size, setSize] = useState('')
   const [unitType, setUnitType] = useState('')
@@ -104,6 +104,7 @@ const ListingForm = () => {
     //setPictures(json_object.pictures)
     setButtonLabel('Save Changes')
     setPrevPics(json_object.pictures)
+    setPictures(json_object.pictures)
   }
 
 
@@ -197,13 +198,11 @@ const ListingForm = () => {
     // If the user is uploading an image as well, then we need to send a second request to update the picture
 
     if (files.length > 0) {
-
       var arr = prevPics;
-      console.log("PREVPICSSS")
-      console.log(prevPics);
 
+      //if this is a new listing with pictures send dummy data to backend
+      //to prevent errors
       if (arr.length == 0) {
-        console.log("hereeeee")
         formData.append('arr[]', "");
       } else {
         for (var i = 0; i < arr.length; i++) {
@@ -221,9 +220,6 @@ const ListingForm = () => {
         body: formData
       });
     }
-
-
-
 
     if (!response1.ok) {
       setError(json.error)

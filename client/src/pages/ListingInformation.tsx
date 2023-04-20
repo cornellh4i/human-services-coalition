@@ -35,14 +35,13 @@ const ListingInformation = () => {
   }
 
 
-  // Create state for image source
+  // Create state for image source and imageLoaded flag
   const [imageSrc, setImageSrc] = useState<string[]>([]);
   const [imagesLoaded, setImagesLoaded] = useState(false);
 
   //The location.state.pictures will store all the pictures of this listing
   //The for loop will loop over each "key" in the pictures and 
   // Fetch image and create object URL when the component mounts
-
   const fetchImage = async () => {
     for (const e of location.state.pictures) {
       console.log("This is the picture  " + e)
@@ -61,40 +60,7 @@ const ListingInformation = () => {
     fetchImage();
   }, [])
 
-
-
-
-  // useEffect(() => {
-  //   const fetchImage = async () => {
-  //     var arr: string[] = []
-  //     location.state.pictures.forEach(async (file: string) => {
-  //       const response = await fetch('api/listingPicture/' + file);
-  //       // Convert the response to a Blob
-  //       const blob = await response.blob();
-  //       // Create an object URL from the Blob
-  //       const objectURL = URL.createObjectURL(blob);
-  //       //this adds to the imgSrc state array but I have no idea why it's not working
-  //       setImageSrc(imageSrc => [...imageSrc, objectURL])
-  //       arr.push(objectURL)
-  //     })
-  //   }
-  //   //Call the fetchImage function
-  //   fetchImage();
-  // }, []);
-
-  // location.state.pictures.forEach(async (e: any) => {
-  //   console.log("This is the picture  " + e)
-  //   const response = await fetch('api/listingPicture/' + e);
-  //   console.log("This is the resposne   " + response)
-  //   const blob = await response.blob();
-  //   console.log("This is the Blob   " + blob)
-  //   const objectURL = URL.createObjectURL(blob);
-  //   console.log("This is the URL   " + objectURL)
-  //   imageSrc.push(objectURL)
-  //   console.log("This is the IMGSRC  " + imageSrc)
-
-
-
+  //if all the images have been loaded then render the screen
   if (!imagesLoaded) {
     return <div>Loading images...</div>;
   }

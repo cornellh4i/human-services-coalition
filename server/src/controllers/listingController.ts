@@ -213,10 +213,7 @@ const updateListing = async (req, res) => {
   if (!mongoose.Types.ObjectId.isValid(id)) {
     return res.status(404).json({ error: 'No such listing' })
   }
-
   try {
-    const temp = await Listing.findById({ _id: id })
-
     const listing = await Listing.findOneAndUpdate({ _id: id }, {
       ...req.body
     })
@@ -228,7 +225,6 @@ const updateListing = async (req, res) => {
     //res.status(200).json({ id: listing._id })
 
   } catch (error) {
-    console.log("NOT_SAVED")
     //res.status(400).json({ error: (error as Error).message })
     console.log(error)
     res.send(errorJson(error));
@@ -239,7 +235,7 @@ const updateListing = async (req, res) => {
 //use s3 module i have a file at this location, name for file and bucket to upload 
 const updateListingPicture = async (req, res) => {
   const { id } = req.params
-  // ADD CODE HERE TO UPLOAD TO S3
+
 
   try {
     const files = req.files;
@@ -253,34 +249,22 @@ const updateListingPicture = async (req, res) => {
 
     //console.log(req.body)
     var temparr: string[] = req.body.arr
-    console.log("thIS IS OLD TEMPADR")
-
 
     if (temparr[0] == "") {
-      console.log("HEREEEEEE")
       temparr = []
     }
-    const temp = await Listing.findById({ _id: id })
-    console.log(temp)
-    console.log("jASDFGHJJHGHJJKJJHJKHGUI")
+
+
     // Now we send the file to S3 using our s3utils
     // 'name' is the text entered into the input field
     // and this is what the name of the file will be in s3
-    var pics: string[] = []
     files.forEach(async (file) => {
-
-      console.log("NAMEMMMEJNNJKNJWIEFNWJIN")
       console.log(req.body.name)
       const name = String(req.body.name);
-      pics.push(name)
       temparr.push(name)
       const result = await s3utils.uploadFile(file, name)
+      await fs.unlink(file.path);
     })
-    console.log("thIS ISnEW  TEMPADR")
-    console.log(temparr)
-    console.log("jgnerngiwnj rjiegnij")
-    console.log(pics)
-    console.log("AHHHHHHHHHHHHHHBEWFJHBWFUBWEBEBFWBWFIWNS")
     await Listing.findOneAndUpdate(
       { _id: id }, // Filter: find the listing with the given ID
       { $set: { pictures: temparr } }, // Update: set the "pictures" field to the "pics" array
@@ -313,9 +297,6 @@ const getListingPicture = async (req, res) => {
       console.log(e);
     }).pipe(res);
   }
-  console.log("PIPE2wnfwoifniwono")
-  console.log("PIPE1")
-  //response.pipe(res)
 }
 
 // DELETE a specific housing listing
