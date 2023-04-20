@@ -174,6 +174,14 @@ const UserForm = () => {
     setRace(event.target.value as string);
   };
 
+
+  const handleAddDaysChange = (e: any) => {
+    const regex = /^[0-9\b]+$/;
+    if (e.target.value === "" || regex.test(e.target.value)) {
+      setAdditionalDays(e.target.value);
+    }
+  };
+
   return (
     <Container maxWidth={false}>
       <Grid container>
@@ -447,7 +455,7 @@ const UserForm = () => {
                         id="additionalDays"
                         name="additionalDays"
                         className="form-field"
-                        onChange={(e) => setAdditionalDays(e.target.value)}
+                        onChange={handleAddDaysChange}
                         value={additionalDays}
                         variant="outlined"
                         size="small"
