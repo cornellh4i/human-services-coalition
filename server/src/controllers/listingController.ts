@@ -216,8 +216,7 @@ const updateListing = async (req, res) => {
 
   try {
     const temp = await Listing.findById({ _id: id })
-    console.log(temp)
-    console.log("jvkcghcghcyckhcyfhyf")
+
     const listing = await Listing.findOneAndUpdate({ _id: id }, {
       ...req.body
     })
