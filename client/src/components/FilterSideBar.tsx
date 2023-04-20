@@ -43,20 +43,55 @@ export default function FilterSideBar({
     maxPrice: "maxPrice",
   }
 
-  function clearFilters() {
-    // for (let i = 0; i < selected.length; i++) {
-    //   console.log("Value in Selected: " + selected[i].filter, selected[i].value)
-    // }
+  function clearAllFilters() {
+    for (let i = 0; i < selected.length; i++) {
+      clearFilter(selected[i].filter)
+    }
+    selected = []
+    setFilters(selected)
+    updateQuery(selected)
+  }
 
-
-    // for (let i = 0; i < selected.length; i++) {
-    //   console.log(selected[i].filter, selected[i].value)
-    //   updateSelected(selected[i].filter, selected[i].value)
-    // }
-
-    // selected = []
-    // setFilters(selected)
-    // updateQuery(selected)
+  function clearFilter(filter: string) {
+    if (filter === "condo") {
+      setCondo(false)
+    }
+    else if (filter === "house") {
+      setHouse(false)
+    }
+    else if (filter === "apartment") {
+      setApartment(false)
+    }
+    else if (filter === "single") {
+      setSingle(false)
+    }
+    else if (filter === "numBath") {
+      setNumBath('')
+    }
+    else if (filter === "numBed") {
+      setNumBed('')
+    }
+    else if (filter === "minPrice") {
+      setMinPrice('')
+    }
+    else if (filter === "maxPrice") {
+      setMaxPrice('')
+    }
+    else if (filter === "pets") {
+      setPets(false)
+    }
+    else if (filter === "furnished") {
+      setFurnished(false)
+    }
+    else if (filter === "utilities") {
+      setUtilities(false)
+    }
+    else if (filter === "disTransportation") {
+      setDisTransportation('')
+    }
+    else if (filter === "address") {
+      setAddress('')
+    }
   }
 
   function updateQuery(filterList: any) {
@@ -297,7 +332,7 @@ export default function FilterSideBar({
         </Grid>
         <Grid sx={{ fontStyle: 'italic', textAlign: 'right', padding: 4 }} item xs={6}>
           <Link underline="hover" color="inherit"
-            onClick={() => clearFilters()}>
+            onClick={() => clearAllFilters()}>
             {'Clear Filters'}
           </Link>
         </Grid>
