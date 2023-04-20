@@ -182,6 +182,7 @@ const createListing = async (req, res) => {
       state,
       country,
       zipCode,
+      pictures: [],
       price,
       size,
       unitType,
@@ -214,6 +215,9 @@ const updateListing = async (req, res) => {
   }
 
   try {
+    const temp = await Listing.findById({ _id: id })
+    console.log(temp)
+    console.log("jvkcghcghcyckhcyfhyf")
     const listing = await Listing.findOneAndUpdate({ _id: id }, {
       ...req.body
     })
@@ -240,32 +244,47 @@ const updateListingPicture = async (req, res) => {
 
   try {
     const files = req.files;
-    console.log("PRINTING THEEE FILEEEEE")
+
     //console.log(files)
     // We should check if the file exists, if it doesn't, return an error
     if (!files) {
       res.send(errorJson("No file uploaded"));
       return;
     }
+    console.log("PRINTING THEEE body")
+    console.log(req.body)
+    var temparr: string[] = req.body.arr
+    console.log("thIS IS OLD TEMPADR")
+
+
+    if (temparr[0] == "") {
+      console.log("HEREEEEEE")
+      temparr = []
+    }
+    const temp = await Listing.findById({ _id: id })
+    console.log(temp)
+    console.log("jASDFGHJJHGHJJKJJHJKHGUI")
     // Now we send the file to S3 using our s3utils
     // 'name' is the text entered into the input field
     // and this is what the name of the file will be in s3
-    var i = 0;
     var pics: string[] = []
     files.forEach(async (file) => {
+
       console.log("NAMEMMMEJNNJKNJWIEFNWJIN")
       console.log(req.body.name)
-      const name = String(req.body.name + i);
+      const name = String(req.body.name);
       pics.push(name)
-      i = i + 1;
+      temparr.push(name)
       const result = await s3utils.uploadFile(file, name)
     })
+    console.log("thIS ISnEW  TEMPADR")
+    console.log(temparr)
     console.log("jgnerngiwnj rjiegnij")
     console.log(pics)
     console.log("AHHHHHHHHHHHHHHBEWFJHBWFUBWEBEBFWBWFIWNS")
-    Listing.findOneAndUpdate(
+    await Listing.findOneAndUpdate(
       { _id: id }, // Filter: find the listing with the given ID
-      { $set: { pictures: pics } }, // Update: set the "pictures" field to the "pics" array
+      { $set: { pictures: temparr } }, // Update: set the "pictures" field to the "pics" array
       (err, updatedListing) => {
         if (err) {
           console.error('Error updating listing:', err);

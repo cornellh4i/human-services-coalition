@@ -23,8 +23,8 @@ function uploadFile(file: any, name: string) {
   console.log("uploading file")
   //get file from server -- fs 
   const fileStream = fs.createReadStream(file.path)
-  console.log("READING THE FILE STREAM ")
-  console.log(fileStream)
+  //console.log("READING THE FILE STREAM ")
+  //console.log(fileStream)
   const uploadParams = {
     Bucket: bucketName,
     Body: fileStream,

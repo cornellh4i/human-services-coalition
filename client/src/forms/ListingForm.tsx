@@ -51,6 +51,7 @@ const ListingForm = () => {
 
   // Picture upload
   const [files, setFiles] = useState<File[]>([]);
+  const [prevPics, setPrevPics] = useState<string[]>([])
 
   const fileSelected = (event: BaseSyntheticEvent) => {
     setFiles(event.target.files[0])
@@ -102,6 +103,7 @@ const ListingForm = () => {
     setUtilitiesIsTrue(json_object.utilities)
     //setPictures(json_object.pictures)
     setButtonLabel('Save Changes')
+    setPrevPics(json_object.pictures)
   }
 
 
@@ -190,13 +192,28 @@ const ListingForm = () => {
     // Get listing ID from response to use in picture upload
     const json = await response1.json();
     const id = json.id;
+    const formData = new FormData();
 
     // If the user is uploading an image as well, then we need to send a second request to update the picture
+
     if (files.length > 0) {
-      const formData = new FormData();
+
+      var arr = prevPics;
+      console.log("PREVPICSSS")
+      console.log(prevPics);
+
+      if (arr.length == 0) {
+        console.log("hereeeee")
+        formData.append('arr[]', "");
+      } else {
+        for (var i = 0; i < arr.length; i++) {
+          formData.append('arr[]', arr[i]);
+        }
+      }
+
       files.forEach((file) => {
         formData.append('pictures', file);
-        formData.append('name', streetAddress)
+        formData.append('name', streetAddress + String(prevPics.length))
       });
 
       const response = await fetch('api/listingPicture/' + id, {
@@ -204,6 +221,9 @@ const ListingForm = () => {
         body: formData
       });
     }
+
+
+
 
     if (!response1.ok) {
       setError(json.error)

@@ -34,30 +34,70 @@ const ListingInformation = () => {
     navigate("/")
   }
 
+
   // Create state for image source
-  const [imageSrc, setImageSrc] = useState<string[]>([""]);
+  const [imageSrc, setImageSrc] = useState<string[]>([]);
+  const [imagesLoaded, setImagesLoaded] = useState(false);
 
   //The location.state.pictures will store all the pictures of this listing
   //The for loop will loop over each "key" in the pictures and 
   // Fetch image and create object URL when the component mounts
-  useEffect(() => {
-    const fetchImage = async () => {
-      var arr: string[] = []
-      location.state.pictures.forEach(async (file: string) => {
-        const response = await fetch('api/listingPicture/' + file);
-        // Convert the response to a Blob
-        const blob = await response.blob();
-        // Create an object URL from the Blob
-        const objectURL = URL.createObjectURL(blob);
-        //this adds to the imgSrc state array but I have no idea why it's not working
-        setImageSrc(imageSrc => [...imageSrc, objectURL])
-        arr.push(objectURL)
-      })
-    }
-    //Call the fetchImage function
-    fetchImage();
-  }, []);
 
+  const fetchImage = async () => {
+    for (const e of location.state.pictures) {
+      console.log("This is the picture  " + e)
+      const response = await fetch('api/listingPicture/' + e);
+      console.log("This is the resposne   " + response)
+      const blob = await response.blob();
+      console.log("This is the Blob   " + blob)
+      const objectURL = URL.createObjectURL(blob);
+      console.log("This is the URL   " + objectURL)
+      imageSrc.push(objectURL)
+      console.log("This is the IMGSRC  " + imageSrc)
+    }
+    setImagesLoaded(true);
+  }
+  useEffect(() => {
+    fetchImage();
+  }, [])
+
+
+
+
+  // useEffect(() => {
+  //   const fetchImage = async () => {
+  //     var arr: string[] = []
+  //     location.state.pictures.forEach(async (file: string) => {
+  //       const response = await fetch('api/listingPicture/' + file);
+  //       // Convert the response to a Blob
+  //       const blob = await response.blob();
+  //       // Create an object URL from the Blob
+  //       const objectURL = URL.createObjectURL(blob);
+  //       //this adds to the imgSrc state array but I have no idea why it's not working
+  //       setImageSrc(imageSrc => [...imageSrc, objectURL])
+  //       arr.push(objectURL)
+  //     })
+  //   }
+  //   //Call the fetchImage function
+  //   fetchImage();
+  // }, []);
+
+  // location.state.pictures.forEach(async (e: any) => {
+  //   console.log("This is the picture  " + e)
+  //   const response = await fetch('api/listingPicture/' + e);
+  //   console.log("This is the resposne   " + response)
+  //   const blob = await response.blob();
+  //   console.log("This is the Blob   " + blob)
+  //   const objectURL = URL.createObjectURL(blob);
+  //   console.log("This is the URL   " + objectURL)
+  //   imageSrc.push(objectURL)
+  //   console.log("This is the IMGSRC  " + imageSrc)
+
+
+
+  if (!imagesLoaded) {
+    return <div>Loading images...</div>;
+  }
   return (
     <><Grid padding="1% 5%">
       {/* Back button */}
@@ -76,7 +116,7 @@ const ListingInformation = () => {
       <Grid item xs={12}>
 
         {/* The Image Section */}
-        <ImageContainer images={location.state.pictures} numImages={location.state.pictures.length} />
+        <ImageContainer images={imageSrc} numImages={location.state.pictures.length} />
 
         <Grid container padding="15px 0px">
           {/* Main content */}
