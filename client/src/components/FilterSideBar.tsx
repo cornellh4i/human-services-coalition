@@ -340,7 +340,7 @@ export default function FilterSideBar({
       <Grid>
         <Box className='box' component="span">
           <h3 className='text'>Location</h3>
-          <TextField size="small" id="outlined-basic" label="Search by address" variant="outlined"
+          <TextField value={address} size="small" id="outlined-basic" label="Search by address" variant="outlined"
             onChange={(e) => handleFilterChange(FilterEnum.address, address, setAddress, e)}
           />
         </Box>

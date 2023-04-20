@@ -180,8 +180,30 @@ export default function SelectedFilters({
     }
   }
 
+  if (selected.length === 0 || (selected.length === 1 && selected[0].filter === "address")) {
+    return (
+      <>
+        <Grid container spacing={3} paddingBottom={2} paddingLeft={2}>
+          {
+            values.map((filter: string, index: number) =>
+              <Grid item xs="auto" paddingLeft={2} key={filter + index}>
+                <div className="item">
+                  <Box sx={{ paddingRight: 1 }}>
+                    <IconButton>
+                      <ClearIcon fontSize="small" onClick={() => { handleDelete(index) }} />
+                    </IconButton>
+                    {filter}
+                  </Box>
+                </div>
+              </Grid>
+            )
+          }
+        </Grid>
+      </>
+    )
 
-  if (selected.length > 0 && selected[0].filter !== "address") {
+  }
+  else {
     return (
       <>
         <Grid container spacing={3} paddingBottom={2} paddingLeft={2}>
@@ -209,28 +231,6 @@ export default function SelectedFilters({
               </Grid>
             }
           </Grid>
-        </Grid>
-      </>
-    )
-  }
-  else {
-    return (
-      <>
-        <Grid container spacing={3} paddingBottom={2} paddingLeft={2}>
-          {
-            values.map((filter: string, index: number) =>
-              <Grid item xs="auto" paddingLeft={2} key={filter + index}>
-                <div className="item">
-                  <Box sx={{ paddingRight: 1 }}>
-                    <IconButton>
-                      <ClearIcon fontSize="small" onClick={() => { handleDelete(index) }} />
-                    </IconButton>
-                    {filter}
-                  </Box>
-                </div>
-              </Grid>
-            )
-          }
         </Grid>
       </>
     )
