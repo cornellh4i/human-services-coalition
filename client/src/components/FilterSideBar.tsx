@@ -14,6 +14,7 @@ import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import InputLabel from '@mui/material/InputLabel';
 import '../css/Home.css';
+import Link from '@mui/material/Link';
 
 export default function FilterSideBar({
   setListings, filters, setFilters, apartment, setApartment, house, setHouse,
@@ -21,7 +22,7 @@ export default function FilterSideBar({
   numBed, setNumBed, utilities, setUtilities, furnished, setFurnished, pets,
   setPets, disTransportation, setDisTransportation, minPrice, setMinPrice,
   maxPrice, setMaxPrice }: any) {
-    
+
   let selected: any = [...filters]
   let theme = createTheme()
   theme = responsiveFontSizes(theme)
@@ -40,6 +41,22 @@ export default function FilterSideBar({
     disTransportation: "disTransportation",
     minPrice: "minPrice",
     maxPrice: "maxPrice",
+  }
+
+  function clearFilters() {
+    // for (let i = 0; i < selected.length; i++) {
+    //   console.log("Value in Selected: " + selected[i].filter, selected[i].value)
+    // }
+
+
+    // for (let i = 0; i < selected.length; i++) {
+    //   console.log(selected[i].filter, selected[i].value)
+    //   updateSelected(selected[i].filter, selected[i].value)
+    // }
+
+    // selected = []
+    // setFilters(selected)
+    // updateQuery(selected)
   }
 
   function updateQuery(filterList: any) {
@@ -67,7 +84,8 @@ export default function FilterSideBar({
     return -1
   }
 
-  function updateSelected(filter: string, value: any, filterState: any) {
+  function updateSelected(filter: string, value: any) {
+    // console.log("updateSelected calls on" + filter)
     let index = 0
 
     if (filter === FilterEnum.address) {
@@ -205,17 +223,17 @@ export default function FilterSideBar({
         if (currMinPrice <= 3000) {
           event.target.value = currMinPrice
           setFunction(currMinPrice)
-          updateSelected(filterName, currMinPrice, minPrice)
+          updateSelected(filterName, currMinPrice)
         }
         else {
           currMinPrice = currMinPrice.slice(0, 3)
           event.target.value = currMinPrice
           setFunction(currMinPrice)
-          updateSelected(filterName, currMinPrice, minPrice)
+          updateSelected(filterName, currMinPrice)
         }
       }
       setFunction(currMinPrice)
-      updateSelected(filterName, currMinPrice, minPrice)
+      updateSelected(filterName, currMinPrice)
 
     } else if (filterName === FilterEnum.maxPrice) {
       var currMaxPrice = event.target.value.replace(/^0+/, "")
@@ -231,17 +249,17 @@ export default function FilterSideBar({
         if (currMaxPrice <= 3000) {
           event.target.value = currMaxPrice
           setFunction(currMaxPrice)
-          updateSelected(filterName, currMaxPrice, maxPrice)
+          updateSelected(filterName, currMaxPrice)
         }
         else {
           currMaxPrice = currMaxPrice.slice(0, 3)
           event.target.value = currMaxPrice
           setFunction(currMaxPrice)
-          updateSelected(filterName, currMaxPrice, maxPrice)
+          updateSelected(filterName, currMaxPrice)
         }
       }
       setFunction(currMaxPrice)
-      updateSelected(filterName, currMaxPrice, maxPrice)
+      updateSelected(filterName, currMaxPrice)
     }
 
     else if (filterName === FilterEnum.disTransportation || filterName ===
@@ -252,7 +270,7 @@ export default function FilterSideBar({
       filterName === FilterEnum.condo || filterName ===
       FilterEnum.single) {
       setFunction(event.target.value)
-      updateSelected(filterName, event.target.value, filterState)
+      updateSelected(filterName, event.target.value)
     }
   }
 
@@ -274,8 +292,14 @@ export default function FilterSideBar({
       <Grid container spacing={2} columns={12}>
         <Grid item xs={12}>
         </Grid>
-        <Grid item xs={12}>
+        <Grid item xs={6}>
           <h2 className='title'>Filters</h2>
+        </Grid>
+        <Grid sx={{ fontStyle: 'italic', textAlign: 'right', padding: 4 }} item xs={6}>
+          <Link underline="hover" color="inherit"
+            onClick={() => clearFilters()}>
+            {'Clear Filters'}
+          </Link>
         </Grid>
       </Grid>
       <Grid>
