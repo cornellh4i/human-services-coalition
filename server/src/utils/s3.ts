@@ -1,13 +1,13 @@
 //npm istal aws -sdk
 //npm install fs
-require('dotenv').config()
+require("dotenv").config(({ path: "config.env" }));
 const fs = require('fs')
 const S3 = require('aws-sdk/clients/s3')
 
-const bucketName = 'hsctempbucket1'
-const region = 'us-east-2'
-const accessKeyId = 'AKIA36RDRWED7DXXWZE4'
-const secretAccessKey = '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'
+const bucketName = process.env.NAME
+const region = process.env.REGION
+const accessKeyId = process.env.ACCESS_KEY
+const secretAccessKey = process.env.SECRET_ACCESS_KEY
 
 const s3 = new S3({
   region,
