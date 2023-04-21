@@ -27,10 +27,11 @@ interface UserDisplayCardProps {
   race: string
   contactPref: string
   date: Date
+  daysLeft: number
   handleDelete: (params: any) => any
 }
 
-const UserDisplayCard = ({ user_id, fname, lname, mInitial, username, password, voucher, supervisor, birthDate, email, phone, prefName, gender, race, contactPref, date, handleDelete }: UserDisplayCardProps) => {
+const UserDisplayCard = ({ user_id, fname, lname, mInitial, username, password, voucher, supervisor, birthDate, email, phone, prefName, gender, race, contactPref, date, daysLeft, handleDelete }: UserDisplayCardProps) => {
 
   const theme = createTheme({
     typography: {
@@ -101,7 +102,7 @@ const UserDisplayCard = ({ user_id, fname, lname, mInitial, username, password, 
           </Box>
         </Card >
       </Container>
-      <UserModal fname={fname} lname={lname} mInitial={mInitial} username={username} password={password} voucher={voucher} supervisor={supervisor} birthDate={birthDate} email={email} phone={phone} prefName={prefName} gender={gender} race={race} contactPref={contactPref} date={date} openUserMod={openUserMod} setOpenUserMod={setOpenUserMod} />
+      <UserModal fname={fname} lname={lname} mInitial={mInitial} username={username} password={password} voucher={voucher} supervisor={supervisor} birthDate={birthDate} email={email} phone={phone} prefName={prefName} gender={gender} race={race} contactPref={contactPref} date={date} daysLeft={daysLeft} openUserMod={openUserMod} setOpenUserMod={setOpenUserMod} />
       <DeleteConfirmation id={user_id} openPop={openPop} setOpenPop={setOpenPop} handleDelete={handleDelete} type={"user"} />
     </ThemeProvider>
   );
