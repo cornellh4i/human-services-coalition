@@ -534,11 +534,8 @@ const UserForm = () => {
                     </FormGroup>
                   </Box>
                 </Grid>
-
-
               </Box>
             </Grid>
-
 
 
             <Grid item xs={12}>

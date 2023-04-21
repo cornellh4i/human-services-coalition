@@ -99,7 +99,7 @@ export default function UserModal({ fname, lname, mInitial, username, password, 
                     <Typography>{race ? race : "N/A"}</Typography>
                   </Grid>
                   <Grid item display="flex" justifyContent="left" xs={12}>
-                    <Typography sx={{ fontWeight: 600 }}>Remainder Days:</Typography>
+                    <Typography sx={{ fontWeight: 600 }}>Remaining Days:</Typography>
                     &nbsp;
                     <Typography>{daysLeft ? daysLeft : 0}</Typography>
                   </Grid>
