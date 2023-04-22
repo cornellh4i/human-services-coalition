@@ -16,7 +16,8 @@ module.exports = () => {
     getUser,
     createUser,
     updateUser,
-    deleteUser
+    deleteUser,
+    getSortUsers
   } = require("./controllers/userController")
 
   const {
@@ -68,6 +69,9 @@ module.exports = () => {
 
   // GET a specific user
   router.get('/users/:id', getUser)
+
+  //GET users based off sort
+  router.get('/users/sort', getSortUsers)
 
   // POST (add) a new user
   router.post('/users', createUser)

@@ -74,9 +74,6 @@ const ManageAdmins = () => {
     setConfirmDeletePop(true)
   }
 
-  const handleChange = (event: SelectChangeEvent) => {
-    setAffiliation(event.target.value as string);
-  };
 
   function handleFilterChange(filterName: string, setFunction: Function,
     event: { target: { value: any } }) {
@@ -102,7 +99,8 @@ const ManageAdmins = () => {
                 <SearchIcon />
               </InputAdornment>,
             }}
-            onChange={(e) => handleFilterChange(FilterEnum.search, setSearch, e)} />
+            onChange={(e) => handleFilterChange(FilterEnum.search, setSearch, e)}
+          />
         </Grid>
 
         <Grid container item xs={'auto'}>
@@ -138,7 +136,7 @@ const ManageAdmins = () => {
             <ColumnLabel ascending={sortName == 'affiliation' && sortOrder == -1} label="Affiliation" onClick={() => handleSortToggle("affiliation")}></ColumnLabel>
           </Grid>
           <Grid item sx={{ ml: "3%" }}>
-            <ColumnLabel ascending={sortName == 'createdAt' && sortOrder == -1} label="Created" onClick={() => handleSortToggle("createdAt")} ascending={sortName == 'createdAt' && sortOrder == -1} label="Created" onClick={() => handleSortToggle("createdAt")}></ColumnLabel>
+            <ColumnLabel ascending={sortName == 'createdAt' && sortOrder == -1} label="Created" onClick={() => handleSortToggle("createdAt")} ></ColumnLabel>
           </Grid>
         </Grid>
 
