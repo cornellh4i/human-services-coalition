@@ -6,12 +6,7 @@ const getSortUsers = async (req, res) => {
   const search = req.query.search || '';
   const sortName = req.query.sortName || '';
   const sortOrder = req.query.sortOrder || '';
-  const voucher = req.query.voucher || '';
-
-  console.log(search)
-  console.log(sortName)
-  console.log(sortOrder)
-  console.log(voucher)
+  const voucherType = req.query.voucherType || '';
 
   let filter = search ? {
     $or: [
@@ -29,15 +24,15 @@ const getSortUsers = async (req, res) => {
       sortObject[sortName] = 'asc';
     }
   }
-  if (voucher == 'Voucher I') {
+  if (voucherType == 'Voucher I') {
     filter["voucherType"] = { $regex: /Voucher I/ };
-  } else if (voucher == 'Voucher II') {
+  } else if (voucherType == 'Voucher II') {
     filter["voucherType"] = { $regex: /Voucher II/ };
-  } else if (voucher == 'Voucher III') {
+  } else if (voucherType == 'Voucher III') {
     filter["voucherType"] = { $regex: /Voucher III/ };
-  } else if (voucher == 'Voucher IV') {
+  } else if (voucherType == 'Voucher IV') {
     filter["voucherType"] = { $regex: /Voucher IV/ };
-  } else if (voucher == "Other") {
+  } else if (voucherType == "Other") {
     filter["voucherType"] = { $not: /Voucher/ };
   }
 
