@@ -8,7 +8,17 @@ import ConfirmPopUp from './ConfirmPopUp';
 
 const ManageAdmins = () => {
   const [Admins, setAdmins] = useState<any[]>([])
+  let [sortOrder, setSortOrder] = useState(-1)
+  let [sortName, setSortName] = useState('createdAt')
+  let [search, setSearch] = useState('')
+  let [affiliation, setAffiliation] = useState('');
+  let [filters, setFilters] = useState([])
   const [confirmDeletePop, setConfirmDeletePop] = useState(false)
+
+  const FilterEnum = {
+    affiliation: "affiliation",
+    search: "search"
+  }
 
   useEffect(() => {
     const fetchAdmins = async () => {
@@ -22,6 +32,37 @@ const ManageAdmins = () => {
     fetchAdmins()
   }, [])
 
+
+  useEffect(() => {
+    const fetchAdmins = async () => {
+      let params = {
+        search: search,
+        sortName: sortName,
+        sortOrder: sortOrder.toString(),
+        affiliation: affiliation
+      }
+      let searchParams = new URLSearchParams(params)
+
+      const response = await fetch('/api/admins/sort?' + searchParams)
+      const json = await response.json()
+      if (response.ok) {
+        setAdmins(json)
+      }
+    }
+    fetchAdmins()
+  }, [search, affiliation, sortOrder, sortName, filters])
+
+
+  async function handleSortToggle(name: string) {
+    if (sortName == name) {
+      setSortOrder(sortOrder * -1)
+    }
+    else {
+      setSortOrder(-1)
+      setSortName(name)
+    }
+  }
+
   // The function that calls the delete routing function
   const handleDelete = async (id: any) => {
     await fetch('/api/admins/' + id, {
@@ -32,11 +73,16 @@ const ManageAdmins = () => {
     setAdmins(newAdmins)
     setConfirmDeletePop(true)
   }
-  const [affiliation, setAffiliation] = React.useState('');
 
   const handleChange = (event: SelectChangeEvent) => {
     setAffiliation(event.target.value as string);
   };
+
+  function handleFilterChange(filterName: string, setFunction: Function,
+    event: { target: { value: any } }) {
+    setFunction(event.target.value)
+    // updateSelected(filterName, event.target.value)
+  }
 
   return (
     <><Box sx={{
@@ -55,7 +101,8 @@ const ManageAdmins = () => {
               endAdornment: <InputAdornment position="end">
                 <SearchIcon />
               </InputAdornment>,
-            }} />
+            }}
+            onChange={(e) => handleFilterChange(FilterEnum.search, setSearch, e)} />
         </Grid>
 
         <Grid container item xs={'auto'}>
@@ -66,11 +113,11 @@ const ManageAdmins = () => {
                 sx={{ flex: 1, borderRadius: 1 }}>
                 <Select
                   value={affiliation}
-                  onChange={handleChange}
+                  onChange={(e) => handleFilterChange(FilterEnum.affiliation, setAffiliation, e)}
                   displayEmpty>
-                  <MenuItem value="">All Affiliations</MenuItem>
-                  <MenuItem value={10}>HSC</MenuItem>
-                  <MenuItem value={20}>Non-HSC</MenuItem>
+                  <MenuItem value="All">All Affiliations</MenuItem>
+                  <MenuItem value="HSC">HSC</MenuItem>
+                  <MenuItem value="Non-HSC">Non-HSC</MenuItem>
                 </Select>
               </FormControl>
             </Box>
@@ -82,16 +129,16 @@ const ManageAdmins = () => {
 
         <Grid container spacing={"10%"}>
           <Grid item sx={{ ml: "1%" }}>
-            <ColumnLabel label="First Name"></ColumnLabel>
+            <ColumnLabel label="First Name" ascending={sortName == 'fName' && sortOrder == -1} onClick={() => handleSortToggle("fName")}></ColumnLabel>
           </Grid>
           <Grid item sx={{ ml: "0%" }}>
-            <ColumnLabel label="Last Name"></ColumnLabel>
+            <ColumnLabel ascending={sortName == 'lName' && sortOrder == -1} label="Last Name" onClick={() => handleSortToggle("lName")}></ColumnLabel>
           </Grid>
           <Grid item sx={{ ml: "0%" }}>
-            <ColumnLabel label="Affiliation"></ColumnLabel>
+            <ColumnLabel ascending={sortName == 'affiliation' && sortOrder == -1} label="Affiliation" onClick={() => handleSortToggle("affiliation")}></ColumnLabel>
           </Grid>
           <Grid item sx={{ ml: "3%" }}>
-            <ColumnLabel label="Created"></ColumnLabel>
+            <ColumnLabel ascending={sortName == 'createdAt' && sortOrder == -1} label="Created" onClick={() => handleSortToggle("createdAt")} ascending={sortName == 'createdAt' && sortOrder == -1} label="Created" onClick={() => handleSortToggle("createdAt")}></ColumnLabel>
           </Grid>
         </Grid>
 

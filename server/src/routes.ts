@@ -24,7 +24,8 @@ module.exports = () => {
     getAdmins,
     createAdmin,
     deleteAdmin,
-    updateAdmin
+    updateAdmin,
+    getSortAdmins
   } = require("./controllers/adminController")
 
   const {
@@ -83,6 +84,9 @@ module.exports = () => {
 
   // GET a specific admin
   router.get('/admins/:id', getAdmin)
+
+  //GET admins based off sort
+  router.get('/admins/sort', getSortAdmins)
 
   // POST (add) a new admin
   router.post('/admins', createAdmin)
