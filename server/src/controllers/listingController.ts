@@ -7,6 +7,7 @@ const fs = require('fs').promises;
 import s3utils from '../utils/s3';
 
 import { successJson, errorJson } from '../utils/jsonResponses';
+import { TIMEOUT } from 'dns';
 
 // GET all housing listings
 const getListings = async (req, res) => {
@@ -238,11 +239,17 @@ const updateListingPicture = async (req, res) => {
 
 
   try {
-    const files = req.files;
 
-    //console.log(files)
+    const files = req.files;
+    console.log("YOU THINK WE GOT THE FILE ? ")
+    console.log(files)
+    console.log("THE PARAMS")
+    console.log(req.params)
+    console.log(!files)
+    console.log("before id")
     // We should check if the file exists, if it doesn't, return an error
     if (!files) {
+      console.log("APPARENTLT WHERE HERE")
       res.send(errorJson("No file uploaded"));
       return;
     }
@@ -258,13 +265,21 @@ const updateListingPicture = async (req, res) => {
     // Now we send the file to S3 using our s3utils
     // 'name' is the text entered into the input field
     // and this is what the name of the file will be in s3
+    console.log("before loop")
     files.forEach(async (file) => {
       console.log(req.body.name)
-      const name = String(req.body.name);
-      temparr.push(name)
-      const result = await s3utils.uploadFile(file, name)
+      const dirname = String(req.body.dirname)
+      const filename1 = String(req.body.filename)
+      const filename2 = `${dirname}/${filename1}`;
+
+      temparr.push(filename2)
+      console.log("What is temparr?")
+      console.log(temparr)
+      const result = await s3utils.uploadFile(dirname, filename1, file, true)
       await fs.unlink(file.path);
     })
+    console.log("exit loop")
+    console.log(temparr)
     await Listing.findOneAndUpdate(
       { _id: id }, // Filter: find the listing with the given ID
       { $set: { pictures: temparr } }, // Update: set the "pictures" field to the "pics" array
@@ -284,16 +299,35 @@ const updateListingPicture = async (req, res) => {
     res.send(successJson({}));
 
   } catch (error) {
+    console.log("We in the error ")
+    console.log(error)
     res.send(errorJson(error));
 
     // res.status(200).json({ id: id })
   }
 }
 const getListingPicture = async (req, res) => {
-  const { id } = req.params
-  const response = s3utils.getFileStream(id)
+  console.log("INSIDE OF GETTING PICTURES")
+  const { dir } = req.params
+  const { file } = req.params
+  console.log("THE PARAMS")
+  console.log(req.params)
+
+  const dirname = String(dir)
+  console.log("dirname" + dir)
+  console.log("filename " + file)
+  const filename1 = String(file)
+  const filename2 = `${dirname}/${filename1}`;
+  console.log("LOOOOOKS AT THE FILES")
+  console.log(filename2)
+
+  const response = s3utils.getFileStream(dirname, filename1)
+  console.log('response iss')
+  //console.log(response)
   if (response) {
+    console.log("into readstre ")
     response.createReadStream().on('error', e => {
+      console.log("This is errororrroorrooror")
       console.log(e);
     }).pipe(res);
   }

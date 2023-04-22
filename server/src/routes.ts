@@ -50,7 +50,7 @@ module.exports = () => {
   router.get('/listing/:id', getListing)
 
   //GET the picture for a specific listing
-  router.get('/listingPicture/:id', getListingPicture)
+  router.get('/listingPicture/:dir/:file', getListingPicture)
 
   // POST (add) a new housing listing
   router.post('/listing', createListing)

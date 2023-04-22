@@ -55,7 +55,19 @@ export default function ListingDetails({ Listing, handleDelete }: { Listing: any
     const fetchImage = async () => {
       try {
         // // Fetch the image from the backend
-        const response = await fetch('api/listingPicture/' + Listing.pictures[0]);
+        const link = `${Listing.streetAddress}/${Listing.pictures[0]}`
+        console.log("THie ling " + link)
+        const response = await fetch('api/listingPicture/' + link);
+        console.log("THis is the repsonse")
+        console.log(response)
+
+        // const formData = new FormData();
+        // formData.append("dirname", Listing.streetAddress)
+        // formData.append("filename", Listing.pictures[0])
+        // const response = await fetch('api/listingPicture', {
+        //   method: 'GET',
+        //   body: formData
+        // });
 
         // Convert the response to a Blob
         const blob = await response.blob();

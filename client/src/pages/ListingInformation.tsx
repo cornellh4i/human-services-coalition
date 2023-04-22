@@ -45,7 +45,9 @@ const ListingInformation = () => {
   const fetchImage = async () => {
     for (const e of location.state.pictures) {
       console.log("This is the picture  " + e)
-      const response = await fetch('api/listingPicture/' + e);
+
+      const link = `${location.state.streetAddress}/${e}`
+      const response = await fetch('api/listingPicture/' + link);
       console.log("This is the resposne   " + response)
       const blob = await response.blob();
       console.log("This is the Blob   " + blob)
@@ -54,6 +56,7 @@ const ListingInformation = () => {
       imageSrc.push(objectURL)
       console.log("This is the IMGSRC  " + imageSrc)
     }
+    console.log(imageSrc)
     setImagesLoaded(true);
   }
   useEffect(() => {

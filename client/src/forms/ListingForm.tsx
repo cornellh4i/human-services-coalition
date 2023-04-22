@@ -212,7 +212,8 @@ const ListingForm = () => {
 
       files.forEach((file) => {
         formData.append('pictures', file);
-        formData.append('name', streetAddress + String(prevPics.length))
+        formData.append('dirname', streetAddress)
+        formData.append('filename', `house${String(prevPics.length)}`)
       });
 
       const response = await fetch('api/listingPicture/' + id, {
@@ -220,6 +221,31 @@ const ListingForm = () => {
         body: formData
       });
     }
+
+    // else {
+    //   console.log("Entered the nopicZONE")
+    //   const placeholderFile = new File(
+    //     ['placeholder content'],
+    //     'placeholder-file-12345',
+    //     { type: 'image/jpeg' },
+    //   );
+    //   console.log("This is the file")
+    //   console.log(placeholderFile)
+
+    //   console.log("tRYING TO APPEDN PIC ")
+    //   formData.append('arr[]', "");
+    //   formData.append('pictures', placeholderFile);
+    //   formData.append('dirname', streetAddress)
+    //   formData.append('filename', `house${String(prevPics.length)}`)
+
+    //   //formData.append('name', streetAddress + String(prevPics.length))
+
+    //   console.log("MAKES THE API CALL ")
+    //   const response = await fetch('api/listingPicture/' + id, {
+    //     method: 'PATCH',
+    //     body: formData
+    //   });
+    // }
 
     if (!response1.ok) {
       setError(json.error)
