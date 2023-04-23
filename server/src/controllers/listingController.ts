@@ -257,9 +257,9 @@ const updateListingPicture = async (req, res) => {
     //console.log(req.body)
     var temparr: string[] = req.body.arr
 
-    if (temparr[0] == "") {
-      temparr = []
-    }
+    // if (temparr[0] == "") {
+    //   temparr = []
+    // }
 
 
     // Now we send the file to S3 using our s3utils
@@ -275,7 +275,7 @@ const updateListingPicture = async (req, res) => {
       console.log("THIS IS FILENAME")
       console.log(filename1)
 
-      temparr.push(filename1)
+      //temparr.push(filename1)
       console.log("What is temparr?")
       console.log(temparr)
       const result = await s3utils.uploadFile(dirname, filename1, file, true)

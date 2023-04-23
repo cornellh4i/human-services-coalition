@@ -51,13 +51,12 @@ const ListingForm = () => {
 
   // Picture upload
   const [files, setFiles] = useState<File[]>([]);
+
   const [prevPics, setPrevPics] = useState<string[]>([])
 
-  const fileSelected = (event: BaseSyntheticEvent) => {
-    setFiles(event.target.files[0])
-  }
-
   const [pic1, setPic1] = useState<File[]>([]);
+  const [pic2, setPic2] = useState<File[]>([]);
+  const [pic3, setPic3] = useState<File[]>([]);
 
 
 
@@ -199,8 +198,94 @@ const ListingForm = () => {
     const id = json.id;
     const formData = new FormData();
 
-    // If the user is uploading an image as well, then we need to send a second request to update the picture
 
+    var temparr = prevPics
+    var placeholder = null;
+    var pictureFile = null;
+
+    // If the user is uploading an image as well, then we need to send a second request to update the picture
+    if (pic1.length > 0 || pic2.length > 0 || pic3.length > 0) {
+
+      //if i have a first image
+      if (pic1.length > 0) {
+        placeholder = `house${0}`
+        pictureFile = pic1[0]
+
+        //were there previous pictures?
+        if (temparr.length < 1) {
+          temparr.push(placeholder)
+        }//else you don't want to push on any placeholder
+
+        for (var i = 0; i < temparr.length; i++) {
+          formData.append('arr[]', temparr[i]);
+        }
+        formData.append('pictures', pictureFile);
+        formData.append('dirname', streetAddress)
+        formData.append('filename', placeholder)
+
+        const response = await fetch('api/listingPicture/' + id, {
+          method: 'PATCH',
+          body: formData
+        });
+        //delete once the api call was finished to prepare for second form data call
+        formData.delete('arr[]')
+        formData.delete('pictures')
+        formData.delete('dirname')
+        formData.delete('filename')
+      }
+
+      if (pic2.length > 0) {
+        placeholder = `house${1}`
+        pictureFile = pic2[0]
+        //at this point there must be at least one picture in temparr
+        if (temparr.length < 2) {
+          temparr.push(placeholder)
+        }//else you don't want to push on any placeholder
+        for (var i = 0; i < temparr.length; i++) {
+          formData.append('arr[]', temparr[i]);
+        }
+        formData.append('pictures', pictureFile)
+        formData.append('dirname', streetAddress)
+        formData.append('filename', placeholder)
+
+        const response = await fetch('api/listingPicture/' + id, {
+          method: 'PATCH',
+          body: formData
+        });
+        //delete once the api call was finished to prepare for second form data call
+        formData.delete('arr[]')
+        formData.delete('pictures')
+        formData.delete('dirname')
+        formData.delete('filename')
+      }
+
+      if (pic3.length > 0) {
+        placeholder = `house${2}`
+        pictureFile = pic3[0]
+        //at this point there must be at least two pictures in temparr
+        if (temparr.length < 3) {
+          temparr.push(placeholder)
+        }//else you don't want to push on any placeholder
+        for (var i = 0; i < temparr.length; i++) {
+          formData.append('arr[]', temparr[i]);
+        }
+        formData.append('pictures', pictureFile)
+        formData.append('dirname', streetAddress)
+        formData.append('filename', placeholder)
+
+        const response = await fetch('api/listingPicture/' + id, {
+          method: 'PATCH',
+          body: formData
+        });
+        //delete once the api call was finished to prepare for second form data call
+        formData.delete('arr[]')
+        formData.delete('pictures')
+        formData.delete('dirname')
+        formData.delete('filename')
+      }
+
+
+    }
 
     if (!response1.ok) {
       setError(json.error)
@@ -214,6 +299,9 @@ const ListingForm = () => {
       setCountry('')
       setZipCode('')
       setFiles([])
+      // setPic1([])
+      // setPic2([])
+      // setPic3([])
       setPrice('')
       setSize('')
       setUnitType('')
@@ -696,7 +784,11 @@ const ListingForm = () => {
                       name="pictures"
                       onChange={(e) => {
                         if (e.target.files) {
-                          setFiles(Array.from(e.target.files));
+                          console.log("The file")
+                          console.log(Array.from(e.target.files))
+                          //setPic1(Array.from(e.target.files));
+                          pic1.push(Array.from(e.target.files)[0])
+                          console.log(pic1)
                         }
                       }}
                     />
@@ -715,8 +807,14 @@ const ListingForm = () => {
                       name="pictures"
                       onChange={(e) => {
                         if (e.target.files) {
+                          console.log("The file")
+                          console.log(Array.from(e.target.files))
                           //setFiles(Array.from(e.target.files));
-                          files.push(Array.from(e.target.files)[1]);
+                          //setPic2(Array.from(e.target.files));
+                          pic2.push(Array.from(e.target.files)[0])
+                          console.log(pic1)
+                          console.log(pic2)
+                          console.log(!pic1)
                         }
                       }}
                     />
@@ -735,8 +833,14 @@ const ListingForm = () => {
                       name="pictures"
                       onChange={(e) => {
                         if (e.target.files) {
-                          //setFiles(Array.from(e.target.files));
-                          files.push(Array.from(e.target.files)[2]);
+                          // setFiles(Array.from(e.target.files));
+                          // console.log(files)
+                          console.log("The file")
+                          console.log(Array.from(e.target.files))
+                          //setPic3(Array.from(e.target.files));
+                          pic3.push(Array.from(e.target.files)[0])
+                          console.log("pic333333")
+                          console.log(pic3)
                         }
                       }}
                     />
