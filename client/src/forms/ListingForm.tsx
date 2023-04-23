@@ -1,5 +1,5 @@
 import React, { BaseSyntheticEvent, useEffect, useState } from "react"
-import { Box, Button, Grid, Typography, Container, TextField, RadioGroup, FormControlLabel, Checkbox, Radio, FormControl, FormLabel, FormGroup, MenuItem, Select, formControlClasses } from '@mui/material';
+import { Box, Button, Grid, Typography, Container, TextField, RadioGroup, FormControlLabel, Checkbox, Radio, FormControl, FormLabel, FormGroup, MenuItem, Select, formControlClasses, CardMedia, Card } from '@mui/material';
 import { PhotoCamera } from "@mui/icons-material";
 import { useLocation, useNavigate } from "react-router-dom";
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
@@ -53,11 +53,15 @@ const ListingForm = () => {
   const [files, setFiles] = useState<File[]>([]);
 
   const [prevPics, setPrevPics] = useState<string[]>([])
+  const [pics, setPics] = useState<string[]>([]);
 
   const [pic1, setPic1] = useState<File[]>([]);
   const [pic2, setPic2] = useState<File[]>([]);
   const [pic3, setPic3] = useState<File[]>([]);
 
+  // // Create state for image source and imageLoaded flag
+  const [imageSrc, setImageSrc] = useState<string[]>([]);
+  const [imagesLoaded, setImagesLoaded] = useState(false);
 
 
   // Navigation functionality
@@ -67,11 +71,28 @@ const ListingForm = () => {
   const location = useLocation();
 
 
-  // Contains what will prepopulate the form if location.state is not null
-  useEffect(() => {
+  // [fetchImages] populates the state list [imgSrc] with the 
+  // the list of images that should be shown on the form
+  const fetchImages = async (alist: any, dir: any) => {
 
-    if (location.state != null) { getListingDetails() }
-  }, [])
+    //for every entry in the [alist]: list of image keys that correspond to S3 storage
+    for (const e of alist) {
+
+      //creates the url parameters and routes to call [getListingPicture] in [listingController.tsx]
+      const link = `${dir}/${e}`
+      const response = await fetch('api/listingPicture/' + link);
+
+      //creates a [blob] -> [URL] with response from GET api call
+      const blob = await response.blob();
+      const objectURL = URL.createObjectURL(blob);
+
+      //populates the state list with the image url 
+      imageSrc.push(objectURL)
+    }
+
+    setImagesLoaded(true);
+  }
+
 
   // Fetch the data related to id from the database
   const getListingDetails = async () => {
@@ -80,6 +101,8 @@ const ListingForm = () => {
       method: 'GET'
     })
     let json_object = await result.json()
+
+    //retrieve the data entries to prepoulate the form 
     setOrg(json_object.streetAddress)
     console.log(org)
     setStreetAddress(json_object.streetAddress)
@@ -104,12 +127,69 @@ const ListingForm = () => {
     setFurnishedIsTrue(json_object.furnished)
     setPetsIsTrue(json_object.pets)
     setUtilitiesIsTrue(json_object.utilities)
-    //setPictures(json_object.pictures)
     setButtonLabel('Save Changes')
     setPrevPics(json_object.pictures)
     setPictures(json_object.pictures)
+
+    //retrieve the images to prepopulate the form
+    fetchImages(json_object.pictures, json_object.streetAddress);
+
   }
 
+  //THE MOST ANNOYING FUNCTIONG EVER ... the [useEffect] calls the [getListingDetails]
+  useEffect(() => {
+    if (location.state != null) {
+      getListingDetails();
+    }
+  }, [])
+
+  // [imageHandler] executes the API call for each image entry on the form
+  const imageHandler = async (id: any) => {
+
+    //Initilisation of helper variables 
+    const formData = new FormData();
+    const alist: File[][] = [pic1, pic2, pic3]// alist is populated with the three images
+    var temparr = prevPics
+    var placeholder = null;
+    var pictureFile = null;
+    var counter = 0;
+
+
+    for (const imgfle of alist) {
+      if (imgfle.length > 0) {//if there is something in this file
+
+        //determines the name of the file to represent in S3 storage 
+        placeholder = `house${counter}`
+        //the actual image file inputted by the user
+        pictureFile = imgfle[0]
+
+        //were there previous pictures that were already associated with this listing?
+        if (temparr.length < (counter + 1)) {
+          temparr.push(placeholder)
+        }//else you don't want to push on any placeholder
+
+        // populate the [formData : arr] entry to transfer in the api call
+        // [formData : arr] is always guranteed to have at least one element
+        for (var i = 0; i < temparr.length; i++) {
+          formData.append('arr[]', temparr[i]);
+        }
+        formData.append('pictures', pictureFile)
+        formData.append('dirname', streetAddress)
+        formData.append('filename', placeholder)
+
+        const response = await fetch('api/listingPicture/' + id, {
+          method: 'PATCH',
+          body: formData
+        });
+        //delete once the api call was finished to prepare for second form data call
+        formData.delete('arr[]')
+        formData.delete('pictures')
+        formData.delete('dirname')
+        formData.delete('filename')
+      }
+      counter = counter + 1
+    }
+  }
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -196,96 +276,10 @@ const ListingForm = () => {
     // Get listing ID from response to use in picture upload
     const json = await response1.json();
     const id = json.id;
-    const formData = new FormData();
+    //const formData = new FormData();
 
+    await imageHandler(id);
 
-    var temparr = prevPics
-    var placeholder = null;
-    var pictureFile = null;
-
-    // If the user is uploading an image as well, then we need to send a second request to update the picture
-    if (pic1.length > 0 || pic2.length > 0 || pic3.length > 0) {
-
-      //if i have a first image
-      if (pic1.length > 0) {
-        placeholder = `house${0}`
-        pictureFile = pic1[0]
-
-        //were there previous pictures?
-        if (temparr.length < 1) {
-          temparr.push(placeholder)
-        }//else you don't want to push on any placeholder
-
-        for (var i = 0; i < temparr.length; i++) {
-          formData.append('arr[]', temparr[i]);
-        }
-        formData.append('pictures', pictureFile);
-        formData.append('dirname', streetAddress)
-        formData.append('filename', placeholder)
-
-        const response = await fetch('api/listingPicture/' + id, {
-          method: 'PATCH',
-          body: formData
-        });
-        //delete once the api call was finished to prepare for second form data call
-        formData.delete('arr[]')
-        formData.delete('pictures')
-        formData.delete('dirname')
-        formData.delete('filename')
-      }
-
-      if (pic2.length > 0) {
-        placeholder = `house${1}`
-        pictureFile = pic2[0]
-        //at this point there must be at least one picture in temparr
-        if (temparr.length < 2) {
-          temparr.push(placeholder)
-        }//else you don't want to push on any placeholder
-        for (var i = 0; i < temparr.length; i++) {
-          formData.append('arr[]', temparr[i]);
-        }
-        formData.append('pictures', pictureFile)
-        formData.append('dirname', streetAddress)
-        formData.append('filename', placeholder)
-
-        const response = await fetch('api/listingPicture/' + id, {
-          method: 'PATCH',
-          body: formData
-        });
-        //delete once the api call was finished to prepare for second form data call
-        formData.delete('arr[]')
-        formData.delete('pictures')
-        formData.delete('dirname')
-        formData.delete('filename')
-      }
-
-      if (pic3.length > 0) {
-        placeholder = `house${2}`
-        pictureFile = pic3[0]
-        //at this point there must be at least two pictures in temparr
-        if (temparr.length < 3) {
-          temparr.push(placeholder)
-        }//else you don't want to push on any placeholder
-        for (var i = 0; i < temparr.length; i++) {
-          formData.append('arr[]', temparr[i]);
-        }
-        formData.append('pictures', pictureFile)
-        formData.append('dirname', streetAddress)
-        formData.append('filename', placeholder)
-
-        const response = await fetch('api/listingPicture/' + id, {
-          method: 'PATCH',
-          body: formData
-        });
-        //delete once the api call was finished to prepare for second form data call
-        formData.delete('arr[]')
-        formData.delete('pictures')
-        formData.delete('dirname')
-        formData.delete('filename')
-      }
-
-
-    }
 
     if (!response1.ok) {
       setError(json.error)
@@ -299,9 +293,9 @@ const ListingForm = () => {
       setCountry('')
       setZipCode('')
       setFiles([])
-      // setPic1([])
-      // setPic2([])
-      // setPic3([])
+      setPic1([])
+      setPic2([])
+      setPic3([])
       setPrice('')
       setSize('')
       setUnitType('')
@@ -324,553 +318,630 @@ const ListingForm = () => {
 
       navigate("/")
     }
+
   }
 
+  //if all the images have been loaded then render the screen
+  if (!imagesLoaded && location.state != null) {
+    return <div>Loading images...</div>;
+  }
   return (
-    <Container maxWidth={false}>
-      <Grid container>
-        <Grid item xs={2} alignSelf="flex-start">
-          <Button disableElevation
-            startIcon={<ArrowBackIosNewIcon />}
-            variant="outlined"
-            size="large"
-            onClick={() => navigate("/")}
-            sx={{ marginTop: '2rem', padding: "0 1rem", fontSize: '1.2rem', fontWeight: 'bold', textTransform: "unset", borderRadius: '12px', color: '#5D737E', borderWidth: '0.14rem', borderColor: '#5D737E', bgcolor: 'white', ':hover': { bgcolor: "#5D737EB5" } }}
-          >
-            Back
-          </Button>
-        </Grid>
+    <>
 
-        <Grid item xs={8}>
-          <form action="/upload" encType="multipart/form-data" noValidate className="listing-form" onSubmit={handleSubmit}>
-            <Typography variant='h3' sx={{ fontSize: '1.3rem', fontWeight: 'bold', mt: '3%' }} >
-              Landlord Contact Information
-            </Typography>
+      <Container maxWidth={false}>
+        <Grid container>
+          <Grid item xs={2} alignSelf="flex-start">
+            <Button disableElevation
+              startIcon={<ArrowBackIosNewIcon />}
+              variant="outlined"
+              size="large"
+              onClick={() => navigate("/")}
+              sx={{ marginTop: '2rem', padding: "0 1rem", fontSize: '1.2rem', fontWeight: 'bold', textTransform: "unset", borderRadius: '12px', color: '#5D737E', borderWidth: '0.14rem', borderColor: '#5D737E', bgcolor: 'white', ':hover': { bgcolor: "#5D737EB5" } }}
+            >
+              Back
+            </Button>
+          </Grid>
 
-            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '1rem' }}>
-              <FormGroup sx={{ flexGrow: '1' }}>
-                <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'left', alignItems: 'center' }}>
-                  <FormLabel>Name</FormLabel>
-                  <Typography sx={{ marginLeft: '0.3rem', color: '#E50808' }}>*</Typography>
-                </Box>
-                <TextField fullWidth
-                  id="listing-landlord"
-                  variant="outlined"
-                  size="small"
-                  className="form-field"
-                  type="text"
-                  required={true}
-                  name="landlord"
-                  onChange={(e) => setLandlord(e.target.value)}
-                  value={landlord}
-                  error={nameError}
-                />
-              </FormGroup>
+          <Grid item xs={8}>
+            <form action="/upload" encType="multipart/form-data" noValidate className="listing-form" onSubmit={handleSubmit}>
+              <Typography variant='h3' sx={{ fontSize: '1.3rem', fontWeight: 'bold', mt: '3%' }}>
+                Landlord Contact Information
+              </Typography>
 
-              <FormGroup sx={{ flexGrow: '1', marginX: '1.5rem' }}>
-                <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'left', alignItems: 'center' }}>
-                  <FormLabel>Number</FormLabel>
-                  <Typography sx={{ marginLeft: '0.3rem', color: '#E50808' }}>*</Typography>
-                </Box>
-                <TextField fullWidth
-                  id="listing-landlordPhone"
-                  variant="outlined"
-                  size="small"
-                  className="form-field"
-                  type="tel"
-                  name="landlordPhone"
-                  onChange={(e) => setLandlordPhone(e.target.value)}
-                  value={landlordPhone}
-                  error={numberError}
-                />
-              </FormGroup>
+              <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '1rem' }}>
+                <FormGroup sx={{ flexGrow: '1' }}>
+                  <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'left', alignItems: 'center' }}>
+                    <FormLabel>Name</FormLabel>
+                    <Typography sx={{ marginLeft: '0.3rem', color: '#E50808' }}>*</Typography>
+                  </Box>
+                  <TextField fullWidth
+                    id="listing-landlord"
+                    variant="outlined"
+                    size="small"
+                    className="form-field"
+                    type="text"
+                    required={true}
+                    name="landlord"
+                    onChange={(e) => setLandlord(e.target.value)}
+                    value={landlord}
+                    error={nameError} />
+                </FormGroup>
 
-              <FormGroup sx={{ flexGrow: '1' }}>
-                <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'left', alignItems: 'center' }}>
-                  <FormLabel>Email</FormLabel>
-                  <Typography sx={{ marginLeft: '0.3rem', color: '#E50808' }}>*</Typography>
-                </Box>
-                <TextField fullWidth
-                  id="listing-landlordEmail"
-                  variant="outlined"
-                  size="small"
-                  className="form-field"
-                  type="email"
-                  name="landlordEmail"
-                  onChange={(e) => setLandlordEmail(e.target.value)}
-                  value={landlordEmail}
-                  error={emailError}
-                />
-              </FormGroup>
-            </Box>
 
-            <Typography variant='h3' sx={{ fontSize: '1.3rem', fontWeight: 'bold', mt: '2%' }} >
-              Listing Information
-            </Typography>
 
-            <Box>
-              <FormGroup>
-                <FormLabel sx={{ marginTop: '1rem' }}>Link to Listing</FormLabel>
-                <TextField fullWidth
-                  id="listing-linkOrig"
-                  variant="outlined"
-                  size="small"
-                  className="form-field"
-                  type="url"
-                  name="linkOrig"
-                  onChange={(e) => setLinkOrig(e.target.value)}
-                  value={linkOrig}
-                />
-              </FormGroup>
 
-              <FormGroup>
-                <FormLabel sx={{ marginTop: '1rem' }}>Link to Housing Application</FormLabel>
-                <TextField fullWidth
-                  id="listing-linkApp"
-                  variant="outlined"
-                  size="small"
-                  className="form-field"
-                  type="url"
-                  name="linkApp"
-                  onChange={(e) => setLinkApp(e.target.value)}
-                  value={linkApp}
-                />
-              </FormGroup>
-              <FormGroup>
-                <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'left', alignItems: 'center', marginTop: '1rem' }}>
-                  <FormLabel>Street Address</FormLabel>
-                  <Typography sx={{ marginLeft: '0.3rem', color: '#E50808' }}>*</Typography>
-                </Box>
-                <TextField fullWidth
-                  id="listing-streetAddress"
-                  variant="outlined"
-                  size="small"
-                  className="form-field"
-                  type="text"
-                  required={true}
-                  name="streetAddress"
-                  onChange={(e) => setStreetAddress(e.target.value)}
-                  value={streetAddress}
-                  error={addressError}
-                />
-              </FormGroup>
-            </Box>
+                <FormGroup sx={{ flexGrow: '1', marginX: '1.5rem' }}>
+                  <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'left', alignItems: 'center' }}>
+                    <FormLabel>Number</FormLabel>
+                    <Typography sx={{ marginLeft: '0.3rem', color: '#E50808' }}>*</Typography>
+                  </Box>
+                  <TextField fullWidth
+                    id="listing-landlordPhone"
+                    variant="outlined"
+                    size="small"
+                    className="form-field"
+                    type="tel"
+                    name="landlordPhone"
+                    onChange={(e) => setLandlordPhone(e.target.value)}
+                    value={landlordPhone}
+                    error={numberError} />
+                </FormGroup>
 
-            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '1rem' }}>
-              <FormGroup sx={{ flexGrow: '1' }}>
-                <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'left', alignItems: 'center' }}>
-                  <FormLabel>City</FormLabel>
-                  <Typography sx={{ marginLeft: '0.3rem', color: '#E50808' }}>*</Typography>
-                </Box>
-                <TextField
-                  id="listing-city"
-                  variant="outlined"
-                  size="small"
-                  className="form-field"
-                  type="text"
-                  required={true}
-                  name="city"
-                  onChange={(e) => setCity(e.target.value)}
-                  value={city}
-                  error={cityError}
-                />
-              </FormGroup>
+                <FormGroup sx={{ flexGrow: '1' }}>
+                  <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'left', alignItems: 'center' }}>
+                    <FormLabel>Email</FormLabel>
+                    <Typography sx={{ marginLeft: '0.3rem', color: '#E50808' }}>*</Typography>
+                  </Box>
+                  <TextField fullWidth
+                    id="listing-landlordEmail"
+                    variant="outlined"
+                    size="small"
+                    className="form-field"
+                    type="email"
+                    name="landlordEmail"
+                    onChange={(e) => setLandlordEmail(e.target.value)}
+                    value={landlordEmail}
+                    error={emailError} />
+                </FormGroup>
+              </Box>
 
-              <FormGroup sx={{ flexGrow: '1', marginX: '1.5rem' }}>
-                <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'left', alignItems: 'center' }}>
-                  <FormLabel>State</FormLabel>
-                  <Typography sx={{ marginLeft: '0.3rem', color: '#E50808' }}>*</Typography>
-                </Box>
-                <TextField
-                  id="listing-state"
-                  variant="outlined"
-                  size="small"
-                  className="form-field"
-                  type="text"
-                  required={true}
-                  name="state"
-                  onChange={(e) => setState(e.target.value)}
-                  value={state}
-                  error={stateError}
-                />
-              </FormGroup>
+              <Typography variant='h3' sx={{ fontSize: '1.3rem', fontWeight: 'bold', mt: '2%' }}>
+                Listing Information
+              </Typography>
 
-              <FormGroup sx={{ flexGrow: '1' }}>
-                <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'left', alignItems: 'center' }}>
-                  <FormLabel>Country</FormLabel>
-                  <Typography sx={{ marginLeft: '0.3rem', color: '#E50808' }}>*</Typography>
-                </Box>
-                <TextField
-                  id="listing-country"
-                  variant="outlined"
-                  size="small"
-                  className="form-field"
-                  type="text"
-                  required={true}
-                  name="country"
-                  onChange={(e) => setCountry(e.target.value)}
-                  value={country}
-                  error={countryError}
-                />
-              </FormGroup>
-            </Box>
+              <Box>
+                <FormGroup>
+                  <FormLabel sx={{ marginTop: '1rem' }}>Link to Listing</FormLabel>
+                  <TextField fullWidth
+                    id="listing-linkOrig"
+                    variant="outlined"
+                    size="small"
+                    className="form-field"
+                    type="url"
+                    name="linkOrig"
+                    onChange={(e) => setLinkOrig(e.target.value)}
+                    value={linkOrig} />
+                </FormGroup>
 
-            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '1rem' }}>
-              <FormGroup sx={{ flexGrow: '1' }}>
-                <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'left', alignItems: 'center' }}>
-                  <FormLabel>Zip Code</FormLabel>
-                  <Typography sx={{ marginLeft: '0.3rem', color: '#E50808' }}>*</Typography>
-                </Box>
-                <TextField
-                  id="listing-zipCode"
-                  variant="outlined"
-                  size="small"
-                  className="form-field"
-                  type="text"
-                  required={true}
-                  name="zipCode"
-                  onChange={(e) => setZipCode(e.target.value)}
-                  value={zipCode}
-                  error={zipError}
-                />
-              </FormGroup>
+                <FormGroup>
+                  <FormLabel sx={{ marginTop: '1rem' }}>Link to Housing Application</FormLabel>
+                  <TextField fullWidth
+                    id="listing-linkApp"
+                    variant="outlined"
+                    size="small"
+                    className="form-field"
+                    type="url"
+                    name="linkApp"
+                    onChange={(e) => setLinkApp(e.target.value)}
+                    value={linkApp} />
+                </FormGroup>
+                <FormGroup>
+                  <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'left', alignItems: 'center', marginTop: '1rem' }}>
+                    <FormLabel>Street Address</FormLabel>
+                    <Typography sx={{ marginLeft: '0.3rem', color: '#E50808' }}>*</Typography>
+                  </Box>
+                  <TextField fullWidth
+                    id="listing-streetAddress"
+                    variant="outlined"
+                    size="small"
+                    className="form-field"
+                    type="text"
+                    required={true}
+                    name="streetAddress"
+                    onChange={(e) => setStreetAddress(e.target.value)}
+                    value={streetAddress}
+                    error={addressError} />
+                </FormGroup>
+              </Box>
 
-              <FormGroup sx={{ flexGrow: '1', marginX: '1.5rem' }}>
-                <FormLabel>School District</FormLabel>
-                <TextField
-                  id="listing-schoolDistrict"
-                  variant="outlined"
-                  size="small"
-                  className="form-field"
-                  type="text"
-                  name="schoolDistrict"
-                  onChange={(e) => setSchoolDistrict(e.target.value)}
-                  value={schoolDistrict}
-                />
-              </FormGroup>
+              <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '1rem' }}>
+                <FormGroup sx={{ flexGrow: '1' }}>
+                  <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'left', alignItems: 'center' }}>
+                    <FormLabel>City</FormLabel>
+                    <Typography sx={{ marginLeft: '0.3rem', color: '#E50808' }}>*</Typography>
+                  </Box>
+                  <TextField
+                    id="listing-city"
+                    variant="outlined"
+                    size="small"
+                    className="form-field"
+                    type="text"
+                    required={true}
+                    name="city"
+                    onChange={(e) => setCity(e.target.value)}
+                    value={city}
+                    error={cityError} />
+                </FormGroup>
 
-              <FormGroup sx={{ flexGrow: '1' }}>
-                <FormLabel>Distance to Transportation</FormLabel>
-                <Select
-                  name="distTransportation"
-                  variant="outlined"
-                  size="small"
-                  id="listing-distTransportation"
-                  onChange={(e) => setDistTransportation(e.target.value)}
-                  value={distTransportation}
-                >
-                  <MenuItem key={"Close"} value="Close">Close</MenuItem>
-                  <MenuItem key={"Medium"} value="Medium">Medium</MenuItem>
-                  <MenuItem key={"Far"} value="Far">Far</MenuItem>
-                </Select>
-              </FormGroup>
-            </Box>
+                <FormGroup sx={{ flexGrow: '1', marginX: '1.5rem' }}>
+                  <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'left', alignItems: 'center' }}>
+                    <FormLabel>State</FormLabel>
+                    <Typography sx={{ marginLeft: '0.3rem', color: '#E50808' }}>*</Typography>
+                  </Box>
+                  <TextField
+                    id="listing-state"
+                    variant="outlined"
+                    size="small"
+                    className="form-field"
+                    type="text"
+                    required={true}
+                    name="state"
+                    onChange={(e) => setState(e.target.value)}
+                    value={state}
+                    error={stateError} />
+                </FormGroup>
 
-            <Box sx={{ marginTop: '1rem' }}>
-              <FormControl>
-                <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'left', alignItems: 'center' }}>
-                  <FormLabel>Property Type</FormLabel>
-                  <Typography sx={{ marginLeft: '0.3rem', color: '#E50808' }}>*</Typography>
-                </Box>
-                <RadioGroup row
-                  name="unitType"
-                  id="listing-unitType"
-                  // required={true}
-                  onChange={(e) => setUnitType(e.target.value)}
-                  value={unitType}
-                // error={propertyError}
-                >
-                  <FormControlLabel sx={{ marginRight: '9rem' }} value="Apartment" label="Apartment" control={<Radio />} />
-                  <FormControlLabel sx={{ marginRight: '9rem' }} value="Condo" label="Condo" control={<Radio />} />
-                  <FormControlLabel sx={{ marginRight: '9rem' }} value="House" label="House" control={<Radio />} />
-                  <FormControlLabel value="Single Room" label="Single Room" control={<Radio />} />
-                </RadioGroup>
-              </FormControl>
-            </Box>
+                <FormGroup sx={{ flexGrow: '1' }}>
+                  <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'left', alignItems: 'center' }}>
+                    <FormLabel>Country</FormLabel>
+                    <Typography sx={{ marginLeft: '0.3rem', color: '#E50808' }}>*</Typography>
+                  </Box>
+                  <TextField
+                    id="listing-country"
+                    variant="outlined"
+                    size="small"
+                    className="form-field"
+                    type="text"
+                    required={true}
+                    name="country"
+                    onChange={(e) => setCountry(e.target.value)}
+                    value={country}
+                    error={countryError} />
+                </FormGroup>
+              </Box>
 
-            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '1rem' }}>
-              <FormGroup sx={{ flexGrow: '2' }}>
-                <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'left', alignItems: 'center' }}>
-                  <FormLabel>Beds</FormLabel>
-                  <Typography sx={{ marginLeft: '0.3rem', color: '#E50808' }}>*</Typography>
-                </Box>
-                <Select
-                  name="size"
-                  variant="outlined"
-                  size="small"
-                  id="listing-size"
-                  required={true}
-                  onChange={(e) => setSize(e.target.value)}
-                  value={size}
-                  error={bedsError}
-                >
-                  <MenuItem key={"Studio"} value="Studio">Studio</MenuItem>
-                  <MenuItem key={"One Bed"} value="One Bed">One Bed</MenuItem>
-                  <MenuItem key={"Two Bed"} value="Two Bed">Two Bed</MenuItem>
-                  <MenuItem key={"Three Bed"} value="Three Bed">Three Bed</MenuItem>
-                  <MenuItem key={"Four Bed"} value="Four Bed">Four Bed</MenuItem>
-                  <MenuItem key={"Five Bed"} value="Five Bed">Five Bed</MenuItem>
-                  <MenuItem key={"Six Bed"} value="Six Bed">Six Bed</MenuItem>
-                </Select>
-              </FormGroup>
+              <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '1rem' }}>
+                <FormGroup sx={{ flexGrow: '1' }}>
+                  <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'left', alignItems: 'center' }}>
+                    <FormLabel>Zip Code</FormLabel>
+                    <Typography sx={{ marginLeft: '0.3rem', color: '#E50808' }}>*</Typography>
+                  </Box>
+                  <TextField
+                    id="listing-zipCode"
+                    variant="outlined"
+                    size="small"
+                    className="form-field"
+                    type="text"
+                    required={true}
+                    name="zipCode"
+                    onChange={(e) => setZipCode(e.target.value)}
+                    value={zipCode}
+                    error={zipError} />
+                </FormGroup>
 
-              <FormGroup sx={{ flexGrow: '1', marginX: '1.5rem' }}>
-                <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'left', alignItems: 'center' }}>
-                  <FormLabel>Baths</FormLabel>
-                  <Typography sx={{ marginLeft: '0.3rem', color: '#E50808' }}>*</Typography>
-                </Box>
-                <TextField
-                  id="listing-numBath"
-                  variant="outlined"
-                  size="small"
-                  className="form-field"
-                  type="number"
-                  required={true}
-                  name="numBath"
-                  onChange={(e) => setNumBath(e.target.value)}
-                  value={numBath}
-                  error={bathError}
-                />
-              </FormGroup>
+                <FormGroup sx={{ flexGrow: '1', marginX: '1.5rem' }}>
+                  <FormLabel>School District</FormLabel>
+                  <TextField
+                    id="listing-schoolDistrict"
+                    variant="outlined"
+                    size="small"
+                    className="form-field"
+                    type="text"
+                    name="schoolDistrict"
+                    onChange={(e) => setSchoolDistrict(e.target.value)}
+                    value={schoolDistrict} />
+                </FormGroup>
 
-              <FormGroup sx={{ flexGrow: '1' }}>
-                <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'left', alignItems: 'center' }}>
-                  <FormLabel>Monthly Rent</FormLabel>
-                  <Typography sx={{ marginLeft: '0.3rem', color: '#E50808' }}>*</Typography>
-                </Box>
-                <TextField
-                  id="listing-price"
-                  variant="outlined"
-                  size="small"
-                  className="form-field"
-                  type="number"
-                  required={true}
-                  name="price"
-                  onChange={(e) => setPrice(e.target.value)}
-                  value={price}
-                  error={rentError}
-                />
-              </FormGroup>
-            </Box>
+                <FormGroup sx={{ flexGrow: '1' }}>
+                  <FormLabel>Distance to Transportation</FormLabel>
+                  <Select
+                    name="distTransportation"
+                    variant="outlined"
+                    size="small"
+                    id="listing-distTransportation"
+                    onChange={(e) => setDistTransportation(e.target.value)}
+                    value={distTransportation}
+                  >
+                    <MenuItem key={"Close"} value="Close">Close</MenuItem>
+                    <MenuItem key={"Medium"} value="Medium">Medium</MenuItem>
+                    <MenuItem key={"Far"} value="Far">Far</MenuItem>
+                  </Select>
+                </FormGroup>
+              </Box>
 
-            <Box sx={{ marginTop: '1rem' }}>
-              <FormGroup>
-                <FormLabel>Earliest Move in Date</FormLabel>
-                <TextField
-                  sx={{ maxWidth: '33%' }}
-                  id="listing-dateAvailable"
-                  variant="outlined"
-                  size="small"
-                  className="form-field"
-                  type="date"
-                  name="dateAvailable"
-                  onChange={(e) => setDateAvailable(e.target.value)}
-                  value={dateAvailable}
-                />
-              </FormGroup>
-            </Box>
+              <Box sx={{ marginTop: '1rem' }}>
+                <FormControl>
+                  <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'left', alignItems: 'center' }}>
+                    <FormLabel>Property Type</FormLabel>
+                    <Typography sx={{ marginLeft: '0.3rem', color: '#E50808' }}>*</Typography>
+                  </Box>
+                  <RadioGroup row
+                    name="unitType"
+                    id="listing-unitType"
+                    // required={true}
+                    onChange={(e) => setUnitType(e.target.value)}
+                    value={unitType}
+                  >
+                    <FormControlLabel sx={{ marginRight: '9rem' }} value="Apartment" label="Apartment" control={<Radio />} />
+                    <FormControlLabel sx={{ marginRight: '9rem' }} value="Condo" label="Condo" control={<Radio />} />
+                    <FormControlLabel sx={{ marginRight: '9rem' }} value="House" label="House" control={<Radio />} />
+                    <FormControlLabel value="Single Room" label="Single Room" control={<Radio />} />
+                  </RadioGroup>
+                </FormControl>
+              </Box>
 
-            <Box sx={{ marginTop: '1rem' }}>
-              <FormControl>
-                <FormLabel>Amenities</FormLabel>
-                <FormGroup row
-                >
-                  <Box sx={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center' }}>
-                    <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'left', marginRight: '12rem' }}>
-                      <FormControlLabel
-                        name="furnished"
-                        id="listing-furnished"
-                        value="furnished"
-                        label="Furnished"
-                        control={
-                          <Checkbox
+              <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '1rem' }}>
+                <FormGroup sx={{ flexGrow: '2' }}>
+                  <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'left', alignItems: 'center' }}>
+                    <FormLabel>Beds</FormLabel>
+                    <Typography sx={{ marginLeft: '0.3rem', color: '#E50808' }}>*</Typography>
+                  </Box>
+                  <Select
+                    name="size"
+                    variant="outlined"
+                    size="small"
+                    id="listing-size"
+                    required={true}
+                    onChange={(e) => setSize(e.target.value)}
+                    value={size}
+                    error={bedsError}
+                  >
+                    <MenuItem key={"Studio"} value="Studio">Studio</MenuItem>
+                    <MenuItem key={"One Bed"} value="One Bed">One Bed</MenuItem>
+                    <MenuItem key={"Two Bed"} value="Two Bed">Two Bed</MenuItem>
+                    <MenuItem key={"Three Bed"} value="Three Bed">Three Bed</MenuItem>
+                    <MenuItem key={"Four Bed"} value="Four Bed">Four Bed</MenuItem>
+                    <MenuItem key={"Five Bed"} value="Five Bed">Five Bed</MenuItem>
+                    <MenuItem key={"Six Bed"} value="Six Bed">Six Bed</MenuItem>
+                  </Select>
+                </FormGroup>
+
+                <FormGroup sx={{ flexGrow: '1', marginX: '1.5rem' }}>
+                  <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'left', alignItems: 'center' }}>
+                    <FormLabel>Baths</FormLabel>
+                    <Typography sx={{ marginLeft: '0.3rem', color: '#E50808' }}>*</Typography>
+                  </Box>
+                  <TextField
+                    id="listing-numBath"
+                    variant="outlined"
+                    size="small"
+                    className="form-field"
+                    type="number"
+                    required={true}
+                    name="numBath"
+                    onChange={(e) => setNumBath(e.target.value)}
+                    value={numBath}
+                    error={bathError} />
+                </FormGroup>
+
+                <FormGroup sx={{ flexGrow: '1' }}>
+                  <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'left', alignItems: 'center' }}>
+                    <FormLabel>Monthly Rent</FormLabel>
+                    <Typography sx={{ marginLeft: '0.3rem', color: '#E50808' }}>*</Typography>
+                  </Box>
+                  <TextField
+                    id="listing-price"
+                    variant="outlined"
+                    size="small"
+                    className="form-field"
+                    type="number"
+                    required={true}
+                    name="price"
+                    onChange={(e) => setPrice(e.target.value)}
+                    value={price}
+                    error={rentError} />
+                </FormGroup>
+              </Box>
+
+              <Box sx={{ marginTop: '1rem' }}>
+                <FormGroup>
+                  <FormLabel>Earliest Move in Date</FormLabel>
+                  <TextField
+                    sx={{ maxWidth: '33%' }}
+                    id="listing-dateAvailable"
+                    variant="outlined"
+                    size="small"
+                    className="form-field"
+                    type="date"
+                    name="dateAvailable"
+                    onChange={(e) => setDateAvailable(e.target.value)}
+                    value={dateAvailable} />
+                </FormGroup>
+              </Box>
+
+              <Box sx={{ marginTop: '1rem' }}>
+                <FormControl>
+                  <FormLabel>Amenities</FormLabel>
+                  <FormGroup row
+                  >
+                    <Box sx={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center' }}>
+                      <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'left', marginRight: '12rem' }}>
+                        <FormControlLabel
+                          name="furnished"
+                          id="listing-furnished"
+                          value="furnished"
+                          label="Furnished"
+                          control={<Checkbox
                             checked={furnishedIsTrue}
                             onChange={(e) => {
                               setFurnishedIsTrue(e.target.checked);
-                              setFurnished(!furnishedIsTrue)
-                            }}
-                          />}
-                      />
-                    </Box>
+                              setFurnished(!furnishedIsTrue);
+                            }} />} />
+                      </Box>
 
-                    <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'left', marginRight: '12rem' }}>
-                      <FormControlLabel
-                        name="pets"
-                        id="listing-pets"
-                        value={pets}
-                        label="Pet-friendly"
-                        control={
-                          <Checkbox
+                      <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'left', marginRight: '12rem' }}>
+                        <FormControlLabel
+                          name="pets"
+                          id="listing-pets"
+                          value={pets}
+                          label="Pet-friendly"
+                          control={<Checkbox
                             checked={petsIsTrue}
                             onChange={(e) => {
                               setPetsIsTrue(e.target.checked);
-                              setPets(!petsIsTrue)
-                            }}
-                          />}
-                      />
-                    </Box>
+                              setPets(!petsIsTrue);
+                            }} />} />
+                      </Box>
 
-                    <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'left' }}>
-                      <FormControlLabel
-                        name="utilities"
-                        id="listing-utilities"
-                        value="utilities"
-                        label="Utilities included in rent"
-                        control={
-                          <Checkbox
+                      <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'left' }}>
+                        <FormControlLabel
+                          name="utilities"
+                          id="listing-utilities"
+                          value="utilities"
+                          label="Utilities included in rent"
+                          control={<Checkbox
                             checked={utilitiesIsTrue}
                             onChange={(e) => {
                               setUtilitiesIsTrue(e.target.checked);
-                              setUtilities(!utilitiesIsTrue)
-                            }}
-                          />}
-                      />
+                              setUtilities(!utilitiesIsTrue);
+                            }} />} />
+                      </Box>
                     </Box>
-                  </Box>
+                  </FormGroup>
+                </FormControl>
+              </Box>
+
+              <Box sx={{ marginTop: '1rem' }}>
+                <FormGroup>
+                  <FormLabel>Description</FormLabel>
+                  <TextField fullWidth
+                    id="listing-description"
+                    variant="outlined"
+                    size="small"
+                    className="form-field"
+                    type="text"
+                    name="description"
+                    onChange={(e) => setDescription(e.target.value)}
+                    value={description} />
                 </FormGroup>
-              </FormControl>
-            </Box >
 
-            <Box sx={{ marginTop: '1rem' }}>
-              <FormGroup>
-                <FormLabel>Description</FormLabel>
-                <TextField fullWidth
-                  id="listing-description"
+
+                {/* <FormGroup>
+      <FormLabel sx={{ marginTop: '1rem' }}>Upload Images</FormLabel>
+      <Button disableElevation variant='outlined' component='label' sx={{ color: '#5D737E', marginBottom: '1rem' }}>
+        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '8rem' }}>
+          <PhotoCamera sx={{ fontSize: '3rem', margin: 'auto' }} />
+          <input
+            hidden
+            id="listing-pictures"
+            className="form-field"
+            type="list"
+            multiple={true}
+            name="pictures"
+            onChange={(e) => setPictures(['https://t4.ftcdn.net/jpg/02/65/15/77/360_F_265157782_7wJFjBLD47WtQljpG9ivndc5AEVTwypu.jpg',
+              'https://t4.ftcdn.net/jpg/02/65/15/77/360_F_265157782_7wJFjBLD47WtQljpG9ivndc5AEVTwypu.jpg',
+              'https://t4.ftcdn.net/jpg/02/65/15/77/360_F_265157782_7wJFjBLD47WtQljpG9ivndc5AEVTwypu.jpg'])}
+            value={pictures}
+          />
+        </Box>
+      </Button>
+    </FormGroup> */}
+
+                <Grid
+                  padding="0px 0px 0px 10px"
+                  display="flex"
+                  flexDirection="row"
+                  alignItems="flex-start">
+                  <Grid container xs={18} alignItems="center">
+                    <Grid item xs={9}>
+                      <FormGroup>
+                        <Card style={{ backgroundColor: "#FFFFFF" }}
+                          sx={{
+                            ':hover': { boxShadow: 20, cursor: 'pointer' },
+                            width: "300px",
+                            height: "310px",
+                            borderRadius: "10px",
+                            boxShadow: "0px 2px 4px rgba(0,0,0,0.25)",
+                            flex: "none",
+                            order: 1,
+                            flexGrow: 0
+                          }}
+                          elevation={10}
+
+                        > {/* Displays a picture of the listing at the top of the card */}
+                          <CardMedia
+                            //{imageSrc || ""}
+                            component="img"
+                            height="300px"
+                            width="300px"
+                            image={imageSrc[0]}
+                          />
+                        </Card>
+                      </FormGroup>
+                    </Grid>
+
+
+                    <Grid item xs={9}>
+                      <FormGroup>
+                        <Card style={{ backgroundColor: "#FFFFFF" }}
+                          sx={{
+                            ':hover': { boxShadow: 20, cursor: 'pointer' },
+                            width: "300px",
+                            height: "310px",
+                            borderRadius: "10px",
+                            boxShadow: "0px 2px 4px rgba(0,0,0,0.25)",
+                            flex: "none",
+                            order: 1,
+                            flexGrow: 0
+                          }}
+                          elevation={10}
+
+                        > {/* Displays a picture of the listing at the top of the card */}
+                          <CardMedia
+                            //{imageSrc || ""}
+                            component="img"
+                            height="300px"
+                            width="300px"
+                            image={imageSrc[1]}
+                          />
+                        </Card>
+                      </FormGroup>
+                    </Grid>
+
+
+                    <Grid item xs={9}>
+                      <FormGroup>
+                        <Card style={{ backgroundColor: "#FFFFFF" }}
+                          sx={{
+                            ':hover': { boxShadow: 20, cursor: 'pointer' },
+                            width: "300px",
+                            height: "310px",
+                            borderRadius: "10px",
+                            boxShadow: "0px 2px 4px rgba(0,0,0,0.25)",
+                            flex: "none",
+                            order: 1,
+                            flexGrow: 0
+                          }}
+                          elevation={10}
+
+                        > {/* Displays a picture of the listing at the top of the card */}
+                          <CardMedia
+                            //{imageSrc || ""}
+                            component="img"
+                            height="300px"
+                            width="300px"
+                            image={imageSrc[2]}
+                          />
+                        </Card>
+                      </FormGroup>
+                    </Grid>
+
+
+                  </Grid>
+                </Grid>
+
+                {/* ORIGINAL CODE FOR UPLOAD IMAGES */}
+                <FormGroup>
+                  <FormLabel sx={{ marginTop: '1rem' }}>Upload Images</FormLabel>
+                  <Button disableElevation variant='outlined' component='label' sx={{ color: '#5D737E', marginBottom: '1rem' }}>
+                    <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '8rem' }}>
+                      <PhotoCamera sx={{ fontSize: '3rem', margin: 'auto' }} />
+                      <input
+                        hidden
+                        id="listing-pictures"
+                        className="form-field"
+                        accept="image/*"
+                        type="file"
+                        multiple={true}
+                        name="pictures"
+                        onChange={(e) => {
+                          if (e.target.files) {
+                            console.log("The file");
+                            console.log(Array.from(e.target.files));
+                            //setPic1(Array.from(e.target.files));
+                            pic1.push(Array.from(e.target.files)[0]);
+                            console.log(pic1);
+                          }
+                        }} />
+                    </Box>
+                  </Button>
+                  <Button disableElevation variant='outlined' component='label' sx={{ color: '#5D737E', marginBottom: '1rem' }}>
+                    <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '8rem' }}>
+                      <PhotoCamera sx={{ fontSize: '3rem', margin: 'auto' }} />
+                      <input
+                        hidden
+                        id="listing-pictures"
+                        className="form-field"
+                        accept="image/*"
+                        type="file"
+                        multiple={true}
+                        name="pictures"
+                        onChange={(e) => {
+                          if (e.target.files) {
+                            console.log("The file");
+                            console.log(Array.from(e.target.files));
+                            //setFiles(Array.from(e.target.files));
+                            //setPic2(Array.from(e.target.files));
+                            pic2.push(Array.from(e.target.files)[0]);
+                            console.log(pic1);
+                            console.log(pic2);
+                            console.log(!pic1);
+                          }
+                        }} />
+                    </Box>
+                  </Button>
+
+
+                  <Button disableElevation variant='outlined' component='label' sx={{ color: '#5D737E', marginBottom: '1rem' }}>
+                    <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '8rem' }}>
+                      <PhotoCamera sx={{ fontSize: '3rem', margin: 'auto' }} />
+                      <input
+                        hidden
+                        id="listing-pictures"
+                        className="form-field"
+                        accept="image/*"
+                        type="file"
+                        multiple={true}
+                        name="pictures"
+                        onChange={(e) => {
+                          if (e.target.files) {
+                            // setFiles(Array.from(e.target.files));
+                            // console.log(files)
+                            console.log("The file");
+                            console.log(Array.from(e.target.files));
+                            //setPic3(Array.from(e.target.files));
+                            pic3.push(Array.from(e.target.files)[0]);
+                            console.log("pic333333");
+                            console.log(pic3);
+                          }
+                        }} />
+                    </Box>
+                  </Button>
+                </FormGroup>
+              </Box>
+
+              <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', marginBottom: '2rem' }}>
+                <Button disableElevation
                   variant="outlined"
-                  size="small"
-                  className="form-field"
-                  type="text"
-                  name="description"
-                  onChange={(e) => setDescription(e.target.value)}
-                  value={description}
-                />
-              </FormGroup>
-
-
-              {/* <FormGroup>
-                <FormLabel sx={{ marginTop: '1rem' }}>Upload Images</FormLabel>
-                <Button disableElevation variant='outlined' component='label' sx={{ color: '#5D737E', marginBottom: '1rem' }}>
-                  <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '8rem' }}>
-                    <PhotoCamera sx={{ fontSize: '3rem', margin: 'auto' }} />
-                    <input
-                      hidden
-                      id="listing-pictures"
-                      className="form-field"
-                      type="list"
-                      multiple={true}
-                      name="pictures"
-                      onChange={(e) => setPictures(['https://t4.ftcdn.net/jpg/02/65/15/77/360_F_265157782_7wJFjBLD47WtQljpG9ivndc5AEVTwypu.jpg',
-                        'https://t4.ftcdn.net/jpg/02/65/15/77/360_F_265157782_7wJFjBLD47WtQljpG9ivndc5AEVTwypu.jpg',
-                        'https://t4.ftcdn.net/jpg/02/65/15/77/360_F_265157782_7wJFjBLD47WtQljpG9ivndc5AEVTwypu.jpg'])}
-                      value={pictures}
-                    />
-                  </Box>
+                  size="large"
+                  sx={{ padding: "0 3.5rem", fontSize: '1.2rem', fontWeight: 'bold', textTransform: "unset", borderRadius: '12px', color: '#5D737E', borderColor: '#5D737E', bgcolor: 'white', ':hover': { bgcolor: "#5D737EB5" } }}
+                  onClick={() => navigate("/")}
+                >
+                  Cancel
                 </Button>
-              </FormGroup> */}
-
-              {/* ORIGINAL CODE FOR UPLOAD IMAGES */}
-              <FormGroup>
-                <FormLabel sx={{ marginTop: '1rem' }}>Upload Images</FormLabel>
-                <Button disableElevation variant='outlined' component='label' sx={{ color: '#5D737E', marginBottom: '1rem' }}>
-                  <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '8rem' }}>
-                    <PhotoCamera sx={{ fontSize: '3rem', margin: 'auto' }} />
-                    <input
-                      hidden
-                      id="listing-pictures"
-                      className="form-field"
-                      accept="image/*"
-                      type="file"
-                      multiple={true}
-                      name="pictures"
-                      onChange={(e) => {
-                        if (e.target.files) {
-                          console.log("The file")
-                          console.log(Array.from(e.target.files))
-                          //setPic1(Array.from(e.target.files));
-                          pic1.push(Array.from(e.target.files)[0])
-                          console.log(pic1)
-                        }
-                      }}
-                    />
-                  </Box>
+                <Button disableElevation
+                  type="submit"
+                  variant="contained"
+                  size="large"
+                  sx={{ marginLeft: "10px", padding: "0 2rem", fontSize: '1.2rem', fontWeight: 'bold', textTransform: "unset", borderRadius: '12px', color: 'white', bgcolor: '#ED5F1E', ':hover': { bgcolor: "#ED5F1EB5" } }}
+                >
+                  {buttonLabel}
                 </Button>
-                <Button disableElevation variant='outlined' component='label' sx={{ color: '#5D737E', marginBottom: '1rem' }}>
-                  <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '8rem' }}>
-                    <PhotoCamera sx={{ fontSize: '3rem', margin: 'auto' }} />
-                    <input
-                      hidden
-                      id="listing-pictures"
-                      className="form-field"
-                      accept="image/*"
-                      type="file"
-                      multiple={true}
-                      name="pictures"
-                      onChange={(e) => {
-                        if (e.target.files) {
-                          console.log("The file")
-                          console.log(Array.from(e.target.files))
-                          //setFiles(Array.from(e.target.files));
-                          //setPic2(Array.from(e.target.files));
-                          pic2.push(Array.from(e.target.files)[0])
-                          console.log(pic1)
-                          console.log(pic2)
-                          console.log(!pic1)
-                        }
-                      }}
-                    />
-                  </Box>
-                </Button>
-                <Button disableElevation variant='outlined' component='label' sx={{ color: '#5D737E', marginBottom: '1rem' }}>
-                  <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '8rem' }}>
-                    <PhotoCamera sx={{ fontSize: '3rem', margin: 'auto' }} />
-                    <input
-                      hidden
-                      id="listing-pictures"
-                      className="form-field"
-                      accept="image/*"
-                      type="file"
-                      multiple={true}
-                      name="pictures"
-                      onChange={(e) => {
-                        if (e.target.files) {
-                          // setFiles(Array.from(e.target.files));
-                          // console.log(files)
-                          console.log("The file")
-                          console.log(Array.from(e.target.files))
-                          //setPic3(Array.from(e.target.files));
-                          pic3.push(Array.from(e.target.files)[0])
-                          console.log("pic333333")
-                          console.log(pic3)
-                        }
-                      }}
-                    />
-                  </Box>
-                </Button>
-              </FormGroup>
-            </Box>
-
-            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', marginBottom: '2rem' }}>
-              <Button disableElevation
-                variant="outlined"
-                size="large"
-                sx={{ padding: "0 3.5rem", fontSize: '1.2rem', fontWeight: 'bold', textTransform: "unset", borderRadius: '12px', color: '#5D737E', borderColor: '#5D737E', bgcolor: 'white', ':hover': { bgcolor: "#5D737EB5" } }}
-                onClick={() => navigate("/")}
-              >
-                Cancel
-              </Button>
-              <Button disableElevation
-                type="submit"
-                variant="contained"
-                size="large"
-                sx={{ marginLeft: "10px", padding: "0 2rem", fontSize: '1.2rem', fontWeight: 'bold', textTransform: "unset", borderRadius: '12px', color: 'white', bgcolor: '#ED5F1E', ':hover': { bgcolor: "#ED5F1EB5" } }}
-              >
-                {buttonLabel}
-              </Button>
-            </Box>
-          </form >
+              </Box>
+            </form>
+          </Grid>
         </Grid>
-      </Grid>
-    </Container >
+      </Container></>
   )
 }
 
