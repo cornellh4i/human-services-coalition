@@ -57,6 +57,10 @@ const ListingForm = () => {
     setFiles(event.target.files[0])
   }
 
+  const [pic1, setPic1] = useState<File[]>([]);
+
+
+
   // Navigation functionality
   const navigate = useNavigate();
 
@@ -197,55 +201,6 @@ const ListingForm = () => {
 
     // If the user is uploading an image as well, then we need to send a second request to update the picture
 
-    if (files.length > 0) {
-      var arr = prevPics;
-
-      //if this is a new listing with pictures send dummy data to backend
-      //to prevent errors
-      if (arr.length == 0) {
-        formData.append('arr[]', "");
-      } else {
-        for (var i = 0; i < arr.length; i++) {
-          formData.append('arr[]', arr[i]);
-        }
-      }
-
-      files.forEach((file) => {
-        formData.append('pictures', file);
-        formData.append('dirname', streetAddress)
-        formData.append('filename', `house${String(prevPics.length)}`)
-      });
-
-      const response = await fetch('api/listingPicture/' + id, {
-        method: 'PATCH',
-        body: formData
-      });
-    }
-
-    // else {
-    //   console.log("Entered the nopicZONE")
-    //   const placeholderFile = new File(
-    //     ['placeholder content'],
-    //     'placeholder-file-12345',
-    //     { type: 'image/jpeg' },
-    //   );
-    //   console.log("This is the file")
-    //   console.log(placeholderFile)
-
-    //   console.log("tRYING TO APPEDN PIC ")
-    //   formData.append('arr[]', "");
-    //   formData.append('pictures', placeholderFile);
-    //   formData.append('dirname', streetAddress)
-    //   formData.append('filename', `house${String(prevPics.length)}`)
-
-    //   //formData.append('name', streetAddress + String(prevPics.length))
-
-    //   console.log("MAKES THE API CALL ")
-    //   const response = await fetch('api/listingPicture/' + id, {
-    //     method: 'PATCH',
-    //     body: formData
-    //   });
-    // }
 
     if (!response1.ok) {
       setError(json.error)
@@ -742,6 +697,46 @@ const ListingForm = () => {
                       onChange={(e) => {
                         if (e.target.files) {
                           setFiles(Array.from(e.target.files));
+                        }
+                      }}
+                    />
+                  </Box>
+                </Button>
+                <Button disableElevation variant='outlined' component='label' sx={{ color: '#5D737E', marginBottom: '1rem' }}>
+                  <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '8rem' }}>
+                    <PhotoCamera sx={{ fontSize: '3rem', margin: 'auto' }} />
+                    <input
+                      hidden
+                      id="listing-pictures"
+                      className="form-field"
+                      accept="image/*"
+                      type="file"
+                      multiple={true}
+                      name="pictures"
+                      onChange={(e) => {
+                        if (e.target.files) {
+                          //setFiles(Array.from(e.target.files));
+                          files.push(Array.from(e.target.files)[1]);
+                        }
+                      }}
+                    />
+                  </Box>
+                </Button>
+                <Button disableElevation variant='outlined' component='label' sx={{ color: '#5D737E', marginBottom: '1rem' }}>
+                  <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '8rem' }}>
+                    <PhotoCamera sx={{ fontSize: '3rem', margin: 'auto' }} />
+                    <input
+                      hidden
+                      id="listing-pictures"
+                      className="form-field"
+                      accept="image/*"
+                      type="file"
+                      multiple={true}
+                      name="pictures"
+                      onChange={(e) => {
+                        if (e.target.files) {
+                          //setFiles(Array.from(e.target.files));
+                          files.push(Array.from(e.target.files)[2]);
                         }
                       }}
                     />

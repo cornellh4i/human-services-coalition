@@ -55,6 +55,8 @@ export default function ListingDetails({ Listing, handleDelete }: { Listing: any
     const fetchImage = async () => {
       try {
         // // Fetch the image from the backend
+        console.log(Listing.streetAddress)
+        console.log(Listing.pictures[0])
         const link = `${Listing.streetAddress}/${Listing.pictures[0]}`
         console.log("THie ling " + link)
         const response = await fetch('api/listingPicture/' + link);
@@ -74,6 +76,7 @@ export default function ListingDetails({ Listing, handleDelete }: { Listing: any
 
         // Create an object URL from the Blob
         const objectURL = URL.createObjectURL(blob);
+        console.log(objectURL)
 
         // Set the object URL as the imageSrc state
         setImageSrc(objectURL);

@@ -269,10 +269,13 @@ const updateListingPicture = async (req, res) => {
     files.forEach(async (file) => {
       console.log(req.body.name)
       const dirname = String(req.body.dirname)
+      console.log("dir")
+      console.log(dirname)
       const filename1 = String(req.body.filename)
-      const filename2 = `${dirname}/${filename1}`;
+      console.log("THIS IS FILENAME")
+      console.log(filename1)
 
-      temparr.push(filename2)
+      temparr.push(filename1)
       console.log("What is temparr?")
       console.log(temparr)
       const result = await s3utils.uploadFile(dirname, filename1, file, true)
@@ -307,6 +310,7 @@ const updateListingPicture = async (req, res) => {
   }
 }
 const getListingPicture = async (req, res) => {
+  console.log("INSIDE OF GETTING PICTURES")
   console.log("INSIDE OF GETTING PICTURES")
   const { dir } = req.params
   const { file } = req.params
