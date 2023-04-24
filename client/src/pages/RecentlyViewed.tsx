@@ -7,7 +7,7 @@ import { Button, IconButton, Typography } from '@mui/material'
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import PrintIcon from '@mui/icons-material/Print';
 
-const ProofSearch = () => {
+const RecentlyViewed = () => {
 
   //intialises the state for the list of houses that correspond to the specified user
   const [Listings, setListings] = useState<any[]>([])
@@ -36,7 +36,7 @@ const ProofSearch = () => {
 
     console.log(json)
 
-    const newListings = Listings.filter(Listing => json.appliedListings.includes(Listing._id))
+    const newListings = Listings.filter(Listing => json.recentlyViewed.includes(Listing._id))
     setListings(newListings)
 
     console.log("HI")
@@ -65,18 +65,8 @@ const ProofSearch = () => {
             <Grid item xs={6} display="flex" flexDirection="column">
               {/* User's proof of history title */}
               <Grid item display="flex" justifyContent="left">
-                <Typography variant="h5" sx={{ fontWeight: 700 }}>{location.state.fName} {location.state.lName}'s Proof of Search</Typography>
+                <Typography variant="h5" sx={{ fontWeight: 700 }}>{location.state.fName} {location.state.lName}'s Recently Viewed Listings</Typography>
               </Grid>
-
-              {/* Subheading for print page instructions*/}
-              <Grid item display="flex" justifyContent="left">
-                <Typography variant="h6" sx={{ fontStyle: "italic", color: "grey" }}>Print this page to provide proof of search</Typography>
-              </Grid>
-            </Grid>
-            <Grid item xs={6} display="flex" justifyContent="right">
-              <IconButton>
-                <PrintIcon fontSize='large'></PrintIcon>
-              </IconButton>
             </Grid>
           </Grid>
 
@@ -96,4 +86,4 @@ const ProofSearch = () => {
   )
 }
 
-export default ProofSearch
+export default RecentlyViewed

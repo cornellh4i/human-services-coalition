@@ -42,6 +42,7 @@ const createUser = async (req, res) => {
     race,
     contactPref,
     recentlyViewed,
+    appliedListings,
     additionalDays
   } = req.body
 
@@ -62,6 +63,7 @@ const createUser = async (req, res) => {
       race,
       contactPref,
       recentlyViewed,
+      appliedListings,
       additionalDays
     })
     res.status(200).json(user)

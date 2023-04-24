@@ -11,6 +11,7 @@ import UserForm from './forms/UserForm'
 
 import ProofSearch from './pages/ProofSearch';
 import FmrForm from './forms/FmrForm';
+import RecentlyViewed from './pages/RecentlyViewed';
 
 
 function App() {
@@ -45,6 +46,10 @@ function App() {
               <Route
                 path="/proof_search"
                 element={<ProofSearch />}
+              />
+              <Route
+                path="/recently_viewed"
+                element={<RecentlyViewed />}
               />
             </Routes>
           </div>
