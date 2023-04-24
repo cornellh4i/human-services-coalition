@@ -830,6 +830,47 @@ const ListingForm = () => {
                 {/* ORIGINAL CODE FOR UPLOAD IMAGES */}
                 <FormGroup>
                   <FormLabel sx={{ marginTop: '1rem' }}>Upload Images</FormLabel>
+
+                  <Button disableElevation variant='outlined' component='label' sx={{ color: '#5D737E', marginBottom: '1rem' }}>
+                    <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '8rem' }}>
+                      <PhotoCamera sx={{ fontSize: '3rem', margin: 'auto' }} />
+                      <input
+                        hidden
+                        id="listing-pictures"
+                        className="form-field"
+                        accept="image/*"
+                        type="file"
+                        multiple={true}
+                        name="pictures"
+                        onChange={(e) => {
+                          if (e.target.files) {
+                            //setPic3(Array.from(e.target.files));
+                            pic1.push(Array.from(e.target.files)[0]);
+                          }
+                        }} />
+                    </Box>
+                  </Button>
+
+                  <Button disableElevation variant='outlined' component='label' sx={{ color: '#5D737E', marginBottom: '1rem' }}>
+                    <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '8rem' }}>
+                      <PhotoCamera sx={{ fontSize: '3rem', margin: 'auto' }} />
+                      <input
+                        hidden
+                        id="listing-pictures"
+                        className="form-field"
+                        accept="image/*"
+                        type="file"
+                        multiple={true}
+                        name="pictures"
+                        onChange={(e) => {
+                          if (e.target.files) {
+                            //setPic3(Array.from(e.target.files));
+                            pic2.push(Array.from(e.target.files)[0]);
+                          }
+                        }} />
+                    </Box>
+                  </Button>
+
                   <Button disableElevation variant='outlined' component='label' sx={{ color: '#5D737E', marginBottom: '1rem' }}>
                     <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '8rem' }}>
                       <PhotoCamera sx={{ fontSize: '3rem', margin: 'auto' }} />
