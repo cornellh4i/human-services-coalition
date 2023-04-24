@@ -255,6 +255,9 @@ const ListingForm = () => {
       dateAvailable
     }
 
+    const action = (location.state === null) ? "create" : "edit"
+
+
     //if location.state is null it creates a POST request to create a listing
     //if location.state is not null it creates a PATCH request to edit the current listing
     const response1 =
@@ -317,10 +320,15 @@ const ListingForm = () => {
       setDateAvailable('')
       setError(null)
 
-      navigate("/")
+      if (action === "create") {
+        navigate("/?action=create&type=listing")
+      } else if (action === "edit") {
+        navigate("/?action=edit&type=listing")
+      }
     }
-
   }
+
+
 
   //if all the images have been loaded then render the screen
   if (!imagesLoaded && location.state != null) {
@@ -344,7 +352,7 @@ const ListingForm = () => {
           </Grid>
 
           <Grid item xs={8}>
-            <form action="/upload" encType="multipart/form-data" noValidate className="listing-form" onSubmit={handleSubmit}>
+            <form noValidate className="listing-form" onSubmit={handleSubmit}>
               <Typography variant='h3' sx={{ fontSize: '1.3rem', fontWeight: 'bold', mt: '3%' }}>
                 Landlord Contact Information
               </Typography>
@@ -367,9 +375,6 @@ const ListingForm = () => {
                     value={landlord}
                     error={nameError} />
                 </FormGroup>
-
-
-
 
                 <FormGroup sx={{ flexGrow: '1', marginX: '1.5rem' }}>
                   <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'left', alignItems: 'center' }}>
@@ -727,26 +732,6 @@ const ListingForm = () => {
                 </FormGroup>
 
 
-                {/* <FormGroup>
-      <FormLabel sx={{ marginTop: '1rem' }}>Upload Images</FormLabel>
-      <Button disableElevation variant='outlined' component='label' sx={{ color: '#5D737E', marginBottom: '1rem' }}>
-        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '8rem' }}>
-          <PhotoCamera sx={{ fontSize: '3rem', margin: 'auto' }} />
-          <input
-            hidden
-            id="listing-pictures"
-            className="form-field"
-            type="list"
-            multiple={true}
-            name="pictures"
-            onChange={(e) => setPictures(['https://t4.ftcdn.net/jpg/02/65/15/77/360_F_265157782_7wJFjBLD47WtQljpG9ivndc5AEVTwypu.jpg',
-              'https://t4.ftcdn.net/jpg/02/65/15/77/360_F_265157782_7wJFjBLD47WtQljpG9ivndc5AEVTwypu.jpg',
-              'https://t4.ftcdn.net/jpg/02/65/15/77/360_F_265157782_7wJFjBLD47WtQljpG9ivndc5AEVTwypu.jpg'])}
-            value={pictures}
-          />
-        </Box>
-      </Button>
-    </FormGroup> */}
 
                 <Grid
                   padding="10px 0px 0px 10px"
@@ -840,52 +825,11 @@ const ListingForm = () => {
                   </Grid>
                 </Grid>
 
+
+
                 {/* ORIGINAL CODE FOR UPLOAD IMAGES */}
                 <FormGroup>
                   <FormLabel sx={{ marginTop: '1rem' }}>Upload Images</FormLabel>
-                  <Button disableElevation variant='outlined' component='label' sx={{ color: '#5D737E', marginBottom: '1rem' }}>
-                    <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '8rem' }}>
-                      <PhotoCamera sx={{ fontSize: '3rem', margin: 'auto' }} />
-                      <input
-                        hidden
-                        id="listing-pictures"
-                        className="form-field"
-                        accept="image/*"
-                        type="file"
-                        multiple={true}
-                        name="pictures"
-                        onChange={(e) => {
-                          if (e.target.files) {
-                            //setPic1(Array.from(e.target.files));
-                            pic1.push(Array.from(e.target.files)[0]);
-                          }
-                        }} />
-                    </Box>
-                  </Button>
-                  <Button disableElevation variant='outlined' component='label' sx={{ color: '#5D737E', marginBottom: '1rem' }}>
-                    <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '8rem' }}>
-                      <PhotoCamera sx={{ fontSize: '3rem', margin: 'auto' }} />
-                      <input
-                        hidden
-                        id="listing-pictures"
-                        className="form-field"
-                        accept="image/*"
-                        type="file"
-                        multiple={true}
-                        name="pictures"
-                        onChange={(e) => {
-                          if (e.target.files) {
-                            console.log("The file");
-                            console.log(Array.from(e.target.files));
-                            //setFiles(Array.from(e.target.files));
-                            //setPic2(Array.from(e.target.files));
-                            pic2.push(Array.from(e.target.files)[0]);
-                          }
-                        }} />
-                    </Box>
-                  </Button>
-
-
                   <Button disableElevation variant='outlined' component='label' sx={{ color: '#5D737E', marginBottom: '1rem' }}>
                     <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '8rem' }}>
                       <PhotoCamera sx={{ fontSize: '3rem', margin: 'auto' }} />
@@ -929,7 +873,7 @@ const ListingForm = () => {
             </form>
           </Grid>
         </Grid>
-      </Container></>
+      </Container ></>
   )
 }
 

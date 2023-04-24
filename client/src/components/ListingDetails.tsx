@@ -8,6 +8,7 @@ import { createTheme, Grid } from '@mui/material';
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from 'react';
 import DeleteConfirmation from './DeleteConfirmation';
+import ConfirmPopUp from './ConfirmPopUp';
 
 const listingTheme = createTheme({
   typography: {
@@ -200,6 +201,7 @@ export default function ListingDetails({ Listing, handleDelete }: { Listing: any
         </Grid>
       </Card>
       <DeleteConfirmation id={Listing._id} openPop={openPop} setOpenPop={setOpenPop} handleDelete={handleDelete} type="listing" />
+
     </>
 
   )

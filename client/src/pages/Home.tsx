@@ -5,6 +5,8 @@ import ListingDetails from '../components/ListingDetails'
 import FilterSideBar from '../components/FilterSideBar'
 import SelectedFilters from '../components/SelectedFilters'
 import '../css/Home.css'
+import ConfirmPopUp from '../components/ConfirmPopUp'
+import { useLocation, useNavigate } from 'react-router-dom'
 
 function Home() {
   let [Listings, setListings] = useState<any[]>([])
@@ -23,6 +25,18 @@ function Home() {
   let [minPrice, setMinPrice] = useState('')
   let [maxPrice, setMaxPrice] = useState('')
 
+  const [confirmDeleteListingPop, setConfirmDeleteListingPop] = useState(false)
+  const [confirmCreateListingPop, setConfirmCreateListingPop] = useState(false)
+  const [confirmEditListingPop, setConfirmEditListingPop] = useState(false)
+  const [confirmSetFMRPop, setConfirmSetFMRPop] = useState(false)
+
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const action = searchParams.get("action");
+  const type = searchParams.get("type");
+
+  const navigate = useNavigate();
+
   useEffect(() => {
     const fetchListings = async () => {
       const response = await fetch('/api/listing')
@@ -33,6 +47,18 @@ function Home() {
       }
     }
     fetchListings()
+
+    if (action === "create" && type === "listing") {
+      setConfirmCreateListingPop(true)
+      navigate("/")
+    } else if (action === "edit" && type === "listing") {
+      setConfirmEditListingPop(true)
+      navigate("/")
+    } else if (action === "set" && type === "fmr") {
+      setConfirmSetFMRPop(true)
+      navigate("/")
+    }
+
   }, [])
 
   // The function that calls the delete routing function
@@ -43,10 +69,11 @@ function Home() {
     // After we delete we must update the local state
     const newListings = Listings.filter(Listing => Listing._id != id)
     setListings(newListings)
+    setConfirmDeleteListingPop(true)
   }
 
   return (
-    <div>
+    <><div>
       <div className='body-box'>
         <div className='side-box'>
           <FilterSideBar
@@ -87,7 +114,7 @@ function Home() {
                 disTransportation={disTransportation} setDisTransportation={setDisTransportation}
                 minPrice={minPrice} setMinPrice={setMinPrice}
                 maxPrice={maxPrice} setMaxPrice={setMaxPrice}>
-              </SelectedFilters >
+              </SelectedFilters>
             </div>
             <div className='listing-cards'>
               <Grid container spacing={2}>
@@ -102,6 +129,11 @@ function Home() {
         </div>
       </div>
     </div>
+      <ConfirmPopUp openConfirmPop={confirmDeleteListingPop} setConfirmPop={setConfirmDeleteListingPop} action="deleted" type="Listing" />
+      <ConfirmPopUp openConfirmPop={confirmCreateListingPop} setConfirmPop={setConfirmCreateListingPop} action="created" type="New Listing" />
+      <ConfirmPopUp openConfirmPop={confirmEditListingPop} setConfirmPop={setConfirmEditListingPop} action="updated" type="Listing" />
+      <ConfirmPopUp openConfirmPop={confirmSetFMRPop} setConfirmPop={setConfirmSetFMRPop} action="updated" type="FMR Values" />
+    </>
   );
 }
 

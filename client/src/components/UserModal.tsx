@@ -17,6 +17,7 @@ interface OpenModalProps {
   race: string
   contactPref: string
   date: Date
+  daysLeft: number
   openUserMod: boolean;
   setOpenUserMod: (trigger: boolean) => void;
 }
@@ -40,7 +41,7 @@ const style = {
   p: 4,
 };
 
-export default function UserModal({ fname, lname, mInitial, username, password, voucher, supervisor, birthDate, email, phone, prefName, gender, race, contactPref, date, openUserMod, setOpenUserMod }: OpenModalProps) {
+export default function UserModal({ fname, lname, mInitial, username, password, voucher, supervisor, birthDate, email, phone, prefName, gender, race, contactPref, date, daysLeft, openUserMod, setOpenUserMod }: OpenModalProps) {
 
   const handleClose = () => setOpenUserMod(false);
 
@@ -92,10 +93,15 @@ export default function UserModal({ fname, lname, mInitial, username, password, 
                     &nbsp;
                     <Typography>{gender ? gender : "N/A"}</Typography>
                   </Grid>
-                  <Grid item display="flex" justifyContent="left" xs={12}>
+                  <Grid item display="flex" justifyContent="left" xs={12} marginBottom='3%'>
                     <Typography sx={{ fontWeight: 600 }}>Race:</Typography>
                     &nbsp;
                     <Typography>{race ? race : "N/A"}</Typography>
+                  </Grid>
+                  <Grid item display="flex" justifyContent="left" xs={12}>
+                    <Typography sx={{ fontWeight: 600 }}>Remaining Days:</Typography>
+                    &nbsp;
+                    <Typography>{daysLeft ? daysLeft : 0}</Typography>
                   </Grid>
                 </Grid>
                 <Grid container display="flex" xs={6}>
