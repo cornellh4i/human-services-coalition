@@ -1,7 +1,14 @@
 import { Box, Button, Card, CardMedia, Grid } from "@mui/material"
 import AppsIcon from '@mui/icons-material/Apps';
+import { useState } from "react";
 
 export default function ImageContainer({ images, numImages }: { images: string[], numImages: number }) {
+
+  const [firstImageHeight, setFirstImageHeight] = useState<number | null>(null);
+
+  const handleFirstImageLoad = (event: React.SyntheticEvent<HTMLImageElement, Event>) => {
+    setFirstImageHeight(event.currentTarget.clientHeight);
+  };
 
   if (numImages === 1) {
     /* Displays a single picture if pic array length is 1*/
@@ -14,6 +21,8 @@ export default function ImageContainer({ images, numImages }: { images: string[]
               height="50%"
               width="100%"
               image={images[0]}
+              style={{ maxHeight: "500px" }}
+              onLoad={handleFirstImageLoad}
             />
           </Card>
         </Grid>
@@ -28,9 +37,11 @@ export default function ImageContainer({ images, numImages }: { images: string[]
           <Card>
             <CardMedia
               component="img"
-              height="100%"
+              height={firstImageHeight ? `${firstImageHeight}px` : 'none'}
               width="100%"
+              style={{ maxHeight: firstImageHeight ? `${firstImageHeight}px` : 'none' }}
               image={images[0]}
+              onLoad={handleFirstImageLoad}
             />
           </Card>
         </Grid>
@@ -38,8 +49,9 @@ export default function ImageContainer({ images, numImages }: { images: string[]
           <Card>
             <CardMedia
               component="img"
-              height="100%"
+              height={firstImageHeight ? `${firstImageHeight}px` : 'none'}
               width="100%"
+              style={{ maxHeight: firstImageHeight ? `${firstImageHeight}px` : 'none' }}
               image={images[1]}
             />
           </Card>
@@ -57,7 +69,9 @@ export default function ImageContainer({ images, numImages }: { images: string[]
               component="img"
               height="100%"
               width="100%"
+              style={{ maxHeight: "500px" }}
               image={images[0]}
+              onLoad={handleFirstImageLoad}
             />
           </Card>
         </Grid>
@@ -66,30 +80,22 @@ export default function ImageContainer({ images, numImages }: { images: string[]
             <Card>
               <CardMedia
                 component="img"
-                height="50%"
+                height={firstImageHeight ? `${firstImageHeight / (numImages - 1)}px` : 'none'}
                 width="100%"
+                style={{ maxHeight: firstImageHeight ? `${firstImageHeight / (numImages - 1)}px` : 'none' }}
                 image={images[1]}
               />
             </Card>
           </Grid>
           <Grid item xs={12} padding="5px">
             <Card>
-              <Box sx={{ position: 'relative' }}>
-                <CardMedia
-                  component="img"
-                  height="50%"
-                  width="100%"
-                  image={images[2]}
-                />
-                <Box sx={{ position: 'absolute', bottom: 10, right: 15, display: 'flex', justifyContent: 'flex-end' }}>
-                  <Button variant="outlined"
-                    sx={{ color: "#000000", bgcolor: "#FFFFFF", borderColor: "#000000", fontSize: "20px", textTransform: "none" }}
-                  >
-                    <AppsIcon sx={{ marginRight: "7px" }}></AppsIcon>
-                    Show All
-                  </Button>
-                </Box>
-              </Box>
+              <CardMedia
+                component="img"
+                height={firstImageHeight ? `${firstImageHeight / (numImages - 1)}px` : 'none'}
+                width="100%"
+                style={{ maxHeight: firstImageHeight ? `${firstImageHeight / (numImages - 1)}px` : 'none' }}
+                image={images[2]}
+              />
             </Card>
           </Grid>
         </Grid>

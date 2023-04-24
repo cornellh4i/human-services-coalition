@@ -3,6 +3,7 @@ import { Box, Button, Grid, Typography, Container, TextField, RadioGroup, FormCo
 import { PhotoCamera } from "@mui/icons-material";
 import { useLocation, useNavigate } from "react-router-dom";
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
+import { fontStyle } from "@mui/system";
 
 const ListingForm = () => {
   const [webScraped, setWebScraped] = useState(false)
@@ -732,162 +733,203 @@ const ListingForm = () => {
                 </FormGroup>
 
 
-
-                <Grid
-                  padding="10px 0px 0px 10px"
-                  display="flex"
-                  flexDirection="column"
-                  alignItems="flex-start">
-                  <Grid container xs={12} alignItems="center">
-
-                    <Grid item xs={4}>
-                      <FormGroup>
-                        <Card style={{ backgroundColor: "#FFFFFF" }}
-                          sx={{
-                            ':hover': { boxShadow: 20, cursor: 'pointer' },
-                            width: "300px",
-                            height: "310px",
-                            borderRadius: "10px",
-                            boxShadow: "0px 2px 4px rgba(0,0,0,0.25)",
-                            flex: "none",
-                            order: 1,
-                            flexGrow: 0
-                          }}
-                          elevation={10}
-                        > {/* Displays a picture of the listing at the top of the card */}
-                          <CardMedia
-                            //{imageSrc || ""}
-                            component="img"
-                            height="310px"
-                            width="300px"
-                            image={imageSrc[0]}
-                          />
-                        </Card>
-                      </FormGroup>
-                    </Grid>
-
-
-                    <Grid item xs={4}>
-                      <FormGroup>
-                        <Card style={{ backgroundColor: "#FFFFFF" }}
-                          sx={{
-                            ':hover': { boxShadow: 20, cursor: 'pointer' },
-                            width: "300px",
-                            height: "310px",
-                            borderRadius: "10px",
-                            boxShadow: "0px 2px 4px rgba(0,0,0,0.25)",
-                            flex: "none",
-                            order: 1,
-                            flexGrow: 0
-                          }}
-                          elevation={10}
-
-                        > {/* Displays a picture of the listing at the top of the card */}
-                          <CardMedia
-                            //{imageSrc || ""}
-                            component="img"
-                            height="310px"
-                            width="300px"
-                            image={imageSrc[1]}
-                          />
-                        </Card>
-                      </FormGroup>
-                    </Grid>
-
-
-                    <Grid item xs={4}>
-                      <FormGroup>
-                        <Card style={{ backgroundColor: "#FFFFFF" }}
-                          sx={{
-                            ':hover': { boxShadow: 20, cursor: 'pointer' },
-                            width: "300px",
-                            height: "310px",
-                            borderRadius: "10px",
-                            boxShadow: "0px 2px 4px rgba(0,0,0,0.25)",
-                            flex: "none",
-                            order: 1,
-                            flexGrow: 0
-                          }}
-                          elevation={10}
-
-                        > {/* Displays a picture of the listing at the top of the card */}
-                          <CardMedia
-                            //{imageSrc || ""}
-                            component="img"
-                            height="310px"
-                            width="300px"
-                            image={imageSrc[2]}
-                          />
-
-                        </Card>
-                      </FormGroup>
-                    </Grid>
-                  </Grid>
-                </Grid>
-
                 {/* ORIGINAL CODE FOR UPLOAD IMAGES */}
                 <FormGroup>
                   <FormLabel sx={{ marginTop: '1rem' }}>Upload Images</FormLabel>
 
-                  <Button disableElevation variant='outlined' component='label' sx={{ color: '#5D737E', marginBottom: '1rem' }}>
-                    <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '8rem' }}>
-                      <PhotoCamera sx={{ fontSize: '3rem', margin: 'auto' }} />
-                      <input
-                        hidden
-                        id="listing-pictures"
-                        className="form-field"
-                        accept="image/*"
-                        type="file"
-                        multiple={true}
-                        name="pictures"
-                        onChange={(e) => {
-                          if (e.target.files) {
-                            //setPic3(Array.from(e.target.files));
-                            pic1.push(Array.from(e.target.files)[0]);
-                          }
-                        }} />
-                    </Box>
-                  </Button>
+                  <Grid
+                    padding="10px 0px 0px 10px"
+                    display="flex"
+                    flexDirection="column"
+                    alignItems="flex-start"
+                    paddingBottom='3%'>
+                    <Grid container xs={12} alignItems="center">
 
-                  <Button disableElevation variant='outlined' component='label' sx={{ color: '#5D737E', marginBottom: '1rem' }}>
-                    <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '8rem' }}>
-                      <PhotoCamera sx={{ fontSize: '3rem', margin: 'auto' }} />
-                      <input
-                        hidden
-                        id="listing-pictures"
-                        className="form-field"
-                        accept="image/*"
-                        type="file"
-                        multiple={true}
-                        name="pictures"
-                        onChange={(e) => {
-                          if (e.target.files) {
-                            //setPic3(Array.from(e.target.files));
-                            pic2.push(Array.from(e.target.files)[0]);
-                          }
-                        }} />
-                    </Box>
-                  </Button>
+                      <Grid item xs={4} sx={{ position: 'relative' }}>
+                        <FormGroup>
+                          <Card style={{ backgroundColor: "#FFFFFF" }}
+                            sx={{
+                              ':hover': { boxShadow: 20, cursor: 'pointer' },
+                              width: "300px",
+                              height: "310px",
+                              borderRadius: "10px",
+                              boxShadow: "0px 2px 4px rgba(0,0,0,0.25)",
+                              flex: "none",
+                              order: 1,
+                              flexGrow: 0
+                            }}
+                            elevation={10}
+                          > {/* Displays a picture of the listing at the top of the card */}
+                            <CardMedia
+                              //{imageSrc || ""}
+                              component="img"
+                              height="310px"
+                              width="300px"
+                              image={imageSrc[0]}
+                            />
+                          </Card>
+                          <Button disableElevation variant='outlined' component='label'
+                            sx={{
+                              color: '#5D737E',
+                              position: 'absolute',
+                              bottom: 0,
+                              left: 0,
+                              height: "310px",
+                              width: "300px",
+                              borderRadius: "10px"
+                            }}>
+                            <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '8rem' }}>
+                              <PhotoCamera sx={{ fontSize: '3rem', margin: 'auto' }} />
+                              <input
+                                hidden
+                                id="listing-pictures"
+                                className="form-field"
+                                accept="image/*"
+                                type="file"
+                                multiple={true}
+                                name="pictures"
+                                onChange={(e) => {
+                                  if (e.target.files) {
+                                    //setPic3(Array.from(e.target.files));
+                                    pic1.push(Array.from(e.target.files)[0]);
+                                  }
+                                }} />
+                            </Box>
+                          </Button>
+                        </FormGroup>
+                      </Grid>
 
-                  <Button disableElevation variant='outlined' component='label' sx={{ color: '#5D737E', marginBottom: '1rem' }}>
-                    <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '8rem' }}>
-                      <PhotoCamera sx={{ fontSize: '3rem', margin: 'auto' }} />
-                      <input
-                        hidden
-                        id="listing-pictures"
-                        className="form-field"
-                        accept="image/*"
-                        type="file"
-                        multiple={true}
-                        name="pictures"
-                        onChange={(e) => {
-                          if (e.target.files) {
-                            //setPic3(Array.from(e.target.files));
-                            pic3.push(Array.from(e.target.files)[0]);
-                          }
-                        }} />
-                    </Box>
-                  </Button>
+
+                      <Grid item xs={4} sx={{ position: 'relative' }}>
+                        <FormGroup>
+                          <Card style={{ backgroundColor: "#FFFFFF" }}
+                            sx={{
+                              ':hover': { boxShadow: 20, cursor: 'pointer' },
+                              width: "300px",
+                              height: "310px",
+                              borderRadius: "10px",
+                              boxShadow: "0px 2px 4px rgba(0,0,0,0.25)",
+                              flex: "none",
+                              order: 1,
+                              flexGrow: 0
+                            }}
+                            elevation={10}
+
+                          > {/* Displays a picture of the listing at the top of the card */}
+                            <CardMedia
+                              //{imageSrc || ""}
+                              component="img"
+                              height="310px"
+                              width="300px"
+                              image={imageSrc[1]}
+                            />
+                          </Card>
+                          <Button disableElevation variant='outlined' component='label'
+                            sx={{
+                              color: '#5D737E',
+                              position: 'absolute',
+                              bottom: 0,
+                              left: 0,
+                              height: "310px",
+                              width: "300px",
+                              borderRadius: "10px"
+                            }}>
+                            <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '8rem' }}>
+                              <PhotoCamera sx={{ fontSize: '3rem', margin: 'auto' }} />
+                              <input
+                                hidden
+                                id="listing-pictures"
+                                className="form-field"
+                                accept="image/*"
+                                type="file"
+                                multiple={true}
+                                name="pictures"
+                                onChange={(e) => {
+                                  if (e.target.files) {
+                                    //setPic3(Array.from(e.target.files));
+                                    pic2.push(Array.from(e.target.files)[0]);
+                                  }
+                                }} />
+                            </Box>
+                          </Button>
+                        </FormGroup>
+                      </Grid>
+
+
+                      <Grid item xs={4} sx={{ position: 'relative' }}>
+                        <FormGroup>
+                          <Card style={{ backgroundColor: "#FFFFFF" }}
+                            sx={{
+                              ':hover': { boxShadow: 20, cursor: 'pointer' },
+                              width: "300px",
+                              height: "310px",
+                              borderRadius: "10px",
+                              boxShadow: "0px 2px 4px rgba(0,0,0,0.25)",
+                              flex: "none",
+                              order: 1,
+                              flexGrow: 0
+                            }}
+                            elevation={10}
+
+                          > {/* Displays a picture of the listing at the top of the card */}
+                            <CardMedia
+                              //{imageSrc || ""}
+                              component="img"
+                              height="310px"
+                              width="300px"
+                              image={imageSrc[2]}
+                            />
+
+                          </Card>
+                          <Button disableElevation variant='outlined' component='label'
+                            sx={{
+                              color: '#5D737E',
+                              position: 'absolute',
+                              bottom: 0,
+                              left: 0,
+                              height: "310px",
+                              width: "300px",
+                              borderRadius: "10px"
+                            }}>
+                            <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '8rem' }}>
+                              <PhotoCamera sx={{ fontSize: '3rem', margin: 'auto' }} />
+                              <input
+                                hidden
+                                id="listing-pictures"
+                                className="form-field"
+                                accept="image/*"
+                                type="file"
+                                multiple={true}
+                                name="pictures"
+                                onChange={(e) => {
+                                  if (e.target.files) {
+                                    //setPic3(Array.from(e.target.files));
+                                    pic3.push(Array.from(e.target.files)[0]);
+                                  }
+                                }} />
+                            </Box>
+                          </Button>
+                        </FormGroup>
+                      </Grid>
+                    </Grid>
+                    <Grid container xs={12}>
+                      <Grid item xs={4} sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+                        <Button onClick={() => console.log("Delete Image 1 clicked")}>
+                          <Typography sx={{ textDecoration: 'underline', cursor: 'pointer', textTransform: 'none', color: '#000000', fontStyle: 'italic' }}>Delete Image</Typography>
+                        </Button>
+                      </Grid>
+                      <Grid item xs={4} sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+                        <Button onClick={() => console.log("Delete Image 2 clicked")}>
+                          <Typography sx={{ textDecoration: 'underline', cursor: 'pointer', textTransform: 'none', color: '#000000', fontStyle: 'italic' }}>Delete Image</Typography>
+                        </Button>
+                      </Grid>
+                      <Grid item xs={4} sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+                        <Button onClick={() => console.log("Delete Image 3 clicked")}>
+                          <Typography sx={{ textDecoration: 'underline', cursor: 'pointer', textTransform: 'none', color: '#000000', fontStyle: 'italic' }}>Delete Image</Typography>
+                        </Button>
+                      </Grid>
+                    </Grid>
+                  </Grid>
                 </FormGroup>
               </Box>
 
