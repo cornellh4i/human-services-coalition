@@ -34,7 +34,6 @@ const ListingInformation = () => {
     navigate("/")
   }
 
-
   // Create state for image source and imageLoaded flag
   const [imageSrc, setImageSrc] = useState<string[]>([]);
   const [imagesLoaded, setImagesLoaded] = useState(false);
@@ -43,30 +42,33 @@ const ListingInformation = () => {
   //The for loop will loop over each "key" in the pictures and 
   // Fetch image and create object URL when the component mounts
   const fetchImage = async () => {
-    for (const e of location.state.pictures) {
-      console.log("This is the picture  " + e)
-
-      const link = `${location.state.streetAddress}/${e}`
-      const response = await fetch('api/listingPicture/' + link);
-      console.log("This is the resposne   " + response)
-      const blob = await response.blob();
-      console.log("This is the Blob   " + blob)
-      const objectURL = URL.createObjectURL(blob);
-      console.log("This is the URL   " + objectURL)
-      imageSrc.push(objectURL)
-      console.log("This is the IMGSRC  " + imageSrc)
+    try {
+      const promises = location.state.pictures.map(async (picture: any) => {
+        const link = `${location.state.streetAddress}/${picture}`
+        const response = await fetch('api/listingPicture/' + link)
+        const blob = await response.blob();
+        return URL.createObjectURL(blob);
+      }
+      )
+      const objectURLs = await Promise.all(promises);
+      setImageSrc(objectURLs);
+      setImagesLoaded(true);
+    } catch (error) {
+      console.error('Error fetching images:', error);
     }
-    console.log(imageSrc)
-    setImagesLoaded(true);
   }
   useEffect(() => {
     fetchImage();
-  }, [])
+  }, [location.state.pictures, location.state.streetAddress])
+
+
 
   //if all the images have been loaded then render the screen
   if (!imagesLoaded) {
     return <div>Loading images...</div>;
   }
+
+
   return (
     <><Grid padding="1% 5%">
       {/* Back button */}

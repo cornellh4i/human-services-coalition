@@ -147,48 +147,49 @@ const ListingForm = () => {
   const imageHandler = async (id: any) => {
 
     //Initilisation of helper variables 
-    const formData = new FormData();
+
     const alist: File[][] = [pic1, pic2, pic3]// alist is populated with the three images
     var temparr = prevPics
-    var placeholder = null;
-    var pictureFile = null;
-    var counter = 0;
+    var counter = 0
 
+    const promises = alist.map(async (imgfle: any) => {
+      let response = null;
+      if (imgfle.length > 0) { // if there is something in this file
 
-    for (const imgfle of alist) {
-      if (imgfle.length > 0) {//if there is something in this file
+        // determines the name of the file to represent in S3 storage
+        const placeholder = `house${counter}`
+        // the actual image file inputted by the user
+        const pictureFile = imgfle[0]
 
-        //determines the name of the file to represent in S3 storage 
-        placeholder = `house${counter}`
-        //the actual image file inputted by the user
-        pictureFile = imgfle[0]
-
-        //were there previous pictures that were already associated with this listing?
+        // were there previous pictures that were already associated with this listing?
         if (temparr.length < (counter + 1)) {
           temparr.push(placeholder)
-        }//else you don't want to push on any placeholder
+        } // else you don't want to push on any placeholder
 
+
+        // create a new formData object for each image
+        const formData = new FormData()
         // populate the [formData : arr] entry to transfer in the api call
         // [formData : arr] is always guranteed to have at least one element
         for (var i = 0; i < temparr.length; i++) {
-          formData.append('arr[]', temparr[i]);
+          formData.append('arr[]', temparr[i])
         }
         formData.append('pictures', pictureFile)
         formData.append('dirname', streetAddress)
         formData.append('filename', placeholder)
 
-        const response = await fetch('api/listingPicture/' + id, {
+        response = await fetch('api/listingPicture/' + id, {
           method: 'PATCH',
           body: formData
         });
-        //delete once the api call was finished to prepare for second form data call
-        formData.delete('arr[]')
-        formData.delete('pictures')
-        formData.delete('dirname')
-        formData.delete('filename')
       }
-      counter = counter + 1
-    }
+      counter++
+      return response
+    })
+
+    // wait for all promises to resolve
+    await Promise.all(promises)
+
   }
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -748,12 +749,13 @@ const ListingForm = () => {
     </FormGroup> */}
 
                 <Grid
-                  padding="0px 0px 0px 10px"
+                  padding="10px 0px 0px 10px"
                   display="flex"
-                  flexDirection="row"
+                  flexDirection="column"
                   alignItems="flex-start">
-                  <Grid container xs={18} alignItems="center">
-                    <Grid item xs={9}>
+                  <Grid container xs={12} alignItems="center">
+
+                    <Grid item xs={4}>
                       <FormGroup>
                         <Card style={{ backgroundColor: "#FFFFFF" }}
                           sx={{
@@ -767,12 +769,11 @@ const ListingForm = () => {
                             flexGrow: 0
                           }}
                           elevation={10}
-
                         > {/* Displays a picture of the listing at the top of the card */}
                           <CardMedia
                             //{imageSrc || ""}
                             component="img"
-                            height="300px"
+                            height="310px"
                             width="300px"
                             image={imageSrc[0]}
                           />
@@ -781,7 +782,7 @@ const ListingForm = () => {
                     </Grid>
 
 
-                    <Grid item xs={9}>
+                    <Grid item xs={4}>
                       <FormGroup>
                         <Card style={{ backgroundColor: "#FFFFFF" }}
                           sx={{
@@ -800,7 +801,7 @@ const ListingForm = () => {
                           <CardMedia
                             //{imageSrc || ""}
                             component="img"
-                            height="300px"
+                            height="310px"
                             width="300px"
                             image={imageSrc[1]}
                           />
@@ -809,7 +810,7 @@ const ListingForm = () => {
                     </Grid>
 
 
-                    <Grid item xs={9}>
+                    <Grid item xs={4}>
                       <FormGroup>
                         <Card style={{ backgroundColor: "#FFFFFF" }}
                           sx={{
@@ -828,15 +829,14 @@ const ListingForm = () => {
                           <CardMedia
                             //{imageSrc || ""}
                             component="img"
-                            height="300px"
+                            height="310px"
                             width="300px"
                             image={imageSrc[2]}
                           />
+
                         </Card>
                       </FormGroup>
                     </Grid>
-
-
                   </Grid>
                 </Grid>
 
@@ -856,11 +856,8 @@ const ListingForm = () => {
                         name="pictures"
                         onChange={(e) => {
                           if (e.target.files) {
-                            console.log("The file");
-                            console.log(Array.from(e.target.files));
                             //setPic1(Array.from(e.target.files));
                             pic1.push(Array.from(e.target.files)[0]);
-                            console.log(pic1);
                           }
                         }} />
                     </Box>
@@ -883,9 +880,6 @@ const ListingForm = () => {
                             //setFiles(Array.from(e.target.files));
                             //setPic2(Array.from(e.target.files));
                             pic2.push(Array.from(e.target.files)[0]);
-                            console.log(pic1);
-                            console.log(pic2);
-                            console.log(!pic1);
                           }
                         }} />
                     </Box>
@@ -905,14 +899,8 @@ const ListingForm = () => {
                         name="pictures"
                         onChange={(e) => {
                           if (e.target.files) {
-                            // setFiles(Array.from(e.target.files));
-                            // console.log(files)
-                            console.log("The file");
-                            console.log(Array.from(e.target.files));
                             //setPic3(Array.from(e.target.files));
                             pic3.push(Array.from(e.target.files)[0]);
-                            console.log("pic333333");
-                            console.log(pic3);
                           }
                         }} />
                     </Box>

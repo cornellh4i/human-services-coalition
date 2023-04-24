@@ -49,46 +49,39 @@ export default function ListingDetails({ Listing, handleDelete }: { Listing: any
 
   // Create state for image source
   const [imageSrc, setImageSrc] = useState<string | null>(null);
+  //create the cache for the image 
+  const [cacheImg, setCacheImg] = useState<string | null>(null);
 
   // Fetch image and create object URL when the component mounts
   useEffect(() => {
     const fetchImage = async () => {
       try {
-        // // Fetch the image from the backend
-        console.log(Listing.streetAddress)
-        console.log(Listing.pictures[0])
-        const link = `${Listing.streetAddress}/${Listing.pictures[0]}`
-        console.log("THie ling " + link)
-        const response = await fetch('api/listingPicture/' + link);
-        console.log("THis is the repsonse")
-        console.log(response)
+        if (cacheImg == null) {
+          // // Fetch the image from the backend
 
-        // const formData = new FormData();
-        // formData.append("dirname", Listing.streetAddress)
-        // formData.append("filename", Listing.pictures[0])
-        // const response = await fetch('api/listingPicture', {
-        //   method: 'GET',
-        //   body: formData
-        // });
+          const link = `${Listing.streetAddress}/${Listing.pictures[0]}`
+          const response = await fetch('api/listingPicture/' + link);
 
-        // Convert the response to a Blob
-        const blob = await response.blob();
+          // Convert the response to a Blob
+          const blob = await response.blob();
 
-        // Create an object URL from the Blob
-        const objectURL = URL.createObjectURL(blob);
-        console.log(objectURL)
+          // Create an object URL from the Blob
+          const objectURL = URL.createObjectURL(blob);
 
-        // Set the object URL as the imageSrc state
-        setImageSrc(objectURL);
+          // Set the object URL as the imageSrc state
+          setCacheImg(objectURL)
+          setImageSrc(objectURL);
+        }
+        else {
+          setImageSrc(cacheImg);
+        }
       } catch (error) {
-        console.log("ERROORRRIMAGqfqwffqfE")
         console.error('Error fetching image:', error);
       }
     };
 
     //Call the fetchImage function
     fetchImage();
-
   }, []);
 
 
