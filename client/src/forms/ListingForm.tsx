@@ -825,8 +825,6 @@ const ListingForm = () => {
                   </Grid>
                 </Grid>
 
-
-
                 {/* ORIGINAL CODE FOR UPLOAD IMAGES */}
                 <FormGroup>
                   <FormLabel sx={{ marginTop: '1rem' }}>Upload Images</FormLabel>
