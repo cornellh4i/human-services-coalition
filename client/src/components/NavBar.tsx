@@ -13,7 +13,7 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import { ReactComponent as Logo } from '../assets/coclogo.svg';
 import { Link, useNavigate } from 'react-router-dom';
 
-const pages = ['Create New', 'Manage Profiles', 'Update FMR'];
+const pages = ['Create New', 'Manage Profiles', 'Vouchers', 'Update FMR'];
 const forms = ['Listing', 'User', 'Admin'];
 
 function ResponsiveAppBar() {
@@ -85,6 +85,11 @@ function ResponsiveAppBar() {
     else navigate('/admin-form');
   };
 
+  const navigateToVoucher = () => {
+    handleCloseNavMenu();
+    navigate("/vouchers");
+  }
+
   return (
     <AppBar position="sticky" elevation={0} style={{ background: "white", borderBottom: '1px solid #D9D9D9' }}>
       <Container maxWidth="xl">
@@ -121,7 +126,7 @@ function ResponsiveAppBar() {
             >
               {pages.map((page) => (
                 <MenuItem key={page}
-                  onClick={page === "Create New" ? handleOpenFormMenu : page === "Manage Profiles" ? navigateToProfiles : page == "Update FMR" ? navigateToFMRForm : handleCloseNavMenu}>
+                  onClick={page === "Create New" ? handleOpenFormMenu : page === "Manage Profiles" ? navigateToProfiles : page === "Vouchers" ? navigateToVoucher : page == "Update FMR" ? navigateToFMRForm : handleCloseNavMenu}>
                   <Typography textAlign="center">{page}</Typography>
                 </MenuItem>
               ))}
@@ -153,7 +158,7 @@ function ResponsiveAppBar() {
             {pages.map((page) => (
               <Button
                 key={page}
-                onClick={page === "Create New" ? handleOpenFormMenu : page === "Manage Profiles" ? navigateToProfiles : page == "Update FMR" ? navigateToFMRForm : handleOpenNavMenu}
+                onClick={page === "Create New" ? handleOpenFormMenu : page === "Manage Profiles" ? navigateToProfiles : page === "Vouchers" ? navigateToVoucher : page == "Update FMR" ? navigateToFMRForm : handleOpenNavMenu}
                 sx={{
                   textTransform: 'none',
                   '&:hover': { fontWeight: 'bold' }, fontSize: 16, my: 2, color: '#737171',

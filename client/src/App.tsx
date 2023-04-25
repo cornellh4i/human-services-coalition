@@ -8,6 +8,7 @@ import ManageProfiles from './pages/ManageProfiles'
 import ListingForm from './forms/ListingForm'
 import AdminForm from './forms/AdminForm'
 import UserForm from './forms/UserForm'
+import Vouchers from './pages/Vouchers'
 
 import ProofSearch from './pages/ProofSearch';
 import FmrForm from './forms/FmrForm';
@@ -37,6 +38,10 @@ function App() {
               <Route
                 path="/manage-profiles"
                 element={<ManageProfiles />}
+              />
+              <Route
+                path="/vouchers"
+                element={<Vouchers />}
               />
               <Route
                 path="/listing_info"
