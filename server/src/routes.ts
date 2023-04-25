@@ -8,34 +8,18 @@ module.exports = () => {
   const {
     getListings,
     getListing,
-    getListingByCategory,
-    createListing,
-    updateListing,
-    deleteListing,
+    getListingByCategory
   } = require("./controllers/listingController")
 
   const {
     getUsers,
-    getUser,
-    createUser,
-    updateUser,
-    deleteUser,
+    getUser
   } = require("./controllers/userController")
 
   const {
     getAdmin,
-    getAdmins,
-    createAdmin,
-    deleteAdmin,
-    updateAdmin
+    getAdmins
   } = require("./controllers/adminController")
-
-  const {
-    getFMRprices,
-    createFMRprices,
-    updateFMRprices,
-    deleteFMRprices
-  } = require("./controllers/fmrController")
 
   /**** Routes ****/
 
@@ -48,30 +32,12 @@ module.exports = () => {
   // GET a specific housing listing (by id)
   router.get('/listing/:id', getListing)
 
-  // POST (add) a new housing listing
-  router.post('/listing', createListing)
-
-  // PATCH (edit) a specific housing listing
-  router.patch('/listing/:id', updateListing)
-
-  // DELETE a specific housing listing
-  router.delete('/listing/:id', deleteListing)
-
 
   // GET all users
   router.get('/users', getUsers)
 
   // GET a specific user
   router.get('/users/:id', getUser)
-
-  // POST (add) a new user
-  router.post('/users', createUser)
-
-  // PATCH (edit) a specific user
-  router.patch('/users/:id', updateUser)
-
-  // DELETE a specific user
-  router.delete('/users/:id', deleteUser)
 
 
   // GET all admins
@@ -80,27 +46,6 @@ module.exports = () => {
   // GET a specific admin
   router.get('/admins/:id', getAdmin)
 
-  // POST (add) a new admin
-  router.post('/admins', createAdmin)
-
-  // PATCH (edit) a specific admin
-  router.patch('/admins/:id', updateAdmin)
-
-  // DELETE a specific admin
-  router.delete('/admins/:id', deleteAdmin)
-
-
-  //GET all FMR prices
-  router.get('/fmr', getFMRprices)
-
-  // POST (add) FMR prices
-  router.post('/fmr', createFMRprices)
-
-  // PATCH (edit) FMR prices  
-  router.patch('/fmr/:id', updateFMRprices)
-
-  // DELETE FMR prices
-  router.delete('/fmr/:id', deleteFMRprices)
 
   // LOGIN
   router.post(
