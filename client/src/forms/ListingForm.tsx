@@ -75,22 +75,27 @@ const ListingForm = () => {
   // [fetchImages] populates the state list [imgSrc] with the 
   // the list of images that should be shown on the form
   const fetchImages = async (alist: any, dir: any) => {
-
+    let blist = abstr(alist)
+    console.log("AYYEE BLIST")
+    console.log(blist)
     //for every entry in the [alist]: list of image keys that correspond to S3 storage
-    for (const e of alist) {
+    for (const e of blist) {
+      if (e == '') {
+        imageSrc.push('')
+      } else {
+        //creates the url parameters and routes to call [getListingPicture] in [listingController.tsx]
+        const link = `${dir}/${e}`
+        const response = await fetch('api/listingPicture/' + link);
 
-      //creates the url parameters and routes to call [getListingPicture] in [listingController.tsx]
-      const link = `${dir}/${e}`
-      const response = await fetch('api/listingPicture/' + link);
+        //creates a [blob] -> [URL] with response from GET api call
+        const blob = await response.blob();
+        const objectURL = URL.createObjectURL(blob);
 
-      //creates a [blob] -> [URL] with response from GET api call
-      const blob = await response.blob();
-      const objectURL = URL.createObjectURL(blob);
-
-      //populates the state list with the image url 
-      imageSrc.push(objectURL)
+        //populates the state list with the image url 
+        imageSrc.push(objectURL)
+      }
     }
-
+    console.log(imageSrc);
     setImagesLoaded(true);
   }
 
@@ -144,29 +149,43 @@ const ListingForm = () => {
     }
   }, [])
 
+
+  // [abstr] converts these example lists: 
+  // ['house1','house2'] to ['','house1','house2']
+  // ['house0','house2'] to ['house0','','house2']
+  const abstr = (lst: any) => {
+    var result: string[] = []
+    result.push((lst.includes('house0')) ? 'house0' : '')
+    result.push((lst.includes('house1')) ? 'house1' : '')
+    result.push((lst.includes('house2')) ? 'house2' : '')
+    return result
+  }
+
   // [imageHandler] executes the API call for each image entry on the form
   const imageHandler = async (id: any) => {
 
     //Initilisation of helper variables 
-
     const alist: File[][] = [pic1, pic2, pic3]// alist is populated with the three images
     var temparr = prevPics
     var counter = 0
 
     const promises = alist.map(async (imgfle: any) => {
       let response = null;
+      counter++
+      console.log("THIS IS COUNTER")
+      console.log(counter)
       if (imgfle.length > 0) { // if there is something in this file
 
         // determines the name of the file to represent in S3 storage
-        const placeholder = `house${counter}`
+        const index = alist.indexOf(imgfle)
+        const placeholder = `house${index}`
         // the actual image file inputted by the user
         const pictureFile = imgfle[0]
 
-        // were there previous pictures that were already associated with this listing?
-        if (temparr.length < (counter + 1)) {
+        if (temparr.includes(placeholder) == false) {
           temparr.push(placeholder)
-        } // else you don't want to push on any placeholder
-
+          temparr.sort()
+        }
 
         // create a new formData object for each image
         const formData = new FormData()
@@ -184,12 +203,29 @@ const ListingForm = () => {
           body: formData
         });
       }
-      counter++
+
       return response
     })
-
     // wait for all promises to resolve
     await Promise.all(promises)
+  }
+
+  const imageDeletion = async (id: any) => {
+    const formData = new FormData()
+    const placeholder = `house${id}`
+    var temparr = prevPics
+    temparr.splice(id, 1)
+
+    formData.append('dirname', streetAddress)
+    formData.append('filename', placeholder)
+    for (var i = 0; i < temparr.length; i++) {
+      formData.append('arr[]', temparr[i])
+    }
+
+    const response = await fetch('api/listingPicture/' + id, {
+      method: 'DELETE',
+      body: formData
+    });
 
   }
 
@@ -281,7 +317,6 @@ const ListingForm = () => {
     // Get listing ID from response to use in picture upload
     const json = await response1.json();
     const id = json.id;
-    //const formData = new FormData();
 
     await imageHandler(id);
 
@@ -333,7 +368,7 @@ const ListingForm = () => {
 
   //if all the images have been loaded then render the screen
   if (!imagesLoaded && location.state != null) {
-    return <div>Loading images...</div>;
+    return <div>Loading Form...</div>;
   }
   return (
     <>
@@ -765,7 +800,7 @@ const ListingForm = () => {
                               component="img"
                               height="310px"
                               width="300px"
-                              image={imageSrc[0]}
+                              image={imageSrc[0] || ""}
                             />
                           </Card>
                           <Button disableElevation variant='outlined' component='label'
@@ -821,7 +856,7 @@ const ListingForm = () => {
                               component="img"
                               height="310px"
                               width="300px"
-                              image={imageSrc[1]}
+                              image={imageSrc[1] || ""}
                             />
                           </Card>
                           <Button disableElevation variant='outlined' component='label'
@@ -877,7 +912,7 @@ const ListingForm = () => {
                               component="img"
                               height="310px"
                               width="300px"
-                              image={imageSrc[2]}
+                              image={imageSrc[2] || ""}
                             />
 
                           </Card>
@@ -914,17 +949,17 @@ const ListingForm = () => {
                     </Grid>
                     <Grid container xs={12}>
                       <Grid item xs={4} sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-                        <Button onClick={() => console.log("Delete Image 1 clicked")}>
+                        <Button onClick={() => imageDeletion(0)}>
                           <Typography sx={{ textDecoration: 'underline', cursor: 'pointer', textTransform: 'none', color: '#000000', fontStyle: 'italic' }}>Delete Image</Typography>
                         </Button>
                       </Grid>
                       <Grid item xs={4} sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-                        <Button onClick={() => console.log("Delete Image 2 clicked")}>
+                        <Button onClick={() => imageDeletion(1)}>
                           <Typography sx={{ textDecoration: 'underline', cursor: 'pointer', textTransform: 'none', color: '#000000', fontStyle: 'italic' }}>Delete Image</Typography>
                         </Button>
                       </Grid>
                       <Grid item xs={4} sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-                        <Button onClick={() => console.log("Delete Image 3 clicked")}>
+                        <Button onClick={() => imageDeletion(2)}>
                           <Typography sx={{ textDecoration: 'underline', cursor: 'pointer', textTransform: 'none', color: '#000000', fontStyle: 'italic' }}>Delete Image</Typography>
                         </Button>
                       </Grid>

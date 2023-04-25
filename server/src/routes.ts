@@ -12,7 +12,8 @@ module.exports = () => {
     updateListing,
     deleteListing,
     updateListingPicture,
-    getListingPicture
+    getListingPicture,
+    deleteListingPicture
   } = require("./controllers/listingController")
 
   const {
@@ -72,6 +73,7 @@ module.exports = () => {
 
   // DELETE a specific housing listing
   router.delete('/listing/:id', deleteListing)
+  router.delete('/listingPicture/:id', deleteListingPicture)
 
   // GET all users
   router.get('/users', getUsers)

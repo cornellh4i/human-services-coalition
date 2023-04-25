@@ -86,22 +86,29 @@ function getFileStream(directoryName: string, fileName: string,) {//TAKES THE PI
 
 }
 
-function deleteImage(imageKey: string) {
+function deleteImage(directoryName: string, fileName: string,) {
+
+  const directoryKey = `${directoryName}/`;
+  console.log("DIRECTORY IS " + directoryKey)
+  const fileKey = `${directoryKey}${fileName}`;
+  console.log("FIleKey IS " + fileKey)
   const params = {
-    Bucket: 'my-bucket-name', // replace with your bucket name
-    Key: imageKey, // the key of the image to delete
+    Bucket: bucketName, // replace with your bucket name
+    Key: fileKey, // the key of the image to delete
   };
 
   try {
     s3.deleteObject(params).promise();
-    console.log(`Successfully deleted image ${imageKey}`);
+
+    console.log(`Successfully deleted image ${fileKey}`);
   } catch (err) {
-    console.log(`Error deleting image ${imageKey}: ${err}`);
+    console.log(`Error deleting image ${fileKey}: ${err}`);
   }
 }
 
 
 export default {
   uploadFile,
-  getFileStream
+  getFileStream,
+  deleteImage
 };

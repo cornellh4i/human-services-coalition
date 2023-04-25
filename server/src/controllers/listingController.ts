@@ -8,6 +8,7 @@ import s3utils from '../utils/s3';
 
 import { successJson, errorJson } from '../utils/jsonResponses';
 import { TIMEOUT } from 'dns';
+import { dir } from 'console';
 
 // GET all housing listings
 const getListings = async (req, res) => {
@@ -337,6 +338,46 @@ const getListingPicture = async (req, res) => {
   }
 }
 
+const deleteListingPicture = async (req, res) => {
+  const { id } = req.params
+
+  try {
+    const dirname = String(req.body.dirname)
+    console.log("dir")
+    console.log(dirname)
+    const filename = String(req.body.filename)
+    console.log("THIS IS FILENAME")
+    console.log(filename)
+    //console.log(req.body)
+    var temparr: string[] = req.body.arr
+    const result = await s3utils.deleteImage(dirname, filename)
+    await Listing.findOneAndUpdate(
+      { _id: id }, // Filter: find the listing with the given ID
+      { $set: { pictures: temparr } }, // Update: set the "pictures" field to the "pics" array
+      (err, updatedListing) => {
+        if (err) {
+          console.error('Error deleting image :', err);
+        } else {
+          console.log('Deleted listing:', updatedListing);
+        }
+      }
+    );
+  }
+  catch (error) {
+    console.log(error)
+    res.send(errorJson(error));
+
+  }
+
+
+
+
+
+
+
+
+}
+
 // DELETE a specific housing listing
 const deleteListing = async (req, res) => {
   const { id } = req.params
@@ -361,5 +402,6 @@ module.exports = {
   updateListing,
   deleteListing,
   updateListingPicture,
-  getListingPicture
+  getListingPicture,
+  deleteListingPicture
 }
