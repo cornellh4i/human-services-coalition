@@ -7,6 +7,7 @@ import ManageUsers from '../components/ManageUsers'
 import ManageAdmins from '../components/ManageAdmins'
 import ConfirmPopUp from '../components/ConfirmPopUp'
 import { useLocation, useNavigate } from 'react-router-dom'
+import VoucherForm from '../components/VoucherForm'
 
 const Vouchers = () => {
   const theme = createTheme({
@@ -61,6 +62,7 @@ const Vouchers = () => {
         </Box>
         <Box>
           <ManageVouchers />
+          <VoucherForm />
         </Box>
       </Container>
     </ThemeProvider>

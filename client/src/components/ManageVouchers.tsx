@@ -46,7 +46,7 @@ const ManageVouchers = () => {
 
         <Grid container spacing={"10%"}>
           <Grid item sx={{ ml: "1%" }}>
-            <ColumnLabel label="First Name"></ColumnLabel>
+            <ColumnLabel label="Name"></ColumnLabel>
           </Grid>
           <Grid item sx={{ ml: "0%" }}>
             <ColumnLabel label="Percentage"></ColumnLabel>
