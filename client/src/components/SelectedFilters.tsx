@@ -4,6 +4,7 @@ import IconButton from '@mui/material/IconButton/IconButton';
 import ClearIcon from '@mui/icons-material/Clear';
 import '../css/Home.css'
 import Link from '@mui/material/Link';
+import { useEffect, useState } from 'react'
 
 export default function SelectedFilters({
   setListings, filters, setFilters, setApartment, setHouse, setAddress,
@@ -14,19 +15,27 @@ export default function SelectedFilters({
   let values: any[] = []
 
   function updateQuery(filterList: any) {
-    let params: any = {}
-
-    for (let i = 0; i < filterList.length; i++) {
-      let currFilter = filterList[i].filter
-      let currVal = filterList[i].value
-      params[currFilter] = currVal
+    if (filterList.length == 0) {
+      fetch('/api/listing')
+        .then(response => response.json())
+        .then(data => setListings(data))
+        .catch(error => console.error(error))
     }
-    console.log(params)
-    const searchParams = new URLSearchParams(Object.entries(params))
-    fetch('/api/listingsByCategory?' + searchParams)
-      .then(response => response.json())
-      .then(data => setListings(data))
-      .catch(error => console.error(error))
+    else {
+      let params: any = {}
+
+      for (let i = 0; i < filterList.length; i++) {
+        let currFilter = filterList[i].filter
+        let currVal = filterList[i].value
+        params[currFilter] = currVal
+      }
+      console.log(params)
+      const searchParams = new URLSearchParams(Object.entries(params))
+      fetch('/api/listingsByCategory?' + searchParams)
+        .then(response => response.json())
+        .then(data => setListings(data))
+        .catch(error => console.error(error))
+    }
   }
 
   for (let i = 0; i < selected.length; i++) {
@@ -130,12 +139,14 @@ export default function SelectedFilters({
   }
 
   function clearAllFilters() {
-    for (let i = 0; i < selected.length; i++) {
-      clearFilter(selected[i].filter)
+    if (selected.length != 0) {
+      for (let i = 0; i < selected.length; i++) {
+        clearFilter(selected[i].filter)
+      }
+      selected = []
+      setFilters(selected)
+      updateQuery(selected)
     }
-    selected = []
-    setFilters(selected)
-    updateQuery(selected)
   }
 
   function clearFilter(filter: string) {
@@ -224,7 +235,7 @@ export default function SelectedFilters({
           <Grid item xs="auto" paddingLeft={2}>
             {
               <Grid item xs="auto" sx={{ paddingTop: 2, fontStyle: 'italic' }} >
-                <Link underline="hover" color="inherit"
+                <Link sx={{ cursor: 'pointer' }} underline="hover" color="inherit"
                   onClick={() => clearAllFilters()}>
                   {'Clear Filters'}
                 </Link>

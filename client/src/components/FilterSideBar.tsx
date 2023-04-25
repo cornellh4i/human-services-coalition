@@ -44,12 +44,14 @@ export default function FilterSideBar({
   }
 
   function clearAllFilters() {
-    for (let i = 0; i < selected.length; i++) {
-      clearFilter(selected[i].filter)
+    if (selected.length != 0) {
+      for (let i = 0; i < selected.length; i++) {
+        clearFilter(selected[i].filter)
+      }
+      selected = []
+      setFilters(selected)
+      updateQuery(selected)
     }
-    selected = []
-    setFilters(selected)
-    updateQuery(selected)
   }
 
   function clearFilter(filter: string) {
@@ -95,19 +97,27 @@ export default function FilterSideBar({
   }
 
   function updateQuery(filterList: any) {
-    let params: any = {}
-
-    for (let i = 0; i < filterList.length; i++) {
-      let currFilter = filterList[i].filter
-      let currVal = filterList[i].value
-      params[currFilter] = currVal
+    if (filterList.length == 0) {
+      fetch('/api/listing')
+        .then(response => response.json())
+        .then(data => setListings(data))
+        .catch(error => console.error(error))
     }
+    else {
+      let params: any = {}
 
-    const searchParams = new URLSearchParams(Object.entries(params))
-    fetch('/api/listingsByCategory?' + searchParams)
-      .then(response => response.json())
-      .then(data => setListings(data))
-      .catch(error => console.error(error))
+      for (let i = 0; i < filterList.length; i++) {
+        let currFilter = filterList[i].filter
+        let currVal = filterList[i].value
+        params[currFilter] = currVal
+      }
+      console.log(params)
+      const searchParams = new URLSearchParams(Object.entries(params))
+      fetch('/api/listingsByCategory?' + searchParams)
+        .then(response => response.json())
+        .then(data => setListings(data))
+        .catch(error => console.error(error))
+    }
   }
 
   function selectedIndex(filter: string) {
@@ -331,7 +341,7 @@ export default function FilterSideBar({
           <h2 className='title'>Filters</h2>
         </Grid>
         <Grid sx={{ fontStyle: 'italic', textAlign: 'right', padding: 4 }} item xs={6}>
-          <Link underline="hover" color="inherit"
+          <Link sx={{ cursor: 'pointer' }} underline="hover" color="inherit"
             onClick={() => clearAllFilters()}>
             {'Clear Filters'}
           </Link>
