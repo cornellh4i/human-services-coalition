@@ -8,7 +8,7 @@ module.exports = () => {
     getListingByCategory,
     createListing,
     updateListing,
-    deleteListing,
+    deleteListing
   } = require("./controllers/listingController")
 
   const {
@@ -35,6 +35,13 @@ module.exports = () => {
     updateFMRprices,
     deleteFMRprices
   } = require("./controllers/fmrController")
+
+  const {
+    getVouchers,
+    getVoucher,
+    createVoucher,
+    deleteVoucher
+  } = require("./controllers/voucherController")
 
   /**** Routes ****/
 
@@ -106,6 +113,18 @@ module.exports = () => {
 
   // DELETE FMR prices
   router.delete('/fmr/:id', deleteFMRprices)
+
+  // GET all vouchers
+  router.get('/vouchers', getVouchers)
+
+  // GET a specific voucher
+  router.get('/vouchers/:id', getVoucher)
+
+  // POST (add) a new voucher
+  router.post('/vouchers', createVoucher)
+
+  // DELETE a specific voucher
+  router.delete('/vouchers/:id', deleteVoucher)
 
   return router;
 }

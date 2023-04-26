@@ -14,6 +14,8 @@ import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import InputLabel from '@mui/material/InputLabel';
 import '../css/Home.css';
+import Link from '@mui/material/Link';
+import { useState } from 'react'
 
 export default function FilterSideBar({
   setListings, filters, setFilters, apartment, setApartment, house, setHouse,
@@ -21,10 +23,12 @@ export default function FilterSideBar({
   numBed, setNumBed, utilities, setUtilities, furnished, setFurnished, pets,
   setPets, disTransportation, setDisTransportation, minPrice, setMinPrice,
   maxPrice, setMaxPrice }: any) {
-    
+
   let selected: any = [...filters]
   let theme = createTheme()
   theme = responsiveFontSizes(theme)
+  let [maxPriceError, setMaxPriceError] = useState(false);
+  let [maxPriceText, setMaxPriceText] = useState("up to $3000");
 
   const FilterEnum = {
     address: "address",
@@ -42,20 +46,80 @@ export default function FilterSideBar({
     maxPrice: "maxPrice",
   }
 
-  function updateQuery(filterList: any) {
-    let params: any = {}
-
-    for (let i = 0; i < filterList.length; i++) {
-      let currFilter = filterList[i].filter
-      let currVal = filterList[i].value
-      params[currFilter] = currVal
+  function clearAllFilters() {
+    if (selected.length != 0) {
+      for (let i = 0; i < selected.length; i++) {
+        clearFilter(selected[i].filter)
+      }
+      selected = []
+      setFilters(selected)
+      updateQuery(selected)
     }
+  }
 
-    const searchParams = new URLSearchParams(Object.entries(params))
-    fetch('/api/listingsByCategory?' + searchParams)
-      .then(response => response.json())
-      .then(data => setListings(data))
-      .catch(error => console.error(error))
+  function clearFilter(filter: string) {
+    if (filter === "condo") {
+      setCondo(false)
+    }
+    else if (filter === "house") {
+      setHouse(false)
+    }
+    else if (filter === "apartment") {
+      setApartment(false)
+    }
+    else if (filter === "single") {
+      setSingle(false)
+    }
+    else if (filter === "numBath") {
+      setNumBath('')
+    }
+    else if (filter === "numBed") {
+      setNumBed('')
+    }
+    else if (filter === "minPrice") {
+      setMinPrice('')
+    }
+    else if (filter === "maxPrice") {
+      setMaxPrice('')
+    }
+    else if (filter === "pets") {
+      setPets(false)
+    }
+    else if (filter === "furnished") {
+      setFurnished(false)
+    }
+    else if (filter === "utilities") {
+      setUtilities(false)
+    }
+    else if (filter === "disTransportation") {
+      setDisTransportation('')
+    }
+    else if (filter === "address") {
+      setAddress('')
+    }
+  }
+
+  function updateQuery(filterList: any) {
+    if (filterList.length == 0) {
+      fetch('/api/listing')
+        .then(response => response.json())
+        .then(data => setListings(data))
+        .catch(error => console.error(error))
+    }
+    else {
+      let params: any = {}
+
+      for (let i = 0; i < filterList.length; i++) {
+        let currFilter = filterList[i].filter
+        let currVal = filterList[i].value
+        params[currFilter] = currVal
+      }
+      const searchParams = new URLSearchParams(Object.entries(params))
+      fetch('/api/listingsByCategory?' + searchParams)
+        .then(response => response.json())
+        .then(data => setListings(data))
+        .catch(error => console.error(error))
+    }
   }
 
   function selectedIndex(filter: string) {
@@ -67,7 +131,7 @@ export default function FilterSideBar({
     return -1
   }
 
-  function updateSelected(filter: string, value: any, filterState: any) {
+  function updateSelected(filter: string, value: any) {
     let index = 0
 
     if (filter === FilterEnum.address) {
@@ -88,24 +152,18 @@ export default function FilterSideBar({
 
     else if (filter === FilterEnum.minPrice) {
       index = selectedIndex(filter)
-      let max_index = selectedIndex(FilterEnum.maxPrice)
       let max_val = 3000
-
-      if (max_index != -1) {
-        max_val = selected[max_index].value
-      }
-
       if (index != -1) {
-        if (selected[index].value !== +value && value !== "" && +value <= max_val && +value != 0) {
+        if (selected[index].value !== value && value != "" && value <= max_val && value != 0) {
           selected.splice(index, 1)
           selected.push({ "filter": filter, "value": +value })
         }
-        else if (value === "") {
+        else if (value == "") {
           selected.splice(index, 1)
         }
       }
       else {
-        if (+value <= max_val && +value != 0) {
+        if (value <= max_val && value != 0) {
           selected.push({ "filter": filter, "value": +value })
         }
       }
@@ -115,24 +173,39 @@ export default function FilterSideBar({
       index = selectedIndex(filter)
       let min_index = selectedIndex(FilterEnum.minPrice)
       let min_val = 1
-
       if (min_index != -1) {
         min_val = selected[min_index].value
       }
 
       if (index != -1) {
-        if (selected[index].value !== +value && value !== "" && +value >= min_val && +value != 0) {
+        if (selected[index].value !== value && value != "" && value >= min_val && value != 0) {
           selected.splice(index, 1)
-          selected.push({ "filter": filter, "value": +value })
+          selected.push({ "filter": filter, "value": value })
+          setMaxPriceError(false)
+          setMaxPriceText("up to $3000")
         }
-        else if (value === "") {
+        else if (value < min_val) {
           selected.splice(index, 1)
+          setMaxPriceError(true)
+          setMaxPriceText("invalid price")
         }
       }
+
       else {
-        if (+value >= min_val && +value != 0) {
+        if (value >= min_val && value != 0) {
           selected.push({ "filter": filter, "value": +value })
+          setMaxPriceError(false)
+          setMaxPriceText("up to $3000")
         }
+        else if (value < min_val) {
+          setMaxPriceError(true)
+          setMaxPriceText("invalid price")
+        }
+      }
+
+      if (value == "") {
+        setMaxPriceError(false)
+        setMaxPriceText("up to $3000")
       }
     }
 
@@ -192,56 +265,49 @@ export default function FilterSideBar({
   function handleFilterChange(filterName: string, filterState: any, setFunction: Function,
     event: { target: { value: any } }) {
     if (filterName === FilterEnum.minPrice) {
-      var currMinPrice = event.target.value.replace(/^0+/, "")
-      let currMinPriceString = '' + currMinPrice
-      if (currMinPriceString.includes('e') || currMinPriceString.includes('-')
-        || currMinPriceString.includes('.')) {
-        currMinPrice = ''
-        event.target.value = currMinPrice
-        setFunction(currMinPrice)
-      }
-      if (currMinPrice > 3000) {
+      var currMinPrice = event.target.value.replace(/^0+|[^0-9]*$/, "")
+
+      if (+currMinPrice > 3000) {
         currMinPrice = currMinPrice.slice(0, 4)
-        if (currMinPrice <= 3000) {
+        if (+currMinPrice <= 3000) {
           event.target.value = currMinPrice
-          setFunction(currMinPrice)
-          updateSelected(filterName, currMinPrice, minPrice)
         }
         else {
           currMinPrice = currMinPrice.slice(0, 3)
           event.target.value = currMinPrice
-          setFunction(currMinPrice)
-          updateSelected(filterName, currMinPrice, minPrice)
         }
       }
+
+      if (maxPrice != "") {
+        currMinPrice = currMinPrice.slice(0, maxPrice.length)
+        if (+currMinPrice <= +maxPrice) {
+          event.target.value = currMinPrice
+        }
+        else {
+          currMinPrice = currMinPrice.slice(0, maxPrice.length - 1)
+          event.target.value = currMinPrice
+        }
+      }
+
       setFunction(currMinPrice)
-      updateSelected(filterName, currMinPrice, minPrice)
+      updateSelected(filterName, +currMinPrice)
 
     } else if (filterName === FilterEnum.maxPrice) {
-      var currMaxPrice = event.target.value.replace(/^0+/, "")
-      let currMaxPriceString = '' + currMaxPrice
-      if (currMaxPriceString.includes('e') || currMaxPriceString.includes('-')
-        || currMaxPriceString.includes('.')) {
-        currMaxPrice = ''
-        event.target.value = currMaxPrice
-        setFunction(currMaxPrice)
-      }
-      if (currMaxPrice > 3000) {
+      var currMaxPrice = event.target.value.replace(/^0+|[^0-9]*$/, "")
+
+      if (+currMaxPrice > 3000) {
         currMaxPrice = currMaxPrice.slice(0, 4)
-        if (currMaxPrice <= 3000) {
+        if (+currMaxPrice <= 3000) {
           event.target.value = currMaxPrice
-          setFunction(currMaxPrice)
-          updateSelected(filterName, currMaxPrice, maxPrice)
         }
         else {
           currMaxPrice = currMaxPrice.slice(0, 3)
           event.target.value = currMaxPrice
-          setFunction(currMaxPrice)
-          updateSelected(filterName, currMaxPrice, maxPrice)
         }
       }
+
       setFunction(currMaxPrice)
-      updateSelected(filterName, currMaxPrice, maxPrice)
+      updateSelected(filterName, +currMaxPrice)
     }
 
     else if (filterName === FilterEnum.disTransportation || filterName ===
@@ -252,7 +318,7 @@ export default function FilterSideBar({
       filterName === FilterEnum.condo || filterName ===
       FilterEnum.single) {
       setFunction(event.target.value)
-      updateSelected(filterName, event.target.value, filterState)
+      updateSelected(filterName, event.target.value)
     }
   }
 
@@ -274,14 +340,20 @@ export default function FilterSideBar({
       <Grid container spacing={2} columns={12}>
         <Grid item xs={12}>
         </Grid>
-        <Grid item xs={12}>
+        <Grid item xs={6}>
           <h2 className='title'>Filters</h2>
+        </Grid>
+        <Grid sx={{ fontStyle: 'italic', textAlign: 'right', padding: 4 }} item xs={6}>
+          <Link sx={{ cursor: 'pointer' }} underline="hover" color="inherit"
+            onClick={() => clearAllFilters()}>
+            {'Clear Filters'}
+          </Link>
         </Grid>
       </Grid>
       <Grid>
         <Box className='box' component="span">
           <h3 className='text'>Location</h3>
-          <TextField size="small" id="outlined-basic" label="Search by address" variant="outlined"
+          <TextField value={address} size="small" id="outlined-basic" label="Search by address" variant="outlined"
             onChange={(e) => handleFilterChange(FilterEnum.address, address, setAddress, e)}
           />
         </Box>
@@ -291,24 +363,25 @@ export default function FilterSideBar({
           <h3 className='text'>Price</h3>
           <TextField
             value={minPrice}
+            helperText="up to $3000"
             className='prices'
             size="small"
             id="outlined-basic"
             label="min"
             variant="outlined"
-            type="number"
-            helperText="up to $3000"
+            type="text"
             onChange={(e) => handleFilterChange(FilterEnum.minPrice, minPrice, setMinPrice, e)} />
           <h3 className='dash'> – </h3>
           <TextField
             value={maxPrice}
+            error={maxPriceError}
+            helperText={maxPriceText}
             className='prices'
             size="small"
             id="outlined-basic"
             label="max"
             variant="outlined"
-            type="number"
-            helperText="up to $3000"
+            type="text"
             onChange={(e) => handleFilterChange(FilterEnum.maxPrice, maxPrice, setMaxPrice, e)}
           />
         </Box>

@@ -3,6 +3,7 @@ import UserDisplayCard from './UserDisplayCard'
 import SearchIcon from '@mui/icons-material/Search';
 import ColumnLabel from '../components/ColumnLabel'
 import { useState, useEffect } from 'react'
+import ConfirmPopUp from './ConfirmPopUp';
 
 
 const ManageUsers = () => {
@@ -11,6 +12,7 @@ const ManageUsers = () => {
   let [sortName, setSortName] = useState('createdAt')
   let [search, setSearch] = useState('')
   let [voucherType, setVoucherType] = useState('')
+  const [confirmDeletePop, setConfirmDeletePop] = useState(false)
 
   function handleFilterChange(setFunction: Function, event: { target: { value: any } }) {
     setFunction(event.target.value)
@@ -26,6 +28,20 @@ const ManageUsers = () => {
       }
     }
     fetchUsers()
+
+    const accountTime = async () => {
+      for (let i = 0; i < Users.length; i++) {
+        const date = new Date();
+        const created = new Date(Users[i].createdAt);
+        let addDays = Users[i].additionalDays;
+        addDays = addDays * 86400000;
+        let timeDiff = date.getTime() - created.getTime();
+        if (timeDiff > 10368000000 + addDays) {
+          handleDelete(Users[i]._id);
+        }
+      }
+    }
+    accountTime()
   }, [])
 
   useEffect(() => {
@@ -66,10 +82,32 @@ const ManageUsers = () => {
     // After we delete we must update the local state
     const newUsers = Users.filter(User => User._id != id)
     setUsers(newUsers)
+    setConfirmDeletePop(true)
   }
 
+  const daysRemaining = (user: any): number => {
+
+    const date = new Date();
+    const created = new Date(user.createdAt);
+    let addDays = user.additionalDays;
+    let totalDays = 120 + addDays;
+    addDays = addDays * 86400000;
+    let timeDiff = date.getTime() - created.getTime();
+    if (timeDiff <= 10368000000 + addDays) {
+      return Math.floor((totalDays - (timeDiff / 86400000) + 1));
+    }
+    return 0;
+  };
+
+
+  const [voucher, setVoucher] = React.useState('');
+
+  const handleChange = (event: SelectChangeEvent) => {
+    setVoucher(event.target.value as string);
+  };
+
   return (
-    <Box sx={{
+    <><Box sx={{
       mt: '1%',
       maxWidth: '100%',
       p: '0.5%'
@@ -132,7 +170,7 @@ const ManageUsers = () => {
 
       </Container>
 
-      <div className="users" >
+      <div className="users">
         {Users && Users.map((User) => (
           <div>
             <UserDisplayCard
@@ -153,13 +191,14 @@ const ManageUsers = () => {
               race={User.race}
               contactPref={User.contactPref}
               date={User.createdAt}
+              daysLeft={daysRemaining(User)}
               handleDelete={handleDelete}
             />
             <Divider variant="middle" sx={{ marginTop: '0.5rem', bgcolor: 'black' }} />
           </div>
         ))}
       </div>
-    </Box>
+    </Box><ConfirmPopUp openConfirmPop={confirmDeletePop} setConfirmPop={setConfirmDeletePop} action="deleted" type="User" /></>
   )
 }
 

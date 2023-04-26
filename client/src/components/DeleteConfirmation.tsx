@@ -3,7 +3,6 @@ import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
-import { padding, spacing } from "@mui/system";
 
 
 //interface for declaring what props the PopUp can take
@@ -18,14 +17,14 @@ interface DeleteConfirmationProps {
 export default function DeleteConfirmation({ id, openPop, setOpenPop, handleDelete, type }: DeleteConfirmationProps) {
 
     // function for deleting the listing and clearing the PopUp all in one
-    const handlePopUpDelete = () => {
+    const handlePopUpDelete = (event: any) => {
+        event.stopPropagation()
         handleDelete(id)
-        setOpenPop(!openPop)
     }
 
     return (
 
-        <Dialog
+        <><Dialog
             open={openPop}
             PaperProps={{ sx: { width: '35%', height: '30%', borderRadius: '10px' } }}
         >
@@ -47,13 +46,13 @@ export default function DeleteConfirmation({ id, openPop, setOpenPop, handleDele
                         <DialogActions>
                             <Button variant='outlined'
                                 sx={{ color: "#5D737E", borderColor: "#5D737E", width: 175, textTransform: "none", fontSize: "1.2rem", fontWeight: "bold", borderRadius: "12px", bgcolor: "white", ":hover": { bgcolor: "#5D737EB5" }, padding: "0px 2px" }}
-                                onClick={() => setOpenPop(!openPop)}
+                                onClick={() => { setOpenPop(!openPop) }}
                             >
                                 Cancel
                             </Button>
                             <Button variant='contained'
                                 sx={{ color: "#FFFFFF", bgcolor: "#ED5F1E", ':hover': { bgcolor: "#ED5F1EB5" }, textTransform: "none", width: 175, fontSize: "1.2rem", fontWeight: "bold", borderRadius: "12px", padding: "0px 2px" }}
-                                onClick={() => handlePopUpDelete()}
+                                onClick={(event) => { handlePopUpDelete(event); }}
                             >
                                 Confirm
                             </Button>
@@ -62,5 +61,6 @@ export default function DeleteConfirmation({ id, openPop, setOpenPop, handleDele
                 </Grid>
             </Grid>
         </Dialog>
+        </>
     )
 }

@@ -81,7 +81,8 @@ const createUser = async (req, res) => {
     gender,
     race,
     contactPref,
-    recentlyViewed
+    recentlyViewed,
+    additionalDays
   } = req.body
 
   try {
@@ -100,7 +101,8 @@ const createUser = async (req, res) => {
       gender,
       race,
       contactPref,
-      recentlyViewed
+      recentlyViewed,
+      additionalDays
     })
     res.status(200).json(user)
   } catch (error) {

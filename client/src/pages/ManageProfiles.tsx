@@ -4,6 +4,8 @@ import { ThemeProvider } from '@emotion/react'
 import React from 'react'
 import ManageUsers from '../components/ManageUsers'
 import ManageAdmins from '../components/ManageAdmins'
+import ConfirmPopUp from '../components/ConfirmPopUp'
+import { useLocation, useNavigate } from 'react-router-dom'
 
 const ManageProfiles = () => {
   const theme = createTheme({
@@ -24,6 +26,18 @@ const ManageProfiles = () => {
   const [Users, setUsers] = useState<any[]>([])
   const [Admins, setAdmins] = useState<any[]>([])
 
+  const [confirmCreateUserPop, setConfirmCreateUserPop] = useState(false)
+  const [confirmEditUserPop, setConfirmEditUserPop] = useState(false)
+  const [confirmCreateAdminPop, setConfirmCreateAdminPop] = useState(false)
+  const [confirmEditAdminPop, setConfirmEditAdminPop] = useState(false)
+
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const action = searchParams.get("action");
+  const type = searchParams.get("type");
+
+  const navigate = useNavigate();
+
   useEffect(() => {
     const fetchAdmins = async () => {
       const response = await fetch('/api/admins')
@@ -34,6 +48,16 @@ const ManageProfiles = () => {
       }
     }
     fetchAdmins()
+
+
+    if (action === "create" && type === "admin") {
+      setConfirmCreateAdminPop(true)
+      navigate("/manage-profiles")
+    } else if (action === "edit" && type === "admin") {
+      setConfirmEditAdminPop(true)
+      navigate("/manage-profiles")
+    }
+
   }, [])
 
   useEffect(() => {
@@ -46,6 +70,14 @@ const ManageProfiles = () => {
       }
     }
     fetchUsers()
+
+    if (action === "create" && type === "user") {
+      setConfirmCreateUserPop(true)
+      navigate("/manage-profiles")
+    } else if (action === "edit" && type === "user") {
+      setConfirmEditUserPop(true)
+      navigate("/manage-profiles")
+    }
   }, [])
 
   interface TabPanelProps {
@@ -86,9 +118,9 @@ const ManageProfiles = () => {
   };
 
   return (
-    <ThemeProvider theme={theme}>
+    <><ThemeProvider theme={theme}>
       <Container maxWidth={false}>
-        <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }} >
+        <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
           <ThemeProvider theme={theme}>
             <Typography variant="h4" sx={{ fontWeight: 'bold', mt: '1%' }}>Manage Profiles</Typography>
           </ThemeProvider>
@@ -102,7 +134,7 @@ const ManageProfiles = () => {
           <Typography variant="subtitle1" sx={{ mr: '0.5%' }}>Admin Users</Typography>
         </Box>
 
-        <Box >
+        <Box>
           <Tabs value={value} onChange={handleTabChange} textColor="primary" indicatorColor="primary">
             <Tab sx={{ borderWidth: "10 rem", borderColor: '#5D737E' }} label="Non-Admin" {...a11yProps(0)} />
             <Tab label="Admin" {...a11yProps(1)} />
@@ -110,14 +142,19 @@ const ManageProfiles = () => {
         </Box>
         <Box>
           <TabPanel value={value} index={0}>
-              <ManageUsers />
+            <ManageUsers />
           </TabPanel>
           <TabPanel value={value} index={1}>
             <ManageAdmins />
           </TabPanel>
         </Box>
-      </Container >
-    </ThemeProvider >
+      </Container>
+    </ThemeProvider>
+      <ConfirmPopUp openConfirmPop={confirmCreateUserPop} setConfirmPop={setConfirmCreateUserPop} action="created" type="New User" />
+      <ConfirmPopUp openConfirmPop={confirmEditUserPop} setConfirmPop={setConfirmEditUserPop} action="updated" type="User" />
+      <ConfirmPopUp openConfirmPop={confirmCreateAdminPop} setConfirmPop={setConfirmCreateAdminPop} action="created" type="New Admin" />
+      <ConfirmPopUp openConfirmPop={confirmEditAdminPop} setConfirmPop={setConfirmEditAdminPop} action="updated" type="Admin" />
+    </>
   )
 }
 

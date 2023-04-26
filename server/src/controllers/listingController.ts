@@ -130,7 +130,6 @@ const getListingByCategory = async (req, res) => {
   }
 
   const listings = await Listing.find(query);
-  console.log(listings)
 
   res.status(200).json(listings);
 }

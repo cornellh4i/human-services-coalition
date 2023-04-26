@@ -84,8 +84,9 @@ const FmrForm = () => {
       setSixBed('')
 
       setError(null)
-      console.log('New FMR prices Added', json)
-      navigate('/')
+
+      navigate("/?action=set&type=fmr")
+
     }
   }
 

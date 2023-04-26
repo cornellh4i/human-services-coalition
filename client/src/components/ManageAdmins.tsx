@@ -3,6 +3,7 @@ import AdminDisplayCard from './AdminDisplayCard'
 import SearchIcon from '@mui/icons-material/Search';
 import ColumnLabel from '../components/ColumnLabel'
 import { useState, useEffect } from 'react'
+import ConfirmPopUp from './ConfirmPopUp';
 
 
 const ManageAdmins = () => {
@@ -11,6 +12,7 @@ const ManageAdmins = () => {
   let [sortName, setSortName] = useState('createdAt')
   let [search, setSearch] = useState('')
   let [affiliation, setAffiliation] = useState('');
+  const [confirmDeletePop, setConfirmDeletePop] = useState(false)
 
   function handleFilterChange(setFunction: Function, event: { target: { value: any } }) {
     setFunction(event.target.value)
@@ -66,10 +68,11 @@ const ManageAdmins = () => {
     // After we delete we must update the local state
     const newAdmins = Admins.filter(Admin => Admin._id !== id)
     setAdmins(newAdmins)
+    setConfirmDeletePop(true)
   }
 
   return (
-    <Box sx={{
+    <><Box sx={{
       mt: '1%',
       maxWidth: '100%',
       p: '0.5%'
@@ -130,7 +133,7 @@ const ManageAdmins = () => {
 
       </Container >
 
-      <div className="admins" >
+      <div className="admins">
         {Admins && Admins.map((Admin) => (
           <div>
             <AdminDisplayCard
@@ -150,13 +153,14 @@ const ManageAdmins = () => {
               birthdate={Admin.birthdate}
               contactPref={Admin.contactPref}
               date={Admin.createdAt}
-              handleDelete={handleDelete}
-            />
+              handleDelete={handleDelete} />
             <Divider variant="middle" sx={{ marginTop: '0.5rem', bgcolor: 'black' }} />
           </div>
         ))}
       </div>
-    </Box >
+    </Box>
+      <ConfirmPopUp openConfirmPop={confirmDeletePop} setConfirmPop={setConfirmDeletePop} action="deleted" type="Admin" />
+    </>
   )
 }
 
