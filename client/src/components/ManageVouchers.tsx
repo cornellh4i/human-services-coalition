@@ -33,7 +33,7 @@ const ManageVouchers = () => {
       }
     }
     fetchVouchers()
-  }, [])
+  }, [Vouchers])
 
   // The function that calls the delete routing function
   const handleDelete = async (id: any) => {

@@ -20,6 +20,7 @@ export default function DeleteConfirmation({ id, openPop, setOpenPop, handleDele
     const handlePopUpDelete = (event: any) => {
         event.stopPropagation()
         handleDelete(id)
+        setOpenPop(false)
     }
 
     return (
