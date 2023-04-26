@@ -1,7 +1,6 @@
-import { Box, Container, Divider, Grid, InputAdornment, FormControl, TextField, Select, MenuItem, SelectChangeEvent, Typography } from '@mui/material'
+import { Box, Container, Divider, Grid, InputAdornment, FormControl, TextField, Select, MenuItem, Typography } from '@mui/material'
 import AdminDisplayCard from './AdminDisplayCard'
 import SearchIcon from '@mui/icons-material/Search';
-import React from 'react'
 import ColumnLabel from '../components/ColumnLabel'
 import { useState, useEffect } from 'react'
 
@@ -12,63 +11,9 @@ const ManageAdmins = () => {
   let [sortName, setSortName] = useState('createdAt')
   let [search, setSearch] = useState('')
   let [affiliation, setAffiliation] = useState('');
-  let [filters, setFilters] = useState([])
-  let selected: any = [...filters]
 
-  const FilterEnum = {
-    affiliation: "affiliation",
-    search: "search"
-  }
-
-  function selectedIndex(filter: string) {
-    for (let i = 0; i < selected.length; i++) {
-      if (selected[i].filter === filter) {
-        return i
-      }
-    }
-    return -1
-  }
-
-  // function updateSelected(filter: string, value: any) {
-  //   let index = 0
-
-  //   // Search case
-  //   if (filter === FilterEnum.search) {
-  //     index = selectedIndex(filter)
-  //     if (index !== -1) {
-  //       if (selected[index].value !== value && value !== "") {
-  //         selected.splice(index, 1)
-  //         selected.push({ "filter": filter, "value": value })
-  //       }
-  //       else if (value === "") {
-  //         selected.splice(index, 1)
-  //       }
-  //     }
-  //     else {
-  //       selected.push({ "filter": filter, "value": value })
-  //     }
-  //   }
-  //   // Affiliation case
-  //   else {
-  //     index = selectedIndex(filter)
-  //     if (index !== -1) {
-  //       selected.splice(index, 1)
-  //       selected.push({ "filter": filter, "value": value })
-  //     }
-  //     else {
-  //       selected.push({ "filter": filter, "value": value })
-  //     }
-  //   }
-  //   setFilters(selected)
-  //   console.log(selected)
-  // }
-
-  // updateQuery(selected)
-
-  function handleFilterChange(filterName: string, setFunction: Function,
-    event: { target: { value: any } }) {
+  function handleFilterChange(setFunction: Function, event: { target: { value: any } }) {
     setFunction(event.target.value)
-    // updateSelected(filterName, event.target.value)
   }
 
   useEffect(() => {
@@ -78,15 +23,7 @@ const ManageAdmins = () => {
 
       if (response.ok) {
         setAdmins(json)
-      }  // function updateQuery(filterList: any) {
-        //   let params: any = {}
-      
-        //   for (let i = 0; i < filterList.length; i++) {
-        //     let currFilter = filterList[i].filter
-        //     let currVal = filterList[i].value
-        //     params[currFilter] = currVal
-        //   }
-        // }
+      } 
     }
     fetchAdmins()
   }, [])
@@ -108,7 +45,7 @@ const ManageAdmins = () => {
       }
     }
     fetchAdmins()
-  }, [search, affiliation, sortOrder, sortName, filters])
+  }, [search, affiliation, sortOrder, sortName])
 
 
   async function handleSortToggle(name: string) {
@@ -131,10 +68,6 @@ const ManageAdmins = () => {
     setAdmins(newAdmins)
   }
 
-  // const handleChange = (event: SelectChangeEvent) => {
-  //   setAffiliation(event.target.value as string);
-  // };
-
   return (
     <Box sx={{
       mt: '1%',
@@ -153,7 +86,7 @@ const ManageAdmins = () => {
                 <SearchIcon />
               </InputAdornment>,
             }}
-            onChange={(e) => handleFilterChange(FilterEnum.search, setSearch, e)}
+            onChange={(e) => handleFilterChange(setSearch, e)}
           />
         </Grid>
 
@@ -165,7 +98,7 @@ const ManageAdmins = () => {
                 sx={{ flex: 1, borderRadius: 1 }}>
                 <Select
                   value={affiliation}
-                  onChange={(e) => handleFilterChange(FilterEnum.affiliation, setAffiliation, e)}
+                  onChange={(e) => handleFilterChange(setAffiliation, e)}
                   displayEmpty>
                   <MenuItem value="All">All Affiliations</MenuItem>
                   <MenuItem value="HSC">HSC</MenuItem>
