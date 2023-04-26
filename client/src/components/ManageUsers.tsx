@@ -112,7 +112,7 @@ const ManageUsers = () => {
         </Grid>
       </Container>
 
-      <Container maxWidth={false} sx={{ borderRadius: 0, display: 'flex', justifyContent: 'flex-start', alignItems: 'left', backgroundColor: '#D9D9D9' }}>
+      <Container maxWidth={false} sx={{ borderRadius: 0, display: 'flex', justifyContent: 'flex-start', alignItems: 'left' }}>
 
         <Grid container spacing={"10%"}>
           <Grid item sx={{ ml: "1%" }}>
