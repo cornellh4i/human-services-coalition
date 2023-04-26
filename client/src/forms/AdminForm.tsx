@@ -30,6 +30,7 @@ const AdminForm = () => {
   const [fNameError, setFNameError] = useState(false)
   const [lNameError, setLNameError] = useState(false)
 
+
   // Navigation functionality
   const navigate = useNavigate();
 
@@ -39,6 +40,7 @@ const AdminForm = () => {
   // //contains that will prepopulate the form if location.state is not null
   useEffect(() => {
     if (location.state != null) { getListingDetails() }
+
   }, [])
   //fetch the data related to id from the database
   const getListingDetails = async () => {
@@ -201,18 +203,21 @@ const AdminForm = () => {
                     <FormLabel>Affiliation</FormLabel>
                     <Typography sx={{ marginLeft: '0.3rem', color: '#E50808' }}>*</Typography>
                   </Box>
-                  <TextField fullWidth
+                  <Select
+                    fullWidth
                     id="affiliation"
                     name="affiliation"
                     className="form-field"
-                    onChange={(e) => setAffiliation(e.target.value)}
                     value={affiliation}
+                    onChange={(e) => setAffiliation(e.target.value)}
                     variant="outlined"
                     size="small"
-                    type="text"
                     required
                     error={affiliationError}
-                  />
+                  >
+                    <MenuItem value="HSC">HSC</MenuItem>
+                    <MenuItem value="Non-HSC">Non-HSC</MenuItem>
+                  </Select>
                 </FormGroup>
               </Box>
             </Grid>
