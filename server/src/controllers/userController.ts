@@ -12,7 +12,6 @@ const getSortUsers = async (req, res) => {
     $or: [
       { fName: { $regex: new RegExp(search, 'i') } },
       { lName: { $regex: new RegExp(search, 'i') } },
-      { voucherType: { $regex: new RegExp(search, 'i') } },
     ]
   } : {};
 

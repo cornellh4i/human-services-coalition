@@ -12,7 +12,6 @@ const getSortAdmins = async (req, res) => {
     $or: [
       { fName: { $regex: new RegExp(search, 'i') } },
       { lName: { $regex: new RegExp(search, 'i') } },
-      { affiliation: { $regex: new RegExp(search, 'i') } },
     ]
   } : {};
 
@@ -25,7 +24,6 @@ const getSortAdmins = async (req, res) => {
     }
   }
   if (affiliation == 'HSC') {
-    console.log("run")
     filter["affiliation"] = { $regex: /HSC/ };
   } else if (affiliation == 'Non-HSC') {
     filter["affiliation"] = { $not: /HSC/ };

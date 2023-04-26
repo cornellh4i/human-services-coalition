@@ -86,7 +86,6 @@ const ManageUsers = () => {
   }
 
   const daysRemaining = (user: any): number => {
-
     const date = new Date();
     const created = new Date(user.createdAt);
     let addDays = user.additionalDays;
@@ -97,13 +96,6 @@ const ManageUsers = () => {
       return Math.floor((totalDays - (timeDiff / 86400000) + 1));
     }
     return 0;
-  };
-
-
-  const [voucher, setVoucher] = React.useState('');
-
-  const handleChange = (event: SelectChangeEvent) => {
-    setVoucher(event.target.value as string);
   };
 
   return (
