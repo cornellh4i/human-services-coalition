@@ -150,7 +150,7 @@ const ManageUsers = () => {
             <Box sx={{ flex: 1 }}>
               <FormControl sx={{ flex: 1, backgroundColor: '#FFFFFF', borderRadius: 1 }}>
                 <Select
-                  value={voucher}
+                  value={voucherType}
                   onChange={(e) => handleFilterChange(setVoucherType, e)}
                   displayEmpty
                 >

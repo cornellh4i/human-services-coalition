@@ -253,9 +253,6 @@ const UserForm = () => {
                     size="small"
                     error={voucherTypeError}
                   >
-                    <MenuItem value="" disabled>
-                      Select Voucher Type
-                    </MenuItem>
                     {voucherNames.map((name) => (
                       <MenuItem key={name} value={name}>
                         {name}
