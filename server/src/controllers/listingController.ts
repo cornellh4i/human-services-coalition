@@ -237,7 +237,8 @@ const updateListing = async (req, res) => {
 //use s3 module i have a file at this location, name for file and bucket to upload 
 const updateListingPicture = async (req, res) => {
   const { id } = req.params
-
+  console.log('FORMBAODY')
+  console.log(req.body)
 
   try {
 
@@ -341,6 +342,8 @@ const getListingPicture = async (req, res) => {
 const deleteListingPicture = async (req, res) => {
   const { id } = req.params
 
+  console.log('FORMBAODY')
+  console.log(req.body)
   try {
     const dirname = String(req.body.dirname)
     console.log("dir")
@@ -348,7 +351,7 @@ const deleteListingPicture = async (req, res) => {
     const filename = String(req.body.filename)
     console.log("THIS IS FILENAME")
     console.log(filename)
-    //console.log(req.body)
+
     var temparr: string[] = req.body.arr
     const result = await s3utils.deleteImage(dirname, filename)
     await Listing.findOneAndUpdate(

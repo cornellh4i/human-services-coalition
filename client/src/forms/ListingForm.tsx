@@ -161,23 +161,22 @@ const ListingForm = () => {
     return result
   }
 
+
   // [imageHandler] executes the API call for each image entry on the form
   const imageHandler = async (id: any) => {
 
     //Initilisation of helper variables 
     const alist: File[][] = [pic1, pic2, pic3]// alist is populated with the three images
     var temparr = prevPics
-    var counter = 0
 
     const promises = alist.map(async (imgfle: any) => {
       let response = null;
-      counter++
-      console.log("THIS IS COUNTER")
-      console.log(counter)
+
       if (imgfle.length > 0) { // if there is something in this file
 
         // determines the name of the file to represent in S3 storage
         const index = alist.indexOf(imgfle)
+        console.log("This is file " + index)
         const placeholder = `house${index}`
         // the actual image file inputted by the user
         const pictureFile = imgfle[0]
@@ -198,6 +197,15 @@ const ListingForm = () => {
         formData.append('dirname', streetAddress)
         formData.append('filename', placeholder)
 
+        console.log('THE OFRMM DAATTAAA upload')
+        console.log(formData.get('filename'))
+        console.log(formData.get('arr[]'))
+
+        // // Display the key/value pairs
+        // for (var pair of formData.values()) {
+        //   console.log(pair[0] + ', ' + pair[1]);
+        // }
+
         response = await fetch('api/listingPicture/' + id, {
           method: 'PATCH',
           body: formData
@@ -216,16 +224,35 @@ const ListingForm = () => {
     var temparr = prevPics
     temparr.splice(id, 1)
 
-    formData.append('dirname', streetAddress)
-    formData.append('filename', placeholder)
+
+    console.log('TEMPEARRR')
+    console.log(temparr)
+
+    console.log("IN LOOOP")
     for (var i = 0; i < temparr.length; i++) {
+      console.log(temparr[i])
       formData.append('arr[]', temparr[i])
     }
+    console.log("OUTLOOP")
+    console.log(formData.keys())
+    formData.append('dirname', streetAddress)
+    console.log('THE OFRMM DAATTAAAstreet')
+    console.log(formData.get('dirname'))
 
+    formData.append('filename', placeholder)
+    console.log(formData.get('filename'))
+    const placeholderFile = new File(
+      ['placeholder content'],
+      'placeholder-file-12345',
+      { type: 'image/jpeg' },
+    );
+    formData.append('picture', placeholderFile)
     const response = await fetch('api/listingPicture/' + id, {
-      method: 'DELETE',
+      method: 'PATCH',
       body: formData
     });
+
+    return response
 
   }
 
@@ -883,6 +910,7 @@ const ListingForm = () => {
                                   if (e.target.files) {
                                     //setPic3(Array.from(e.target.files));
                                     pic2.push(Array.from(e.target.files)[0]);
+                                    console.log(pic2)
                                   }
                                 }} />
                             </Box>
@@ -940,6 +968,7 @@ const ListingForm = () => {
                                   if (e.target.files) {
                                     //setPic3(Array.from(e.target.files));
                                     pic3.push(Array.from(e.target.files)[0]);
+                                    console.log(pic3)
                                   }
                                 }} />
                             </Box>
