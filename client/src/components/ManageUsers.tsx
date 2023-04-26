@@ -9,6 +9,29 @@ import ConfirmPopUp from './ConfirmPopUp';
 const ManageUsers = () => {
   const [Users, setUsers] = useState<any[]>([])
   const [confirmDeletePop, setConfirmDeletePop] = useState(false)
+  const [voucherNames, setVoucherNames] = useState<string[]>([]);
+
+
+  interface Voucher {
+    _id: string;
+    name: string;
+    percentage: number;
+    createdAt: string;
+    updatedAt: string;
+    __v: number;
+  }
+
+  //Get vouchers from api and assign names to state
+  const assignVoucherNames = async () => {
+    let vouchersJson = await fetch('/api/vouchers')
+    let json: Voucher[] = [] // Add the type annotation here
+    if (vouchersJson.ok) {
+      json = await vouchersJson.json()
+      console.log(json)
+    }
+    const voucherNames = json.map(voucher => voucher.name);
+    setVoucherNames(voucherNames)
+  }
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -20,6 +43,7 @@ const ManageUsers = () => {
       }
     }
     fetchUsers()
+    assignVoucherNames()
 
     const accountTime = async () => {
       for (let i = 0; i < Users.length; i++) {
@@ -96,14 +120,14 @@ const ManageUsers = () => {
                 <Select
                   value={voucher}
                   onChange={handleChange}
-                  displayEmpty>
-                  <MenuItem value="">All Vouchers</MenuItem>
-                  <MenuItem value={10}>Voucher I</MenuItem>
-                  <MenuItem value={20}>Voucher II</MenuItem>
-                  <MenuItem value={30}>Voucher III</MenuItem>
-                  <MenuItem value={40}>Voucher IV</MenuItem>
-                  <MenuItem value={50}>Other</MenuItem>
+                  displayEmpty
+                >
+                  <MenuItem value="All Vouchers">All Vouchers</MenuItem>
+                  {voucherNames.map((voucherName) => (
+                    <MenuItem key={voucherName} value={voucherName}>{voucherName}</MenuItem>
+                  ))}
                 </Select>
+
               </FormControl>
             </Box>
           </Box>
