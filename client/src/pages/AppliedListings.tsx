@@ -7,7 +7,7 @@ import { Button, IconButton, Typography } from '@mui/material'
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import PrintIcon from '@mui/icons-material/Print';
 
-const ProofSearch = () => {
+const AppliedListings = () => {
 
   //intialises the state for the list of houses that correspond to the specified user
   const [Listings, setListings] = useState<any[]>([])
@@ -96,4 +96,4 @@ const ProofSearch = () => {
   )
 }
 
-export default ProofSearch
+export default AppliedListings
