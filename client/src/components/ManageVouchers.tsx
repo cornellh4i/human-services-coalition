@@ -1,4 +1,4 @@
-import { Box, Container, Divider, Grid, InputAdornment, FormControl, TextField, Select, MenuItem, SelectChangeEvent, Typography } from '@mui/material'
+import { Box, Container, Divider, Grid, InputAdornment, FormControl, TextField, Select, MenuItem, SelectChangeEvent, Typography, createTheme, ThemeProvider } from '@mui/material'
 import VoucherDisplayCard from './VoucherDisplayCard'
 import ColumnLabel from '../components/ColumnLabel'
 import { useState, useEffect } from 'react'
@@ -7,6 +7,21 @@ import ConfirmPopUp from './ConfirmPopUp';
 const ManageVouchers = () => {
   const [Vouchers, setVouchers] = useState<any[]>([])
   const [confirmDeletePop, setConfirmDeletePop] = useState(false)
+
+  const theme = createTheme({
+    typography: {
+      fontSize: 7
+    },
+    palette: {
+      primary: {
+        main: "#FF6933"
+      }
+    }
+  })
+  theme.typography.h4 = {
+    fontSize: '1.0rem',
+    fontFamily: "Arial"
+  }
 
   useEffect(() => {
     const fetchVouchers = async () => {
@@ -44,14 +59,16 @@ const ManageVouchers = () => {
 
       <Container maxWidth={false} sx={{ borderRadius: 0, display: 'flex', justifyContent: 'flex-start', alignItems: 'left' }}>
 
-        <Grid container spacing={"10%"}>
-          <Grid item sx={{ ml: "1%" }}>
-            <ColumnLabel label="Name"></ColumnLabel>
+        <ThemeProvider theme={theme}>
+          <Grid container spacing={"10%"}>
+            <Grid item sx={{}}>
+              <Typography variant="h4" sx={{ fontWeight: 'normal', fontStyle: 'italic', mt: '1%' }}> Voucher Name </Typography>
+            </Grid>
+            <Grid item sx={{}}>
+              <Typography variant="h4" sx={{ fontWeight: 'normal', fontStyle: 'italic', mt: '1%' }}> Percentage </Typography>
+            </Grid>
           </Grid>
-          <Grid item sx={{ ml: "0%" }}>
-            <ColumnLabel label="Percentage"></ColumnLabel>
-          </Grid>
-        </Grid>
+        </ThemeProvider>
 
       </Container>
 

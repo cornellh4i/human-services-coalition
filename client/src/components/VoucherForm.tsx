@@ -105,7 +105,7 @@ const VoucherForm = () => {
 
               <FormGroup sx={{ flexGrow: '1', marginX: '1.5rem' }}>
                 <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'left', alignItems: 'center' }}>
-                  <FormLabel>Percetage</FormLabel>
+                  <FormLabel>Percentage</FormLabel>
                   <Typography sx={{ marginLeft: '0.3rem', color: '#E50808' }}>*</Typography>
                 </Box>
                 <TextField fullWidth

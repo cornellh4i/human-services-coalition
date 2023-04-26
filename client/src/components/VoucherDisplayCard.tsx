@@ -6,7 +6,7 @@ import { useState } from 'react';
 import { useNavigate } from "react-router-dom";
 //import AdminModal from './AdminModal';
 import { DeleteOutlined, EditOutlined } from '@mui/icons-material';
-//import DeleteConfirmation from './DeleteConfirmation';
+import DeleteConfirmation from './DeleteConfirmation';
 
 interface VoucherDisplayCardProps {
   voucherID: number
@@ -25,9 +25,6 @@ const VoucherDisplayCard = ({ voucherID, name, percentage, handleDelete }: Vouch
 
   // define handle click function
   //const navigate = useNavigate();
-
-  //states for the admin modal
-  const [openAdminMod, setOpenAdminMod] = useState(false)
 
   //states for the delete dialog pop up
   const [openPop, setOpenPop] = useState(false)
@@ -49,7 +46,7 @@ const VoucherDisplayCard = ({ voucherID, name, percentage, handleDelete }: Vouch
                 <Typography sx={{ ml: '10%' }}>{name}</Typography>
               </Grid>
               <Grid item display="flex" justifyContent="left" alignItems='center' xs={3}>
-                <Typography>{percentage}</Typography>
+                <Typography>{percentage}% </Typography>
               </Grid>
             </Grid>
           </Grid>
@@ -63,7 +60,9 @@ const VoucherDisplayCard = ({ voucherID, name, percentage, handleDelete }: Vouch
           </Box>
         </Card >
       </Container>
+      <DeleteConfirmation id={voucherID} openPop={openPop} setOpenPop={setOpenPop} handleDelete={handleDelete} type={"Voucher"} />
     </ThemeProvider>
+
 
 
   );
