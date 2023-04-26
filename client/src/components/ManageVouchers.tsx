@@ -78,7 +78,7 @@ const ManageVouchers = () => {
             <VoucherDisplayCard
               name={Voucher.name}
               percentage={Voucher.percentage}
-              voucherID={Voucher._id}
+              voucherid={Voucher._id}
               handleDelete={handleDelete} />
             <Divider variant="middle" sx={{ marginTop: '0.5rem', bgcolor: 'black' }} />
           </div>

@@ -4,18 +4,17 @@ import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import { useState } from 'react';
 import { useNavigate } from "react-router-dom";
-//import AdminModal from './AdminModal';
 import { DeleteOutlined, EditOutlined } from '@mui/icons-material';
 import DeleteConfirmation from './DeleteConfirmation';
 
 interface VoucherDisplayCardProps {
-  voucherID: number
+  voucherid: number
   name: string
   percentage: number
   handleDelete: (params: any) => any
 }
 
-const VoucherDisplayCard = ({ voucherID, name, percentage, handleDelete }: VoucherDisplayCardProps) => {
+const VoucherDisplayCard = ({ voucherid, name, percentage, handleDelete }: VoucherDisplayCardProps) => {
 
   const theme = createTheme({
     typography: {
@@ -60,7 +59,7 @@ const VoucherDisplayCard = ({ voucherID, name, percentage, handleDelete }: Vouch
           </Box>
         </Card >
       </Container>
-      <DeleteConfirmation id={voucherID} openPop={openPop} setOpenPop={setOpenPop} handleDelete={handleDelete} type={"Voucher"} />
+      <DeleteConfirmation id={voucherid} openPop={openPop} setOpenPop={setOpenPop} handleDelete={handleDelete} type={"Voucher"} />
     </ThemeProvider>
 
 
