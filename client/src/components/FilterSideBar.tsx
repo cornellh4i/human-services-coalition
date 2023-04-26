@@ -162,7 +162,11 @@ export default function FilterSideBar({
         else if (value == "") {
           selected.splice(index, 1)
         }
-        if (value <= maxPrice) {
+        if (value <= maxPrice && maxPrice !== "") {
+          let max_index = selectedIndex(FilterEnum.maxPrice)
+          if (max_index != -1) {
+            selected.splice(max_index, 1)
+          }
           setMaxPriceError(false)
           setMaxPriceText("up to $3000")
           selected.push({ "filter": FilterEnum.maxPrice, "value": maxPrice })
