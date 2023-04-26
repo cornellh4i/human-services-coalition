@@ -24,9 +24,9 @@ const getSortAdmins = async (req, res) => {
     }
   }
   if (affiliation == 'HSC') {
-    filter["affiliation"] = { $regex: /HSC/ };
+    filter["affiliation"] = { $eq: "HSC" };
   } else if (affiliation == 'Non-HSC') {
-    filter["affiliation"] = { $not: /HSC/ };
+    filter["affiliation"] = { $eq: "Non-HSC" };
   }
 
   const admins = await Admin.find(filter).sort(sortObject);

@@ -23,17 +23,10 @@ const getSortUsers = async (req, res) => {
       sortObject[sortName] = 'asc';
     }
   }
-  if (voucherType == 'Voucher I') {
-    filter["voucherType"] = { $regex: /Voucher I/ };
-  } else if (voucherType == 'Voucher II') {
-    filter["voucherType"] = { $regex: /Voucher II/ };
-  } else if (voucherType == 'Voucher III') {
-    filter["voucherType"] = { $regex: /Voucher III/ };
-  } else if (voucherType == 'Voucher IV') {
-    filter["voucherType"] = { $regex: /Voucher IV/ };
-  } else if (voucherType == "Other") {
-    filter["voucherType"] = { $not: /Voucher/ };
+  if (voucherType != "All Vouchers" && voucherType != "") {
+    filter["voucherType"] = { $eq: voucherType };
   }
+
 
   const users = await User.find(filter).sort(sortObject);
 
