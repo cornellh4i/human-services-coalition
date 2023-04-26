@@ -1,18 +1,26 @@
-import { Box, Container, Divider, Grid, InputAdornment, FormControl, TextField, Select, MenuItem, SelectChangeEvent, Typography } from '@mui/material'
+import { Box, Container, Divider, Grid, InputAdornment, FormControl, TextField, Select, MenuItem, Typography } from '@mui/material'
 import UserDisplayCard from './UserDisplayCard'
 import SearchIcon from '@mui/icons-material/Search';
-import React from 'react'
 import ColumnLabel from '../components/ColumnLabel'
 import { useState, useEffect } from 'react'
 import ConfirmPopUp from './ConfirmPopUp';
 
+
 const ManageUsers = () => {
   const [Users, setUsers] = useState<any[]>([])
+  let [sortOrder, setSortOrder] = useState(-1)
+  let [sortName, setSortName] = useState('createdAt')
+  let [search, setSearch] = useState('')
+  let [voucherType, setVoucherType] = useState('')
   const [confirmDeletePop, setConfirmDeletePop] = useState(false)
+
+  function handleFilterChange(setFunction: Function, event: { target: { value: any } }) {
+    setFunction(event.target.value)
+  }
 
   useEffect(() => {
     const fetchUsers = async () => {
-      const response = await fetch('/api/users')
+      const response = await fetch('/api/users/')
       const json = await response.json()
 
       if (response.ok) {
@@ -36,6 +44,36 @@ const ManageUsers = () => {
     accountTime()
   }, [])
 
+  useEffect(() => {
+    const fetchUsers = async () => {
+      let params = {
+        search: search,
+        sortName: sortName,
+        sortOrder: sortOrder.toString(),
+        voucherType: voucherType
+      }
+      let searchParams = new URLSearchParams(params)
+
+      const response = await fetch('/api/users/sort?' + searchParams)
+      const json = await response.json()
+      if (response.ok) {
+        setUsers(json)
+      }
+    }
+    fetchUsers()
+  }, [search, voucherType, sortOrder, sortName])
+
+
+  async function handleSortToggle(name: string) {
+    if (sortName == name) {
+      setSortOrder(sortOrder * -1)
+    }
+    else {
+      setSortOrder(-1)
+      setSortName(name)
+    }
+  }
+
   // The function that calls the delete routing function
   const handleDelete = async (id: any) => {
     await fetch('/api/users/' + id, {
@@ -48,7 +86,6 @@ const ManageUsers = () => {
   }
 
   const daysRemaining = (user: any): number => {
-
     const date = new Date();
     const created = new Date(user.createdAt);
     let addDays = user.additionalDays;
@@ -59,13 +96,6 @@ const ManageUsers = () => {
       return Math.floor((totalDays - (timeDiff / 86400000) + 1));
     }
     return 0;
-  };
-
-
-  const [voucher, setVoucher] = React.useState('');
-
-  const handleChange = (event: SelectChangeEvent) => {
-    setVoucher(event.target.value as string);
   };
 
   return (
@@ -85,7 +115,9 @@ const ManageUsers = () => {
               endAdornment: <InputAdornment position="end">
                 <SearchIcon />
               </InputAdornment>,
-            }} />
+            }}
+            onChange={(e) => handleFilterChange(setSearch, e)}
+          />
         </Grid>
 
         <Grid container item xs={'auto'}>
@@ -94,15 +126,15 @@ const ManageUsers = () => {
             <Box sx={{ flex: 1 }}>
               <FormControl sx={{ flex: 1, backgroundColor: '#FFFFFF', borderRadius: 1 }}>
                 <Select
-                  value={voucher}
-                  onChange={handleChange}
+                  value={voucherType}
+                  onChange={(e) => handleFilterChange(setVoucherType, e)}
                   displayEmpty>
-                  <MenuItem value="">All Vouchers</MenuItem>
-                  <MenuItem value={10}>Voucher I</MenuItem>
-                  <MenuItem value={20}>Voucher II</MenuItem>
-                  <MenuItem value={30}>Voucher III</MenuItem>
-                  <MenuItem value={40}>Voucher IV</MenuItem>
-                  <MenuItem value={50}>Other</MenuItem>
+                  <MenuItem value="All">All Vouchers</MenuItem>
+                  <MenuItem value="Voucher I">Voucher I</MenuItem>
+                  <MenuItem value="Voucher II">Voucher II</MenuItem>
+                  <MenuItem value="Voucher III">Voucher III</MenuItem>
+                  <MenuItem value="Voucher IV">Voucher IV</MenuItem>
+                  <MenuItem value="Other">Other</MenuItem>
                 </Select>
               </FormControl>
             </Box>
@@ -110,21 +142,21 @@ const ManageUsers = () => {
         </Grid>
       </Container>
 
-
       <Container maxWidth={false} sx={{ borderRadius: 0, display: 'flex', justifyContent: 'flex-start', alignItems: 'left' }}>
 
         <Grid container spacing={"10%"}>
           <Grid item sx={{ ml: "1%" }}>
-            <ColumnLabel label="First Name"></ColumnLabel>
+            <ColumnLabel label="First Name"
+              ascending={sortName == 'fName' && sortOrder == -1} onClick={() => handleSortToggle("fName")}></ColumnLabel>
           </Grid>
           <Grid item sx={{ ml: "0%" }}>
-            <ColumnLabel label="Last Name"></ColumnLabel>
+            <ColumnLabel label="Last Name" ascending={sortName == 'lName' && sortOrder == -1} onClick={() => handleSortToggle("lName")}></ColumnLabel>
           </Grid>
-          <Grid item sx={{ ml: "2%" }}>
-            <ColumnLabel label="Voucher Type"></ColumnLabel>
+          <Grid item sx={{ ml: "0%" }}>
+            <ColumnLabel label="Voucher" ascending={sortName == 'voucherType' && sortOrder == -1} onClick={() => handleSortToggle("voucherType")}></ColumnLabel>
           </Grid>
-          <Grid item sx={{ ml: "-1%" }}>
-            <ColumnLabel label="Created"></ColumnLabel>
+          <Grid item sx={{ ml: "3%" }}>
+            <ColumnLabel label="Created" ascending={sortName == 'createdAt' && sortOrder == -1} onClick={() => handleSortToggle("createdAt")}></ColumnLabel>
           </Grid>
         </Grid>
 
