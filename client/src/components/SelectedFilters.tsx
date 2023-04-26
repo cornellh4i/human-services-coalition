@@ -29,7 +29,6 @@ export default function SelectedFilters({
         let currVal = filterList[i].value
         params[currFilter] = currVal
       }
-      console.log(params)
       const searchParams = new URLSearchParams(Object.entries(params))
       fetch('/api/listingsByCategory?' + searchParams)
         .then(response => response.json())

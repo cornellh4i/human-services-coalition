@@ -114,7 +114,6 @@ export default function FilterSideBar({
         let currVal = filterList[i].value
         params[currFilter] = currVal
       }
-      console.log(params)
       const searchParams = new URLSearchParams(Object.entries(params))
       fetch('/api/listingsByCategory?' + searchParams)
         .then(response => response.json())
@@ -205,7 +204,6 @@ export default function FilterSideBar({
       }
 
       if (value == "") {
-        console.log("CALLED 2")
         setMaxPriceError(false)
         setMaxPriceText("up to $3000")
       }
