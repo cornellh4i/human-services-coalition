@@ -232,59 +232,32 @@ const updateListing = async (req, res) => {
     res.send(errorJson(error));
   }
 }
+
 //before this is called multer is called - middleware between front end and backend
 //steps in and takes the pictures and downloads it onto server (/uploads) folder MAGIC
 //use s3 module i have a file at this location, name for file and bucket to upload 
 const updateListingPicture = async (req, res) => {
   const { id } = req.params
-  console.log('FORMBAODY')
-  console.log(req.body)
-
   try {
-
     const files = req.files;
-    console.log("YOU THINK WE GOT THE FILE ? ")
-    console.log(files)
-    console.log("THE PARAMS")
-    console.log(req.params)
-    console.log(!files)
-    console.log("before id")
     // We should check if the file exists, if it doesn't, return an error
     if (!files) {
-      console.log("APPARENTLT WHERE HERE")
       res.send(errorJson("No file uploaded"));
       return;
     }
 
-    //console.log(req.body)
     var temparr: string[] = req.body.arr
-
-    // if (temparr[0] == "") {
-    //   temparr = []
-    // }
-
 
     // Now we send the file to S3 using our s3utils
     // 'name' is the text entered into the input field
     // and this is what the name of the file will be in s3
-    console.log("before loop")
-    files.forEach(async (file) => {
-      console.log(req.body.name)
-      const dirname = String(req.body.dirname)
-      console.log("dir")
-      console.log(dirname)
-      const filename1 = String(req.body.filename)
-      console.log("THIS IS FILENAME")
-      console.log(filename1)
 
-      //temparr.push(filename1)
-      console.log("What is temparr?")
-      console.log(temparr)
+    files.forEach(async (file) => {
+      const dirname = String(req.body.dirname)
+      const filename1 = String(req.body.filename)
       const result = await s3utils.uploadFile(dirname, filename1, file, true)
       await fs.unlink(file.path);
     })
-    console.log("exit loop")
-    console.log(temparr)
     await Listing.findOneAndUpdate(
       { _id: id }, // Filter: find the listing with the given ID
       { $set: { pictures: temparr } }, // Update: set the "pictures" field to the "pics" array
@@ -296,40 +269,26 @@ const updateListingPicture = async (req, res) => {
         }
       }
     );
-
-    //console.log(result)
-    // Now we delete the file from the /uploads folder since it has been uploaded
-    // await fs.unlink(file.path);
-    // Here you can return anything, I'm choosing to return the path to the image
     res.send(successJson({}));
 
   } catch (error) {
-    console.log("We in the error ")
-    console.log(error)
     res.send(errorJson(error));
-
     // res.status(200).json({ id: id })
   }
 }
 const getListingPicture = async (req, res) => {
-  console.log("INSIDE OF GETTING PICTURES")
-  console.log("INSIDE OF GETTING PICTURES")
+
   const { dir } = req.params
   const { file } = req.params
-  console.log("THE PARAMS")
-  console.log(req.params)
+
 
   const dirname = String(dir)
-  console.log("dirname" + dir)
-  console.log("filename " + file)
   const filename1 = String(file)
   const filename2 = `${dirname}/${filename1}`;
-  console.log("LOOOOOKS AT THE FILES")
-  console.log(filename2)
 
   const response = s3utils.getFileStream(dirname, filename1)
-  console.log('response iss')
-  //console.log(response)
+
+  //DONT MESS WITH THE CONSOLE READS IN THIS
   if (response) {
     console.log("into readstre ")
     response.createReadStream().on('error', e => {
@@ -339,6 +298,7 @@ const getListingPicture = async (req, res) => {
   }
 }
 
+// This function is absolutely useless! What a waste of my time
 const deleteListingPicture = async (req, res) => {
   const { id } = req.params
 
@@ -371,13 +331,6 @@ const deleteListingPicture = async (req, res) => {
     res.send(errorJson(error));
 
   }
-
-
-
-
-
-
-
 
 }
 

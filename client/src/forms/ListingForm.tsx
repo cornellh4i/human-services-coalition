@@ -54,7 +54,6 @@ const ListingForm = () => {
   const [files, setFiles] = useState<File[]>([]);
 
   const [prevPics, setPrevPics] = useState<string[]>([])
-  const [pics, setPics] = useState<string[]>([]);
 
   const [pic1, setPic1] = useState<File[]>([]);
   const [pic2, setPic2] = useState<File[]>([]);
@@ -71,16 +70,28 @@ const ListingForm = () => {
   // Location functionality to retrieve the state variable passed 
   const location = useLocation();
 
+  // [abstr] converts these example lists: 
+  // ['house1','house2'] to ['','house1','house2']
+  // ['house0','house2'] to ['house0','','house2']
+  //  This is useful in the fetchFunction for the [FORM] specifically 
+  const abstr = (lst: any) => {
+    var result: string[] = []
+    result.push((lst.includes('house0')) ? 'house0' : '')
+    result.push((lst.includes('house1')) ? 'house1' : '')
+    result.push((lst.includes('house2')) ? 'house2' : '')
+    return result
+  }
 
   // [fetchImages] populates the state list [imgSrc] with the 
   // the list of images that should be shown on the form
   const fetchImages = async (alist: any, dir: any) => {
     let blist = abstr(alist)
-    console.log("AYYEE BLIST")
-    console.log(blist)
+
     //for every entry in the [alist]: list of image keys that correspond to S3 storage
     for (const e of blist) {
       if (e == '') {
+        //pushes dummy data onto the imgSrc bypass the 
+        //API call and also maintain skeleton of imgSrc
         imageSrc.push('')
       } else {
         //creates the url parameters and routes to call [getListingPicture] in [listingController.tsx]
@@ -95,8 +106,7 @@ const ListingForm = () => {
         imageSrc.push(objectURL)
       }
     }
-    console.log(imageSrc);
-    setImagesLoaded(true);
+    setImagesLoaded(true);//flag to load the webpage
   }
 
 
@@ -149,20 +159,9 @@ const ListingForm = () => {
     }
   }, [])
 
-
-  // [abstr] converts these example lists: 
-  // ['house1','house2'] to ['','house1','house2']
-  // ['house0','house2'] to ['house0','','house2']
-  const abstr = (lst: any) => {
-    var result: string[] = []
-    result.push((lst.includes('house0')) ? 'house0' : '')
-    result.push((lst.includes('house1')) ? 'house1' : '')
-    result.push((lst.includes('house2')) ? 'house2' : '')
-    return result
-  }
-
-
   // [imageHandler] executes the API call for each image entry on the form
+  //  It checks the image form entries to see if they have file data then makes 
+  //  an API request with those file data
   const imageHandler = async (id: any) => {
 
     //Initilisation of helper variables 
@@ -176,8 +175,8 @@ const ListingForm = () => {
 
         // determines the name of the file to represent in S3 storage
         const index = alist.indexOf(imgfle)
-        console.log("This is file " + index)
         const placeholder = `house${index}`
+
         // the actual image file inputted by the user
         const pictureFile = imgfle[0]
 
@@ -185,26 +184,16 @@ const ListingForm = () => {
           temparr.push(placeholder)
           temparr.sort()
         }
-
         // create a new formData object for each image
         const formData = new FormData()
+
         // populate the [formData : arr] entry to transfer in the api call
-        // [formData : arr] is always guranteed to have at least one element
         for (var i = 0; i < temparr.length; i++) {
           formData.append('arr[]', temparr[i])
         }
         formData.append('pictures', pictureFile)
         formData.append('dirname', streetAddress)
         formData.append('filename', placeholder)
-
-        console.log('THE OFRMM DAATTAAA upload')
-        console.log(formData.get('filename'))
-        console.log(formData.get('arr[]'))
-
-        // // Display the key/value pairs
-        // for (var pair of formData.values()) {
-        //   console.log(pair[0] + ', ' + pair[1]);
-        // }
 
         response = await fetch('api/listingPicture/' + id, {
           method: 'PATCH',
@@ -218,42 +207,38 @@ const ListingForm = () => {
     await Promise.all(promises)
   }
 
+
+  // [imageDeletion] "Deletes" an image
+  // This function esentially replaces the current entry on the S3 with an empty placeholder
+  // Why so much ? Well the actual 'DELETE' route was being a massive B**CH
   const imageDeletion = async (id: any) => {
     const formData = new FormData()
     const placeholder = `house${id}`
+
+    //Filters to remove this imageKey
     var temparr = prevPics
     temparr.splice(id, 1)
 
-
-    console.log('TEMPEARRR')
-    console.log(temparr)
-
-    console.log("IN LOOOP")
-    for (var i = 0; i < temparr.length; i++) {
-      console.log(temparr[i])
-      formData.append('arr[]', temparr[i])
-    }
-    console.log("OUTLOOP")
-    console.log(formData.keys())
-    formData.append('dirname', streetAddress)
-    console.log('THE OFRMM DAATTAAAstreet')
-    console.log(formData.get('dirname'))
-
-    formData.append('filename', placeholder)
-    console.log(formData.get('filename'))
+    //the placeholder file that replaces this image
     const placeholderFile = new File(
       ['placeholder content'],
       'placeholder-file-12345',
       { type: 'image/jpeg' },
     );
+
+    for (var i = 0; i < temparr.length; i++) {
+      formData.append('arr[]', temparr[i])
+    }
+    formData.append('dirname', streetAddress)
+    formData.append('filename', placeholder)
     formData.append('picture', placeholderFile)
+
+    //NOTE: this is 'PATCH' request and not a 'DELETE' request
     const response = await fetch('api/listingPicture/' + id, {
       method: 'PATCH',
       body: formData
     });
-
     return response
-
   }
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -910,7 +895,6 @@ const ListingForm = () => {
                                   if (e.target.files) {
                                     //setPic3(Array.from(e.target.files));
                                     pic2.push(Array.from(e.target.files)[0]);
-                                    console.log(pic2)
                                   }
                                 }} />
                             </Box>
@@ -968,7 +952,7 @@ const ListingForm = () => {
                                   if (e.target.files) {
                                     //setPic3(Array.from(e.target.files));
                                     pic3.push(Array.from(e.target.files)[0]);
-                                    console.log(pic3)
+
                                   }
                                 }} />
                             </Box>

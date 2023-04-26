@@ -79,9 +79,7 @@ function getFileStream(directoryName: string, fileName: string,) {//TAKES THE PI
   // console.log("BEFOREEE")
   // const res = s3.getObject(downloadParams).createReadStream()
   const res = s3.getObject(downloadParams);
-  console.log("EXIT")
-  // console.log("OBBBAFGG[POOOOO")
-  //console.log(res)
+
   return res
 
 }
