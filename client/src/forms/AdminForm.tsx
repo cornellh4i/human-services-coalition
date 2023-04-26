@@ -201,18 +201,21 @@ const AdminForm = () => {
                     <FormLabel>Affiliation</FormLabel>
                     <Typography sx={{ marginLeft: '0.3rem', color: '#E50808' }}>*</Typography>
                   </Box>
-                  <TextField fullWidth
+                  <Select
+                    fullWidth
                     id="affiliation"
                     name="affiliation"
                     className="form-field"
-                    onChange={(e) => setAffiliation(e.target.value)}
                     value={affiliation}
+                    onChange={(e) => setAffiliation(e.target.value)}
                     variant="outlined"
                     size="small"
-                    type="text"
                     required
                     error={affiliationError}
-                  />
+                  >
+                    <MenuItem value="HSC">HSC</MenuItem>
+                    <MenuItem value="Non-HSC">Non-HSC</MenuItem>
+                  </Select>
                 </FormGroup>
               </Box>
             </Grid>

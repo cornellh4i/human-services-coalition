@@ -13,6 +13,29 @@ const ManageUsers = () => {
   let [search, setSearch] = useState('')
   let [voucherType, setVoucherType] = useState('')
   const [confirmDeletePop, setConfirmDeletePop] = useState(false)
+  const [voucherNames, setVoucherNames] = useState<string[]>([]);
+
+
+  interface Voucher {
+    _id: string;
+    name: string;
+    percentage: number;
+    createdAt: string;
+    updatedAt: string;
+    __v: number;
+  }
+
+  //Get vouchers from api and assign names to state
+  const assignVoucherNames = async () => {
+    let vouchersJson = await fetch('/api/vouchers')
+    let json: Voucher[] = [] // Add the type annotation here
+    if (vouchersJson.ok) {
+      json = await vouchersJson.json()
+      console.log(json)
+    }
+    const voucherNames = json.map(voucher => voucher.name);
+    setVoucherNames(voucherNames)
+  }
 
   function handleFilterChange(setFunction: Function, event: { target: { value: any } }) {
     setFunction(event.target.value)
@@ -28,6 +51,7 @@ const ManageUsers = () => {
       }
     }
     fetchUsers()
+    assignVoucherNames()
 
     const accountTime = async () => {
       for (let i = 0; i < Users.length; i++) {
@@ -128,14 +152,14 @@ const ManageUsers = () => {
                 <Select
                   value={voucherType}
                   onChange={(e) => handleFilterChange(setVoucherType, e)}
-                  displayEmpty>
-                  <MenuItem value="All">All Vouchers</MenuItem>
-                  <MenuItem value="Voucher I">Voucher I</MenuItem>
-                  <MenuItem value="Voucher II">Voucher II</MenuItem>
-                  <MenuItem value="Voucher III">Voucher III</MenuItem>
-                  <MenuItem value="Voucher IV">Voucher IV</MenuItem>
-                  <MenuItem value="Other">Other</MenuItem>
+                  displayEmpty
+                >
+                  <MenuItem value="All Vouchers">All Vouchers</MenuItem>
+                  {voucherNames.map((voucherName) => (
+                    <MenuItem key={voucherName} value={voucherName}>{voucherName}</MenuItem>
+                  ))}
                 </Select>
+
               </FormControl>
             </Box>
           </Box>
