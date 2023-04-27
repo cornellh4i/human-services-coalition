@@ -1,6 +1,38 @@
 const User = require("../models/User");
 import mongoose from 'mongoose';
 
+//GET users according to sort
+const getSortUsers = async (req, res) => {
+  const search = req.query.search || '';
+  const sortName = req.query.sortName || '';
+  const sortOrder = req.query.sortOrder || '';
+  const voucherType = req.query.voucherType || '';
+
+  let filter = search ? {
+    $or: [
+      { fName: { $regex: new RegExp(search, 'i') } },
+      { lName: { $regex: new RegExp(search, 'i') } },
+    ]
+  } : {};
+
+  let sortObject = {};
+  if (sortName) {
+    if (sortOrder) {
+      sortObject[sortName] = sortOrder;
+    } else {
+      sortObject[sortName] = 'asc';
+    }
+  }
+  if (voucherType != "All Vouchers" && voucherType != "") {
+    filter["voucherType"] = { $eq: voucherType };
+  }
+
+
+  const users = await User.find(filter).sort(sortObject);
+
+  res.status(200).json(users);
+};
+
 // GET all users
 const getUsers = async (req, res) => {
   const users = await User.find({}).sort({ createdAt: -1 })
@@ -42,6 +74,7 @@ const createUser = async (req, res) => {
     race,
     contactPref,
     recentlyViewed,
+    appliedListings,
     additionalDays
   } = req.body
 
@@ -62,6 +95,7 @@ const createUser = async (req, res) => {
       race,
       contactPref,
       recentlyViewed,
+      appliedListings,
       additionalDays
     })
     res.status(200).json(user)
@@ -115,5 +149,6 @@ module.exports = {
   getUsers,
   createUser,
   deleteUser,
-  updateUser
+  updateUser,
+  getSortUsers
 }

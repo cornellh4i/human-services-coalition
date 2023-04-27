@@ -3,6 +3,8 @@ import Box from '@mui/material/Box';
 import IconButton from '@mui/material/IconButton/IconButton';
 import ClearIcon from '@mui/icons-material/Clear';
 import '../css/Home.css'
+import Link from '@mui/material/Link';
+import { useEffect, useState } from 'react'
 
 export default function SelectedFilters({
   setListings, filters, setFilters, setApartment, setHouse, setAddress,
@@ -13,19 +15,26 @@ export default function SelectedFilters({
   let values: any[] = []
 
   function updateQuery(filterList: any) {
-    let params: any = {}
-
-    for (let i = 0; i < filterList.length; i++) {
-      let currFilter = filterList[i].filter
-      let currVal = filterList[i].value
-      params[currFilter] = currVal
+    if (filterList.length == 0) {
+      fetch('/api/listing')
+        .then(response => response.json())
+        .then(data => setListings(data))
+        .catch(error => console.error(error))
     }
-    console.log(params)
-    const searchParams = new URLSearchParams(Object.entries(params))
-    fetch('/api/listingsByCategory?' + searchParams)
-      .then(response => response.json())
-      .then(data => setListings(data))
-      .catch(error => console.error(error))
+    else {
+      let params: any = {}
+
+      for (let i = 0; i < filterList.length; i++) {
+        let currFilter = filterList[i].filter
+        let currVal = filterList[i].value
+        params[currFilter] = currVal
+      }
+      const searchParams = new URLSearchParams(Object.entries(params))
+      fetch('/api/listingsByCategory?' + searchParams)
+        .then(response => response.json())
+        .then(data => setListings(data))
+        .catch(error => console.error(error))
+    }
   }
 
   for (let i = 0; i < selected.length; i++) {
@@ -128,22 +137,112 @@ export default function SelectedFilters({
     updateQuery(selected)
   }
 
-  return (
-    <>
-      <Grid container spacing={3} paddingBottom={2} paddingLeft={2}>
-        {
-          values.map((filter: string, index: number) =>
-            <Grid item xs="auto" paddingLeft={2} key={filter + index}>
-              <div className="item">
-                <Box>
-                  {filter}
-                  <IconButton>
-                    <ClearIcon fontSize="small" onClick={() => { handleDelete(index) }} />
-                  </IconButton>
-                </Box>
-              </div>
-            </Grid>)}
-      </Grid>
-    </>
-  )
+  function clearAllFilters() {
+    if (selected.length != 0) {
+      for (let i = 0; i < selected.length; i++) {
+        clearFilter(selected[i].filter)
+      }
+      selected = []
+      setFilters(selected)
+      updateQuery(selected)
+    }
+  }
+
+  function clearFilter(filter: string) {
+    if (filter === "condo") {
+      setCondo(false)
+    }
+    else if (filter === "house") {
+      setHouse(false)
+    }
+    else if (filter === "apartment") {
+      setApartment(false)
+    }
+    else if (filter === "single") {
+      setSingle(false)
+    }
+    else if (filter === "numBath") {
+      setNumBath('')
+    }
+    else if (filter === "numBed") {
+      setNumBed('')
+    }
+    else if (filter === "minPrice") {
+      setMinPrice('')
+    }
+    else if (filter === "maxPrice") {
+      setMaxPrice('')
+    }
+    else if (filter === "pets") {
+      setPets(false)
+    }
+    else if (filter === "furnished") {
+      setFurnished(false)
+    }
+    else if (filter === "utilities") {
+      setUtilities(false)
+    }
+    else if (filter === "disTransportation") {
+      setDisTransportation('')
+    }
+    else if (filter === "address") {
+      setAddress('')
+    }
+  }
+
+  if (selected.length === 0 || (selected.length === 1 && selected[0].filter === "address")) {
+    return (
+      <>
+        <Grid container spacing={3} paddingBottom={2} paddingLeft={2}>
+          {
+            values.map((filter: string, index: number) =>
+              <Grid item xs="auto" paddingLeft={2} key={filter + index}>
+                <div className="item">
+                  <Box sx={{ paddingRight: 1 }}>
+                    <IconButton>
+                      <ClearIcon fontSize="small" onClick={() => { handleDelete(index) }} />
+                    </IconButton>
+                    {filter}
+                  </Box>
+                </div>
+              </Grid>
+            )
+          }
+        </Grid>
+      </>
+    )
+
+  }
+  else {
+    return (
+      <>
+        <Grid container spacing={3} paddingBottom={2} paddingLeft={2}>
+          {
+            values.map((filter: string, index: number) =>
+              <Grid item xs="auto" paddingLeft={2} key={filter + index}>
+                <div className="item">
+                  <Box sx={{ paddingRight: 1 }}>
+                    <IconButton>
+                      <ClearIcon fontSize="small" onClick={() => { handleDelete(index) }} />
+                    </IconButton>
+                    {filter}
+                  </Box>
+                </div>
+              </Grid>
+            )
+          }
+          <Grid item xs="auto" paddingLeft={2}>
+            {
+              <Grid item xs="auto" sx={{ paddingTop: 2, fontStyle: 'italic' }} >
+                <Link sx={{ cursor: 'pointer' }} underline="hover" color="inherit"
+                  onClick={() => clearAllFilters()}>
+                  {'Clear Filters'}
+                </Link>
+              </Grid>
+            }
+          </Grid>
+        </Grid>
+      </>
+    )
+  }
 }

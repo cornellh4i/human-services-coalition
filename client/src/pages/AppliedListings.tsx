@@ -7,7 +7,7 @@ import { Button, IconButton, Typography } from '@mui/material'
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import PrintIcon from '@mui/icons-material/Print';
 
-const ProofSearch = () => {
+const AppliedListings = () => {
 
   //intialises the state for the list of houses that correspond to the specified user
   const [Listings, setListings] = useState<any[]>([])
@@ -31,12 +31,10 @@ const ProofSearch = () => {
     const response2 = await fetch('/api/listing', { method: 'GET' })
     const json2 = await response2.json()
 
-    // setListings(json2)
     json2.forEach((e: any) => Listings.push(e))
 
-    const newListings = Listings.filter(Listing => json.recentlyViewed.includes(Listing._id))
+    const newListings = Listings.filter(Listing => json.appliedListings.includes(Listing._id))
     setListings(newListings)
-
   }
   return (
     <>
@@ -91,4 +89,4 @@ const ProofSearch = () => {
   )
 }
 
-export default ProofSearch
+export default AppliedListings

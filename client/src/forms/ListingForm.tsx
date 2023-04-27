@@ -21,11 +21,8 @@ const ListingForm = () => {
   const [numBath, setNumBath] = useState('')
   const [schoolDistrict, setSchoolDistrict] = useState('')
   const [pets, setPets] = useState(false)
-  const [petsIsTrue, setPetsIsTrue] = useState(false)
   const [utilities, setUtilities] = useState(false)
-  const [utilitiesIsTrue, setUtilitiesIsTrue] = useState(false)
   const [furnished, setFurnished] = useState(false)
-  const [furnishedIsTrue, setFurnishedIsTrue] = useState(false)
   const [distTransportation, setDistTransportation] = useState('')
   const [landlord, setLandlord] = useState('')
   const [landlordEmail, setLandlordEmail] = useState('')
@@ -140,9 +137,9 @@ const ListingForm = () => {
     setPrice(json_object.price)
     if (json_object.dateAvailable != null) setDateAvailable(json_object.dateAvailable.split('T')[0]); // to make date readable
     setSchoolDistrict(json_object.schoolDistrict)
-    setFurnishedIsTrue(json_object.furnished)
-    setPetsIsTrue(json_object.pets)
-    setUtilitiesIsTrue(json_object.utilities)
+    json_object.furnished === "true" ? setFurnished(true) : setFurnished(false)
+    json_object.pets === "true" ? setPets(true) : setPets(false)
+    json_object.utilities === "true" ? setUtilities(true) : setUtilities(false)
     setButtonLabel('Save Changes')
     setPrevPics(json_object.pictures)
     setPictures(json_object.pictures)
@@ -354,11 +351,8 @@ const ListingForm = () => {
       setNumBath('')
       setSchoolDistrict('')
       setPets(false)
-      setPetsIsTrue(false)
       setUtilities(false)
-      setUtilitiesIsTrue(false)
       setFurnished(false)
-      setFurnishedIsTrue(false)
       setDistTransportation('')
       setLandlord('')
       setLandlordEmail('')
@@ -719,31 +713,29 @@ const ListingForm = () => {
                   <FormGroup row
                   >
                     <Box sx={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center' }}>
-                      <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'left', marginRight: '12rem' }}>
+                       <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'left', marginRight: '12rem' }}>
                         <FormControlLabel
                           name="furnished"
                           id="listing-furnished"
                           value="furnished"
                           label="Furnished"
                           control={<Checkbox
-                            checked={furnishedIsTrue}
+                            checked={furnished}
                             onChange={(e) => {
-                              setFurnishedIsTrue(e.target.checked);
-                              setFurnished(!furnishedIsTrue);
-                            }} />} />
+                              setFurnished(e.target.checked);
+                            }}/>} />
                       </Box>
 
                       <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'left', marginRight: '12rem' }}>
                         <FormControlLabel
                           name="pets"
                           id="listing-pets"
-                          value={pets}
+                          value="pets"
                           label="Pet-friendly"
                           control={<Checkbox
-                            checked={petsIsTrue}
+                            checked={pets}
                             onChange={(e) => {
-                              setPetsIsTrue(e.target.checked);
-                              setPets(!petsIsTrue);
+                              setPets(e.target.checked);
                             }} />} />
                       </Box>
 
@@ -754,10 +746,9 @@ const ListingForm = () => {
                           value="utilities"
                           label="Utilities included in rent"
                           control={<Checkbox
-                            checked={utilitiesIsTrue}
+                            checked={utilities}
                             onChange={(e) => {
-                              setUtilitiesIsTrue(e.target.checked);
-                              setUtilities(!utilitiesIsTrue);
+                              setUtilities(e.target.checked);
                             }} />} />
                       </Box>
                     </Box>

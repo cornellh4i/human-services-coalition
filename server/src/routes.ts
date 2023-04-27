@@ -21,7 +21,8 @@ module.exports = () => {
     getUser,
     createUser,
     updateUser,
-    deleteUser
+    deleteUser,
+    getSortUsers
   } = require("./controllers/userController")
 
   const {
@@ -29,7 +30,8 @@ module.exports = () => {
     getAdmins,
     createAdmin,
     deleteAdmin,
-    updateAdmin
+    updateAdmin,
+    getSortAdmins
   } = require("./controllers/adminController")
 
   const {
@@ -50,6 +52,7 @@ module.exports = () => {
 
   // GET all housing listings
   router.get('/listing', getListings)
+
 
   //GET housing listing by category and value
   router.get('/listingsByCategory', getListingByCategory);
@@ -78,6 +81,9 @@ module.exports = () => {
   // GET all users
   router.get('/users', getUsers)
 
+  //GET admins based off sort
+  router.get('/users/sort', getSortUsers)
+
   // GET a specific user
   router.get('/users/:id', getUser)
 
@@ -90,6 +96,8 @@ module.exports = () => {
   // DELETE a specific user
   router.delete('/users/:id', deleteUser)
 
+  //GET admins based off sort
+  router.get('/admins/sort', getSortAdmins)
 
   // GET all admins
   router.get('/admins', getAdmins)

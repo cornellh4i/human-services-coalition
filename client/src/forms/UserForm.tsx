@@ -30,6 +30,8 @@ const UserForm = () => {
   const [passwordlError, setPasswordError] = useState(false)
   const [fNameError, setFNameError] = useState(false)
   const [lNameError, setLNameError] = useState(false)
+  const [voucherNames, setVoucherNames] = useState<string[]>([]);
+
 
   // Navigation functionality
   const navigate = useNavigate();
@@ -37,10 +39,31 @@ const UserForm = () => {
   //Location functionality to retrieve the state variable passed 
   const location = useLocation();
 
+  interface Voucher {
+    _id: string;
+    name: string;
+    percentage: number;
+    createdAt: string;
+    updatedAt: string;
+    __v: number;
+  }
+
+  //Get vouchers from api and assign names to state
+  const assignVoucherNames = async () => {
+    let vouchersJson = await fetch('/api/vouchers')
+    let json: Voucher[] = [] // Add the type annotation here
+    if (vouchersJson.ok) {
+      json = await vouchersJson.json()
+      console.log(json)
+    }
+    const voucherNames = json.map(voucher => voucher.name);
+    setVoucherNames(voucherNames)
+  }
 
   // //contains that will prepopulate the form if location.state is not null
   useEffect(() => {
     if (location.state != null) { getUserDetails() }
+    assignVoucherNames()
   }, [])
   //fetch the data related to id from the database
   const getUserDetails = async () => {
@@ -186,7 +209,7 @@ const UserForm = () => {
       setAdditionalDays(e.target.value);
     }
   };
-  
+
   const title = (location.state === null) ? "Create a New User" : "Edit User";
 
   return (
@@ -219,7 +242,7 @@ const UserForm = () => {
                     <FormLabel>Voucher Type</FormLabel>
                     <Typography sx={{ marginLeft: '0.3rem', color: '#E50808' }}>*</Typography>
                   </Box>
-                  <TextField fullWidth
+                  <Select
                     id="voucherType"
                     name="voucherType"
                     className="form-field"
@@ -228,9 +251,14 @@ const UserForm = () => {
                     required
                     variant="outlined"
                     size="small"
-                    type="text"
                     error={voucherTypeError}
-                  />
+                  >
+                    {voucherNames.map((name) => (
+                      <MenuItem key={name} value={name}>
+                        {name}
+                      </MenuItem>
+                    ))}
+                  </Select>
                 </FormGroup>
 
                 <FormGroup sx={{ flexGrow: '1', marginX: '1.5rem' }}>

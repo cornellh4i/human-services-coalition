@@ -79,7 +79,6 @@ function Home() {
           <FilterSideBar
             listings={Listings} setListings={setListings}
             filters={filters} setFilters={setFilters}
-            // unitType={unitType} setUnitType={setUnitType}
             apartment={apartment} setApartment={setApartment}
             house={house} setHouse={setHouse}
             address={address} setAddress={setAddress}

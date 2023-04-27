@@ -9,8 +9,9 @@ import ListingForm from './forms/ListingForm'
 import AdminForm from './forms/AdminForm'
 import UserForm from './forms/UserForm'
 
-import ProofSearch from './pages/ProofSearch';
+import AppliedListings from './pages/AppliedListings';
 import FmrForm from './forms/FmrForm';
+import RecentlyViewed from './pages/RecentlyViewed';
 
 
 function App() {
@@ -43,8 +44,12 @@ function App() {
                 element={<ListingInformation />}
               />
               <Route
-                path="/proof_search"
-                element={<ProofSearch />}
+                path="/applied_listings"
+                element={<AppliedListings />}
+              />
+              <Route
+                path="/recently_viewed"
+                element={<RecentlyViewed />}
               />
             </Routes>
           </div>
