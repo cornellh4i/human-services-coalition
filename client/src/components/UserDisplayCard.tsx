@@ -76,7 +76,7 @@ const UserDisplayCard = ({ user_id, fname, lname, mInitial, username, password, 
 
           <Box sx={{ display: "flex", justifyContent: "right", alignItems: 'center', marginLeft: '1.4rem', width: '15rem' }}>
             <Button
-              onClick={() => navigate("/proof_search", {
+              onClick={() => navigate("/applied_listings", {
                 state: {
                   id: user_id,
                   fName: fname,

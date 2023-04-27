@@ -73,6 +73,9 @@ const userSchema = new Schema({
   recentlyViewed: {
     type: Array
   },
+  appliedListings: {
+    type: Array
+  },
   additionalDays: {
     type: Number,
     default: 0
