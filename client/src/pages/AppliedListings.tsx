@@ -34,14 +34,8 @@ const AppliedListings = () => {
     // setListings(json2)
     json2.forEach((e: any) => Listings.push(e))
 
-    console.log(json)
-
     const newListings = Listings.filter(Listing => json.appliedListings.includes(Listing._id))
     setListings(newListings)
-
-    console.log("HI")
-    console.log(json.appliedListings)
-
   }
   return (
     <>

@@ -3,9 +3,8 @@ import { useEffect, useState } from 'react'
 import ListingDetails from '../components/ListingDetails'
 import { useLocation, useNavigate } from "react-router-dom";
 import '../css/Home.css'
-import { Button, IconButton, Typography } from '@mui/material'
+import { Button, Typography } from '@mui/material'
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
-import PrintIcon from '@mui/icons-material/Print';
 
 const RecentlyViewed = () => {
 
@@ -34,14 +33,8 @@ const RecentlyViewed = () => {
     // setListings(json2)
     json2.forEach((e: any) => Listings.push(e))
 
-    console.log(json)
-
     const newListings = Listings.filter(Listing => json.recentlyViewed.includes(Listing._id))
     setListings(newListings)
-
-    console.log("HI")
-    console.log(json.appliedListings)
-
   }
   return (
     <>
