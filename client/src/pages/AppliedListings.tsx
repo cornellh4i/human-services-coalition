@@ -31,7 +31,6 @@ const AppliedListings = () => {
     const response2 = await fetch('/api/listing', { method: 'GET' })
     const json2 = await response2.json()
 
-    // setListings(json2)
     json2.forEach((e: any) => Listings.push(e))
 
     const newListings = Listings.filter(Listing => json.appliedListings.includes(Listing._id))

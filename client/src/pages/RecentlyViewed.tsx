@@ -30,7 +30,6 @@ const RecentlyViewed = () => {
     const response2 = await fetch('/api/listing', { method: 'GET' })
     const json2 = await response2.json()
 
-    // setListings(json2)
     json2.forEach((e: any) => Listings.push(e))
 
     const newListings = Listings.filter(Listing => json.recentlyViewed.includes(Listing._id))
@@ -47,7 +46,7 @@ const RecentlyViewed = () => {
               startIcon={<ArrowBackIosNewIcon />}
               variant="outlined"
               size="large"
-              onClick={() => navigate("/manage-profiles")}
+              onClick={() => navigate("/")}
               sx={{ marginTop: '2rem', padding: "0 1rem", fontSize: '1.2rem', fontWeight: 'bold', textTransform: "unset", borderRadius: '15px', color: '#5D737E', borderWidth: '0.14rem', borderColor: '#5D737E', bgcolor: 'white', ':hover': { bgcolor: "#5D737EB5" } }}
             >
               Back
@@ -56,14 +55,14 @@ const RecentlyViewed = () => {
 
           <Grid container display="flex" flexDirection="row" paddingTop="1%" paddingBottom="1%">
             <Grid item xs={6} display="flex" flexDirection="column">
-              {/* User's proof of history title */}
+              {/* User's recently viewed title */}
               <Grid item display="flex" justifyContent="left">
                 <Typography variant="h5" sx={{ fontWeight: 700 }}>{location.state.fName} {location.state.lName}'s Recently Viewed Listings</Typography>
               </Grid>
             </Grid>
           </Grid>
 
-          {/* Displays the listings in the user's search history */}
+          {/* Displays recently viewed listings */}
           <Grid container spacing={2}>
             {Listings.map((Listing) => (
               <Grid item key={Listing._id}>
