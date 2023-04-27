@@ -713,7 +713,7 @@ const ListingForm = () => {
                   <FormGroup row
                   >
                     <Box sx={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center' }}>
-                       <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'left', marginRight: '12rem' }}>
+                      <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'left', marginRight: '12rem' }}>
                         <FormControlLabel
                           name="furnished"
                           id="listing-furnished"
