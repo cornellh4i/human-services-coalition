@@ -27,7 +27,6 @@ const ListingInformation = () => {
 
   //the function that calls the delete routing function
   const handleDelete = async (id: any) => {
-    console.log(id)
     await fetch('/api/listing/' + id, {
       method: 'DELETE'
     })

@@ -1,6 +1,5 @@
-import { Box, Container, Divider, Grid, InputAdornment, FormControl, TextField, Select, MenuItem, SelectChangeEvent, Typography, createTheme, ThemeProvider } from '@mui/material'
+import { Box, Container, Divider, Grid, Typography, createTheme, ThemeProvider } from '@mui/material'
 import VoucherDisplayCard from './VoucherDisplayCard'
-import ColumnLabel from '../components/ColumnLabel'
 import { useState, useEffect } from 'react'
 import ConfirmPopUp from './ConfirmPopUp';
 
@@ -53,9 +52,7 @@ const ManageVouchers = () => {
       p: '0.5%'
     }}>
 
-      <Container maxWidth={false} sx={{ mt: '10px', maxWidth: '100%', borderRadius: 0, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-
-      </Container>
+      <Container maxWidth={false} sx={{ mt: '10px', maxWidth: '100%', borderRadius: 0, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}/>
 
       <Container maxWidth={false} sx={{ borderRadius: 0, display: 'flex', justifyContent: 'flex-start', alignItems: 'left' }}>
 

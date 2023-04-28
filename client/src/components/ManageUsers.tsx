@@ -31,7 +31,6 @@ const ManageUsers = () => {
     let json: Voucher[] = [] // Add the type annotation here
     if (vouchersJson.ok) {
       json = await vouchersJson.json()
-      console.log(json)
     }
     const voucherNames = json.map(voucher => voucher.name);
     setVoucherNames(voucherNames)
