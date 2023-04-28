@@ -1,10 +1,9 @@
 import Card from '@mui/material/Card';
-import { Typography, Container, createTheme, ThemeProvider, IconButton, StepIconClassKey } from '@mui/material';
+import { Typography, Container, createTheme, ThemeProvider, IconButton } from '@mui/material';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import { useState } from 'react';
-import { useNavigate } from "react-router-dom";
-import { DeleteOutlined, EditOutlined } from '@mui/icons-material';
+import { DeleteOutlined } from '@mui/icons-material';
 import DeleteConfirmation from './DeleteConfirmation';
 
 interface VoucherDisplayCardProps {
@@ -22,9 +21,6 @@ const VoucherDisplayCard = ({ voucherid, name, percentage, handleDelete }: Vouch
     }
   })
 
-  // define handle click function
-  //const navigate = useNavigate();
-
   //states for the delete dialog pop up
   const [openPop, setOpenPop] = useState(false)
 
@@ -32,8 +28,6 @@ const VoucherDisplayCard = ({ voucherid, name, percentage, handleDelete }: Vouch
     event.stopPropagation()
     setOpenPop(true)
   }
-
-
 
   return (
     <ThemeProvider theme={theme}>
@@ -61,9 +55,6 @@ const VoucherDisplayCard = ({ voucherid, name, percentage, handleDelete }: Vouch
       </Container>
       <DeleteConfirmation id={voucherid} openPop={openPop} setOpenPop={setOpenPop} handleDelete={handleDelete} type={"Voucher"} />
     </ThemeProvider>
-
-
-
   );
 
 }

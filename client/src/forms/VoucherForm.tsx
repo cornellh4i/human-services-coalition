@@ -1,20 +1,16 @@
-import { Box, Button, Container, FormControlLabel, FormGroup, FormLabel, Grid, MenuItem, Radio, RadioGroup, Select, SelectChangeEvent, TextField, Typography } from "@mui/material"
+import { Box, Button, Container, FormGroup, FormLabel, Grid, TextField, Typography } from "@mui/material"
 import { useEffect, useState } from "react"
-import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import React from "react";
 
 
 const VoucherForm = () => {
-
   const [name, setName] = useState('')
   const [percentage, setPercentage] = useState('')
   const [error, setError] = useState(null)
 
   const [nameError, setNameError] = useState(false)
   const [percentageError, setPercentageError] = useState(false)
-
-  const navigate = useNavigate();
 
   const location = useLocation();
 
@@ -71,12 +67,6 @@ const VoucherForm = () => {
 
     }
   }
-
-
-
-
-
-
 
   return (
     <Container maxWidth={false}>
