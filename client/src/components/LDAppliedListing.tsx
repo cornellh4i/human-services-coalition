@@ -35,18 +35,11 @@ const priceTheme = createTheme({
 });
 
 
-export default function ListingDetails({ Listing, handleDelete }: { Listing: any, handleDelete: any }) {
+export default function LDAppliedListing({ Listing }: { Listing: any }) {
 
   // define handle click function
   const navigate = useNavigate();
 
-  //states for the delete dialog pop up
-  const [openPop, setOpenPop] = useState(false)
-
-  const handleClick = (event: any) => {
-    event.stopPropagation()
-    setOpenPop(true)
-  }
 
   // Create state for image source
   const [imageSrc, setImageSrc] = useState<string | null>(null);
@@ -148,9 +141,9 @@ export default function ListingDetails({ Listing, handleDelete }: { Listing: any
           alignItems="flex-start">
 
           {/* Create a grid container to hold all the grid items of the grid */}
-          <Grid container xs={18} alignItems="center">
+          <Grid container xs={18} alignItems="center" paddingTop="7px">
             {/* Displays the listing address */}
-            <Grid item xs={9}>
+            <Grid item xs={12}>
               <ThemeProvider theme={listingTheme}>
                 <Typography>
                   {Listing.streetAddress}
@@ -158,7 +151,7 @@ export default function ListingDetails({ Listing, handleDelete }: { Listing: any
               </ThemeProvider>
             </Grid>
 
-            {/* Creates the delete and edit buttons and displays it next to the address */}
+            {/* Creates the delete and edit buttons and displays it next to the address
             <Grid item xs={3}>
               <IconButton onClick={() => navigate('/listing-form', { state: { id: Listing._id } })}>
                 <EditOutlined fontSize="small" />
@@ -166,10 +159,10 @@ export default function ListingDetails({ Listing, handleDelete }: { Listing: any
               <IconButton onClick={(event) => handleClick(event)}>
                 <DeleteOutlined fontSize="small" />
               </IconButton>
-            </Grid>
+            </Grid> */}
 
             {/* Displays the listing landlord */}
-            <Grid item xs={12}>
+            <Grid item xs={12} paddingTop="2px">
               <ThemeProvider theme={addressTheme}>
                 <Typography>
                   {Listing.landlord}
@@ -201,11 +194,7 @@ export default function ListingDetails({ Listing, handleDelete }: { Listing: any
           </Grid>
         </Grid>
       </Card>
-      <DeleteConfirmation id={Listing._id} openPop={openPop} setOpenPop={setOpenPop} handleDelete={handleDelete} type="listing" />
-
     </>
 
   )
 }
-
-

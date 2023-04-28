@@ -117,6 +117,8 @@ const ListingForm = () => {
     //retrieve the data entries to prepoulate the form 
     setOrg(json_object.streetAddress)
     setStreetAddress(json_object.streetAddress)
+    console.log("DESCRIPTIONS")
+    console.log(json_object.description)
     setDescription(json_object.description)
     setState(json_object.state)
     setCity(json_object.city)
@@ -333,7 +335,7 @@ const ListingForm = () => {
     }
     if (response1.ok) {
       setWebScraped(false)
-      setDescription('')
+
       setStreetAddress('')
       setCity('')
       setState('')
@@ -721,7 +723,7 @@ const ListingForm = () => {
                             checked={furnished}
                             onChange={(e) => {
                               setFurnished(e.target.checked);
-                            }}/>} />
+                            }} />} />
                       </Box>
 
                       <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'left', marginRight: '12rem' }}>
