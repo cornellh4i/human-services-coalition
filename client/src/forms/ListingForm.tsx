@@ -1,9 +1,8 @@
-import React, { BaseSyntheticEvent, useEffect, useState } from "react"
+import React, { useEffect, useState } from "react"
 import { Box, Button, Grid, Typography, Container, TextField, RadioGroup, FormControlLabel, Checkbox, Radio, FormControl, FormLabel, FormGroup, MenuItem, Select, formControlClasses, CardMedia, Card } from '@mui/material';
 import { PhotoCamera } from "@mui/icons-material";
 import { useLocation, useNavigate } from "react-router-dom";
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
-import { fontStyle } from "@mui/system";
 
 const ListingForm = () => {
   const [webScraped, setWebScraped] = useState(false)
@@ -117,7 +116,6 @@ const ListingForm = () => {
 
     //retrieve the data entries to prepoulate the form 
     setOrg(json_object.streetAddress)
-    console.log(org)
     setStreetAddress(json_object.streetAddress)
     setDescription(json_object.description)
     setState(json_object.state)

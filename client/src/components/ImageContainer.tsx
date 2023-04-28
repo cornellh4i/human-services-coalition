@@ -1,5 +1,4 @@
-import { Box, Button, Card, CardMedia, Grid } from "@mui/material"
-import AppsIcon from '@mui/icons-material/Apps';
+import { Card, CardMedia, Grid } from "@mui/material"
 import { useState } from "react";
 
 export default function ImageContainer({ images, numImages }: { images: string[], numImages: number }) {

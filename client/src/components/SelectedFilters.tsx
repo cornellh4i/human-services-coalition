@@ -4,7 +4,6 @@ import IconButton from '@mui/material/IconButton/IconButton';
 import ClearIcon from '@mui/icons-material/Clear';
 import '../css/Home.css'
 import Link from '@mui/material/Link';
-import { useEffect, useState } from 'react'
 
 export default function SelectedFilters({
   setListings, filters, setFilters, setApartment, setHouse, setAddress,

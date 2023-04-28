@@ -1,5 +1,5 @@
 import Card from '@mui/material/Card';
-import { Typography, Container, createTheme, ThemeProvider, IconButton, StepIconClassKey } from '@mui/material';
+import { Typography, Container, createTheme, ThemeProvider, IconButton } from '@mui/material';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import { useState } from 'react';
