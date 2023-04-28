@@ -1,3 +1,5 @@
+import multer from 'multer';
+
 module.exports = () => {
   const express = require("express");
   const router = express.Router();
@@ -8,7 +10,10 @@ module.exports = () => {
     getListingByCategory,
     createListing,
     updateListing,
-    deleteListing
+    deleteListing,
+    updateListingPicture,
+    getListingPicture,
+    deleteListingPicture
   } = require("./controllers/listingController")
 
   const {
@@ -55,15 +60,23 @@ module.exports = () => {
   // GET a specific housing listing (by id)
   router.get('/listing/:id', getListing)
 
+  //GET the picture for a specific listing
+  router.get('/listingPicture/:dir/:file', getListingPicture)
+
   // POST (add) a new housing listing
   router.post('/listing', createListing)
 
+  const upload = multer({ dest: "uploads/" });
+  // upload.single("pictures")
+  //upload.array("pictures")
+
   // PATCH (edit) a specific housing listing
   router.patch('/listing/:id', updateListing)
+  router.patch('/listingPicture/:id', upload.array("pictures"), updateListingPicture)
 
   // DELETE a specific housing listing
   router.delete('/listing/:id', deleteListing)
-
+  router.delete('/listingPicture/:id', deleteListingPicture)
 
   // GET all users
   router.get('/users', getUsers)

@@ -6,7 +6,7 @@ import IconButton from '@mui/material/IconButton/IconButton';
 import { ThemeProvider } from '@emotion/react';
 import { createTheme, Grid } from '@mui/material';
 import { useNavigate } from "react-router-dom";
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import DeleteConfirmation from './DeleteConfirmation';
 import ConfirmPopUp from './ConfirmPopUp';
 
@@ -48,6 +48,44 @@ export default function ListingDetails({ Listing, handleDelete }: { Listing: any
     setOpenPop(true)
   }
 
+  // Create state for image source
+  const [imageSrc, setImageSrc] = useState<string | null>(null);
+  //create the cache for the image 
+  const [cacheImg, setCacheImg] = useState<string | null>(null);
+
+  // Fetch image and create object URL when the component mounts
+  useEffect(() => {
+    const fetchImage = async () => {
+      try {
+        if (cacheImg == null) {
+          // // Fetch the image from the backend
+
+          const link = `${Listing.streetAddress}/${Listing.pictures[0]}`
+          const response = await fetch('api/listingPicture/' + link);
+
+          // Convert the response to a Blob
+          const blob = await response.blob();
+
+          // Create an object URL from the Blob
+          const objectURL = URL.createObjectURL(blob);
+
+          // Set the object URL as the imageSrc state
+          setCacheImg(objectURL)
+          setImageSrc(objectURL);
+        }
+        else {
+          setImageSrc(cacheImg);
+        }
+      } catch (error) {
+        console.error('Error fetching image:', error);
+      }
+    };
+
+    //Call the fetchImage function
+    fetchImage();
+  }, []);
+
+
   return (
 
     <>
@@ -69,10 +107,11 @@ export default function ListingDetails({ Listing, handleDelete }: { Listing: any
 
         {/* Displays a picture of the listing at the top of the card */}
         <CardMedia
+          //{imageSrc || ""}
           component="img"
           height="210px"
           width="300px"
-          image={Listing.pictures[0]}
+          image={imageSrc || ""}
           onClick={() => navigate("/listing_info", {
             state: {
               id: Listing._id,

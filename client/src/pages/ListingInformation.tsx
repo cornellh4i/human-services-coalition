@@ -10,7 +10,7 @@ import PlaceIcon from '@mui/icons-material/Place';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import { useLocation, useNavigate } from "react-router-dom";
 import ImageContainer from '../components/ImageContainer';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import DeleteConfirmation from '../components/DeleteConfirmation'
 
 
@@ -34,9 +34,43 @@ const ListingInformation = () => {
     navigate("/")
   }
 
+  // Create state for image source and imageLoaded flag
+  const [imageSrc, setImageSrc] = useState<string[]>([]);
+  const [imagesLoaded, setImagesLoaded] = useState(false);
+
+  //The location.state.pictures will store all the pictures of this listing
+  //The for loop will loop over each "key" in the pictures and 
+  // Fetch image and create object URL when the component mounts
+  const fetchImage = async () => {
+    try {
+      const promises = location.state.pictures.map(async (picture: any) => {
+        const link = `${location.state.streetAddress}/${picture}`
+        const response = await fetch('api/listingPicture/' + link)
+        const blob = await response.blob();
+        return URL.createObjectURL(blob);
+      }
+      )
+      const objectURLs = await Promise.all(promises);
+      setImageSrc(objectURLs);
+      setImagesLoaded(true);
+    } catch (error) {
+      console.error('Error fetching images:', error);
+    }
+  }
+  useEffect(() => {
+    fetchImage();
+  }, [location.state.pictures, location.state.streetAddress])
+
+
+
+  //if all the images have been loaded then render the screen
+  if (!imagesLoaded) {
+    return <div>Loading images...</div>;
+  }
+
+
   return (
     <><Grid padding="1% 5%">
-
       {/* Back button */}
       <Grid item xs={1}>
         <Button disableElevation
@@ -53,7 +87,7 @@ const ListingInformation = () => {
       <Grid item xs={12}>
 
         {/* The Image Section */}
-        <ImageContainer images={location.state.pictures} numImages={location.state.pictures.length} />
+        <ImageContainer images={imageSrc} numImages={location.state.pictures.length} />
 
         <Grid container padding="15px 0px">
           {/* Main content */}
