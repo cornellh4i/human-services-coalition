@@ -667,8 +667,10 @@ const ListingForm = () => {
                     name="numBath"
                     onChange={(e) => setNumBath(e.target.value)}
                     value={numBath}
-                    error={bathError} />
+                    error={bathError}
+                    inputProps={{ step: 0.5, max: 5, min: 1 }} />
                 </FormGroup>
+
 
                 <FormGroup sx={{ flexGrow: '1' }}>
                   <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'left', alignItems: 'center' }}>
@@ -721,7 +723,7 @@ const ListingForm = () => {
                             checked={furnished}
                             onChange={(e) => {
                               setFurnished(e.target.checked);
-                            }}/>} />
+                            }} />} />
                       </Box>
 
                       <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'left', marginRight: '12rem' }}>
