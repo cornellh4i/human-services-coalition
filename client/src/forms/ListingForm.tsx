@@ -368,7 +368,7 @@ const ListingForm = () => {
     }
   }
 
-
+  const blockInvalidChar = (e: any) => ['e', 'E', '+', '-', '.'].includes(e.key) && e.preventDefault();
 
   //if all the images have been loaded then render the screen
   if (!imagesLoaded && location.state != null) {
@@ -665,8 +665,11 @@ const ListingForm = () => {
                     type="number"
                     required={true}
                     name="numBath"
-                    onChange={(e) => setNumBath(e.target.value)}
                     value={numBath}
+                    onKeyDown={blockInvalidChar}
+                    onChange={({ target: { value } }) => {
+                      setNumBath(value);
+                    }}
                     error={bathError} />
                 </FormGroup>
 
@@ -683,8 +686,11 @@ const ListingForm = () => {
                     type="number"
                     required={true}
                     name="price"
-                    onChange={(e) => setPrice(e.target.value)}
                     value={price}
+                    onKeyDown={blockInvalidChar}
+                    onChange={({ target: { value } }) => {
+                      setPrice(value);
+                    }}
                     error={rentError} />
                 </FormGroup>
               </Box>

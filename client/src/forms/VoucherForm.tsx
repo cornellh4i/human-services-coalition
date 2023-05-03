@@ -2,6 +2,8 @@ import { Box, Button, Container, FormGroup, FormLabel, Grid, TextField, Typograp
 import { useEffect, useState } from "react"
 import { useLocation } from "react-router-dom";
 import React from "react";
+import ConfirmPopUp from '../components/ConfirmPopUp'
+
 
 
 const VoucherForm = () => {
@@ -11,6 +13,8 @@ const VoucherForm = () => {
 
   const [nameError, setNameError] = useState(false)
   const [percentageError, setPercentageError] = useState(false)
+  const [confirmAddPop, setConfirmAddPop] = useState(false)
+
 
   const location = useLocation();
 
@@ -64,12 +68,15 @@ const VoucherForm = () => {
 
       setNameError(false)
       setPercentageError(false)
+      setConfirmAddPop(true)
+
 
     }
   }
+  const blockInvalidChar = (e: any) => ['e', 'E', '+', '-', '.'].includes(e.key) && e.preventDefault();
 
   return (
-    <Container maxWidth={false}>
+    <><Container maxWidth={false}>
       <Grid container>
         <Grid item xs={12}>
           <form noValidate className="voucher-form" onSubmit={handleSubmit}>
@@ -102,8 +109,14 @@ const VoucherForm = () => {
                   id="phone"
                   name="phone"
                   className="form-field"
-                  onChange={(e) => setPercentage(e.target.value)}
                   value={percentage}
+                  onKeyDown={blockInvalidChar}
+                  onChange={({ target: { value } }) => {
+                    setPercentage(value);
+                  }}
+                  inputProps={{
+                    min:'0'
+                  }}
                   variant="outlined"
                   size="small"
                   type="number"
@@ -127,6 +140,8 @@ const VoucherForm = () => {
         </Grid>
       </Grid>
     </Container >
+    <ConfirmPopUp openConfirmPop={confirmAddPop} setConfirmPop={setConfirmAddPop} action="added" type="Voucher" />
+  </>
   )
 }
 
