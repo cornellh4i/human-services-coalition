@@ -670,6 +670,9 @@ const ListingForm = () => {
                     onChange={({ target: { value } }) => {
                       setNumBath(value);
                     }}
+                    inputProps={{
+                      min:'0'
+                    }}
                     error={bathError} />
                 </FormGroup>
 
@@ -690,6 +693,9 @@ const ListingForm = () => {
                     onKeyDown={blockInvalidChar}
                     onChange={({ target: { value } }) => {
                       setPrice(value);
+                    }}
+                    inputProps={{
+                      min:'0'
                     }}
                     error={rentError} />
                 </FormGroup>
