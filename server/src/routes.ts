@@ -76,7 +76,7 @@ module.exports = () => {
 
   // DELETE a specific housing listing
   router.delete('/listing/:id', deleteListing)
-  router.delete('/listingPicture/:id', deleteListingPicture)
+  router.delete('/listingPicture/:id', upload.array("pictures"), deleteListingPicture)
 
   // GET all users
   router.get('/users', getUsers)

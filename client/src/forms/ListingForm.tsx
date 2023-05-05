@@ -142,8 +142,10 @@ const ListingForm = () => {
     setPrevPics(json_object.pictures)
     setPictures(json_object.pictures)
 
+    console.log("BEFORE DELETE");
+    console.log(json_object.pictures);
     //retrieve the images to prepopulate the form
-    fetchImages(json_object.pictures, json_object.streetAddress);
+    await fetchImages(json_object.pictures, json_object.streetAddress);
 
   }
 
@@ -212,7 +214,10 @@ const ListingForm = () => {
 
     //Filters to remove this imageKey
     var temparr = prevPics
-    temparr.splice(id, 1)
+    const index_of_pic = temparr.indexOf(placeholder);
+    temparr.splice(index_of_pic, 1)
+    console.log("THE FILTERED")
+    console.log(temparr)
 
     //the placeholder file that replaces this image
     const placeholderFile = new File(
@@ -221,19 +226,26 @@ const ListingForm = () => {
       { type: 'image/jpeg' },
     );
 
+
+    if (temparr.length == 0) {
+      formData.append('arr[]', "")
+    }
     for (var i = 0; i < temparr.length; i++) {
       formData.append('arr[]', temparr[i])
     }
     formData.append('dirname', streetAddress)
     formData.append('filename', placeholder)
-    formData.append('picture', placeholderFile)
+    formData.append('pictures', placeholderFile)
 
+    // navigate('/listing-form', { state: { id: location.state.id } })
     //NOTE: this is 'PATCH' request and not a 'DELETE' request
-    const response = await fetch('api/listingPicture/' + id, {
-      method: 'PATCH',
+    const response = await fetch('api/listingPicture/' + location.state.id, {
+      method: 'DELETE',
       body: formData
     });
-    return response
+    window.location.reload();
+
+    //return response
   }
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -367,8 +379,6 @@ const ListingForm = () => {
       }
     }
   }
-
-
 
   //if all the images have been loaded then render the screen
   if (!imagesLoaded && location.state != null) {
@@ -721,7 +731,7 @@ const ListingForm = () => {
                             checked={furnished}
                             onChange={(e) => {
                               setFurnished(e.target.checked);
-                            }}/>} />
+                            }} />} />
                       </Box>
 
                       <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'left', marginRight: '12rem' }}>
@@ -951,7 +961,10 @@ const ListingForm = () => {
                     </Grid>
                     <Grid container xs={12}>
                       <Grid item xs={4} sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-                        <Button onClick={() => imageDeletion(0)}>
+                        <Button onClick={() => {
+                          imageDeletion(0)
+
+                        }}>
                           <Typography sx={{ textDecoration: 'underline', cursor: 'pointer', textTransform: 'none', color: '#000000', fontStyle: 'italic' }}>Delete Image</Typography>
                         </Button>
                       </Grid>

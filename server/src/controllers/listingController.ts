@@ -268,7 +268,9 @@ const updateListingPicture = async (req, res) => {
         }
       }
     );
+
     res.send(successJson({}));
+
 
   } catch (error) {
     res.send(errorJson(error));
@@ -301,34 +303,40 @@ const getListingPicture = async (req, res) => {
 const deleteListingPicture = async (req, res) => {
   const { id } = req.params
 
-  console.log('FORMBAODY')
+  console.log('THIS IS THE FORMBOOOODY')
   console.log(req.body)
   try {
     const dirname = String(req.body.dirname)
-    console.log("dir")
+    console.log("THIS IS THE DIRECTOR")
     console.log(dirname)
     const filename = String(req.body.filename)
     console.log("THIS IS FILENAME")
     console.log(filename)
 
     var temparr: string[] = req.body.arr
+    console.log("THIS IS TEMPARR BEFORS")
+    console.log(temparr)
+    if (temparr[0] === "") { temparr = [] }
+    console.log("THIS IS TEMPARR AFTER")
+    console.log(temparr)
     const result = await s3utils.deleteImage(dirname, filename)
+    console.log("AFTER S3 DELETE")
     await Listing.findOneAndUpdate(
       { _id: id }, // Filter: find the listing with the given ID
       { $set: { pictures: temparr } }, // Update: set the "pictures" field to the "pics" array
       (err, updatedListing) => {
         if (err) {
-          console.error('Error deleting image :', err);
+          console.error('Error updating listing:', err);
         } else {
-          console.log('Deleted listing:', updatedListing);
+          console.log('Updated listing:', updatedListing);
         }
       }
     );
+    return res.send(successJson({}));
   }
   catch (error) {
     console.log(error)
     res.send(errorJson(error));
-
   }
 
 }
