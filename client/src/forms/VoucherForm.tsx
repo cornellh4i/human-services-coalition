@@ -41,6 +41,10 @@ const VoucherForm = () => {
       setPercentageError(true)
     }
 
+    if (location.state !== null && (name === '' || percentage === '')) {
+      return;
+    }
+
     const voucher = {
       name,
       percentage

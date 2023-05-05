@@ -273,6 +273,10 @@ const ListingForm = () => {
       setBedsError(true)
     }
 
+    if (location.state !== null && (landlord === '' || landlordPhone === '' || landlordEmail === '' || streetAddress === '' || city === '' || state === '' || country === '' || zipCode === '' || numBath === '' || price === '' || size === '')) {
+      return;
+    }
+
     const listing = {
       webScraped,
       description,

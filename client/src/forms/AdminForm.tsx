@@ -87,6 +87,10 @@ const AdminForm = () => {
       setLNameError(true)
     }
 
+    if (location.state !== null && (affiliation === '' || email === '' || username === '' || password === '' || fName === '' || lName === '')) {
+      return;
+    }
+
     const admin = {
       password,
       username,

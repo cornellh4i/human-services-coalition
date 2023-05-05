@@ -90,6 +90,7 @@ const UserForm = () => {
     setBirthDate(date)// to make date readable
     setContactPref(json_object.contactPref)
     setAdditionalDays(json_object.additionalDays)
+    
     setButtonLabel('Save Changes')
 
   }
@@ -114,6 +115,10 @@ const UserForm = () => {
     }
     if (lName === '') {
       setLNameError(true)
+    }
+
+    if (location.state !== null && (voucherType === '' || supervisor === '' || username === '' || password === '' || fName === '' || lName === '')) {
+      return;
     }
 
     const user = {
