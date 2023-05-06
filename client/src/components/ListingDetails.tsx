@@ -46,6 +46,10 @@ export default function ListingDetails({ Listing, handleDelete }: { Listing: any
     event.stopPropagation()
     setOpenPop(true)
   }
+  const handleSemiDel = async (id: any) => {
+    const address = Listing.streetAddress;
+    handleDelete(id, address);
+  }
 
   // Create state for image source
   const [imageSrc, setImageSrc] = useState<string | null>(null);
@@ -55,38 +59,29 @@ export default function ListingDetails({ Listing, handleDelete }: { Listing: any
   // Fetch image and create object URL when the component mounts
   useEffect(() => {
     const fetchImage = async () => {
-      try {
-        if (cacheImg == null) {
-          // // Fetch the image from the backend
 
-          const link = `${Listing.streetAddress}/${Listing.pictures[0]}`
-          const response = await fetch('api/listingPicture/' + link);
+      if (Listing.pictures.length == 0) {// if this listing has no images
+        setImageSrc(null)
+      }
+      else {// if this listing hahandleClicks images
 
-          // Convert the response to a Blob
-          const blob = await response.blob();
-
-          // Create an object URL from the Blob
-          const objectURL = URL.createObjectURL(blob);
-
-          // Set the object URL as the imageSrc state
-          setCacheImg(objectURL)
-          setImageSrc(objectURL);
-        }
-        else {
-          setImageSrc(cacheImg);
-        }
-      } catch (error) {
-        console.error('Error fetching image:', error);
+        //combines the streetaddress and the filename to get the link for S3 lookup
+        const link = `${Listing.streetAddress}/${Listing.pictures[0]}`;
+        // Fetch the image from the backend
+        const response = await fetch('api/listingPicture/' + link);
+        // Convert the response to a Blob
+        const blob = await response.blob();
+        // Create an object URL from the Blob
+        const objectURL = URL.createObjectURL(blob);
+        // Set the object URL as the imageSrc state
+        setImageSrc(objectURL);
       }
     };
-
     //Call the fetchImage function
     fetchImage();
   }, []);
 
-
   return (
-
     <>
       {/* Creates a single listing card */}
       <Card style={{ backgroundColor: "#FFFFFF" }}
@@ -199,7 +194,7 @@ export default function ListingDetails({ Listing, handleDelete }: { Listing: any
           </Grid>
         </Grid>
       </Card>
-      <DeleteConfirmation id={Listing._id} openPop={openPop} setOpenPop={setOpenPop} handleDelete={handleDelete} type="listing" />
+      <DeleteConfirmation id={Listing._id} openPop={openPop} setOpenPop={setOpenPop} handleDelete={handleSemiDel} type="listing" />
 
     </>
 

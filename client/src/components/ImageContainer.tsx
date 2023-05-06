@@ -9,7 +9,10 @@ export default function ImageContainer({ images, numImages }: { images: string[]
     setFirstImageHeight(event.currentTarget.clientHeight);
   };
 
-  if (numImages === 1) {
+  if (numImages === 0) {
+    return (<Grid container></Grid>)
+  }
+  else if (numImages === 1) {
     /* Displays a single picture if pic array length is 1*/
     return (
       <Grid container>

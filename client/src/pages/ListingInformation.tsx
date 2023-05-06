@@ -27,8 +27,12 @@ const ListingInformation = () => {
 
   //the function that calls the delete routing function
   const handleDelete = async (id: any) => {
+    const formData = new FormData();
+
+    formData.append('dirname', location.state.streetAddress)
     await fetch('/api/listing/' + id, {
-      method: 'DELETE'
+      method: 'DELETE',
+      body: formData
     })
     navigate("/")
   }
@@ -41,7 +45,12 @@ const ListingInformation = () => {
   //The for loop will loop over each "key" in the pictures and 
   // Fetch image and create object URL when the component mounts
   const fetchImage = async () => {
-    try {
+
+    if (location.state.pictures.length == 0) {// if there are no images in this listing
+      setImageSrc([])
+      setImagesLoaded(true)
+    }
+    else {
       const promises = location.state.pictures.map(async (picture: any) => {
         const link = `${location.state.streetAddress}/${picture}`
         const response = await fetch('api/listingPicture/' + link)
@@ -52,10 +61,9 @@ const ListingInformation = () => {
       const objectURLs = await Promise.all(promises);
       setImageSrc(objectURLs);
       setImagesLoaded(true);
-    } catch (error) {
-      console.error('Error fetching images:', error);
     }
   }
+
   useEffect(() => {
     fetchImage();
   }, [location.state.pictures, location.state.streetAddress])
@@ -66,7 +74,6 @@ const ListingInformation = () => {
   if (!imagesLoaded) {
     return <div>Loading images...</div>;
   }
-
 
   return (
     <><Grid padding="1% 5%">
