@@ -657,18 +657,30 @@ const ListingForm = () => {
                     <FormLabel>Baths</FormLabel>
                     <Typography sx={{ marginLeft: '0.3rem', color: '#E50808' }}>*</Typography>
                   </Box>
-                  <TextField
+                  <Select
                     id="listing-numBath"
                     variant="outlined"
                     size="small"
                     className="form-field"
-                    type="number"
                     required={true}
                     name="numBath"
                     onChange={(e) => setNumBath(e.target.value)}
                     value={numBath}
-                    error={bathError} />
+                    error={bathError}
+                  >
+                    <MenuItem value={1}>1 Bath</MenuItem>
+                    <MenuItem value={1.5}>1.5 Baths</MenuItem>
+                    <MenuItem value={2}>2 Baths</MenuItem>
+                    <MenuItem value={2.5}>2.5 Baths</MenuItem>
+                    <MenuItem value={3}>3 Baths</MenuItem>
+                    <MenuItem value={3.5}>3.5 Baths</MenuItem>
+                    <MenuItem value={4}>4 Baths</MenuItem>
+                    <MenuItem value={4.5}>4.5 Baths</MenuItem>
+                    <MenuItem value={5}>5 Baths</MenuItem>
+                  </Select>
                 </FormGroup>
+
+
 
                 <FormGroup sx={{ flexGrow: '1' }}>
                   <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'left', alignItems: 'center' }}>
@@ -721,7 +733,7 @@ const ListingForm = () => {
                             checked={furnished}
                             onChange={(e) => {
                               setFurnished(e.target.checked);
-                            }}/>} />
+                            }} />} />
                       </Box>
 
                       <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'left', marginRight: '12rem' }}>
