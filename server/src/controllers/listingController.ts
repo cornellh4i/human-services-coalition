@@ -1,14 +1,9 @@
 const Listing = require("../models/Listing");
 import mongoose from 'mongoose';
-import multer from 'multer';
-// const multer = require('multer');
-// const multerS3 = require('multer-s3');
 const fs = require('fs').promises;
 import s3utils from '../utils/s3';
 
 import { successJson, errorJson } from '../utils/jsonResponses';
-import { TIMEOUT } from 'dns';
-import { dir } from 'console';
 
 // GET all housing listings
 const getListings = async (req, res) => {
@@ -143,9 +138,6 @@ const getListingByCategory = async (req, res) => {
   res.status(200).json(listings);
 }
 
-
-
-
 // POST (add) a new housing listing
 const createListing = async (req, res) => {
   const {
@@ -232,9 +224,9 @@ const updateListing = async (req, res) => {
   }
 }
 
-//before this is called multer is called - middleware between front end and backend
-//steps in and takes the pictures and downloads it onto server (/uploads) folder MAGIC
-//use s3 module i have a file at this location, name for file and bucket to upload 
+// before this is called multer is called - middleware between front end and backend
+// steps in and takes the pictures and downloads it onto server (/uploads) folder MAGIC
+// use s3 module i have a file at this location, name for file and bucket to upload 
 const updateListingPicture = async (req, res) => {
   const { id } = req.params
   try {
@@ -275,6 +267,7 @@ const updateListingPicture = async (req, res) => {
     // res.status(200).json({ id: id })
   }
 }
+
 const getListingPicture = async (req, res) => {
 
   const { dir } = req.params
@@ -342,8 +335,8 @@ const deleteListingPicture = async (req, res) => {
     console.log(error)
     res.send(errorJson(error));
   }
-
 }
+
 // DELETE a specific housing listing
 const deleteListing = async (req, res) => {
   const { id } = req.params
@@ -369,7 +362,6 @@ const deleteListings = async (req, res) => {
   const listing = await Listing.deleteMany({})
   res.status(200).json(listing)
 }
-
 
 // Exports
 module.exports = {
