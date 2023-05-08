@@ -1,13 +1,9 @@
 import { Card, CardMedia } from '@mui/material';
 import Typography from '@mui/material/Typography';
-import { DeleteOutlined } from '@mui/icons-material';
-import { EditOutlined } from '@mui/icons-material';
-import IconButton from '@mui/material/IconButton/IconButton';
 import { ThemeProvider } from '@emotion/react';
 import { createTheme, Grid } from '@mui/material';
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from 'react';
-import DeleteConfirmation from './DeleteConfirmation';
 
 const listingTheme = createTheme({
   typography: {
@@ -36,7 +32,6 @@ const priceTheme = createTheme({
 
 
 export default function LDAppliedListing({ Listing }: { Listing: any }) {
-
   // define handle click function
   const navigate = useNavigate();
 

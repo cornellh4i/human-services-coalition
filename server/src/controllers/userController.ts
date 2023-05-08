@@ -1,7 +1,7 @@
 const User = require("../models/User");
 import mongoose from 'mongoose';
 
-//GET users according to sort
+// GET users according to sort
 const getSortUsers = async (req, res) => {
   const search = req.query.search || '';
   const sortName = req.query.sortName || '';
@@ -26,7 +26,6 @@ const getSortUsers = async (req, res) => {
   if (voucherType != "All Vouchers" && voucherType != "") {
     filter["voucherType"] = { $eq: voucherType };
   }
-
 
   const users = await User.find(filter).sort(sortObject);
 

@@ -6,7 +6,7 @@ import { Card, CardContent } from "@mui/material";
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 
 
-//interface for declaring what props the PopUp can take
+// Interface for declaring what props the PopUp can take
 interface ConfirmationProps {
   setConfirmPop: (trigger: boolean) => void;
   openConfirmPop: boolean;

@@ -4,8 +4,6 @@ import { useLocation } from "react-router-dom";
 import React from "react";
 import ConfirmPopUp from '../components/ConfirmPopUp'
 
-
-
 const VoucherForm = () => {
   const [name, setName] = useState('')
   const [percentage, setPercentage] = useState('')

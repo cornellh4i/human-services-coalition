@@ -5,7 +5,6 @@ import ColumnLabel from '../components/ColumnLabel'
 import { useState, useEffect } from 'react'
 import ConfirmPopUp from './ConfirmPopUp';
 
-
 const ManageUsers = () => {
   const [Users, setUsers] = useState<any[]>([])
   let [sortOrder, setSortOrder] = useState(-1)

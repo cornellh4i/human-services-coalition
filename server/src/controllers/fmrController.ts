@@ -36,7 +36,6 @@ const createFMRprices = async(req,res)=> {
     }
 }
 
-
 // PATCH (edit) FMR prices
 const updateFMRprices = async (req, res) => {
   const { id } = req.params

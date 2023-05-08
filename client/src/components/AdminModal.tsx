@@ -1,6 +1,5 @@
 import { Box, createTheme, Grid, Modal, ThemeProvider, Typography } from "@mui/material";
 
-
 interface OpenModalProps {
   fname: string
   lname: string
