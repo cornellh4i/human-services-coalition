@@ -113,9 +113,7 @@ const VoucherForm = () => {
                   className="form-field"
                   value={percentage}
                   onKeyDown={blockInvalidChar}
-                  onChange={({ target: { value } }) => {
-                    setPercentage(value);
-                  }}
+                  onChange={(e) => setPercentage(e.target.value)}
                   inputProps={{
                     min:'0'
                   }}

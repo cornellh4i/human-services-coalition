@@ -701,6 +701,7 @@ const ListingForm = () => {
                     size="small"
                     className="form-field"
                     required={true}
+                    onChange={(e) => setNumBath(e.target.value)}
                     name="numBath"
                     value={numBath}
                     error={bathError}
