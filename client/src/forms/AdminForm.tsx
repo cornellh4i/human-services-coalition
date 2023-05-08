@@ -4,7 +4,6 @@ import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import { useLocation, useNavigate } from "react-router-dom";
 import React from "react";
 
-
 const AdminForm = () => {
 
   const [affiliation, setAffiliation] = useState('')

@@ -1,7 +1,7 @@
 const Admin = require("../models/Admin");
 import mongoose from 'mongoose';
 
-//GET admins based off sort
+// GET admins based off sort
 const getSortAdmins = async (req, res) => {
   const search = req.query.search || '';
   const sortName = req.query.sortName || '';

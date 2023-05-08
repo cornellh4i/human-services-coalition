@@ -161,7 +161,7 @@ const ListingForm = () => {
 
 
   const handleClick = (event: any, id: any) => {
-    setCount(count + 1); console.log(event.target.files[0]);
+    setCount(count + 1);
     if (id == 0) {
       //setDummyImg(URL.createObjectURL(event.target.files[0]));
       imageSrc.splice(0, 1, URL.createObjectURL(event.target.files[0]));

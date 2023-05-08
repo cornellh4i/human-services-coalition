@@ -33,8 +33,6 @@ const Vouchers = () => {
         </Box>
       </Container>
     </ThemeProvider>
-
-
   )
 }
 

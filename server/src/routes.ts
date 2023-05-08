@@ -54,14 +54,13 @@ module.exports = () => {
   // GET all housing listings
   router.get('/listing', getListings)
 
-
-  //GET housing listing by category and value
+  // GET housing listing by category and value
   router.get('/listingsByCategory', getListingByCategory);
 
   // GET a specific housing listing (by id)
   router.get('/listing/:id', getListing)
 
-  //GET the picture for a specific listing
+  // GET the picture for a specific listing
   router.get('/listingPicture/:dir/:file', getListingPicture)
 
   // POST (add) a new housing listing

@@ -1,8 +1,7 @@
 const Listing = require("../models/Listing");
-import mongoose from 'mongoose';
 const fs = require('fs').promises;
+import mongoose from 'mongoose';
 import s3utils from '../utils/s3';
-
 import { successJson, errorJson } from '../utils/jsonResponses';
 
 // GET all housing listings
@@ -224,7 +223,7 @@ const updateListing = async (req, res) => {
   }
 }
 
-// before this is called multer is called - middleware between front end and backend
+// before this is called, multer is called - middleware between front end and backend
 // steps in and takes the pictures and downloads it onto server (/uploads) folder MAGIC
 // use s3 module i have a file at this location, name for file and bucket to upload 
 const updateListingPicture = async (req, res) => {
@@ -242,13 +241,13 @@ const updateListingPicture = async (req, res) => {
     // Now we send the file to S3 using our s3utils
     // 'name' is the text entered into the input field
     // and this is what the name of the file will be in s3
-
     files.forEach(async (file) => {
       const dirname = String(req.body.dirname)
       const filename1 = String(req.body.filename)
       const result = await s3utils.uploadFile(dirname, filename1, file, true)
       await fs.unlink(file.path);
     })
+
     await Listing.findOneAndUpdate(
       { _id: id }, // Filter: find the listing with the given ID
       { $set: { pictures: temparr } }, // Update: set the "pictures" field to the "pics" array
@@ -269,7 +268,6 @@ const updateListingPicture = async (req, res) => {
 }
 
 const getListingPicture = async (req, res) => {
-
   const { dir } = req.params
   const { file } = req.params
 

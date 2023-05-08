@@ -58,8 +58,6 @@ function uploadFile(directoryName: string, fileName: string, file: any, isnew: b
 
 function getFileStream(directoryName: string, fileName: string,) {
   // TAKES THE PICTURE NAME THAT'S ON S3 
-  // WANT TO TELL THE FRONT END THAT i WANT THE CORNELL) PICTURE
-  // IF UPLOAD IS SUCCESSFULL 
 
   const directoryKey = `${directoryName}/`;
   console.log("DIRECTORY IS " + directoryKey)
@@ -84,7 +82,6 @@ function getFileStream(directoryName: string, fileName: string,) {
 }
 
 function deleteImage(directoryName: string, fileName: string,) {
-
   const directoryKey = `${directoryName}/`;
   console.log("DIRECTORY IS " + directoryKey)
   const fileKey = `${directoryKey}${fileName}`;
@@ -102,6 +99,7 @@ function deleteImage(directoryName: string, fileName: string,) {
     console.log(`Error deleting image ${fileKey}: ${err}`);
   }
 }
+
 async function deleteDirectory(directoryName: string) {
   const directoryKey = `${directoryName}/`;
   console.log("DIRECTORY IS Deletee" + directoryKey)
@@ -141,13 +139,11 @@ async function deleteDirectory(directoryName: string) {
       Key: directoryKey,
     }).promise();
 
-    //console.log(`Successfully deleted directory  ${directoryKey}`);
   } catch (err) {
     console.log(`Error deleting directory ${directoryKey}: ${err}`);
   }
 
 }
-
 
 export default {
   uploadFile,

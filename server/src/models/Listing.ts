@@ -32,7 +32,6 @@ enum BooleanType {
   False = "false"
 }
 
-
 const listingSchema = new Schema({
   webScraped: {
     type: Boolean,
