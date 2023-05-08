@@ -117,8 +117,6 @@ const ListingForm = () => {
     //retrieve the data entries to prepoulate the form 
     setOrg(json_object.streetAddress)
     setStreetAddress(json_object.streetAddress)
-    console.log("DESCRIPTIONS")
-    console.log(json_object.description)
     setDescription(json_object.description)
     setState(json_object.state)
     setCity(json_object.city)

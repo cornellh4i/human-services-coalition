@@ -67,7 +67,7 @@ const AppliedListings = () => {
               </Grid>
             </Grid>
             <Grid item xs={6} display="flex" justifyContent="right">
-              <IconButton>
+              <IconButton onClick={() => window.print()}>
                 <PrintIcon fontSize='large'></PrintIcon>
               </IconButton>
             </Grid>

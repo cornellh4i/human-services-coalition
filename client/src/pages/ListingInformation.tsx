@@ -6,7 +6,6 @@ import CheckIcon from '@mui/icons-material/Check';
 import EmailIcon from '@mui/icons-material/Email';
 import SmartphoneIcon from '@mui/icons-material/Smartphone';
 import LinkIcon from '@mui/icons-material/Link';
-import PlaceIcon from '@mui/icons-material/Place';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import { useLocation, useNavigate } from "react-router-dom";
 import ImageContainer from '../components/ImageContainer';
@@ -60,11 +59,9 @@ const ListingInformation = () => {
   }
   useEffect(() => {
     fetchImage();
-    console.log(location.state.description);
   }, [location.state.pictures, location.state.streetAddress])
 
 
-  //[location.state.pictures, location.state.streetAddress]
   //if all the images have been loaded then render the screen
   if (!imagesLoaded) {
     return <div>Loading images...</div>;
@@ -113,7 +110,7 @@ const ListingInformation = () => {
               </Grid>
             </Grid>
             <Typography paddingBottom={"20px"} sx={{ color: "#343434", fontSize: "16px", fontStyle: "italic" }}>
-              {location.state.webscraped == "true" ? "This listing has been webscraped from apartments.com" : ""}
+              {location.state.webscraped == "true" ? "This listing has been webscraped" : ""}
             </Typography>
 
             {/* Listing information */}
