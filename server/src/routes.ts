@@ -66,9 +66,8 @@ module.exports = () => {
   // POST (add) a new housing listing
   router.post('/listing', createListing)
 
+  // Upload images
   const upload = multer({ dest: "uploads/" });
-  // upload.single("pictures")
-  //upload.array("pictures")
 
   // PATCH (edit) a specific housing listing
   router.patch('/listing/:id', updateListing)

@@ -146,7 +146,7 @@ const ListingInformation = () => {
             {/* Listing description */}
             <Grid item padding="10px 0px" xs={10}>
               <Typography sx={{ color: "#343434", fontStyle: "italic" }}>
-                {location.state.description ? location.state.description : "no description included"}
+                {location.state.description ? location.state.description : "No description included"}
               </Typography>
             </Grid>
 
