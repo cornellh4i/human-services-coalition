@@ -59,7 +59,7 @@ const UserForm = () => {
     setVoucherNames(voucherNames)
   }
 
-  // //contains that will prepopulate the form if location.state is not null
+  //contains that will prepopulate the form if location.state is not null
   useEffect(() => {
     if (location.state != null) { getUserDetails() }
     assignVoucherNames()
@@ -90,6 +90,7 @@ const UserForm = () => {
     setBirthDate(date)// to make date readable
     setContactPref(json_object.contactPref)
     setAdditionalDays(json_object.additionalDays)
+    
     setButtonLabel('Save Changes')
 
   }
@@ -114,6 +115,10 @@ const UserForm = () => {
     }
     if (lName === '') {
       setLNameError(true)
+    }
+
+    if (location.state !== null && (voucherType === '' || supervisor === '' || username === '' || password === '' || fName === '' || lName === '')) {
+      return;
     }
 
     const user = {
@@ -210,6 +215,8 @@ const UserForm = () => {
   };
 
   const title = (location.state === null) ? "Create a New User" : "Edit User";
+
+  const blockInvalidChar = (e: any) => ['e', 'E', '+', '-', '.'].includes(e.key) && e.preventDefault();
 
   return (
     <Container maxWidth={false}>
@@ -494,6 +501,7 @@ const UserForm = () => {
                         variant="outlined"
                         size="small"
                         type="number"
+                        onKeyDown={blockInvalidChar}
                       />
                     </FormGroup>
                   </Box>

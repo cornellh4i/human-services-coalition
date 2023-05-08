@@ -90,6 +90,8 @@ const FmrForm = () => {
     }
   }
 
+  const blockInvalidChar = (e: any) => ['e', 'E', '+', '-', '.'].includes(e.key) && e.preventDefault();
+
   return (
 
     <Container maxWidth={false}>
@@ -136,6 +138,7 @@ const FmrForm = () => {
               required={true}
               onChange={(e) => setStudio(e.target.value)}
               value={studio}
+              onKeyDown={blockInvalidChar}
             />
 
             <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '1rem' }}>
@@ -157,6 +160,7 @@ const FmrForm = () => {
               required={true}
               onChange={(e) => setOneBed(e.target.value)}
               value={oneBed}
+              onKeyDown={blockInvalidChar}
             />
 
             <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '1rem' }}>
@@ -178,6 +182,7 @@ const FmrForm = () => {
               required={true}
               onChange={(e) => setTwoBed(e.target.value)}
               value={twoBed}
+              onKeyDown={blockInvalidChar}
             />
 
             <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '1rem' }}>
@@ -199,6 +204,7 @@ const FmrForm = () => {
               required={true}
               onChange={(e) => setThreeBed(e.target.value)}
               value={threeBed}
+              onKeyDown={blockInvalidChar}
             />
 
             <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '1rem' }}>
@@ -220,6 +226,7 @@ const FmrForm = () => {
               required={true}
               onChange={(e) => setFourBed(e.target.value)}
               value={fourBed}
+              onKeyDown={blockInvalidChar}
             />
 
             <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '1rem' }}>
@@ -241,6 +248,7 @@ const FmrForm = () => {
               required={true}
               onChange={(e) => setFiveBed(e.target.value)}
               value={fiveBed}
+              onKeyDown={blockInvalidChar}
             />
 
 
@@ -262,6 +270,7 @@ const FmrForm = () => {
               required={true}
               onChange={(e) => setSixBed(e.target.value)}
               value={sixBed}
+              onKeyDown={blockInvalidChar}
             />
 
 

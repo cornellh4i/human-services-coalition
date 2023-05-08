@@ -12,7 +12,6 @@ const ListingForm = () => {
   const [state, setState] = useState('')
   const [country, setCountry] = useState('')
   const [zipCode, setZipCode] = useState('')
-  // const [pictures, setPictures] = useState<string[]>([''])
   const [pictures, setPictures] = useState<string[]>([]);
   const [price, setPrice] = useState('')
   const [size, setSize] = useState('')
@@ -31,7 +30,6 @@ const ListingForm = () => {
   const [dateAvailable, setDateAvailable] = useState('')
   const [error, setError] = useState(null)
   const [buttonLabel, setButtonLabel] = useState('Create New Listing')
-  const [org, setOrg] = useState('')
 
   // Enforces Validation
   const [nameError, setNameError] = useState(false)
@@ -61,7 +59,6 @@ const ListingForm = () => {
   const [count, setCount] = useState(0);
 
 
-
   // Navigation functionality
   const navigate = useNavigate();
 
@@ -83,12 +80,10 @@ const ListingForm = () => {
   // [fetchImages] populates the state list [imgSrc] with the 
   // the list of images that should be shown on the form
   const fetchImages = async (alist: any, dir: any) => {
-
     if (alist.length == 0) {
       imageSrc.push('');
       imageSrc.push('');
       imageSrc.push('');
-      // setImageSrc(["", "", ""])
     }
     else {
       let blist = abstr(alist)
@@ -126,7 +121,6 @@ const ListingForm = () => {
     let json_object = await result.json()
 
     //retrieve the data entries to prepoulate the form 
-    setOrg(json_object.streetAddress)
     setStreetAddress(json_object.streetAddress)
     setDescription(json_object.description)
     setState(json_object.state)
@@ -156,11 +150,6 @@ const ListingForm = () => {
 
     //retrieve the images to prepopulate the form
     await fetchImages(json_object.pictures, json_object.streetAddress);
-    // console.log(pic0);
-    // console.log(pic1);
-    // console.log(imageSrc)
-
-
   }
 
   //THE MOST ANNOYING FUNCTIONG EVER ... the [useEffect] calls the [getListingDetails]
@@ -202,7 +191,6 @@ const ListingForm = () => {
       let response = null;
 
       if (imgfle.length > 0) { // if there is something in this file
-        // console.log(imgfle); 
         // determines the name of the file to represent in S3 storage
         const index = alist.indexOf(imgfle)
         const placeholder = `house${index}`
@@ -236,8 +224,6 @@ const ListingForm = () => {
     await Promise.all(promises)
   }
 
-
-
   const handeDel = async (event: any, id: any) => {
     setCount(count + 1);
     imageSrc.splice(id, 1, " ");
@@ -246,7 +232,6 @@ const ListingForm = () => {
   }
   // [imageDeletion] "Deletes" an image
   // This function esentially replaces the current entry on the S3 with an empty placeholder
-  // Why so much ? Well the actual 'DELETE' route was being a massive B**CH
   const imageDeletion = async (id: any) => {
     const formData = new FormData()
     const placeholder = `house${id}`
@@ -319,6 +304,10 @@ const ListingForm = () => {
     }
     if (size === '') {
       setBedsError(true)
+    }
+
+    if (location.state !== null && (landlord === '' || landlordPhone === '' || landlordEmail === '' || streetAddress === '' || city === '' || state === '' || country === '' || zipCode === '' || numBath === '' || price === '' || size === '')) {
+      return;
     }
 
     const listing = {
@@ -416,6 +405,7 @@ const ListingForm = () => {
     }
   }
 
+  const blockInvalidChar = (e: any) => ['e', 'E', '+', '-', '.'].includes(e.key) && e.preventDefault();
 
   //if all the images have been loaded then render the screen
   if (!imagesLoaded && location.state != null) {
@@ -465,7 +455,7 @@ const ListingForm = () => {
 
                 <FormGroup sx={{ flexGrow: '1', marginX: '1.5rem' }}>
                   <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'left', alignItems: 'center' }}>
-                    <FormLabel>Number</FormLabel>
+                    <FormLabel>Phone Number</FormLabel>
                     <Typography sx={{ marginLeft: '0.3rem', color: '#E50808' }}>*</Typography>
                   </Box>
                   <TextField fullWidth
@@ -475,6 +465,7 @@ const ListingForm = () => {
                     className="form-field"
                     type="tel"
                     name="landlordPhone"
+                    placeholder="XXX-XXX-XXXX"
                     onChange={(e) => setLandlordPhone(e.target.value)}
                     value={landlordPhone}
                     error={numberError} />
@@ -711,7 +702,6 @@ const ListingForm = () => {
                     className="form-field"
                     required={true}
                     name="numBath"
-                    onChange={(e) => setNumBath(e.target.value)}
                     value={numBath}
                     error={bathError}
                   >
@@ -742,8 +732,14 @@ const ListingForm = () => {
                     type="number"
                     required={true}
                     name="price"
-                    onChange={(e) => setPrice(e.target.value)}
                     value={price}
+                    onKeyDown={blockInvalidChar}
+                    onChange={({ target: { value } }) => {
+                      setPrice(value);
+                    }}
+                    inputProps={{
+                      min:'0'
+                    }}
                     error={rentError} />
                 </FormGroup>
               </Box>

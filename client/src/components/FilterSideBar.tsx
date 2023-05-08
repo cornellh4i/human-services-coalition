@@ -332,6 +332,8 @@ export default function FilterSideBar({
     }
   }
 
+  const blockInvalidChar = (e: any) => ['e', 'E', '+', '-', '.'].includes(e.key) && e.preventDefault();
+
   return (
     <Box sx={{
       flexGrow: 1,
@@ -380,6 +382,7 @@ export default function FilterSideBar({
             label="min"
             variant="outlined"
             type="text"
+            onKeyDown={blockInvalidChar}
             onChange={(e) => handleFilterChange(FilterEnum.minPrice, minPrice, setMinPrice, e)} />
           <h3 className='dash'> – </h3>
           <TextField
@@ -392,6 +395,7 @@ export default function FilterSideBar({
             label="max"
             variant="outlined"
             type="text"
+            onKeyDown={blockInvalidChar}
             onChange={(e) => handleFilterChange(FilterEnum.maxPrice, maxPrice, setMaxPrice, e)}
           />
         </Box>
