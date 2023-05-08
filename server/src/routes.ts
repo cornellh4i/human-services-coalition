@@ -11,6 +11,7 @@ module.exports = () => {
     createListing,
     updateListing,
     deleteListing,
+    deleteListings,
     updateListingPicture,
     getListingPicture,
     deleteListingPicture
@@ -75,8 +76,9 @@ module.exports = () => {
   router.patch('/listingPicture/:id', upload.array("pictures"), updateListingPicture)
 
   // DELETE a specific housing listing
-  router.delete('/listing/:id', deleteListing)
-  router.delete('/listingPicture/:id', deleteListingPicture)
+  router.delete('/listing/:id', upload.array("pictures"), deleteListing)
+  router.delete('/listing', deleteListings)
+  router.delete('/listingPicture/:id', upload.array("pictures"), deleteListingPicture)
 
   // GET all users
   router.get('/users', getUsers)

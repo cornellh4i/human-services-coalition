@@ -51,13 +51,15 @@ const ListingForm = () => {
 
   const [prevPics, setPrevPics] = useState<string[]>([])
 
+  const [pic0, setPic0] = useState<File[]>([]);
   const [pic1, setPic1] = useState<File[]>([]);
   const [pic2, setPic2] = useState<File[]>([]);
-  const [pic3, setPic3] = useState<File[]>([]);
 
   // // Create state for image source and imageLoaded flag
   const [imageSrc, setImageSrc] = useState<string[]>([]);
   const [imagesLoaded, setImagesLoaded] = useState(false);
+  const [count, setCount] = useState(0);
+
 
 
   // Navigation functionality
@@ -81,25 +83,34 @@ const ListingForm = () => {
   // [fetchImages] populates the state list [imgSrc] with the 
   // the list of images that should be shown on the form
   const fetchImages = async (alist: any, dir: any) => {
-    let blist = abstr(alist)
 
-    //for every entry in the [alist]: list of image keys that correspond to S3 storage
-    for (const e of blist) {
-      if (e == '') {
-        //pushes dummy data onto the imgSrc bypass the 
-        //API call and also maintain skeleton of imgSrc
-        imageSrc.push('')
-      } else {
-        //creates the url parameters and routes to call [getListingPicture] in [listingController.tsx]
-        const link = `${dir}/${e}`
-        const response = await fetch('api/listingPicture/' + link);
+    if (alist.length == 0) {
+      imageSrc.push('');
+      imageSrc.push('');
+      imageSrc.push('');
+      // setImageSrc(["", "", ""])
+    }
+    else {
+      let blist = abstr(alist)
 
-        //creates a [blob] -> [URL] with response from GET api call
-        const blob = await response.blob();
-        const objectURL = URL.createObjectURL(blob);
+      //for every entry in the [alist]: list of image keys that correspond to S3 storage
+      for (const e of blist) {
+        if (e == '') {
+          //pushes dummy data onto the imgSrc bypass the 
+          //API call and also maintain skeleton of imgSrc
+          imageSrc.push('')
+        } else {
+          //creates the url parameters and routes to call [getListingPicture] in [listingController.tsx]
+          const link = `${dir}/${e}`
+          const response = await fetch('api/listingPicture/' + link);
 
-        //populates the state list with the image url 
-        imageSrc.push(objectURL)
+          //creates a [blob] -> [URL] with response from GET api call
+          const blob = await response.blob();
+          const objectURL = URL.createObjectURL(blob);
+
+          //populates the state list with the image url 
+          imageSrc.push(objectURL)
+        }
       }
     }
     setImagesLoaded(true);//flag to load the webpage
@@ -142,8 +153,13 @@ const ListingForm = () => {
     setPrevPics(json_object.pictures)
     setPictures(json_object.pictures)
 
+
     //retrieve the images to prepopulate the form
-    fetchImages(json_object.pictures, json_object.streetAddress);
+    await fetchImages(json_object.pictures, json_object.streetAddress);
+    // console.log(pic0);
+    // console.log(pic1);
+    // console.log(imageSrc)
+
 
   }
 
@@ -152,7 +168,26 @@ const ListingForm = () => {
     if (location.state != null) {
       getListingDetails();
     }
-  }, [])
+  }, [pic0, pic1, imageSrc])
+
+
+  const handleClick = (event: any, id: any) => {
+    setCount(count + 1); console.log(event.target.files[0]);
+    if (id == 0) {
+      //setDummyImg(URL.createObjectURL(event.target.files[0]));
+      imageSrc.splice(0, 1, URL.createObjectURL(event.target.files[0]));
+      pic0.push(event.target.files[0]);
+    }
+    else if (id == 1) {
+      imageSrc.splice(1, 1, URL.createObjectURL(event.target.files[0]));
+      pic1.push(event.target.files[0]);
+    }
+    else if (id == 2) {
+      imageSrc.splice(2, 1, URL.createObjectURL(event.target.files[0]));
+      pic2.push(event.target.files[0]);
+    }
+  }
+
 
   // [imageHandler] executes the API call for each image entry on the form
   //  It checks the image form entries to see if they have file data then makes 
@@ -160,14 +195,14 @@ const ListingForm = () => {
   const imageHandler = async (id: any) => {
 
     //Initilisation of helper variables 
-    const alist: File[][] = [pic1, pic2, pic3]// alist is populated with the three images
+    const alist: File[][] = [pic0, pic1, pic2]// alist is populated with the three images
     var temparr = prevPics
 
     const promises = alist.map(async (imgfle: any) => {
       let response = null;
 
       if (imgfle.length > 0) { // if there is something in this file
-
+        // console.log(imgfle); 
         // determines the name of the file to represent in S3 storage
         const index = alist.indexOf(imgfle)
         const placeholder = `house${index}`
@@ -195,14 +230,20 @@ const ListingForm = () => {
           body: formData
         });
       }
-
-      return response
     })
+
     // wait for all promises to resolve
     await Promise.all(promises)
   }
 
 
+
+  const handeDel = async (event: any, id: any) => {
+    setCount(count + 1);
+    imageSrc.splice(id, 1, " ");
+    await imageDeletion(id);
+
+  }
   // [imageDeletion] "Deletes" an image
   // This function esentially replaces the current entry on the S3 with an empty placeholder
   // Why so much ? Well the actual 'DELETE' route was being a massive B**CH
@@ -211,8 +252,9 @@ const ListingForm = () => {
     const placeholder = `house${id}`
 
     //Filters to remove this imageKey
-    var temparr = prevPics
-    temparr.splice(id, 1)
+    var temparr = prevPics;
+    const index_of_pic = temparr.indexOf(placeholder);
+    temparr.splice(index_of_pic, 1)
 
     //the placeholder file that replaces this image
     const placeholderFile = new File(
@@ -221,18 +263,24 @@ const ListingForm = () => {
       { type: 'image/jpeg' },
     );
 
+
+    if (temparr.length == 0) {
+      formData.append('arr[]', "")
+    }
     for (var i = 0; i < temparr.length; i++) {
       formData.append('arr[]', temparr[i])
     }
     formData.append('dirname', streetAddress)
     formData.append('filename', placeholder)
-    formData.append('picture', placeholderFile)
+    formData.append('pictures', placeholderFile)
 
+    // navigate('/listing-form', { state: { id: location.state.id } })
     //NOTE: this is 'PATCH' request and not a 'DELETE' request
-    const response = await fetch('api/listingPicture/' + id, {
-      method: 'PATCH',
+    const response = await fetch('api/listingPicture/' + location.state.id, {
+      method: 'DELETE',
       body: formData
     });
+
     return response
   }
 
@@ -340,9 +388,9 @@ const ListingForm = () => {
       setCountry('')
       setZipCode('')
       setFiles([])
+      setPic0([])
       setPic1([])
       setPic2([])
-      setPic3([])
       setPrice('')
       setSize('')
       setUnitType('')
@@ -367,7 +415,6 @@ const ListingForm = () => {
       }
     }
   }
-
 
 
   //if all the images have been loaded then render the screen
@@ -783,7 +830,7 @@ const ListingForm = () => {
 
                 {/* ORIGINAL CODE FOR UPLOAD IMAGES */}
                 <FormGroup>
-                  <FormLabel sx={{ marginTop: '1rem' }}>Upload Images</FormLabel>
+                  <FormLabel sx={{ marginTop: '1rem' }}>Upload {count} Images</FormLabel>
 
                   <Grid
                     padding="10px 0px 0px 10px"
@@ -813,7 +860,7 @@ const ListingForm = () => {
                               component="img"
                               height="310px"
                               width="300px"
-                              image={imageSrc[0] || ""}
+                              image={imageSrc[0]}
                             />
                           </Card>
                           <Button disableElevation variant='outlined' component='label'
@@ -836,12 +883,8 @@ const ListingForm = () => {
                                 type="file"
                                 multiple={true}
                                 name="pictures"
-                                onChange={(e) => {
-                                  if (e.target.files) {
-                                    //setPic3(Array.from(e.target.files));
-                                    pic1.push(Array.from(e.target.files)[0]);
-                                  }
-                                }} />
+                                onChange={(event) => handleClick(event, 0)}
+                              />
                             </Box>
                           </Button>
                         </FormGroup>
@@ -869,7 +912,7 @@ const ListingForm = () => {
                               component="img"
                               height="310px"
                               width="300px"
-                              image={imageSrc[1] || ""}
+                              image={imageSrc[1]}
                             />
                           </Card>
                           <Button disableElevation variant='outlined' component='label'
@@ -892,12 +935,7 @@ const ListingForm = () => {
                                 type="file"
                                 multiple={true}
                                 name="pictures"
-                                onChange={(e) => {
-                                  if (e.target.files) {
-                                    //setPic3(Array.from(e.target.files));
-                                    pic2.push(Array.from(e.target.files)[0]);
-                                  }
-                                }} />
+                                onChange={(event) => handleClick(event, 1)} />
                             </Box>
                           </Button>
                         </FormGroup>
@@ -925,7 +963,7 @@ const ListingForm = () => {
                               component="img"
                               height="310px"
                               width="300px"
-                              image={imageSrc[2] || ""}
+                              image={imageSrc[2]}
                             />
 
                           </Card>
@@ -949,13 +987,7 @@ const ListingForm = () => {
                                 type="file"
                                 multiple={true}
                                 name="pictures"
-                                onChange={(e) => {
-                                  if (e.target.files) {
-                                    //setPic3(Array.from(e.target.files));
-                                    pic3.push(Array.from(e.target.files)[0]);
-
-                                  }
-                                }} />
+                                onChange={(event) => handleClick(event, 2)} />
                             </Box>
                           </Button>
                         </FormGroup>
@@ -963,17 +995,17 @@ const ListingForm = () => {
                     </Grid>
                     <Grid container xs={12}>
                       <Grid item xs={4} sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-                        <Button onClick={() => imageDeletion(0)}>
+                        <Button onClick={async (event) => await handeDel(event, 0)}>
                           <Typography sx={{ textDecoration: 'underline', cursor: 'pointer', textTransform: 'none', color: '#000000', fontStyle: 'italic' }}>Delete Image</Typography>
                         </Button>
                       </Grid>
                       <Grid item xs={4} sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-                        <Button onClick={() => imageDeletion(1)}>
+                        <Button onClick={async (event) => await handeDel(event, 1)}>
                           <Typography sx={{ textDecoration: 'underline', cursor: 'pointer', textTransform: 'none', color: '#000000', fontStyle: 'italic' }}>Delete Image</Typography>
                         </Button>
                       </Grid>
                       <Grid item xs={4} sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-                        <Button onClick={() => imageDeletion(2)}>
+                        <Button onClick={async (event) => await handeDel(event, 2)}>
                           <Typography sx={{ textDecoration: 'underline', cursor: 'pointer', textTransform: 'none', color: '#000000', fontStyle: 'italic' }}>Delete Image</Typography>
                         </Button>
                       </Grid>

@@ -280,10 +280,16 @@ const getListingPicture = async (req, res) => {
   const { dir } = req.params
   const { file } = req.params
 
+  console.log("WELCOME TO GET PICTURE (LISTING CONTROLLER)")
 
+
+  console.log("This is directory")
   const dirname = String(dir)
+  console.log(dirname)
+
+  console.log("This is filename")
   const filename1 = String(file)
-  const filename2 = `${dirname}/${filename1}`;
+  console.log(filename1)
 
   const response = s3utils.getFileStream(dirname, filename1)
 
@@ -301,49 +307,66 @@ const getListingPicture = async (req, res) => {
 const deleteListingPicture = async (req, res) => {
   const { id } = req.params
 
-  console.log('FORMBAODY')
+  console.log('THIS IS THE FORMBOOOODY')
   console.log(req.body)
   try {
     const dirname = String(req.body.dirname)
-    console.log("dir")
+    console.log("THIS IS THE DIRECTOR")
     console.log(dirname)
     const filename = String(req.body.filename)
     console.log("THIS IS FILENAME")
     console.log(filename)
 
     var temparr: string[] = req.body.arr
+    console.log("THIS IS TEMPARR BEFORS")
+    console.log(temparr)
+    if (temparr[0] === "") { temparr = [] }
+    console.log("THIS IS TEMPARR AFTER")
+    console.log(temparr)
     const result = await s3utils.deleteImage(dirname, filename)
+    console.log("AFTER S3 DELETE")
     await Listing.findOneAndUpdate(
       { _id: id }, // Filter: find the listing with the given ID
       { $set: { pictures: temparr } }, // Update: set the "pictures" field to the "pics" array
       (err, updatedListing) => {
         if (err) {
-          console.error('Error deleting image :', err);
+          console.error('Error updating listing:', err);
         } else {
-          console.log('Deleted listing:', updatedListing);
+          console.log('Updated listing:', updatedListing);
         }
       }
     );
+    return res.send(successJson({}));
   }
   catch (error) {
     console.log(error)
     res.send(errorJson(error));
-
   }
 
 }
-
 // DELETE a specific housing listing
 const deleteListing = async (req, res) => {
   const { id } = req.params
   if (!mongoose.Types.ObjectId.isValid(id)) {
     return res.status(404).json({ error: 'No such listing' })
   }
+  console.log('THIS IS THE FORMBOOOODY')
+  console.log(req.body)
+  const dirname = String(req.body.dirname);
+  console.log("THIS IS THE DIRECTO DLEETEEER")
+  console.log(dirname)
+  const result = await s3utils.deleteDirectory(dirname);
 
   const listing = await Listing.findOneAndDelete({ _id: id })
   if (!listing) {
     return res.status(400).json({ error: 'No such listing' })
   }
+
+  res.status(200).json(listing)
+}
+
+const deleteListings = async (req, res) => {
+  const listing = await Listing.deleteMany({})
   res.status(200).json(listing)
 }
 
@@ -356,6 +379,7 @@ module.exports = {
   createListing,
   updateListing,
   deleteListing,
+  deleteListings,
   updateListingPicture,
   getListingPicture,
   deleteListingPicture

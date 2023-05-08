@@ -62,9 +62,12 @@ function Home() {
   }, [])
 
   // The function that calls the delete routing function
-  const handleDelete = async (id: any) => {
+  const handleDelete = async (id: any, address: any) => {
+    const formData = new FormData();
+    formData.append('dirname', address)
     await fetch('/api/listing/' + id, {
-      method: 'DELETE'
+      method: 'DELETE',
+      body: formData
     })
     // After we delete we must update the local state
     const newListings = Listings.filter(Listing => Listing._id != id)
