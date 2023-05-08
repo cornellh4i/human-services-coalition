@@ -381,7 +381,7 @@ const ListingForm = () => {
     }
     if (response1.ok) {
       setWebScraped(false)
-      setDescription('')
+
       setStreetAddress('')
       setCity('')
       setState('')

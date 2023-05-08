@@ -6,12 +6,13 @@ import CheckIcon from '@mui/icons-material/Check';
 import EmailIcon from '@mui/icons-material/Email';
 import SmartphoneIcon from '@mui/icons-material/Smartphone';
 import LinkIcon from '@mui/icons-material/Link';
-import PlaceIcon from '@mui/icons-material/Place';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import { useLocation, useNavigate } from "react-router-dom";
 import ImageContainer from '../components/ImageContainer';
 import { useEffect, useState } from 'react';
-import DeleteConfirmation from '../components/DeleteConfirmation'
+import DeleteConfirmation from '../components/DeleteConfirmation';
+import CloseIcon from '@mui/icons-material/Close';
+import QuestionMarkIcon from '@mui/icons-material/QuestionMark';
 
 
 const ListingInformation = () => {
@@ -69,7 +70,6 @@ const ListingInformation = () => {
   }, [location.state.pictures, location.state.streetAddress])
 
 
-
   //if all the images have been loaded then render the screen
   if (!imagesLoaded) {
     return <div>Loading images...</div>;
@@ -117,7 +117,7 @@ const ListingInformation = () => {
               </Grid>
             </Grid>
             <Typography paddingBottom={"20px"} sx={{ color: "#343434", fontSize: "16px", fontStyle: "italic" }}>
-              This listing has been webscraped from apartments.com
+              {location.state.webscraped == "true" ? "This listing has been webscraped" : ""}
             </Typography>
 
             {/* Listing information */}
@@ -126,10 +126,10 @@ const ListingInformation = () => {
                 ${location.state.price}/mo
               </Typography>
               <Typography>
-                {location.state.size === "One Bed" ? "1bed" : location.state.size === "Two Bed" ? "2bed" :
-                  location.state.size === "Three Bed" ? "3bed" : location.state.size === "Four Bed" ? "4bed" :
-                    location.state.size === "Five Bed" ? "5bed" : location.state.size === "Six Bed" ? "6bed" :
-                      location.state.size === "Studio" ? "studio" : <p></p>} {location.state.numBath}bath
+                {location.state.size === "One Bed" ? "1 bed" : location.state.size === "Two Bed" ? "2 beds" :
+                  location.state.size === "Three Bed" ? "3 beds" : location.state.size === "Four Bed" ? "4 beds" :
+                    location.state.size === "Five Bed" ? "5 beds" : location.state.size === "Six Bed" ? "6 beds" :
+                      location.state.size === "Studio" ? "Studio" : <p></p>} | {location.state.numBath} {location.state.numBath == 1 ? "bath" : "baths"}
               </Typography>
               <Typography>
                 {location.state.landlord}
@@ -141,15 +141,19 @@ const ListingInformation = () => {
 
             {/* Listing availability */}
             <Grid item padding="10px 0px" xs={12}>
-              <Typography sx={{ fontWeight: 700, color: "#000000" }}>
-                Available From: {location.state.dateAvailable}
-              </Typography>
+              {location.state.dateAvailable ?
+                <Typography sx={{ fontWeight: 700, color: "#000000" }}>
+                  Available From: {location.state.dateAvailable}
+                </Typography> :
+                <Typography sx={{ fontWeight: 700, color: "#000000" }}>
+                  Availability date not included
+                </Typography>}
             </Grid>
 
             {/* Listing description */}
             <Grid item padding="10px 0px" xs={10}>
               <Typography sx={{ color: "#343434", fontStyle: "italic" }}>
-                Beautiful 1 bedroom home.  Many utilities and services included. You only need to pay in addition the NYSEG/electricity&gas bill and wifi (average $45- per month per person). Large bedrooms with big windows, hardwood floors, full size bed, dresser, desk, chair, and large build-in closet. Free parking in front of your door. Pets allowed ($25 per pet per month). Picnic table at your back yard patio
+                {location.state.description ? location.state.description : "No description included"}
               </Typography>
             </Grid>
 
@@ -160,32 +164,68 @@ const ListingInformation = () => {
               </Typography>
               <Grid container>
                 <Grid item xs={6}>
-                  <Typography display="flex">
-                    <CheckIcon sx={{ marginRight: "5px" }}></CheckIcon>
-                    {location.state.utilities == "true" ? "utilities included: gas, water, heat" : "utilities not included"}
-                  </Typography>
-                  <Typography display="flex">
-                    <CheckIcon sx={{ marginRight: "5px" }}></CheckIcon>
-                    {location.state.pets == "true" ? "dog-friendly" : "not dog-friendly"}
-                  </Typography>
-                  <Typography display="flex">
-                    <CheckIcon sx={{ marginRight: "5px" }}></CheckIcon>
-                    {location.state.pets == "true" ? "cat-friendly" : "not cat-friendly"}
-                  </Typography>
+                  {location.state.utilities ?
+                    (location.state.utilities == "true" ?
+                      <Typography display="flex">
+                        <CheckIcon sx={{ marginRight: "5px" }}></CheckIcon>
+                        utilities included: gas, water, heat
+                      </Typography> :
+                      <Typography display="flex">
+                        <CloseIcon sx={{ marginRight: "5px" }}></CloseIcon>
+                        utilities not included
+                      </Typography>) :
+                    <Typography display="flex">
+                      <QuestionMarkIcon sx={{ marginRight: "5px" }}></QuestionMarkIcon>
+                      utilities unknown
+                    </Typography>
+                  }
+                  {location.state.pets ?
+                    (location.state.pets == "true" ?
+                      <Typography display="flex">
+                        <CheckIcon sx={{ marginRight: "5px" }}></CheckIcon>
+                        dog-friendly
+                      </Typography> :
+                      <Typography display="flex">
+                        <CloseIcon sx={{ marginRight: "5px" }}></CloseIcon>
+                        not dog-friendly
+                      </Typography>) :
+                    <Typography display="flex">
+                      <QuestionMarkIcon sx={{ marginRight: "5px" }}></QuestionMarkIcon>
+                      dog-friendly unknown
+                    </Typography>
+                  }
                 </Grid>
                 <Grid item xs={6}>
-                  <Typography display="flex">
-                    <CheckIcon sx={{ marginRight: "5px" }}></CheckIcon>
-                    {location.state.furnished == "true" ? "fully furnished" : "not fully furnished"}
-                  </Typography>
-                  <Typography display="flex">
-                    <CheckIcon sx={{ marginRight: "5px" }}></CheckIcon>
-                    hardwood floors
-                  </Typography>
-                  <Typography display="flex">
-                    <CheckIcon sx={{ marginRight: "5px" }}></CheckIcon>
-                    full-kitchen
-                  </Typography>
+                  {location.state.furnished ?
+                    (location.state.furnished == "true" ?
+                      <Typography display="flex">
+                        <CheckIcon sx={{ marginRight: "5px" }}></CheckIcon>
+                        fully furnished
+                      </Typography> :
+                      <Typography display="flex">
+                        <CloseIcon sx={{ marginRight: "5px" }}></CloseIcon>
+                        not fully furnished
+                      </Typography>) :
+                    <Typography display="flex">
+                      <QuestionMarkIcon sx={{ marginRight: "5px" }}></QuestionMarkIcon>
+                      fully furnished unknown
+                    </Typography>
+                  }
+                  {location.state.pets ?
+                    (location.state.pets == "true" ?
+                      <Typography display="flex">
+                        <CheckIcon sx={{ marginRight: "5px" }}></CheckIcon>
+                        cat-friendly
+                      </Typography> :
+                      <Typography display="flex">
+                        <CloseIcon sx={{ marginRight: "5px" }}></CloseIcon>
+                        not cat-friendly
+                      </Typography>) :
+                    <Typography display="flex">
+                      <QuestionMarkIcon sx={{ marginRight: "5px" }}></QuestionMarkIcon>
+                      cat-friendly unknown
+                    </Typography>
+                  }
                 </Grid>
               </Grid>
             </Grid>
@@ -206,31 +246,32 @@ const ListingInformation = () => {
                     </Typography>
                   </Grid>
                   <Grid item padding="5px 0px" xs={12}>
-                    <Typography display="flex" justifyContent="center">
-                      <EmailIcon sx={{ marginRight: "5px" }}></EmailIcon> {location.state.landlordEmail}
-                    </Typography>
+                    {location.state.landlordEmail ?
+                      <Typography display="flex" justifyContent="center">
+                        <EmailIcon sx={{ marginRight: "5px" }}></EmailIcon> {location.state.landlordEmail}
+                      </Typography> : <Typography display="flex" justifyContent="center">
+                        No landlord email included
+                      </Typography>
+                    }
                   </Grid>
                   <Grid item padding="5px 0px" xs={12}>
-                    <Typography display="flex" justifyContent="center">
-                      <SmartphoneIcon sx={{ marginRight: "5px" }}></SmartphoneIcon> {location.state.landlordPhone}
-                    </Typography>
+                    {location.state.landlordPhone ?
+                      <Typography display="flex" justifyContent="center">
+                        <SmartphoneIcon sx={{ marginRight: "5px" }}></SmartphoneIcon> {location.state.landlordPhone}
+                      </Typography> : <Typography display="flex" justifyContent="center">
+                        No landlord phone number included
+                      </Typography>
+                    }
                   </Grid>
                   <Grid item padding="5px 0px" xs={12}>
-                    <Typography display="flex" justifyContent="center">
-                      <LinkIcon sx={{ marginRight: "5px" }}></LinkIcon> {location.state.linkApp}
-                    </Typography>
+                    {location.state.linkApp ?
+                      <Typography display="flex" justifyContent="center">
+                        <LinkIcon sx={{ marginRight: "5px" }}></LinkIcon> {location.state.linkApp}
+                      </Typography> : <Typography display="flex" justifyContent="center">
+                        No application link included
+                      </Typography>
+                    }
                   </Grid>
-                </Grid>
-              </Card>
-            </Grid>
-
-            {/* Location of listing on the map */}
-            <Grid item padding="10px 7px">
-              <Card style={{ backgroundColor: "#EAEAEA", borderRadius: "10px", height: "340px" }} elevation={3}>
-                <Grid container padding="150px 160px">
-                  <Typography justifyContent={"center"}>
-                    <PlaceIcon fontSize='large'></PlaceIcon>
-                  </Typography>
                 </Grid>
               </Card>
             </Grid>
