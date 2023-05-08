@@ -1,6 +1,6 @@
 import Grid from '@mui/material/Grid'
 import { useEffect, useState } from 'react'
-import ListingDetails from '../components/ListingDetails'
+import LDAppliedListing from '../components/LDAppliedListing'
 import { useLocation, useNavigate } from "react-router-dom";
 import '../css/Home.css'
 import { Button, Typography } from '@mui/material'
@@ -66,7 +66,7 @@ const RecentlyViewed = () => {
           <Grid container spacing={2}>
             {Listings.map((Listing) => (
               <Grid item key={Listing._id}>
-                <ListingDetails Listing={Listing} handleDelete={undefined} />
+                <LDAppliedListing Listing={Listing} />
               </Grid>
             ))}
           </Grid>

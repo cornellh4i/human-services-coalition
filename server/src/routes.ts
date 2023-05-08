@@ -11,6 +11,7 @@ module.exports = () => {
     createListing,
     updateListing,
     deleteListing,
+    deleteListings,
     updateListingPicture,
     getListingPicture,
     deleteListingPicture
@@ -66,17 +67,17 @@ module.exports = () => {
   // POST (add) a new housing listing
   router.post('/listing', createListing)
 
+  // Upload images
   const upload = multer({ dest: "uploads/" });
-  // upload.single("pictures")
-  //upload.array("pictures")
 
   // PATCH (edit) a specific housing listing
   router.patch('/listing/:id', updateListing)
   router.patch('/listingPicture/:id', upload.array("pictures"), updateListingPicture)
 
   // DELETE a specific housing listing
-  router.delete('/listing/:id', deleteListing)
-  router.delete('/listingPicture/:id', deleteListingPicture)
+  router.delete('/listing/:id', upload.array("pictures"), deleteListing)
+  router.delete('/listing', deleteListings)
+  router.delete('/listingPicture/:id', upload.array("pictures"), deleteListingPicture)
 
   // GET all users
   router.get('/users', getUsers)

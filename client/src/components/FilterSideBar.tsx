@@ -455,11 +455,14 @@ export default function FilterSideBar({
               onChange={(e) =>
                 handleFilterChange(FilterEnum.numBath, numBath, setNumBath, e)}>
               <MenuItem value={1}>1</MenuItem>
+              <MenuItem value={1.5}>1.5</MenuItem>
               <MenuItem value={2}>2</MenuItem>
+              <MenuItem value={2.5}>2.5</MenuItem>
               <MenuItem value={3}>3</MenuItem>
+              <MenuItem value={3.5}>3.5</MenuItem>
               <MenuItem value={4}>4</MenuItem>
+              <MenuItem value={4.5}>4.5</MenuItem>
               <MenuItem value={5}>5</MenuItem>
-              <MenuItem value={6}>6</MenuItem>
             </Select>
           </FormControl>
         </Box>
