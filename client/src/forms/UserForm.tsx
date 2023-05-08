@@ -59,7 +59,7 @@ const UserForm = () => {
     setVoucherNames(voucherNames)
   }
 
-  // //contains that will prepopulate the form if location.state is not null
+  //contains that will prepopulate the form if location.state is not null
   useEffect(() => {
     if (location.state != null) { getUserDetails() }
     assignVoucherNames()
@@ -215,6 +215,8 @@ const UserForm = () => {
   };
 
   const title = (location.state === null) ? "Create a New User" : "Edit User";
+
+  const blockInvalidChar = (e: any) => ['e', 'E', '+', '-', '.'].includes(e.key) && e.preventDefault();
 
   return (
     <Container maxWidth={false}>
@@ -499,6 +501,7 @@ const UserForm = () => {
                         variant="outlined"
                         size="small"
                         type="number"
+                        onKeyDown={blockInvalidChar}
                       />
                     </FormGroup>
                   </Box>
