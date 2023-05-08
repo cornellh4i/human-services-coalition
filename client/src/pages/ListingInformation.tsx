@@ -119,10 +119,10 @@ const ListingInformation = () => {
                 ${location.state.price}/mo
               </Typography>
               <Typography>
-                {location.state.size === "One Bed" ? "1bed" : location.state.size === "Two Bed" ? "2bed" :
-                  location.state.size === "Three Bed" ? "3bed" : location.state.size === "Four Bed" ? "4bed" :
-                    location.state.size === "Five Bed" ? "5bed" : location.state.size === "Six Bed" ? "6bed" :
-                      location.state.size === "Studio" ? "studio" : <p></p>} {location.state.numBath}bath
+                {location.state.size === "One Bed" ? "1 bed" : location.state.size === "Two Bed" ? "2 beds" :
+                  location.state.size === "Three Bed" ? "3 beds" : location.state.size === "Four Bed" ? "4 beds" :
+                    location.state.size === "Five Bed" ? "5 beds" : location.state.size === "Six Bed" ? "6 beds" :
+                      location.state.size === "Studio" ? "Studio" : <p></p>} | {location.state.numBath} {location.state.numBath == 1 ? "bath" : "baths"}
               </Typography>
               <Typography>
                 {location.state.landlord}

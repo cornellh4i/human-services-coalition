@@ -151,16 +151,6 @@ export default function LDAppliedListing({ Listing }: { Listing: any }) {
               </ThemeProvider>
             </Grid>
 
-            {/* Creates the delete and edit buttons and displays it next to the address
-            <Grid item xs={3}>
-              <IconButton onClick={() => navigate('/listing-form', { state: { id: Listing._id } })}>
-                <EditOutlined fontSize="small" />
-              </IconButton>
-              <IconButton onClick={(event) => handleClick(event)}>
-                <DeleteOutlined fontSize="small" />
-              </IconButton>
-            </Grid> */}
-
             {/* Displays the listing landlord */}
             <Grid item xs={12} paddingTop="2px">
               <ThemeProvider theme={addressTheme}>
