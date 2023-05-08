@@ -1,5 +1,5 @@
-//npm istal aws -sdk
-//npm install fs
+// npm istal aws -sdk
+// npm install fs
 require("dotenv").config(({ path: "config.env" }));
 const fs = require('fs')
 const S3 = require('aws-sdk/clients/s3')
@@ -17,8 +17,8 @@ const s3 = new S3({
 
 
 function uploadFile(directoryName: string, fileName: string, file: any, isnew: boolean) {
-  //send a file from frontend and download onto backend with multer and then take that 
-  //and send to aws
+  // send a file from frontend and download onto backend with multer and then take that 
+  // and send to aws
   const directoryKey = `${directoryName}/`;
   console.log("DIRECTORY IS " + directoryKey)
   const fileKey = `${directoryKey}${fileName}`;
@@ -57,9 +57,9 @@ function uploadFile(directoryName: string, fileName: string, file: any, isnew: b
 }
 
 function getFileStream(directoryName: string, fileName: string,) {
-  //TAKES THE PICTURE NAME THAT'S ON S3 
-  //WANT TO TELL THE FRONT END THAT i WANT THE CORNELL) PICTURE
-  //IF UPLOAD IS SUCCESSFULL 
+  // TAKES THE PICTURE NAME THAT'S ON S3 
+  // WANT TO TELL THE FRONT END THAT i WANT THE CORNELL) PICTURE
+  // IF UPLOAD IS SUCCESSFULL 
 
   const directoryKey = `${directoryName}/`;
   console.log("DIRECTORY IS " + directoryKey)
@@ -75,10 +75,6 @@ function getFileStream(directoryName: string, fileName: string,) {
   try {
     const res = s3.getObject(downloadParams);
     console.log(`Successfully retrieved image ${fileKey}`);
-    // console.log("TAKE A LOOK AT THE RES")
-    // console.log(res)
-    // console.log("NOW LOOK AT RES.BODY")
-    // console.log(res.body)
     return res
   }
   catch (err) {
