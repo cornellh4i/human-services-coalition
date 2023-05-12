@@ -41,12 +41,15 @@ function Home() {
     const fetchListings = async () => {
       const response = await fetch('/api/listing')
       const json = await response.json()
+      console.log("akfjnqwjifn")
+      console.log(json)
 
       if (response.ok) {
         setListings(json)
       }
     }
-    fetchListings()
+    fetchListings();
+
 
     if (action === "create" && type === "listing") {
       setConfirmCreateListingPop(true)
