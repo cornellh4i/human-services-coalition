@@ -80,6 +80,7 @@ export default function ListingDetails({ Listing, handleDelete }: { Listing: any
     };
     //Call the fetchImage function
     fetchImage();
+
   }, []);
 
   return (

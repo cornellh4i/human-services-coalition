@@ -739,7 +739,7 @@ const ListingForm = () => {
                       setPrice(value);
                     }}
                     inputProps={{
-                      min:'0'
+                      min: '0'
                     }}
                     error={rentError} />
                 </FormGroup>

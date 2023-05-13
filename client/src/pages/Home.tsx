@@ -46,7 +46,8 @@ function Home() {
         setListings(json)
       }
     }
-    fetchListings()
+    fetchListings();
+
 
     if (action === "create" && type === "listing") {
       setConfirmCreateListingPop(true)

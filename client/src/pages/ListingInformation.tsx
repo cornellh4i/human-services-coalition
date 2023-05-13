@@ -69,6 +69,13 @@ const ListingInformation = () => {
     fetchImage();
   }, [location.state.pictures, location.state.streetAddress])
 
+  const parseDate = (date: any) => {
+    var clean = date.split('T')[0];
+    var datearr = clean.split("-");
+    var result = datearr[1] + "/" + datearr[2] + "/" + datearr[0];
+
+    return result
+  }
 
   //if all the images have been loaded then render the screen
   if (!imagesLoaded) {
@@ -143,7 +150,7 @@ const ListingInformation = () => {
             <Grid item padding="10px 0px" xs={12}>
               {location.state.dateAvailable ?
                 <Typography sx={{ fontWeight: 700, color: "#000000" }}>
-                  Available From: {location.state.dateAvailable}
+                  Available From: {parseDate(location.state.dateAvailable)}
                 </Typography> :
                 <Typography sx={{ fontWeight: 700, color: "#000000" }}>
                   Availability date not included
@@ -153,7 +160,7 @@ const ListingInformation = () => {
             {/* Listing description */}
             <Grid item padding="10px 0px" xs={10}>
               <Typography sx={{ color: "#343434", fontStyle: "italic" }}>
-                {location.state.description ? location.state.description : "No description included"}
+                {location.state.description ? location.state.description : "Description not included"}
               </Typography>
             </Grid>
 
@@ -263,12 +270,33 @@ const ListingInformation = () => {
                       </Typography>
                     }
                   </Grid>
-                  <Grid item padding="5px 0px" xs={12}>
+                  <Grid item padding="8px 0px" xs={12}>
                     {location.state.linkApp ?
-                      <Typography display="flex" justifyContent="center">
-                        <LinkIcon sx={{ marginRight: "5px" }}></LinkIcon> {location.state.linkApp}
-                      </Typography> : <Typography display="flex" justifyContent="center">
-                        No application link included
+                      <Grid>
+                        <Typography display="flex" justifyContent="center">
+                          Application Link
+                        </Typography>
+                        <Typography display="flex" justifyContent="center">
+                          <LinkIcon sx={{ marginRight: "5px" }}></LinkIcon> {location.state.linkApp}
+                        </Typography>
+                      </Grid>
+                      : <Typography display="flex" justifyContent="center">
+                        Application link not included
+                      </Typography>
+                    }
+                  </Grid>
+                  <Grid item padding="8px 0px" xs={12}>
+                    {location.state.linkOrig ?
+                      <Grid>
+                        <Typography display="flex" justifyContent="center">
+                          Listing Link
+                        </Typography>
+                        <Typography display="flex" justifyContent="center">
+                          <LinkIcon sx={{ marginRight: "5px" }}></LinkIcon> {location.state.linkOrig}
+                        </Typography>
+                      </Grid>
+                      : <Typography display="flex" justifyContent="center">
+                        Listing link not included
                       </Typography>
                     }
                   </Grid>
