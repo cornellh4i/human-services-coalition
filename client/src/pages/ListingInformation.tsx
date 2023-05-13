@@ -67,17 +67,14 @@ const ListingInformation = () => {
 
   useEffect(() => {
     fetchImage();
-    console.log("THI LINLLL");
-    console.log(location.state.linkOrig);
   }, [location.state.pictures, location.state.streetAddress])
 
   const parseDate = (date: any) => {
     var clean = date.split('T')[0];
     var datearr = clean.split("-");
     var result = datearr[1] + "/" + datearr[2] + "/" + datearr[0];
-    console.log(result)
-    return result
 
+    return result
   }
 
   //if all the images have been loaded then render the screen
@@ -163,7 +160,7 @@ const ListingInformation = () => {
             {/* Listing description */}
             <Grid item padding="10px 0px" xs={10}>
               <Typography sx={{ color: "#343434", fontStyle: "italic" }}>
-                {location.state.description ? location.state.description : "No description included"}
+                {location.state.description ? location.state.description : "Description not included"}
               </Typography>
             </Grid>
 
@@ -284,7 +281,7 @@ const ListingInformation = () => {
                         </Typography>
                       </Grid>
                       : <Typography display="flex" justifyContent="center">
-                        No application link included
+                        Application link not included
                       </Typography>
                     }
                   </Grid>
@@ -299,7 +296,7 @@ const ListingInformation = () => {
                         </Typography>
                       </Grid>
                       : <Typography display="flex" justifyContent="center">
-                        No Listing link included
+                        Listing link not included
                       </Typography>
                     }
                   </Grid>
