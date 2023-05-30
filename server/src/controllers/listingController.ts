@@ -3,6 +3,8 @@ const fs = require('fs').promises;
 import mongoose from 'mongoose';
 import s3utils from '../utils/s3';
 import { successJson, errorJson } from '../utils/jsonResponses';
+import { spawn } from 'child_process';
+import { exec } from 'child_process';
 
 // GET all housing listings
 const getListings = async (req, res) => {
@@ -198,6 +200,83 @@ const createListing = async (req, res) => {
   }
 }
 
+// POST (add) webscraped listings
+const createScrapedListing = async (req, res) => {
+  // collect data from script
+  const pythonProcess = spawn('python', ['scraping.py']);
+  pythonProcess.stdout.on('data', (data) => {
+    console.log(`stdout: ${data}`);
+  });
+  pythonProcess.stderr.on('data', (data) => {
+    console.error(`stderr: ${data}`);
+  });
+
+  let data : any;
+  exec('python scraping.py', (error, stdout, stderr) => {
+    if (error) {
+      console.error(`exec error: ${error}`);
+      return;
+    }
+    const data = JSON.parse(stdout);
+    console.log(`Name: ${data.description}`);
+  });
+
+  const  webScraped = data.webScraped,
+    description = data.description,
+    streetAddress = data.streetAddress,
+    city = data.city,
+    state = data.state,
+    country = data.country,
+    zipCode = data.zipCode,
+    pictures = [],
+    price = data.price,
+    size = data.size,
+    unitType = data.unitType,
+    numBath = data.numBath,
+    schoolDistrict = data.schoolDistrict,
+    pets = data.pets,
+    utilities = data.utilities,
+    furnished = data.furnished,
+    distTransportation = data.disTransportation,
+    landlord = data.landlord,
+    landlordEmail = data.landlordEmail,
+    landlordPhone = data.landlordPhone,
+    linkOrig = data.linkOrig,
+    linkApp = data.linkApp,
+    dateAvailable = data.dateAvailable
+
+  try {
+    const listing = await Listing.create({
+      webScraped,
+      description,
+      streetAddress,
+      city,
+      state,
+      country,
+      zipCode,
+      pictures,
+      price,
+      size,
+      unitType,
+      numBath,
+      schoolDistrict,
+      pets,
+      utilities,
+      furnished,
+      distTransportation,
+      landlord,
+      landlordEmail,
+      landlordPhone,
+      linkOrig,
+      linkApp,
+      dateAvailable
+    })
+    res.status(200).json(listing)
+  } catch (error) {
+    res.status(400).json({ error: (error as Error).message })
+  }
+}
+
 // PATCH (edit) a specific housing listing
 const updateListing = async (req, res) => {
   const { id } = req.params
@@ -341,6 +420,7 @@ module.exports = {
   getListings,
   getListing,
   createListing,
+  createScrapedListing,
   updateListing,
   deleteListing,
   deleteListings,

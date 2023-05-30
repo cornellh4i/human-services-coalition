@@ -9,6 +9,7 @@ module.exports = () => {
     getListing,
     getListingByCategory,
     createListing,
+    createScrapedListing,
     updateListing,
     deleteListing,
     deleteListings,
@@ -65,6 +66,9 @@ module.exports = () => {
 
   // POST (add) a new housing listing
   router.post('/listing', createListing)
+
+  // POST (add) webscraped listings
+  router.post('/scraped', createScrapedListing)
 
   // Upload images
   const upload = multer({ dest: "uploads/" });
