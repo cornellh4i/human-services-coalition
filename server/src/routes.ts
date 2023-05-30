@@ -3,6 +3,8 @@ import multer from 'multer';
 module.exports = () => {
   const express = require("express");
   const router = express.Router();
+  const passport = require('passport');
+  const jwt = require('jsonwebtoken');
 
   const {
     getListings,
@@ -142,6 +144,40 @@ module.exports = () => {
 
   // DELETE a specific voucher
   router.delete('/vouchers/:id', deleteVoucher)
+
+  // LOGIN
+  router.post(
+    '/login',
+    async (req, res, next) => {
+      passport.authenticate(
+        'login',
+        async (err, account, account_type, info) => {
+          try {
+            if (err || !account) {
+              const error = new Error('An error occurred.');
+
+              return next(error);
+            }
+
+            req.login(
+              account,
+              { session: false },
+              async (error) => {
+                if (error) return next(error);
+
+                const body = {type: account_type, _id: account._id, username: account.username };
+                const token = jwt.sign({ account: body }, 'TOP_SECRET');
+
+                return res.json({ token });
+              }
+            );
+          } catch (error) {
+            return next(error);
+          }
+        }
+      )(req, res, next);
+    }
+  );
 
   return router;
 }

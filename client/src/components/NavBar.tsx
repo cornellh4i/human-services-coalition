@@ -85,6 +85,12 @@ function ResponsiveAppBar() {
     else navigate('/admin-form');
   };
 
+  const navigateToLoginForm = () => {
+    handleCloseLogoutMenu();
+    navigate('/login-form');
+    window.location.reload();
+  };
+
   const navigateToVoucher = () => {
     handleCloseNavMenu();
     navigate("/vouchers");
@@ -196,7 +202,7 @@ function ResponsiveAppBar() {
               onClose={handleCloseLogoutMenu}
             >
               <MenuItem>
-                <Typography sx={{ color: "orange" }} textAlign="center">Log out</Typography>
+                <Typography sx={{ color: "orange" }} textAlign="center" onClick={navigateToLoginForm}>Log out</Typography>
               </MenuItem>
             </Menu>
           </Box>

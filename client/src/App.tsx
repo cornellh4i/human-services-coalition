@@ -8,6 +8,7 @@ import ManageProfiles from './pages/ManageProfiles'
 import ListingForm from './forms/ListingForm'
 import AdminForm from './forms/AdminForm'
 import UserForm from './forms/UserForm'
+import LoginForm from './forms/LoginForm'
 import Vouchers from './pages/Vouchers'
 
 import AppliedListings from './pages/AppliedListings';
@@ -29,7 +30,7 @@ function App() {
     <div className="App">
       <ThemeProvider theme={theme}>
         <BrowserRouter>
-          <NavBar />
+          {window.location.href.indexOf('login-form') > -1 ? "" : <NavBar />}
           <div className="pages">
             <Routes>
               <Route
@@ -61,6 +62,10 @@ function App() {
           <div className="forms">
             <Routes>
               <Route
+                path='/login-form'
+                element={<LoginForm />}
+              />
+              <Route
                 path='/listing-form'
                 element={<ListingForm />}
               />
@@ -76,7 +81,6 @@ function App() {
                 path='/fmr-form'
                 element={<FmrForm />}
               />
-
             </Routes>
           </div>
         </BrowserRouter>
